@@ -1,0 +1,501 @@
+//common for all three pages
+.container.request-container {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.request-container {
+  max-width: 880px;
+  background-color: #fdfdfd;
+  border: 1px solid #f2f2f2;
+  background-color: #fdfdfd;
+  margin: 0 auto;
+
+  &.user-bewertung {
+    .username {
+      font-family: 'open sans';
+      font-weight: bold;
+      font-size: 13px;
+        margin-top: 10px;
+    }
+    .user-bewertung-content {
+      text-align: center;
+        margin-bottom: 50px;
+    }
+    .username-av {
+      border-radius: 50%;
+      -webkit-border-radius: 50%;
+    }
+    .rate-item li {
+        margin-top: 1.5vw;
+    }
+  }
+  h1 {
+    font-size: 20px;
+    margin-top: 31px;
+    letter-spacing: 0.5px;
+    margin-bottom: 53px;
+    font-weight: bold;
+  }
+  .rate-item {
+    padding-left: 20px;
+    li {
+      list-style: none;
+      display: inline-block;
+      width: 80px;
+      height: 76px;
+      margin-right: 3.9%;
+      margin-top: 4vw;
+      cursor: pointer;
+      background-size: cover;
+    }
+  }
+  .product-info {
+    ul {
+      margin-left: 10px;
+    }
+    .product-name {
+      margin-left: 10px;
+    }
+    .price {
+      margin-top: 6px;
+    }
+    .price,.tag {
+      font-size: 15px;
+      margin-right: 10px;
+    }
+    .tag {
+      font-size: 10px;
+    }
+  }
+  .bewertung-request-form {
+    margin-top: 32px;
+    .label-span {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .sign-span {
+      font-family: 'open sans', sans-serif;
+      font-size: 15px;
+      color: black;
+      float:right;
+      margin-top: 10px;
+    }
+    textarea {
+      .radius;
+      margin-top: 22px;
+      width: 100%;
+      min-height: 10vw;
+      margin-bottom: 17px;
+      border: 1px solid #cccccc;
+      border-right: none;
+      border-bottom: none;
+      padding: 10px;
+      font-style: italic;
+      color: black !important;
+      font-family: 'open sans', sans-serif;
+    }
+    textarea::-webkit-input-placeholder {
+         color: #000;
+      }
+    textarea::-moz-placeholder {  /* Firefox 19+ */
+         color: #000;
+      }
+    textarea::-ms-input-placeholder {
+         color: #000;
+      }
+    .must-sign {
+      font-size: 13px;
+      font-family: 'open sans', sans-serif;
+      font-style: italic;
+      color: black;
+      display: block;
+    }
+    button {
+      .radius;
+      width: 100%;
+      background-color: #34b437;
+      margin-top: 47px;
+      padding: 10px 0;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      border: none;
+      transition: all 300ms;
+      &:hover {
+        background-color: #0d9110!important;
+      }
+    }
+  }
+
+  // Buchen page
+  .summary {
+    .summary-info {
+      p {
+        font-size: 20px;
+        margin-top: -5px;
+        margin-bottom: 6px;
+        letter-spacing: 0.5px;
+        margin-left: 2px;
+        font-family: 'open sans', sans-serif;
+        color: black;
+        text-transform: uppercase;
+      }
+    }
+    .rabat-input {
+      width: 90%;
+      max-width: 206px;
+      margin-top: 18px;
+      height: 48px;
+      padding-left: 10px;
+      text-transform: uppercase;
+      font-family: 'open sans', sans-serif;
+      .radius;
+      border: none;
+      border-top: 1px solid #cccccc;
+      border-left: 1px solid #cccccc;
+
+    }
+    .rabat-input::-webkit-input-placeholder {
+         color: #cacaca;
+      }
+    .rabat-input::-moz-placeholder {  /* Firefox 19+ */
+         color: #cacaca;
+      }
+    .rabat-input::-ms-input-placeholder {
+         color: #cacaca;
+      }
+    .rabat-button {
+      text-transform: uppercase;
+      margin-top: 17px;
+      height: 49px;
+      width: 90%;
+      max-width: 220px;
+      background-color: #f0c814;
+      font-size: 15px;
+      font-weight: bold;
+      border: none;
+      .radius;
+      font-family: 'open sans', sans-serif;
+      font-weight: bold;
+      transition: all 300ms;
+      &:hover {
+        background-color: black;
+        color: white;
+      }
+    }
+  }
+  .legals {
+    margin-top: 25px!important;
+    p {
+      font-family: 'open sans', sans-serif;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+    }
+    .checkbox {
+      margin-top: 31px;
+      span {
+        font-family: 'open sans', sans-serif;
+        font-size: 15px;
+      }
+    }
+    a {
+      color: inherit;
+      font-family: inherit;
+      text-decoration: underline;
+    }
+  }
+
+  // stornieren
+  .stornieren {
+    margin-top: 0px !important;
+    h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 35px;
+    }
+    button.btn-red {
+      padding: 16px 0;
+      margin-top: 28px;
+      display: block;
+      max-width: 268px;
+      font-size: 15px;
+      font-family: 'open sans',sans-serif;
+      text-transform: uppercase;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      width: 100%;
+      background-color: #d91212;
+      padding: 15px 0;
+      color: white;
+      font-weight: bold;
+      border: none;
+      transition: all 300ms;
+    }
+    span {
+      margin-right: 8px !important;
+    }
+    input[type="radio"] {
+        display:none;
+    }
+    label {
+      display: block;
+      margin: 12px 0px;
+      font-weight: normal;
+      font-family: 'open sans';
+    }
+    input[type="radio"] + label span {
+        display:inline-block;
+        width:19px;
+        height:19px;
+        margin:-1px 4px 0 0;
+        vertical-align:middle;
+        background:url('../img/check_radio_sheet.png') -38px top no-repeat;
+        cursor:pointer;
+    }
+    input[type="radio"]:checked + label span {
+        background:url('../img/check_radio_sheet.png') -56px top no-repeat;
+    }
+    input[type="text"] {
+      height: 42px;
+      margin-top: 10px;
+      width: 300px;
+      font-family: 'open sans',sans-serif;
+      font-size: 15px;
+      color: black;
+      text-transform: uppercase;
+      padding: 0 10px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border: none;
+      border-top: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+    }
+  }
+}
+// Anfrage page
+.modal {
+  &.anfrage, &.phone, &.bewertungen {
+    .modal-title {
+      font-size: 20px;
+      margin-top: 31px;
+      letter-spacing: .5px;
+      margin-bottom: 35px;
+      font-weight: bold;
+      text-align: center;
+      margin-left: 0px;
+      font-weight: bold;
+    }
+    .phone-inputs {
+        text-align: center;
+    }
+    .modal-dialog {
+      width: 100%;
+      max-width: 768px !important;
+    }
+    .modal-content {
+      border-radius: 0px;
+      border: 0px;
+    }
+    .form-container {
+      background: white;
+    }
+    .close {
+      filter: opacity(1.0);
+      opacity: 1.0;
+    }
+    .mark {
+      background: #f5f5f5;
+      padding: 20px 12px;
+      margin: 10px;
+      width: ~"calc(33% - 20px)";
+
+      ul {
+        margin: 0;
+        cursor: pointer;
+        padding: 0;
+        text-align: center;
+        li {
+          list-style: none;
+          display: inline-block;
+          color: #b2b2b2;
+        }
+        .marked {
+          color: @myyellow;
+        }
+      }
+      p {
+          font-size: 13px;
+        text-align: center;
+        font-family: 'open sans';
+        margin-top: 16px;
+      }
+    }
+    button.sp {
+      padding: 16px 0;
+      margin: 28px auto 10px !important;
+      display: block;
+      max-width: 268px;
+      font-size: 15px;
+      font-family: 'open sans',sans-serif;
+      text-transform: uppercase;
+      border-radius: 5px;
+      width: 100%;
+      background-color: @myyellow;
+      padding: 10px 0;
+      color: black;
+      font-weight: bold;
+      border: none;
+      transition: all 300ms;
+
+      &:hover {
+        color: white;
+        background: black;
+      }
+    }
+  }
+  &.phone {
+
+  }
+}
+.reply-page {
+  .bootstrap-select {
+    width: 260px;
+    margin-right: 0px;
+    .filter-option {
+      text-transform: uppercase;
+      text-align: center!important;
+    }
+    button.btn.dropdown-toggle.btn-info {
+      background-color: #f9f9f9;
+    }
+  }
+  h1 {
+    margin-bottom: 38px;
+  }
+  .question {
+    margin-bottom: 48px;
+    p {
+      margin-bottom: 0px;
+      font-family: 'open sans';
+    }
+  }
+  .answer {
+    * {
+      font-family: 'open sans' !important;
+    }
+    h1 {
+      font-family: 'Roboto Slab',sans-serif !important;
+    }
+    a {
+      text-decoration: underline;
+    }
+  }
+  .dropdown-toggle {
+    background-color: #f9f9f9;
+    margin-top: 10px;
+  }
+  p {
+    text-align: center;
+  }
+  .reply-select {
+    text-align: center;
+    margin-top: 13px;
+
+    .bootstrap-select.btn-group .dropdown-toggle .filter-option {
+      font-weight: bold !important;
+    }
+  }
+  .bewertung-request-form {
+    margin-top: 11px;
+    textarea {
+      min-height: 5.6vw;
+    }
+
+    button {
+      margin-top: 24px;
+      padding: 16px 0;
+      margin: 0 auto;
+      display: block;
+      width: 90%;
+      max-width: 268px;
+      font-size: 15px;
+      font-family: 'open sans',sans-serif;
+      text-transform: uppercase;
+    }
+  }
+  .user-answer {
+    ul {
+      margin: 0;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 15px;
+      li {
+        list-style: none;
+        display: inline-block;
+        color: #b2b2b2;
+      }
+      .marked {
+        color: @myyellow;
+      }
+    }
+    h2 {
+      margin-top: 53px;
+      display: block;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .user {
+      img {
+        border-radius: 50%;
+        width: 89%;
+        height: auto;
+        margin-top: 43px;
+        text-align: center;
+        margin-left: 7px;
+      }
+      p {
+        font-family: 'open sans', sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+        margin-top: 8px;
+
+      }
+    }
+    .question-content {
+      margin-top: 43px;
+      p {
+        font-family: 'open sans', sans-serif;
+        text-align: left;
+        margin-bottom: 24px;
+        font-size: 15px;
+        color: black;
+      }
+    }
+  }
+
+}
+.question-data {
+  p {
+    font-family: 'open sans';
+    font-weight: 300;
+
+    strong {
+      font-family: 'open sans';
+      font-weight: bold;
+    }
+  }
+  a {
+    font-weight: 300;
+    font-family: 'open sans';
+    text-decoration: underline;
+  }
+  .last {
+    font-weight: 400;
+  }
+}
+.form-input .bootstrap-select.btn-group .dropdown-toggle .filter-option {
+  font-weight: normal;
+}

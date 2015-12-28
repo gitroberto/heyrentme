@@ -1,0 +1,96 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_testimonials_list') }}" >Testimonials</a></li>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+   <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script>
+      tinymce.init({ 
+          selector: 'textarea.rich-text-edit',
+          width: 600,
+          menubar: false/*,
+          content_css: '/css/main.css'*/
+      });
+      
+    </script>
+{% endblock %}
+
+{% block body %}
+<h1>Testimonial add</h1>
+    
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="form-horizontal">
+    <div class="err-msg">{{ form_errors(form) }}</div>
+
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Name</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.name) }}</div>
+            {{ form_widget(form.name, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'Name' }}) }}
+          </div>
+        </div>
+    </div>
+   <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Age</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.age) }}</div>
+            {{ form_widget(form.age, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'Age' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Place</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.place) }}</div>
+            {{ form_widget(form.place, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'Place' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Description</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.description) }}</div>
+            {{ form_widget(form.description, { 'attr': { 'rows': '12', 'class': 'text-box', 'placeholder': 'Description' }}) }}
+          </div>
+        </div>
+    </div>
+          
+    <div class="row">
+        <div class="form-group">
+          <label for="form_position" class="control-label col-xs-2">Position</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.position) }}</div>
+          {{ form_widget(form.position, { 'attr': { 'class': 'text-box single-line short', 'placeholder': 'Position' }}) }}
+          </div>
+        </div>
+    </div>
+    
+          <div class="row">
+        <div class="form-group">
+          <label for="form_upl" class="control-label col-xs-2">Add testimonial image</label>
+          <div class="col-xs-10">
+            <input type="file" name="upl"/>
+          </div>
+        </div>
+    </div>
+   
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Add">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_testimonials_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{{ form_end(form) }}
+{% endblock %}

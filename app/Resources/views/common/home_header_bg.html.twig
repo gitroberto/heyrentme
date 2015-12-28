@@ -1,0 +1,23 @@
+<div class="mobile-hidden">
+  <header class="home-header" id="pages-header">
+  <div id="heading-fixed">
+      <div class="container background-light-gray no-border">
+          <div class="row left-right-border">
+              <div class="col-xs-6">
+                  <a href="{{ path('start-page') }}"><img src="/img/logo.svg" alt="logo" class="logo"/></a>
+                  <a data-toggle="modal" data-target="#choose-offer" href="#" class="button-black backgound-yellow text-black">Anbieten / Vermieten</a>
+                </div>
+              <div class="col-xs-6 text-right">
+                  {% if not app.user %}
+                    <a data-toggle="modal" data-target="#reg-modal" class="button-black" href="#">Anmelden / 5 &euro; Startrabatt</a>
+                    <a data-toggle="modal" data-target="#login" class="button-black" href="#">Login</a>
+                  {% else %}
+                      <a href="{{ path('profil') }}" class="button-black">Profil</a>
+                  {% endif %}
+                  <a href="{{ path('hilfe_faq_euipment_mieten') }}" class="button-black">Hilfe & Faq</a>
+                </div>
+          </div>
+      </div>
+  </div>
+</header>
+</div>

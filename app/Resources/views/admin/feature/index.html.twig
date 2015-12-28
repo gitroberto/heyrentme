@@ -1,0 +1,74 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_feature_section_list') }}" >Feature section</a></li>
+    <li><a href="{{ path('admin_feature_list', { 'featureSectionId': featureSectionId }) }}" class="active-crumb">Feature</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Feature</h1>
+
+<a class="button-black backgound-yellow text-black" href="{{ path('admin_feature_new', { 'featureSectionId': featureSectionId }) }}">New feature</a>
+
+<br/>
+<br/>
+<div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover">
+                <tr>
+                        <td></td>
+                </tr>
+        </table>
+        <div id="jqgrid-pager"></div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+    {{ include('admin/common/admin.footer.html.twig') }}
+<script>    
+$(document).ready(function(){    
+//*******************************************
+/*	JQGRID INIT
+/********************************************/
+
+
+function rowActions(cellvalue, options, cellobject) {
+      return   "<a title='Edit'             href='edit/"   +  options.rowId + "'><u>Edit</u></a>  "+
+  	       "<a title='Delete'           href='delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>";
+  }
+
+var $grid = $('#jqgrid');
+
+if($grid.length > 0 ) {
+        $grid.jqGrid({
+                url: '{{ path('admin_feature_jsondata', { 'featureSectionId': featureSectionId }) }}',
+                mtype: 'GET',
+                datatype: 'jsonp',
+                colModel:[
+                        { name:' ', width:120, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                        { name:'FeatureSection', index:'fs.name', width: 400, editable:false, sortable:true, search: false },
+                        { name:'Name', index:'f.name', width: 200, editable:false, sortable:true, search: false },
+                        { name:'ShortName', index:'f.short_name', width: 200, editable:false, sortable:true, search: false },
+                        { name:'Freetext', index:'f.freetext', width: 100, editable:false, sortable:true, search: false },
+                        { name:'Position', index:'f.position', width: 100, editable:false, sortable:true, search: false }
+                ],
+                height: 300,
+                rowNum: 50,
+                rowList: [50, 100, 200],
+                pager: 'jqgrid-pager',
+                sortname: 'f.position',
+                viewrecords: false,
+                sortorder: "asc",
+                caption: "Features",
+                multiselect: false
+        });
+        
+}
+
+}); // end ready function
+</script>    
+    
+{% endblock %}
+

@@ -1,0 +1,228 @@
+.main-header {
+  z-index: -1;
+  display: inline-block;
+  margin-top: -80px;
+  width: 100%;
+
+  .main-search {
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 66%;
+    width: 90%;
+    max-width: 950px;
+    text-align: center;
+    h1 {
+      font-size: 27px;
+      font-weight: lighter;
+      display: inline-block;
+    }
+  }
+}
+
+img.down-icon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  margin-top: -63px;
+}
+.text-link {
+  color: @myyellow;
+  text-decoration: underline;
+}
+.new-header {
+  h2 {
+    background: #000;
+    display: inline-block;
+    color: white;
+    font-size: 34px;
+    font-weight: 300;
+    padding: 6px 18px;
+    margin-top: 40px;
+
+    b {
+      color: @myyellow;
+      font-weight: bold;
+    }
+  }
+}
+.main-categories {
+  position: relative;
+  padding-bottom: 0%;
+  margin-bottom: 70px;
+  .row {
+    div {
+      margin-bottom: 30px;
+      img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-top-right-radius: 6px;
+      }
+      .categories-names {
+        position: absolute;
+        top: 37%;
+        left: 0;
+        right: 0;
+        height: 47%;
+        margin: 0 auto;
+        text-align: center;
+        background-repeat: no-repeat;
+        background-position: center 97%;
+        cursor: pointer;
+        background-image: none !important;
+        transition: all 300ms ease-in;
+        h3 {
+          color: white;
+          background-color: @myyellow;
+          padding: 5px 15px;
+          display: inline-block;
+          font-weight: bold;
+          transition: all 300ms ease-in;
+          font-size: 28px;
+        }
+      }
+      &:hover {
+        .categories-names {
+          h3 {
+            background-color: black;
+            color: @myyellow;
+          }
+        }
+
+      }
+    }
+    &:last-child {
+      border-bottom: 1px solid #f4f4f4;
+    }
+  }
+  .heading {
+    margin-bottom: 2.5%;
+  }
+}
+
+.categories-container {
+  background-color: #fdfdfd;
+  padding-top: 20px;
+  border-bottom: 1px solid #ececec;
+}
+
+.info {
+  background-image: url('../img/info.jpg');
+  background-size: cover;
+  padding-top: 4.5%;
+  max-width: 1600px;
+  margin: 0 auto;
+  .heading {
+    margin-bottom: 5px;
+    margin-top: 0px;
+  }
+  .text-yellow {
+    color: @myyellow;
+    font-weight: bold;
+  }
+  p {
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    margin-top: 20px;
+    background-color: rgba(0, 0, 0, 0.85);
+    padding: 20px;
+    margin-bottom: 20%;
+  }
+  span {
+    font-family: 'open sans', sans-serif;
+  }
+}
+
+.lower-info {
+  background-image: url('../img/lower-info.jpg');
+  background-size: cover;
+}
+
+.slider {
+  padding: 3%;
+  margin-top: 15px;
+  padding-top: 3.5%;
+  margin-bottom: 10px;
+  p.text-yellow {
+    color: @myyellow;
+    font-weight: bold;
+    display: table;
+    margin-bottom: 5px;
+    font-size: 36px;
+    padding: 3px 10px;
+  }
+  #owl-demo {
+    .testamonials {
+      font-style: italic;
+      font-family: 'Open Sans', sans-serif;
+      color: black;
+      background-color: white;
+      padding: 20px 40px;
+      display: inline-block;
+      width: 89%;
+      border-radius: 4px;
+      box-shadow: 1px 1px 1px #ECECEC;
+      position: relative;
+      font-size: 15px;
+      img {
+        position: absolute;top: -10px;
+        left: -10px;
+      }
+    }
+  }
+}
+
+.about-us {
+  margin-top: 4%;
+  img {
+    border-top-right-radius: 6px;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+  h4 {
+    font-size: 24px;
+    padding:5px 12px;
+    color: @myyellow;
+    background-color: black;
+    display: inline-block;
+    font-weight: bold;
+  }
+  p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 1px 1px 1px #E2E2E2;
+    width: 99.8%;
+    margin-top: 10px;
+  }
+  a {
+    font-family: inherit;
+    font-size: inherit;
+    margin-top: 10px;
+    text-decoration: underline;
+    display: inline-block;
+    &:hover {
+      color: @myyellow;
+    }
+  }
+}
+
+.spc {
+  .open {
+    display: none!important;
+  }
+}
+.search-form.mobile-kategorie-form {
+  #kaup-hidden {
+    background-color: white;
+    top: 3px;
+    right: 28%;
+  }
+
+}

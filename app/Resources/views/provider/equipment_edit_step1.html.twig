@@ -1,0 +1,222 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+    {% include('provider/user_nav.html.twig') %}
+    <section class="users container background-light-grey">
+      <div class="row">
+          <!-- Left side -->
+          <div class="col-md-9">
+              <img src="/img/logo-small.svg" alt=""/>
+              <ul class="steps">
+                  <li class="step-1"><span class="counters text-bold"><span class="n-one"></span>Tarif</span></li>
+                  <li class="step-2"><span class="counters greyed"><span class="nh-two"></span>Beschreibung</span>
+                  </li>
+                  <li class="step-3"><span class="counters greyed"><span class="nh-three"></span>Details</span></li>
+                  <li class="step-4"><span class="counters greyed"><span class="nh-four"></span>Fertig</span></li>
+              </ul>
+          </div>
+          <!-- Right side -->
+          <div class="col-md-3 margin-rwd">
+            <div class="support">
+              <p class="head">Anbieter Support</p>
+              <p class="mail"><a href="mail:support@hey-tsc.com">support@hey-tsc.com</a></p>
+            </div>
+          </div>
+      </div>
+      <div class="row user-forms">
+          <div class="col-md-9">
+              {{ form_start(form) }}
+              <div class="row">
+                  <div class="col-xs-12 border-bottom-white form-head">
+                      <div class="form-container">
+                          <div class="row">
+                              <div class="col-md-5">
+                                  <span class="number-one number-rwd"></span>
+                                  <p class="form-heading">Tarif</p>
+                              </div>
+                              <div class="col-md-7">
+                                  <span class="form-info"><strong>Um welchen Betrag möchtest du das Equipment verleihen?</strong></span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xs-12">
+                      <div class="form-container form-input form-last-item">
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <label for="price">Name:</label>
+                                  {{ form_widget(form.name, { 'attr': { 'placeholder': 'mountain bike cube' } }) }}
+                                  <div class="err-msg">{{ form_errors(form.name) }}</div>
+                              </div>
+                              <!--<div class="col-sm-6 text-right">
+                                  <label class="chbox"><input type="checkbox"> <span> Keine Angabe</span></label>
+                              </div>-->
+                          </div>
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <label for="price">Preis pro Tag:</label>
+                                  {# <input type="text" name="name2" placeholder="ab.: 10" class="small-input " id="preis_pro_tag">,- € #}
+                                  {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': 'ab.: 10' }}) }},- € 
+                                  <div class="err-msg">{{ form_errors(form.price) }}</div>
+                              </div>
+                              <!--<div class="col-sm-6 text-right">
+                                  <label class="chbox"><input type="checkbox"> <span> Keine Angabe</span></label>
+                              </div>-->
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xs-12 border-bottom-white form-head smaller-form">
+                      <div class="form-container">
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <p class="form-heading">Kaution & Garantie</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xs-12">
+                      <div class="form-container form-input form-last-item">
+                          <div class="row">
+                              <div class="col-xs-12">
+                                  <p class="memo">Kaution: Du kannst hier für dein Equipment eine Kaution angeben, die vom
+                                      Mieter in bar zur Übergabe mitgenommen wird.
+                                      Die Kaution schützt dich vor generellen Unannehmlichkeiten, kleinen Kratzern etc.
+                                      Sollte es zu Diebstahl oder Bruch kommen, bieten
+                                      wir dir zusätzlich eine <strong><u>hey-tsc Garantie</u> bis zu 1.500,00 € an.</strong></p>
+
+                                  <div class="kaution row">
+                                      <div class="col-xs-5">
+                                        <span>Original-Wert (ca.)</span>
+                                        {# <input type="text" name="name2" placeholder="z.B.: 500" class="small-input " id="name2">    ,- € #}
+                                        {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': 'z.B.: 500' }}) }},- € 
+                                        <div class="err-msg">{{ form_errors(form.value) }}</div>
+                                      </div>
+                                      <div class="col-xs-3">
+                                        <div class="search-form mobile-kategorie-form">
+                                            <div class="select-link">
+                                                <select title='Alter (ca.)' name="gender2" class="selectpicker bs-select-hidden ">
+                                                    <option>Alter (ca.)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-xs-4">
+                                        <span>Kaution</span>
+                                        {# <input type="text" name="name2" placeholder="z.B.: 20" class="small-input " id="name2">    ,- € #}
+                                        {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input', 'placeholder': 'z.B.: 20' }}) }},- € 
+                                        <div class="err-msg">{{ form_errors(form.deposit) }}</div>
+                                      </div>
+                                  </div>
+                                  {#
+                                  <div class="chbox-holder">
+                                      <input type="checkbox" id="chx">
+                                        <label for="invoice"><span></span>Original-Rechnung ist vorhanden</label>
+                                  </div>
+                                  #}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xs-8 left-offer">
+                      <div class="col-sm-12 border-bottom-white form-head smaller-form medium-form">
+                          <p class="form-heading medium-heading">Kaufoption - Test & Buy</p>
+                      </div>
+                      <div class="form-container last-form-container">
+                          <div class="row">
+                              <div class="col-xs-12">
+                                  <div class="former">
+                                      <div class="row">
+                                          <div class="col-xs-12">
+                                              <p>Möchtest du dein Fahrrad auch unter “Test & Buy” anführen?
+                                                  Der Mieter weiß dann, dass du dein Fahrrad auch zum
+                                                  Verkauf anbieten möchtest. Den Kaufpreis kannst du direkt mit dem
+                                                  Mieter vereinbaren.</p>
+
+                                                <div class="chbox-holder">
+                                                    {# <input type="checkbox" id="chxx"> #}
+                                                    {{ form_widget(form.invoice) }}
+                                                    <label for="form_invoice"><span></span>Original-Rechnung ist vorhanden</label>
+                                                </div>
+                                              <div class="kaution">
+                                                <span>Verkaufspreis</span>
+                                                {# <input type="text" name="name2" placeholder="z.B.: 250" class="small-input " id="name2">,- € #}
+                                                {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': 'z.B.: 250' }}) }},- € 
+                                                <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xs-4 right-offer">
+                      <div class="ad  mobile-hidden">
+                          <img src="/img/placeholder/bike3.jpg" alt="ad" class="img-responsive">
+
+                          <div class="product-info product-ad">
+                              <div class="row">
+                                  <div class="col-xs-12">
+                                      <ul>
+                                          <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                          <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                          <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                          <li><span class="glyphicon glyphicon-star"></span></li>
+                                          <li><span class="glyphicon glyphicon-star"></span></li>
+                                      </ul>
+                                      <p class="product-name">
+                                          cube mountainbike
+                                      </p>
+                                  </div>
+                              </div>
+                              <img src="/img/new-icon.svg" alt="cart" class="cart">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xs-12 border-bottom-white form-head smaller-form">
+                      <div class="form-container">
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <p class="form-heading">Gewerblicher Anbieter</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xs-12">
+                      <div class="form-container form-input form-last-item no-margin-bottom">
+                          <div class="row">
+                              <div class="col-xs-12">
+                                  <div class="chbox-holder">
+                                      {# <input type="checkbox" id="chxxx"> #}
+                                      {{ form_widget(form.industrial) }}
+                                      <label for="form_industrial"><span></span>Gewerbliches Angebot</label>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <input type="submit" class="yellow-button left-0" value="Einstellungen speichern">
+            {{ form_end(form) }}
+          </div>
+          <div class="col-md-3 margin-rwd">
+              <div class="support">
+                  <p class="head">Dein Verdienst</p>
+                  <div class="range"><input type="text" id="range_30" name="example_name" value=""/></div>
+                  <p class="price">0 €</p>
+                  <p class="price-info">pro Jahr bei 50 Tagen Vermietung</p>
+              </div>
+          </div>
+  </section>
+  <script>
+      $(document).ready(function () {
+          $("#range_30").ionRangeSlider({
+              min: 1,
+              max: 100
+          });
+      })
+  </script>
+  </div>
+{% endblock %}

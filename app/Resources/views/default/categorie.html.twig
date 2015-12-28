@@ -1,0 +1,143 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+  <div class="main-header ">
+        <img src="/img/bike-heading.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="/img/bike-heading-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="main-search kategorie-search">
+            <h2 class="heading mobile-hidden">Sport & Freizeit bei <span class="text-yellow text-bold"> hey! VIENNA</span></h2>
+            <div class="mobile-headers">
+              <h1 class="text-white text-background desktop-hide-inline">Sport & Freizeit bei</h1>
+            </div>
+            <div class="mobile-headers">
+              <h1 class="margin-bottom-40 text-white text-background desktop-hide-inline"><span
+                              class="text-yellow text-bold">hey! VIENNA</span></h1>
+            </div>
+            <!--
+            <div class="kategorie-form">
+                <form method="post" accept-charset="utf-8" action="/kategorie/index/Rennr%C3%A4der"><div style="display:none;"><input type="hidden" name="_method" value="POST"></div><input type="text" name="test2" placeholder="(z.B. 1050 Wien)" class="city-input" id="test2"><input type="submit" value="los geht´s!"></form>                <span class="clearfix"></span>
+            </div>
+            -->
+            <div class="search-form mobile-kategorie-form mobile-hidden">
+                <form method="post" accept-charset="utf-8" action="/heyrentme"><div style="display:none;"><input type="hidden" name="_method" value="POST"></div><select name="gender" class="selectpicker mobile-hidden" title="SUCHE"><option value="&lt;option data-content=&quot;&lt;span class=&quot;link-selected&quot; href=&quot;content&quot;&gt;OFFICE&lt;/span&gt;&quot;&gt;&lt;/option&gt;">BITE</option></select><select name="gender2" class="selectpickerspc"><option value="S">HAUPTKATEGORIEN</option><option value="T">HAUPTKATEGORIEN</option></select><input type="submit" class="desktop-hide" value="los geht´s!"></form>
+                <ul class="col-xs-6 pull-right text-right kaup-select">
+                    {{ render(controller('AppBundle:Common:categoryList')) }}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+  </header>
+  <div class="search-form mobile-kategorie-form select-select desktop-hide">
+    <span class="clearfix"></span>
+  </div>
+  <div class="container">
+  {{ render(controller('AppBundle:Common:categoryList', { 'mobile': true })) }}
+  <section class="main-categories main-offers">
+    <div class="container  background-white background-light-grey">
+        <nav class="crumbs">
+            <ul class="col-xs-6">
+                <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
+                <li><a href="{{ path('rentme') }}" {% if not category %}class="active-crumb"{% endif %}>hey! rentme</a></li>
+                {% if category %}
+                    <li><a href=""{{ path('catchall', { 'content': category.slug }) }}#categories" class="active-crumb">{{ category.name }}</a></li>
+                {% endif %}
+            </ul>
+            <ul class="col-xs-6 pull-right text-right kaup-select">
+                <li>
+                    <a class="active-crumb" href="javascript:anbieten({% if category %}{{ category.id }}{% endif %})">In dieser Kategorie anbieten</a>                    
+                </li>
+            </ul>
+            <ul class="col-xs-4 pull-right text-right">
+                <li class="gallery-gallery"><a id="show-grid">
+                        <span class="gallery-icon"></span>
+                    </a></li>
+                <li class="gallery-block"><a id="show-list">
+                        <span class="gallery-block-icon"></span>
+                    </a></li>
+            </ul>
+        </nav>        
+        <div class="col-sm-8 col-xs-12 pull-left sortieren">
+          <p>
+            Sortieren nach:
+          </p>
+          <select id="sort" class="selectpicker" title="Neuste zuerst">
+            <option value="date">Neueste zuerst</option>
+            <option value="price">Preis: niedrigster zuerst</option>
+        </select>
+          <div class="chbox-holder">
+            <input type="checkbox" id="buy" {% if searchParams.testBuy %}checked="checked"{% endif %} />
+            <label for="buy"><span></span>Test & Buy</label>
+          </div>
+          <div class="chbox-holder" style="margin-left: 8px;">{# TODO: move style to class #}
+            <input type="checkbox" id="discount" {% if searchParams.discount %}checked="checked"{% endif %} />
+            <label for="discount"><span></span>Discount</label>
+          </div>
+        </div>
+        <span class="clearfix"></span>
+        <div class="row" id="equipment-list">
+            {{ render(controller('AppBundle:Default:equipmentList')) }}
+        </div>
+    </div>
+  </section>
+  <script>
+    $(document).ready(function(){
+        var $sort = $("#sort");
+        $sort.val('{{ searchParams.sort }}');
+        $sort.selectpicker('refresh');
+        $sort.selectpicker('val', '{{ searchParams.sort }}');
+        initGrids();
+        $("#sort, #buy, #discount").change(search);
+    });
+    
+    function initGrids() {
+       var grids = $('#show-grid');
+       var lists = $('#show-list');
+       var avatar = $('.product-user');
+       var text = $('.product-list-info') ;
+       var border = $('.list-desc-border');
+
+       grids.on('click',function(){
+           lists.children().addClass('gallery-block-icon').removeClass('gallery-block-icon-active');
+           $(this).children().addClass('gallery-icon').removeClass('gallery-icon-active');
+           //avatar.show();
+           text.hide();
+           border.css('display','none');
+           $('.product-info').css('border-bottom','1px solid #e5e5e5').removeClass('no-margin-bottom');
+
+        });
+        lists.on('click',function(){
+            grids.children().addClass('gallery-icon-active');
+            $(this).children().addClass('gallery-block-icon-active');
+            //avatar.hide();
+            text.show();
+            border.css('display','block');
+            $('.product-info').css('border-bottom','none').addClass('no-margin-bottom');
+        });
+    }
+    function search() {
+        {# wait 1 seconds before actual search (in case user changes another search option) #}
+        console.log('search');
+        if (typeof window.searchT !== 'undefined') {
+            window.clearTimeout(window.searchT);
+        }
+        window.searchT = window.setTimeout(doSearch, 1000);
+    }
+    function doSearch() {
+        console.log('doSearch');
+        var url = '{{ path('equipment-list') }}';
+        var data = {
+            'sort': $("#sort").val(),
+            'testBuy': $("#buy").is(':checked') ? 1 : 0,
+            'discount': $("#discount").is(':checked') ? 1 : 0
+        };
+        console.log(JSON.stringify(data));
+        $("#pls-wait").modal();
+        $("#equipment-list").load(url, data, function() {
+            initGrids();
+            $("#pls-wait").modal('hide');
+        });
+    }
+  </script>
+  </div>
+{% endblock %}

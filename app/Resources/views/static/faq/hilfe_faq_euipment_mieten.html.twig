@@ -1,0 +1,79 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+<div class="main-header ">
+        <img src="/img/info.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="/img/info-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading help-heading">
+            <div class="row">
+                <div class="col-sm-8 text-white">
+                    <h1>Hilfe & FAQ</h1><br>
+                    <a class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+  <section>
+    <div class="container background-white rent-container">
+        {{ render(controller('AppBundle:Static:breadcrumb', { "pageName":"hilfe_faq_euipment_mieten" } )) }}
+        <span class="clearfix"></span>
+        <!-- Left nav -->
+        <div class="row help-page">
+        {{ render(controller('AppBundle:Static:leftmenu', { "pageName":"hilfe_faq_euipment_mieten" } )) }}
+        <div class="col-md-9 content blog-content">
+            <div class="row">
+                <div class="col-md-4">
+                    <div>
+                        <h3>Kategorie wählen</h3>
+                        <span class="number-one"></span>
+                        <img src="/img/placeholder/blog.png" alt=""/>
+                        <p>Such dir mit Hilfe verschiedener Filter ein passendes Auto von netten Fahrzeugbesitzern in deiner Nähe, egal ob Kleinwagen, Kombi oder Transporter!
+                        </p>
+                        <ul>
+                            <li>Übersichtliche und einfache Suche nach privaten Carsharing-Autos zur Miete</li>
+                            <li>Deine Anfragen sind unverbindlich, du kannst mehrere Anfragen parallel stellen</li>
+                            <li>Keine Anmelde- oder Grundgebühr</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <h3>Angebot einstellen</h3>
+                        <span class="number-two"></span>
+                        <img src="/img/placeholder/blog2.png" alt=""/>
+                        <p>Such dir mit Hilfe verschiedener Filter ein passendes Auto von netten Fahrzeugbesitzern in deiner Nähe, egal ob Kleinwagen, Kombi oder Transporter!
+                        </p>
+                        <ul>
+                            <li>Übersichtliche und einfache Suche nach privaten Carsharing-Autos zur Miete</li>
+                            <li>Deine Anfragen sind unverbindlich, du kannst mehrere Anfragen parallel stellen</li>
+                            <li>Keine Anmelde- oder Grundgebühr</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <h3>Weiterempfehlen</h3>
+                        <span class="number-three"></span>
+                        <img src="/img/placeholder/blog3.png" alt=""/>
+                        <p>Such dir mit Hilfe verschiedener Filter ein passendes Auto von netten Fahrzeugbesitzern in deiner Nähe, egal ob Kleinwagen, Kombi oder Transporter!
+                        </p>
+                        <ul>
+                            <li>Übersichtliche und einfache Suche nach privaten Carsharing-Autos zur Miete</li>
+                            <li>Deine Anfragen sind unverbindlich, du kannst mehrere Anfragen parallel stellen</li>
+                            <li>Keine Anmelde- oder Grundgebühr</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mobile-hidden">
+                <h4>Welches Angebot möchtest du einstellen?</h4>
+                <p class="content-categories" id="kategorie-select">Kategorie wählen</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <span class="add-margin mobile-hidden"></span>
+  </div>
+{% endblock %}

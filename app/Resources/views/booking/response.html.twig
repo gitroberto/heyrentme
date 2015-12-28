@@ -1,0 +1,216 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+  <div class="request-container head-req">
+    <img src="/img/detail-bg.jpg" alt="image" class="img-responsive max-320"/></div>
+    <img src="/img/detail-bg-rwd.jpg" alt="image" class="img-responsive min-320"/></div>
+  <div class="container request-container reply-page">
+    <form method="post">
+    <div class="row question">
+        <div class="col-xs-12">
+            <h1>Anfrage bearbeiten</h1>
+            <p class="text-bold">Reagiere auf die Anfrage</p>
+            <p>
+                {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %}
+                möchte dein Angebot für den unten genannten Zeitraum buchen.</p>
+            <div class="reply-select">
+                <select class="selectpicker" name="accept" id="accept" title="BITTE AUSWÄHLEN*">
+                  <option value="1" selected>Auftrag annehmen</option>
+                  <option value="0" selected>Auftrag ablehnen</option>
+                </select>
+              </div>
+            </div>
+    </div>
+    <div class="row answer">
+        <div class="col-xs-12">
+            <h1>Nachrichten an Ilse</h1>
+            <p class="text-bold">Telefonnummer für Rückfragen: +43 {{ equipment.user.fullPhone }} 
+                {# TODO: add modal to update phone number
+                    <a href="" data-toggle="modal" data-target=".phone">editieren</a> #}
+            </p>
+        </div>
+    </div>
+    <div class="row bewertung-request-form">
+        <div class="col-xs-12">
+            <textarea name="message" id="message" placeholder="Möchtest du {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %} etwas mitteilen?"></textarea>
+            <button onclick="javascript:submit()">Absenden</button>
+        </div>
+    </div>
+    <div class="row user-answer">
+        <div class="col-xs-12">
+            <h2>Anfrage</h2>
+            <div class="row">
+                <div class="col-sm-2 col-xs-4 user">
+                    {% if inquiry.user %}
+                        <img src="{{ inquiry.user.getProfilePicture(false, image_url_prefix) }}" alt=""/>
+                    {% endif %}
+                    <p>{% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %}</p>
+                    <ul data-toggle="modal" data-target=".bewertungen">
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                </div>
+                <div class="col-sm-10 col-xs-8 question-content">
+                    <p class="text-italic">
+                        {{ inquiry.message }}
+                    </p>
+                    <div class="question-data">
+                        <p class="text-bold"><strong>Buchungsdaten:</strong></p>
+                        <p class="text-bold"><strong>{{ equipment.name }}</strong></p>
+                        <p class="no-margin-bottom"><strong>Beginn:</strong>{{ inquiry.fromAt|date('D d F Y H:i') }}</p>
+                        <p class="no-margin-bottom"><strong>Ende:</strong>{{ inquiry.toAt|date('D d F Y H:i') }}</p>
+                        <p class="no-margin-bottom"><strong>Dein Verdienst:</strong> {{ inquiry.price|number_format(0) }},- €</p>
+                        <p class="no-margin-bottom"><strong> Kaution:</strong> {{ inquiry.deposit|number_format(0) }},- €</p>
+                        <p><strong>Ort:</strong> {{ equipment.addressAsString }}
+                            {# TODO: add modal to update address 
+                            (<a href="" data-toggle="modal" data-target=".anfrage">editieren</a>)</p> #}
+                        <p class="last">Buchungsnr.: {{ inquiry.id }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="add-margin-bottom-300"></span>
+    </form>
+  </div>
+  </div>
+  <div id="allge-modal" class="modal fade anfrage register" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header ort form-container">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title">Angebot Adresse bearbeiten</h4>
+                  <div class="row">
+                    <div class="col-xs-8">
+                      <input type="text" placeholder="Strasse*" />
+                    </div>
+                    <div class="col-xs-4">
+                      <input type="text" placeholder="Hausnr.*" />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <input type="text" placeholder="Plz*" />
+                    </div>
+                    <div class="col-xs-5">
+                      <input type="text" placeholder="Ort*" />
+                    </div>
+                  </div>
+                  <button type="button" class="sp">Speichern</button>
+          </div>
+      </div>
+  </div>
+</div>
+  <div id="phone-modal" class="modal fade phone register" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header form-container">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title">Telefon Nr. für User-Rückfragen bearbeiten</h4>
+                  <div class="phone-inputs">
+                    <span>+43</span><input type="number" maxlength="3" min="0" placeholder="664" />
+                    <input type="number" maxlength="7" min="0" placeholder="1808021" />
+                    <button type="button" class="sp">Speichern</button>
+                  </div>
+          </div>
+      </div>
+  </div>
+</div>
+  <div id="bewertungen-modal" class="modal fade bewertungen register" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header form-container">
+                <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                <h4 class="modal-title">Bewertungen für Ilse</h4>
+                <div class="row">
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                </div>
+          </div>
+      </div>
+  </div>
+</div>
+  <script>
+      function submit() {
+          $("form").submit();
+      }
+      </script>
+{% endblock %}

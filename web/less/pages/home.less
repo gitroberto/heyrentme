@@ -1,0 +1,115 @@
+* {
+  font-family: 'Roboto Slab', sans-serif;
+}
+
+.logo {
+   margin-right: 2%;
+   transition: all 0.4s ease;
+   width: 25%;
+ }
+
+img.main-page-logo {
+  position: absolute;
+  right: 38px;
+  top: 38px;
+  max-width: 146px;
+}
+
+.home-header.position-absolute .logo {
+
+  width: auto;
+}
+
+.welcome {
+  position: absolute;
+  top: 40.5%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  max-width: 900px;
+  width: 100%;
+  span {
+    color: @myyellow;
+    font-weight: bold;
+  }
+  .text-big {
+    font-size: 34px;
+    padding: 13px 24px;
+    letter-spacing: 1px;
+  }
+  .text-small {
+    font-size: 21px;
+    padding: 13px 37px;
+    font-weight: lighter;
+    display: block;
+  }
+  .text-small, .text-big {
+    color: white;
+    background-color: black;
+    text-align: center;
+    display: inline-block;
+    font-weight: 100;
+  }
+  .text-bold {
+    font-weight: bold;
+  }
+  .button-yellow {
+    margin-top: 2%;
+    width: 34.2%;
+    &:first-child {
+      margin-right: 5%;
+    }
+  }
+  .home-playicon {
+    margin-top: 2.8%;
+    display: inline-block;
+    height: 107px;
+    width: 107px;
+    background-image: url("../img/play.svg");
+    transition: all 100ms;
+    &:hover {
+      background-image: url("../img/play-hover.svg");
+      height: 115px;
+      width: 115px;
+    }
+  }
+}
+
+@media only screen and (max-width : 480px) {
+  .home-header .button-black {
+    margin-top: 10px;
+    &:first-child {
+      margin-right: 0%;
+    }
+  }
+  .welcome {
+    top: 25%;
+  }
+  .welcome .text-big {
+    font-size: 22px;
+  }
+  .welcome .text-small {
+    font-size: 13px;
+  }
+  .logo {
+    width: 100px;
+    height: auto;
+  }
+  .button-yellow {
+    font-size: 14px;
+  }
+  footer p {
+    font-size: 13px;
+    text-align: center;
+  }
+  footer .float-right {
+    float: none;
+  }
+  footer {
+    img {
+      margin: 0 auto;
+      display: inherit;
+    }
+  }
+
+}

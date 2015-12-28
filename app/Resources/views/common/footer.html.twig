@@ -1,0 +1,178 @@
+  <div class="sb-slidebar sb-left sb-style-overlay">
+      <a href="http://www.wp.pl">Link 1</a>
+      <a href="http://www.wp.pl">Link 1</a>
+      <a href="http://www.wp.pl">Link 1</a>
+      <a href="http://www.wp.pl">Link 1</a>
+      <a href="http://www.wp.pl">Link 1</a>
+      <a href="http://www.wp.pl">Link 1</a>
+      <a href="http://www.wp.pl">Link 1</a>
+      <a href="http://www.wp.pl">Link 1</a>
+  </div>
+  <div class="sb-slidebar sb-right sb-style-overlay sb-toggle-right">
+     <span id="social-shares">
+     <a class="social fb" href="#"></a>
+     <a class="social flash" href="#"></a>
+     <a class="social tweet" href="#"></a>
+     <a class="social email" href="#"></a>
+         <span class="clearfix"></span>
+     </span>
+  </div>
+  <div id="feedback" data-toggle="modal" data-target=".feed"></div>
+  <!-- Modal -->
+  <a id="passwordResetButton" data-dismiss="modal" data-toggle="modal" data-target="#passwordReset" class="has-account text-center" href="#"></a>
+  
+  <div id="feedback-modal" class="modal fade feed" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title">Feedback</h4>
+                  <form method="post" accept-charset="utf-8" action="/"><div style="display:none;"><input type="hidden" name="_method" value="POST"></div><input type="text" name="name2" placeholder="ROBERT" id="name2"><input type="text" name="mail2" placeholder="INFO@ROBERTLADKANI.COM" id="mail2"><input type="text" name="info2" placeholder="ANREGUNGEN ZUR WEBSITE" id="info2"><textarea name="desc2" placeholder="DEIN FEEDBACK" id="desc2" rows="5"></textarea><input type="submit" value="abschicken"></form>            </div>
+          </div>
+      </div>
+  </div>
+  {% if app.user == null %}     
+  <div id="reg-modal" class="modal  register" role="dialog" aria-labelledby="reg-titile">
+      <div class="modal-dialog" role="document">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" ><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title reg" id="reg-titile">Anmelden</h4>
+                  <p class="reg-promo">Jetzt anmelden <span class="text-bold">5 &euro; Rabatt</span> für die 1. Buchung sichern! </p>
+                  <a class="fb-button" href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"><img src="/img/facebook-reg.svg" alt=""/></a>
+                  <span class="oder">- oder -</span>             
+                  <div id = "confirmationDiv" style="display:none;">
+                      Your account is registered. Please check your email and click confirmation link.
+                  </div>
+                  {{ render(controller('FOSUserBundle:Registration:register')) }}
+                  
+                    <a data-dismiss="modal" data-toggle="modal" data-target="#login" class="has-account text-center" 
+                     href="#">Du hast bereits ein Konto? Melde dich an</a>                  
+              </div>
+          </div>
+      </div>
+  </div>
+    <div id="login" class="modal  register" role="dialog" aria-labelledby="login-title">
+      <div class="modal-dialog" role="document">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title reg" id="login-title">Login</h4>
+                  <a class="fb-button" href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"><img src="/img/fb-log.svg" alt=""/></a>
+                  <span class="oder">- oder -</span>
+
+                  {{ render(controller('FOSUserBundle:Security:login')) }}
+                       
+                      <div class="text-center">
+                        <a data-dismiss="modal" data-toggle="modal" data-target="#reg-modal" class="reg-forgot text-center" href="#">Registrieren</a>
+                        <a class="reg-forgot text-center" href="#" data-dismiss="modal" data-toggle="modal" data-target="#passwordRecovery" >Passwort vergessen?</a>
+                     </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div id="passwordRecovery" class="modal  register" role="dialog" aria-labelledby="login-title">
+      <div class="modal-dialog" role="document">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title reg" id="login-title">Reset</h4>
+                  
+                  {{ render(controller('FOSUserBundle:Resetting:request')) }}
+                       
+                  <div class="text-center">
+                    <a data-dismiss="modal" data-toggle="modal" data-target="#reg-modal" class="reg-forgot text-center" href="#">Registrieren</a>
+                    <a data-dismiss="modal" data-toggle="modal" data-target="#login" class="reg-forgot text-center" href="#">Login</a>                  
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+                  
+    
+       
+       
+                  
+    {% if token is defined and token != null %}
+  <div id="passwordReset" class="modal  register" role="dialog" aria-labelledby="login-title">
+      <div class="modal-dialog" role="document">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title reg" id="login-title">Reset</h4>
+                  
+                  {{ render(controller('FOSUserBundle:Resetting:reset', { "token":token } )) }}
+                       
+              </div>
+          </div>
+      </div>
+  </div>
+      {% endif %}      
+                   
+
+  {% endif %}
+  
+  {% if app.user != null and confirmed is defined and confirmed != null %}  
+  <a id="emailConfirmedButton" data-dismiss="modal" data-toggle="modal" data-target="#emailConfirmed" class="has-account text-center" href="#"></a>
+  <div id="emailConfirmed" class="modal  register" role="dialog" aria-labelledby="login-title">
+      <div class="modal-dialog" role="document">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title reg" id="login-title">Confirmed</h4>
+                 
+                  
+                  {{ render(controller('FOSUserBundle:Registration:confirmed' )) }}
+                       
+                  
+              </div>
+          </div>
+      </div>
+  </div>      
+{% endif %}
+
+<script>
+    var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+    
+    $(function(){        
+            
+        if (getUrlParameter("login")) {            
+            $("a[data-target='#login']")[0].click();
+        } else if (getUrlParameter("passwordReset")) {            
+            $("#passwordResetButton").click();
+        } else if (getUrlParameter("confirmed")) {               
+            
+            $("#emailConfirmedButton").click();            
+        } else if (getUrlParameter("register")) {
+            $("a[data-target='#reg-modal']")[0].click();
+        }
+        $("#emailConfirmed .close").unbind("click");
+        $("#emailConfirmed .close").click(function(e){
+            e.preventDefault();
+            location.href = "provider/profil";
+        });
+    });
+</script>
+
+  <script src="/js/owl.carousel.min.js"></script><script src="/js/vendors/bootstrap.min.js"></script><script src="/js/vendors/bootstrap-select.min.js"></script><script src="/js/vendors/moment.min.js"></script><script src="/js/vendors/bootstrap-datetimepicker.min.js"></script><script src="/js/vendors/slidebars.min.js"></script><script src="/js/vendors/ion.rangeSlider.min.js"></script><script src="/js/build.js"></script></body>
+</html>

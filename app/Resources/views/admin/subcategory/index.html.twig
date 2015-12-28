@@ -1,0 +1,73 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_category_list') }}">Category</a></li>
+    <li><a href="{{ path('admin_subcategory_list', { 'categoryID': category.id }) }}" class="active-crumb"> Subcategory</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Subcategories for {{ category.name }}</h1>
+
+<a class="button-black backgound-yellow text-black" href="{{ path('admin_subcategory_new', { 'categoryID': category.id }) }}">New Subcategory</a>
+
+<br/>
+<br/>
+<div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover">
+                <tr>
+                        <td></td>
+                </tr>
+        </table>
+        <div id="jqgrid-pager"></div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+    {{ include('admin/common/admin.footer.html.twig') }}
+<script>    
+$(document).ready(function(){    
+//*******************************************
+/*	JQGRID INIT
+/********************************************/
+
+
+function rowActions(cellvalue, options, cellobject) {
+      return "<a title='Edit' href='edit/" +  options.rowId +"'><u>Edit</u></a>  "+
+  	       "<a title='Delete' href='delete/" +  options.rowId +"' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>";
+  }
+
+var grid = $('#jqgrid');
+
+if( $('#jqgrid').length > 0 ) {
+        grid.jqGrid({
+                url: '{{ path('admin_subcategory_jsondata', { 'categoryID': category.getId() }) }}',
+                mtype: 'GET',
+                datatype: 'jsonp',
+                colModel:[
+                        { name:' ', width:80, fixed:true, editable:false, sortable:false, formatter:rowActions },
+                        { name:'Id', index:'sc.id', width:1, editable:false, sortable:false, hidden: true },
+                        { name:'Category', index:'sc.category', width: 200, editable:false, sortable:true },
+                        { name:'Name', index:'sc.name', width: 200, editable:false, sortable:true },
+                        { name:'Slug', index:'sc.slug', width: 100, editable:false, sortable:true },
+                        { name:'Position', index:'sc.position', align:"right", width: 100, editable:false, sortable:true},
+                ],
+                height: 300,
+                rowNum: 10,
+                rowList: [10, 50, 200],
+                pager: 'jqgrid-pager',
+                sortname: 'sc.position',
+                viewrecords: false,
+                sortorder: "asc",
+                caption: "Subcategories",
+                multiselect: false,
+        });
+}
+
+}); // end ready function
+</script>    
+    
+{% endblock %}
+

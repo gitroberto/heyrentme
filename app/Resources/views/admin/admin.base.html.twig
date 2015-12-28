@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% block head %}
+    {{ include('admin/common/admin.head.html.twig') }}
+{% endblock %}
+</head>
+<body>
+    <header class="adm-header">
+        <a class="adm-logo" href="{{ path('admin_area') }}"><img src="/img/logo.svg" alt="hey! Vienna" class="adm-logo"></a>
+        Administration
+    </header>
+
+    <nav class="crumbs">
+        <ul>
+            {% block breadcrumb %}
+                <li><a href="{{ path('admin_area') }}">ADMIN HOME</a></li>
+            {% endblock %}
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        {% block body %}{% endblock %}
+    </div>
+    
+    {% block footer %}
+        {{ include('admin/common/admin.footer.html.twig') }}
+    {% endblock %}
+</body>
+</html>
+

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+    <script>/*
+        $(function(){
+            $("#userImageUpload input").change(function(){
+                $("#userImageUpload form").submit();
+            });
+        });*/
+    </script>
+    
+    {% include('provider/user_nav.html.twig') %}
+  <section class="users container background-light-grey dashboard">
+    <div class="row">
+        <!-- Left side -->
+        <div class="col-md-9">
+            <a href="{{ path('start-page') }}"><img src="/img/logo-small.svg" alt=""/></a>
+          </div>
+        <!-- Right side -->
+        <div class="col-md-3 margin-rwd">
+          <div class="support">
+            <p class="head">Anbieter Support</p>
+            <p class="mail"><a href="mail:support@hey-tsc.com">support@hey-tsc.com</a></p>
+          </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-md-9">
+            <div class="row users-profile">
+                <div class="col-xs-12">
+                    <div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <span class="user-profil"></span>
+                                <p class="form-heading">{{ app.user.name }}</p>
+
+                                <div class="offer user-upload">
+                                    <p>Profilbild</p>
+                                    <span class="user-upload-note">Schaffe Vertrauen und lade ein Profilbild hoch (max. 10MB, min. 250x250px)</span>
+                                    <img src="{{ app.user.getProfilePicture(true, image_url_prefix) }}" class="profileImage" alt=""/>                
+                                    
+                                    <div id="userImageUpload" class="btn btn-default btn-file" >
+                                        <form id="upload" class='imageUpload' method="post" action="{{ path('user-image') }}" enctype="multipart/form-data">                                                                                
+                                            <img src="/img/placeholder/user-upload.png" alt=""/>                                   
+                                            <input type="file" name='upl'>        
+                                            <ul>
+                                                <!-- The file uploads will be shown here -->
+                                            </ul>
+                                        </form>
+                                    </div>
+                                    
+                                    
+                                    
+                                    <div>&nbsp;</div>
+                                    <form method="post" action="{{ path('profil') }}" enctype="multipart/form-data">     
+                                    {{ form_start(form, {'method': 'post', 'action': path('profil'), 'attr': { 'enctype':'multipart/form-data'}}) }}    
+                                        {{ form_errors(form) }}
+                                        
+                                        {{ form_widget(form.aboutMyself, {'attr': {'placeholder': 'ÜBER MICH' }}) }}
+                                        <input type="submit" class="green-big-button step3-button submit-green" value="Einstellungen speichern >>">
+                                    {{ form_end(form) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            {{ include('provider/user_nav2.html.twig', { 'page': 'profil' }) }}
+        </div>
+    </div>
+  </section>
+    <script src="/js/vendors/upload/jquery.knob.js"></script>
+    <script src="/js/vendors/upload/jquery.ui.widget.js"></script>
+    <script src="/js/vendors/upload/jquery.iframe-transport.js"></script>
+    <script src="/js/vendors/upload/jquery.fileupload.js"></script>
+    <script src="/js/vendors/upload/script.js"></script>
+  </div>
+{% endblock %}

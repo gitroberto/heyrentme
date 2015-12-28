@@ -1,0 +1,367 @@
+.header-loged-user {
+    width: 100%;
+    height: 40px;
+    margin-left:auto;
+    margin-right:auto;
+    color: #ffffff;
+    text-align: right;
+    padding-top: 10px;
+    padding-right: 20%;
+    background-color: #000000;
+}
+div.err-msg  ul  li {
+    color: #c00;
+}
+
+/* 
+ * TODO: refactor long lists of id-prefixed selectors below
+ */
+#reg-modal .modal-dialog,
+#login .modal-dialog,
+#emailConfirmed .modal-dialog,
+#passwordReset .modal-dialog,
+#passwordRecovery .modal-dialog,
+#inquiry-modal .modal-dialog,
+#melden .modal-dialog {
+    max-width:450px
+}
+#reg-modal .modal-content,
+#login .modal-content,
+#passwordRecovery .modal-content,
+#passwordReset .modal-content,
+#emailConfirmed .modal-content,
+#inquiry-modal .modal-content,
+#melden .modal-content{
+    border-radius:0;
+    box-shadow:none;
+    max-width:450px
+}
+#passwordRecovery .modal-title,
+#feedback-modal .modal-title,
+#reg-modal .modal-title,
+#login .modal-title,
+#passwordRecovery .modal-title,
+#passwordReset .modal-title,
+#emailConfirmed .modal-title,
+#inquiry-modal .modal-title,
+#melden .modal-title{
+    text-align:center;
+    font-size:34px;
+    font-weight:bold;
+    margin-bottom:30px;
+    margin-top:40px;
+    letter-spacing:1.2px
+}
+#passwordRecovery input[type="text"],
+#feedback-modal input[type="text"],
+#reg-modal input[type="text"],
+#login input[type="text"],
+#emailConfirmed input[type="text"],
+#passwordReset input[type="text"],
+#passwordRecovery input[type="text"],
+#melden input[type="text"], 
+#passwordRecovery input[type="password"],
+#feedback-modal input[type="password"],
+#reg-modal input[type="email"],
+#reg-modal input[type="password"],
+#login input[type="password"],
+#passwordRecovery input[type="password"],
+#passwordReset input[type="password"],
+#emailConfirmed input[type="password"],
+#melden input[type="password"], 
+#passwordRecovery textarea,
+#feedback-modal textarea,
+#reg-modal textarea,
+#login textarea,
+#inquiry-modal input[type="text"],
+#inquiry-modal input[type="email"],
+#inquiry-modal textarea,
+#melden textarea{
+    display:block;
+    width:100%;
+    height:48px;
+    font-size:15px;
+    font-family:'open sans',sans-serif;
+    border:transparent;
+    background-color:#f9f9f9;
+    padding-left:10px;
+    margin-bottom:17px;
+    color:black;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-top:1px solid #c7c7c7;
+    border-left:1px solid #c7c7c7
+}
+#inquiry-modal textarea {
+    height: auto;
+}
+
+#passwordRecovery textarea,
+#feedback-modal textarea,
+#reg-modal textarea,
+#login textarea,
+#melden textarea{
+    min-height:140px;
+    padding-right:10px
+} 
+#passwordRecovery input[type="submit"],
+#feedback-modal input[type="submit"],
+#reg-modal input[type="submit"],
+#login input[type="submit"],
+#passwordRecovery input[type="submit"],
+#passwordReset input[type="submit"],
+#emailConfirmed input[type="submit"],
+#inquiry-modal input[type="submit"],
+#melden input[type="submit"]{
+    background-color:#34b437;
+    width:100%;
+    height:47px;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+    border-bottom-left-radius:5px;
+    font-size:15px;
+    font-weight:bold;
+    text-align:center;
+    border:none;
+    color:white;
+    text-transform:uppercase;
+    font-family:'open sans',sans-serif;
+    margin-bottom:22px
+}
+#passwordRecovery input[type="submit"]:hover,
+#feedback-modal input[type="submit"]:hover,
+#reg-modal input[type="submit"]:hover,
+#login input[type="submit"]:hover,
+#passwordRecovery input[type="submit"]:hover,
+#passwordReset input[type="submit"]:hover,
+#emailConfirmed input[type="submit"]:hover,
+#inquiry-modal input[type="submit"]:hover,
+#melden input[type="submit"]:hover{
+    background-color:#009103;
+    transition:all 300ms ease-in
+}
+
+#passwordRecovery input[placeholder],
+#feedback-modal input[placeholder],
+#reg-modal input[placeholder],
+#login input[placeholder],
+#passwordRecovery input[placeholder],
+#passwordReset input[placeholder],
+#emailConfirmed input[placeholder],
+#inquiry-modal input[placeholder],
+#melden input[placeholder]{
+    font-weight:bold;
+    border-color:#c7c7c7;
+    font-size:15px;
+    font-weight:normal
+} 
+#passwordRecovery button.close,
+#feedback-modal button.close,
+#reg-modal button.close,
+#login button.close,
+#passwordRecovery button.close,
+#passwordReset button.close,
+#emailConfirmed button.close,
+#melden button.close{opacity:1}.rent-dialog p{
+    font-family:'open sans',sans-serif !important;
+    text-transform:uppercase;
+    margin-left:20px
+}
+
+
+#upload.imageUpload {
+    width: 220px;
+    margin: 0px auto 0px;
+    padding: 2px;
+}
+
+#upload.imageUpload img {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+#userImageUpload {
+    padding: 0px;
+    border: none;
+    
+}
+
+#userImageUpload:hover {
+    background-color: #ffffff;
+}
+
+#upload.imageUpload {
+    
+    margin: 0px;
+}
+
+#upload.imageUpload ul li p {
+    color: #333;
+    left: 0px;
+}
+
+#upload.imageUpload ul li {
+    height: 90px;
+}
+
+#upload.imageUpload ul li.error p {
+    color: #ff0000;
+}
+
+
+img.profileImage {
+  max-width: 250px;
+  max-height: 250px;
+}
+
+img.headerProfileImage {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+
+.chbox-holder input[type="radio"] {
+  display: none;
+}
+.chbox-holder input[type="radio"] + label span {
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  margin: -1px 4px 0 0;
+  vertical-align: middle;
+  background: url('../img/check_radio_sheet.png') -38px top no-repeat;
+  cursor: pointer;
+}
+.chbox-holder input[type="radio"]:checked + label span {
+  background: url('../img/check_radio_sheet.png') -57px top no-repeat;
+
+}
+
+.blog-container > .row div img.blogimg {
+    max-width: 300px;
+    max-height: 300px;
+}
+.blog-img-container {
+    width: 300px;
+    height: 300px;
+}
+
+.select-box {
+    width: 184px;
+    margin-top:3px;
+}
+
+
+.check-box {
+    margin-top:3px;
+}
+
+
+/* class missing from main.css (?) */
+.img-responsive, .thumbnail > img, .thumbnail a > img, .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+.btnSaveStatus{
+    cursor: pointer;
+}
+
+ul.error {
+    color: #ff0000;
+    margin-top: 5px;
+}
+
+ul.correct {
+    color: #5e8014;
+    margin-top: 5px;
+}
+
+div.clear {
+    clear:both;
+}
+
+#deleteOffer{
+    text-align: center;
+    font-weight: normal;
+}
+
+#deleteOffer h1 {
+    font-size: inherit;
+    font-weight: bold;    
+}
+
+
+#deleteOffer .button-red {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #ffffff;
+    
+    white-space: nowrap;
+    
+    background-color: red;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
+    color: white;
+    font-family: "Open Sans",sans-serif;
+    font-size: 1.03em;
+    font-weight: bolder;
+    width: 200px;
+    padding: 12px 20px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-top:10px;
+    
+}
+
+.control-readonly {
+    padding-top: 7px;
+}
+
+.control-readonly p {
+    max-width: 50%;
+}
+
+div.redButtonAdmin {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #ffffff;
+    
+    white-space: nowrap;
+    
+    background-color: red;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
+    color: white;
+    font-family: "Open Sans",sans-serif;
+    font-size: inherit;
+    font-weight: bolder;
+    min-width: 100px;
+    padding: 6px 20px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-left:20px;
+    cursor:pointer;
+}
+
+div.error{
+    color:red;
+}
+
+.generatePanel {
+    margin-top: 20px;
+}
+
+.selecttionPanel{
+    margin-bottom: 20px;
+}
+
+img.testimonialDisplayImg {
+    max-width: 235px;
+    max-height: 235px;
+}

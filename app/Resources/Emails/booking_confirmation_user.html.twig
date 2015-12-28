@@ -1,0 +1,86 @@
+<!doctype html>
+<html style="overflow-x: hidden;max-width: 600px;margin: 0 auto;">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Dokument bez tytułu</title>
+    <link rel="stylesheet" href="/rentme/mail.css"/>
+</head>
+<body style="background-color:#f9f9f9;margin: 0;overflow-x: hidden;max-width: 600px;margin: 0 auto;" class="mail1">
+
+<table style="background-color: #000000;width: 100%;">
+    <tr style="height: 30px;width: 100%;max-width: 600px;">
+        <td>
+            <p class="paddin" style="color: white;color: white;width: 100%;max-width: 640px;margin: 0 auto;padding-left: 36px;font-size: 13px;font-family: helvetica, arial;padding-left: 92px;">Du hast eine Buchungsanfrage erhalten</p>
+        </td>
+    </tr>
+</table>
+
+
+<table border="0" style="margin:0 auto;background-color:#fdfdfd;border:1px solid #f2f2f2;border-top: none;width: 100%;max-width: 600px;">
+    <tr style="height:200px">
+        <td class="td-img"><img style="width:100%;margin-top: -5px;" src="{{ mailer_image_url_prefix }}img/mail/mail.jpg" class="img-header" alt="rent me !"/></td>
+    </tr>
+    <tr>
+        <td style="padding: 20px;padding-top: 0px;padding-bottom: 0px;">
+            <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 20px;" class="page-title">
+                Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},</h1>
+                <p style="font-family: helvetica, arial;font-weight: 100;">
+                    Deine Buchung war erfolgreich!
+                </p>
+                <p style="font-family: helvetica, arial;font-weight: 100;">
+                    to be completed
+                </p>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 20px;padding-top: 0px;">
+            <p style="font-family: helvetica, arial;font-size: 15px;font-size: 20px;font-weight: bold;margin-top: 0px;margin-bottom: 0px">Buchungsdaten:</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;font-size: 20px;font-weight: bold;margin-top: 0px;margin-bottom: 0px">{{ equipment.name }}</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;font-size: 20px;margin-bottom: 5px;"> Beginn: <span style="font-weight: bold;">{{ inquiry.fromAt|date('D d F Y H:i') }}</span></p>
+            <p style="font-family: helvetica, arial;font-size: 15px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;">Ende: <span style="font-weight: bold;">{{ inquiry.toAt|date('D d F Y H:i') }}</span></p>
+            <p style="font-family: helvetica, arial;font-size: 15px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;">Gesamtsumme:  <span style="font-weight: bold;">{{ inquiry.price|number_format(0) }},- €</span></p>
+            <p style="font-family: helvetica, arial;font-size: 15px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;">Kaution:  <span style="font-weight: bold;">{{ inquiry.deposit|number_format(0) }},- €</span></p>
+            <p style="font-family: helvetica, arial;font-size: 15px;font-size: 15px;margin-top: 25px;margin-bottom: 0px;">Buchungsnr.: {{ inquiry.id }}</p>
+
+            <p style="font-weight: bold;font-size: 20px;font-family: helvetica, arial;margin-top: 25px;">Anbieterkontakt</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;">Tel:  <span style="font-weight: bold;">+43 {{ equipment.user.fullPhone }}</span></p>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center;padding-bottom: 15px;">
+            <p style="text-align: center;"><img src="{{ mailer_image_url_prefix }}img/mail/greetings.png" alt="rent me !"/></p>
+            <a style="margin-right: 10px;margin-top: 13px;display: inline-block;" href="#" class="links"><img src="{{ mailer_image_url_prefix }}img/mail/app.png" alt="rent me !"/></a>
+            <a style="margin-left: 10px;margin-top: 13px;display: inline-block;" href="#" class="links"><img src="{{ mailer_image_url_prefix }}img/mail/google.png" alt="rent me !"/></a>
+        </td>
+    </tr>
+</table>
+
+<table width="100%" style="margin-bottom: 35px;">
+    <tr>
+        <td>
+            <p style="text-align: center;font-size: 13px;font-family: helvetica, arial;">**Antworten auf diese automatische System-E-Mail werden nicht gelesen.**</p>
+        </td>
+    </tr>
+</table>
+
+
+<table style="background-color: #0e0e0e;width: 100%;margin: 0 auto;padding-top: 10px;padding-bottom: 60px;">
+    <tr style="width: 100%;max-width: 600px;display: block;margin: 0 auto;">
+        <td style="vertical-align: top;">
+            <img style="margin-left: 45px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_image_url_prefix }}img/mail/logo.png" alt="rent me !"/>
+        </td>
+        <td style="color: #9b9b9b;font-size: 14px;font-family: helvetica, arial;">
+            <p style="font-weight: bold;margin-bottom: 7px;">hey! TSC</p>
+            <p style="margin: 0px;margin-bottom: 3px;">ist ein Service der hey! The Sharing Community GmbH</p>
+            <p style="margin: 0px;margin-bottom: 3px">Zentagasse 40-42/1/17 - 1050 Wien</p>
+            <p style="margin: 0px;margin-bottom: 22px">0043 664 180 80 21  &nbsp; -  &nbsp; <a style="color: inherit;" href="www.hey-tsc.at">www.hey-tsc.at</a></p>
+            <p  style="margin-bottom: 0px;">Geschäftsführer: Robert Ladkani   -   Registergericht: Wien</p>
+            <p  style="margin-top: 0px;">Sitz der Gesellschaft: Wien   -   UID: AT123456789</p>
+        </td>
+    </tr>
+</table>
+
+
+</body>
+</html>

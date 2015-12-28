@@ -1,0 +1,67 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_feature_section_list') }}" >Feature section</a></li>    
+{% endblock %}
+
+{% block body %}
+<h1>Feature section add</h1>
+    
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="form-horizontal">
+    <div class="err-msg">{{ form_errors(form) }}</div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_subcategory" class="control-label col-xs-2">Subcategory</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.subcategory) }}</div>
+                {{ form_widget(form.subcategory, { 'attr': { 'class': 'select-box single-line' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Name</label>
+          <div class="col-xs-10">
+            <div class="err-msg">{{ form_errors(form.name) }}</div>
+            {{ form_widget(form.name, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'name' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_exclusive" class="control-label col-xs-2">Exclusive</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.exclusive) }}</div>
+          {{ form_widget(form.exclusive, { 'attr': { 'class': 'check-box single-line' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_position" class="control-label col-xs-2">Position</label>
+          <div class="col-xs-10">
+          <div class="err-msg">{{ form_errors(form.position) }}</div>
+          {{ form_widget(form.position, { 'attr': { 'class': 'text-box single-line short', 'placeholder': 'position' }}) }}
+          </div>
+        </div>
+    </div>
+          
+    
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Add">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_feature_section_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% block header %}
+    {{ include('common/header.html.twig') }}
+{% endblock %}
+
+{% block common %} {# common html/js stuff, eg. anbieten modals #}
+    {{ render(controller('AppBundle:Common:commons')) }}
+{% endblock %}
+
+{% block paddings %}{% endblock %}
+
+{% block home_header %}
+    {{ include('common/home_header.html.twig') }}
+{% endblock %}
+
+{% block body %}{% endblock %}
+
+{% block page_footer %}
+    {{ include('common/page_footer.html.twig') }}
+{% endblock %}
+
+{% block footer %}
+    {{ include('common/footer.html.twig') }}
+{% endblock %}

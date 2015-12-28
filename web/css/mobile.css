@@ -1,0 +1,38 @@
+a:hover,button:hover {
+  background-color: inherit;
+  animation: none;
+}
+#full-footer .social-heading {
+    margin-left: 0px;
+    font-size: 15px;
+}
+.no-top-margin {
+    margin-top:0px!important;
+}
+html body .date-container .date-picker-wrapper {
+    right: 0!important;
+    left: 0!important;
+    top: 51px !important;
+}
+.date-picker-wrapper .month-wrapper, .month1 {
+    width: 100%!important;
+}
+.date-picker-wrapper .month-wrapper table .day {
+    padding: 7px 3px;
+    line-height: 1;
+    font-size: 16px;
+    margin-bottom: 1px;
+    color: #ccc;
+    cursor: default;
+    font-family: 'open sans',sans-serif;
+}
+.touch *:hover {
+    all:unset!important;
+}
+.button-yellow:hover, .button-yellow:active {
+    color: black;
+    background-color: #f0c814;
+}
+iframe#player_1 {
+    top:6.3vh!important;
+}

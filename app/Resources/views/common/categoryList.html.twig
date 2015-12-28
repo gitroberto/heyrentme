@@ -1,0 +1,10 @@
+<li id="kaup-hidden">
+    <p class="display-block"><a class="haup-link">Equipment mieten / hey! rentme</a></p>
+    <span id="close-haup" class="haup-close-icon"></span>
+    {% for cat in categories %}
+        <p>
+            <a href="{{ path('catchall', { 'content': cat.slug }) }}#categories"><img src="{{ cat.imageUrl }}" alt=""/></a>
+            <a href="{{ path('catchall', { 'content': cat.slug }) }}#categories">{{ cat.name }}</a>
+        </p>
+    {% endfor %}
+</li>

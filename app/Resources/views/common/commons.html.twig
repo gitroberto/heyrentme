@@ -1,0 +1,121 @@
+<div class="modal fade delete-offer" id="pls-wait" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+            <div class="content-modal">
+                <p class="text-bold">Processing ....</p>
+                <p class="text-bold">Please wait</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="choose-offer" class="modal fade delete-offer" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+
+            <div class="content-modal">
+                <p class="text-bold">Was möchtest du anbieten?</p>
+                <p class="delate-info">Hier kannst du entweder ein Equipment oder dein
+                    Talent bzw. eine Dienstleistung anbieten! </p>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <a href="#" data-toggle="modal" data-target="#choose-category" class="button-black backgound-yellow text-black">Equipment Anbieten</a>
+                {% else %}
+                    <a href="{{ path('rental') }}" class="button-black backgound-yellow text-black">Equipment Anbieten</a>
+                {% endif %}
+                <a href="#" class="button-black backgound-yellow text-black">Talent Anbieten</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="choose-category" class="modal fade delete-offer" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+
+            <div class="content-modal">
+                <p class="text-bold">Bitte wähle eine Kategorie</p>
+                <p class="delate-info">Bitte wähle eine Haupt- und Detailkategorie, damit wir dein Angebot zuordnen können.</p>
+                <div class="clearfix">
+                  <select title='Hauptkategorie' id="category" name="category" class="selectpicker bs-select-hidden ">
+                      {% for cat in categories %}
+                          <option value="{{ cat.id }}">{{ cat.name }}</option>
+                      {% endfor %}
+                  </select>
+                  <select title='Detailcategorie' name="subcategory" id="subcategory" class="selectpicker bs-select-hidden" disabled="disabled">
+                  </select>
+                </div>
+                <div>
+                  <a href="#" id="weiter" class="button-black backgound-yellow text-black" disabled="disabled">Weiter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                  
+{# TODO: possibly move script to external .js file (watch out for the twig-logic (if's)! #}
+<script>
+    $(function() {
+        $("weiter").attr('disabled', 'disabled');
+        
+        $("#category").change(function() {
+            var id = $("#category").val();
+            var url = '{{ path('subcat', { 'id': 'CAT_ID' }) }}'.replace('CAT_ID', id.toString());           
+            var subsel = $("#subcategory");
+            $.getJSON(url)
+                .done(function(json) {
+                    subsel.empty();
+                    subsel.attr('disabled', 'disabled').selectpicker('refresh');
+                    $.each(json, function(index, item) {
+                        var opt = $("<option>").attr('value', item.id).text(item.name);                   
+                        subsel.append(opt);
+                    });
+                    subsel.removeAttr('disabled').selectpicker('refresh');
+                })
+                .fail(function(jqxhr, textStatus, error) {
+                    var err = textStatus + ", " + error;
+                    console.log("Request Failed: " + err);
+                    alert("Subcategories cannot be loaded, please try again.");
+                    subsel.attr('disabled', 'disabled').selectpicker('refresh');
+                });
+        });
+        
+        $("#subcategory").change(function() {
+            var butt = $('#weiter');
+            if ($("#subcategory").is(":selected"))
+                butt.removeAttr('disabled');
+            else
+                butt.attr('disabled', 'disabled');
+        });
+        
+        $("#weiter").click(weiterClick);
+    });
+    
+    function anbieten(categoryId) {
+        // preselect current category
+        if (typeof categoryId === 'number') {
+            var $sel = $('#category');
+            $sel.val(categoryId.toString()).selectpicker('refresh');
+            $sel.change();
+            $('#weiter').attr('diabled', 'disabled');
+        }
+        $("#choose-category").modal();
+    }
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        function weiterClick() {
+            var id = $("#subcategory").val();
+            var url = '{{ path('equipment-add-1', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            window.location = url;
+        }
+    {% else %}
+        function weiterClick() {
+            var id = $("#subcategory").val();
+            var url = '{{ path('rental-detail', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            window.location = url;
+        }
+    {% endif %}
+</script>

@@ -1,0 +1,57 @@
+
+.adm-header {
+    padding: 4px 16px;
+    font-size: 24px;
+    margin-bottom: 0;
+}
+h1 {
+    font-size: 20px;
+    margin-top: 0px;
+}
+img.adm-logo {
+    max-height: 60px;
+    margin-right: 8px;
+}
+a.adm-logo {
+    display: inline-block;
+}
+
+nav.crumbs ul {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+nav.crumbs {
+    padding: 4px 8px;
+}
+
+.main-content {
+    padding: 16px;
+}
+.button-black {
+    display: inline-block;
+    transition: all .4s ease;
+}
+
+.rich-text-edit {
+    width: 600px;
+    height: 300px;
+}
+
+.thumb {
+    max-width: 250px;
+    max-height: 150px;
+}
+
+
+.ui-jqgrid .ui-jqgrid-sortable {
+    height: auto;
+}
+.text-box {
+    width: 400px;
+}
+.text-box.short {
+    width: 120px;
+}
+.select-box {
+    width: 400px;
+}

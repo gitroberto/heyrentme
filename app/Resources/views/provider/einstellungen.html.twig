@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+    {% include('provider/user_nav.html.twig') %}
+    <section class="users container background-light-grey dashboard">
+      <div class="row">
+          <!-- Left side -->
+          <div class="col-md-9">
+            <a href="{{ path('start-page') }}"><img src="/img/logo-small.svg" alt=""/></a>
+            </div>
+          <!-- Right side -->
+          <div class="col-md-3 margin-rwd">
+              <div class="support">
+                <p class="head">Anbieter Support</p>
+                <p class="mail"><a href="mail:support@hey-tsc.com">support@hey-tsc.com</a></p>
+              </div>
+          </div>
+      </div>
+      <div class="row ">
+          <div class="col-md-9">
+              <div class="row users-profile">
+                  <div class="col-xs-12">
+                      <div>
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <span class="user-profil"></span>
+                                  <p class="form-heading">Einstellungen</p>
+                                  
+                                {{ form_start(form, {'method': 'post', 'action': path('einstellungen'), 'attr': { 'class': 'user-profil-form', 'accept-charset': 'utf-8'}}) }}    
+                                      
+                                        {{ form_errors(form) }}
+                                        {{ form_errors(form.password) }}
+                                        {{ form_errors(form.newPassword) }}
+                                        {{ form_errors(form.repeatedPassword) }}
+                                        {{ form_errors(form.name) }}
+                                        {{ form_errors(form.surname) }}
+                                        {{ form_errors(form.phonePrefix) }}
+                                        {{ form_errors(form.phone) }}
+                                        {{ form_errors(form.iban) }}
+                                        {{ form_errors(form.bic) }}
+                                        
+                                        
+                                        {{ form_widget(form.password, {'attr': {'placeholder': 'aktuelles passwort', 'id': 'actual-pass'}}) }}
+                                        {{ form_widget(form.newPassword, {'attr': {'placeholder': 'neues passwort', 'id': 'new-pass'}}) }}
+                                        {{ form_widget(form.repeatedPassword, {'attr': {'placeholder': 'neues passwort wiederholen', 'id': 'repeat-pass'}}) }}
+                                    
+                                        
+                                  <div class="row user-names">
+                                      <div class="col-xs-6">
+                                          {{ form_widget(form.name, {'attr': {'placeholder': 'vorname', 'id': 'name-pass'}}) }}
+                                        </div>
+                                      <div class="col-xs-6">                                          
+                                          {{ form_widget(form.surname, {'attr': {'placeholder': 'nachname', 'id': 'lastname-pass'}}) }}
+                                        </div>
+                                  </div>
+                                  <div class="phone-numer">
+                                    <h3>Telefon Nr. für User-Rückfragen</h3>
+                                    <div class="phone-inputs">
+                                      <span>+43</span>
+                                      
+                                      {{ form_widget(form.phonePrefix, {'attr': {'placeholder': '000'}}) }}
+                                      {{ form_widget(form.phone, {'attr': {'placeholder': '1234567'}}) }}
+                                      
+                                      <span>(verifiziert)</span>
+                                    </div>
+                                  </div>
+                                  <!--<input type="email" name="email" placeholder="e-Mail" id="email">-->
+                                  <div class="bank">
+                                    <h3>Bankverbindung für Rabatt-Zahlungen</h3>
+                                    <p>
+                                      Damit dein Angebot öfters gebucht wird, bietet die hey! sharing community Rabatte auf Buchungen. Um dir einen Buchungs-Rabatt auszahlen zu können, benötigen wir deine Bankverbindung.
+                                    </p>
+                                    <div class="bank-inputs row">
+                                      <div class="col-xs-6">
+                                          {{ form_widget(form.iban, {'attr': {'placeholder': 'iban'}}) }}
+                                        </div>
+                                        <div class="col-xs-6">
+                                          {{ form_widget(form.bic, {'attr': {'placeholder': 'bic'}}) }}
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <input type="submit" class="green-big-button" value="Einstellungen speichern">
+                                  {{ form_end(form) }}
+                                </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-3">
+            {{ include('provider/user_nav2.html.twig', { 'page': 'einstellungen' }) }}
+          </div>
+      </div>
+  </section>
+  <div id="reg-modal" class="modal  register" role="dialog" aria-labelledby="reg-titile">
+      <div class="modal-dialog" role="document">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" ><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title reg" id="reg-titile">Registrieren</h4>
+                  <p class="reg-promo">Jetzt registrieren <span class="text-bold">5 &euro; Rabatt</span> für die 1, Buchung sichern! </p>
+                  <a class="fb-button" href="#"><img src="/img/facebook-reg.svg" alt=""/></a>
+                  <span class="oder">- oder -</span>
+
+                  <form method="post" accept-charset="utf-8" action="/users/profile"><div style="display:none;"><input type="hidden" name="_method" value="POST"></div><input type="text" name="name3" placeholder="NAME" id="name3"><input type="text" name="mail3" placeholder="NACHNAME" id="mail3"><input type="text" name="info3" placeholder="EMAIL" id="info3"><input type="password" name="desc3" placeholder="PASSWORT" class="lock-icon" id="desc3"><input type="submit" value="Registriere dich per E-mail"><label class="agb"><input type="checkbox"> <span>Ich akzeptiere die <a href="#">AGBs</a> von hey-rentme</span></label></form>                <a data-dismiss="modal" data-toggle="modal" data-target="#login" class="has-account text-center" href="#">Du hast bereits ein Konto? Melde dich an</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div id="delete-offer" class="modal fade delete-offer" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+
+              <div class="content-modal">
+                  <p class="text-bold">Angebot “Cube Mountainbike” entfernen?</p>
+                  <p class="delate-info">Möchtest du dieses Angebot wirklich löschen? Dieser Schritt ist nicht rückgängig zu machen. </p>
+                  <button class="button btn-danger">Angebot entfernen</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  </div>
+{% endblock %}

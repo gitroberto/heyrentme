@@ -1,0 +1,15 @@
+  <nav class="user-nav">
+    <div class="container relative">
+        {% if app.user %}
+            <img src="{{ app.user.getProfilePicture(false, image_url_prefix) }}" class="headerProfileImage"  alt=""/>
+            <p>{{ app.user.name }}</p>
+            <a href="#" id="open-menu"><span class="down"></span></a>
+            <ul class="dropdown-menu-span">
+              <li><a href="{{ path('profil') }}">Profil</a></li>
+              <li><a href="{{ path('einstellungen') }}">Einstellungen</a></li>
+              <li><a href="{{ path('dashboard') }}">Dashboard</a></li>
+              <li><a href="{{ path('fos_user_security_logout') }}">Ausloggen</a></li>
+            </ul>
+        {% endif %}
+    </div>
+  </nav>

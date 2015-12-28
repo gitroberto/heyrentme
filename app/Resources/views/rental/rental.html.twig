@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="main-header ">
+        <img src="/img/rent-bg.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="/img/rent-bg-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading ">
+            <div class="row">
+                <div class="col-sm-8 full">
+                  <div class="text-align">
+                    <h1 class="vermietung-mobile">Equipment vermieten</h1>
+                  </div>
+
+                    <ul class="heading-list mobile-hidden">
+                        <li>Mache etwas sinnvolles mit deinen ungenutzten Gegenständen</li>
+                        <li>Lerne neue Menschen kennen</li>
+                        <li>Nutze unsere <span class="text-yellow">Test & Buy Option</span> </li>
+                        <li>Verdiene etwas Geld dabei</li>
+                    </ul>
+                    <a class="button-black backgound-yellow text-black no-hover mobile-hidden">Jetzt kostenlos mitmachen!</a>
+                </div>
+                <div class="ad col-sm-4 mobile-hidden">
+                    <img src="/img/placeholder/ad.jpg" alt="ad" class="img-responsive"/>
+                    <div class="product-info product-ad">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <ul>
+                                    <li><span class="marked glyphicon glyphicon-star"></span> </li>
+                                    <li><span class="marked glyphicon glyphicon-star"></span> </li>
+                                    <li><span class="marked glyphicon glyphicon-star"></span> </li>
+                                    <li><span class="glyphicon glyphicon-star"></span> </li>
+                                    <li><span class="glyphicon glyphicon-star"></span> </li>
+                                </ul>
+                                <p class="product-name">
+                                    dein inserat bei hey-TSC
+                                </p>
+                            </div>
+                        </div>
+                        <img src="/img/woman2.png" alt="cart" class="product-user">
+                        <img src="/img/new-icon.svg" alt="cart" class="cart">
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+  <div class="container margin-bot">
+  {{ render(controller('AppBundle:Common:categoryList', { 'mobile': true })) }}
+</div>
+  <section class="main-categories main-offers">
+    <div class="container background-white rent-container">
+        <nav class="crumbs">
+            <ul class="col-xs-8">
+                <li><a href="/">hey! TSC</a></li>
+                <li><a href="{{ path('rentme') }}">hey! rentme</a></li>
+                <li><a href="{{ path('rental') }}" class="active-crumb">Anbieten / Vermieten</a></li>
+            </ul>
+        </nav>
+        <span class="clearfix"></span>
+        <!-- Categories -->
+        <div class="row">
+            <div class="col-xs-12 mobile-hidden"><h2>Was möchtest du anbieten?</h2></div>
+            {% for subcat in subcategories %}
+                <a class="text-black" href="{{ path(route, { 'subcategoryId': subcat.id }) }}">
+                  <div class="col-sm-4">
+                      <div class="categories-names">
+                          <h3>{{ subcat.name }}</h3>
+                      </div>
+                      <a href="{{ path(route, { 'subcategoryId': subcat.id }) }}"><img src="{{ subcat.imageUrl }}" alt="{{ subcat.name }}"/></a>
+                  </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Categories -->
+    </div>
+  </section>
+  </div>
+{% endblock %}

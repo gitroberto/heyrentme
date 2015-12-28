@@ -1,0 +1,38 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+<div class="main-header ">
+        <img src="/img/info.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="/img/info-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading help-heading">
+            <div class="row">
+                <div class="col-sm-8 text-white">
+                    <h1>Hilfe & FAQ</h1><br>
+                    <a class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+  <section>
+    <div class="container background-white rent-container">
+        {{ render(controller('AppBundle:Static:breadcrumb', { "pageName":"hilfe_faq_talente_anbieten" } )) }}
+        <span class="clearfix"></span>
+        <!-- Left nav -->
+        <div class="row help-page">
+        {{ render(controller('AppBundle:Static:leftmenu', { "pageName":"hilfe_faq_talente_anbieten" } )) }}
+        <div class="col-md-9 content blog-content">
+            <div class="row">
+                TODO
+            </div>
+            <div class="text-center mobile-hidden">
+                <h4>Welches Angebot möchtest du einstellen?</h4>
+                <p class="content-categories" id="kategorie-select">Kategorie wählen</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <span class="add-margin mobile-hidden"></span>
+  </div>
+{% endblock %}

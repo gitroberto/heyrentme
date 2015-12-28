@@ -1,0 +1,100 @@
+.discount {
+  background: url('../img/statt.png') center center no-repeat;
+  width: 82px;
+  height: 83px;
+  position: absolute;
+  display: block;
+  right: 11px;
+  top: -4px;
+
+  span {
+    background: white;
+    display: inline-block;
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    color: #000;
+    font-size: 16px;
+    font-family: Open Sans;
+    font-weight: bold;
+    position: absolute;
+    right: 8px;
+    line-height: 18px;
+    padding: 0px 4px;
+    top: 19px;
+  }
+  &.discount-big {
+    right: -4px;
+  }
+}
+.product-info {
+  margin-top: 10px;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 25px !important;
+  padding-bottom: 10px;
+  ul {
+    margin: 0;
+    padding: 0;
+    margin-left: 15px;
+    li {
+      list-style: none;
+      display: inline-block;
+      color: #b2b2b2;
+    }
+    .marked {
+      color: @myyellow;
+    }
+  }
+  p {
+    margin: 0;
+  }
+  img.product-user, img.product-user2 {
+    position: absolute;
+    z-index: 1;
+    width: 80px !important;
+    height: 80px !important;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    bottom: 57px;
+    border-radius: 50% !important;
+    border: 3px solid rgba(255, 255, 255, 0.28);
+  }
+  img.product-user2 {
+    bottom: 34px;
+  }
+
+
+  .product-name {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'open sans', sans-serif;
+    font-size: 15px;
+    margin-left: 15px;
+  }
+  .no-stars {
+    text-transform: uppercase;
+    color: #b2b2b2;
+    font-family: Open Sans;
+    font-weight: bold;
+    font-size: 12px;
+    margin-left: 15px;
+  }
+  .price {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: right;
+  }
+  .tag {
+    font-size: 11px ;
+    color: #8d8d8d;
+    font-family: 'open sans', sans-serif;
+    text-align: right;
+    margin-top: -2px;
+  }
+  .price, .tag {
+    margin-right: 15px;
+  }
+}

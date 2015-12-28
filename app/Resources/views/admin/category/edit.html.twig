@@ -1,0 +1,83 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+  <script>
+        $(function() {
+            $("#form_name").keyup(updateSlug).blur(updateSlug);
+        });
+        function updateSlug() {
+            $("#form_slug").val(getSlug($("#form_name").val()));
+        }
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_category_list') }}" class="active">Category</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Category edit</h1>
+
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="form-horizontal">
+    <div class="err-msg">{{ form_errors(form) }}</div>
+    
+    {{ form_widget(form.id) }}
+
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Name</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.name) }}</div>
+            {{ form_widget(form.name, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'name' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_slug" class="control-label col-xs-2">Slug</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.slug) }}</div>
+          {{ form_widget(form.slug, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'slug' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_position" class="control-label col-xs-2">Position</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.position) }}</div>
+          {{ form_widget(form.position, { 'attr': { 'class': 'text-box single-line short', 'placeholder': 'position' }}) }}
+          </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="form-group">
+          <label for="form_upl" class="control-label col-xs-2">Change category image</label>
+          <div class="col-xs-10">
+            <input type="file" name="upl"/>
+          </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2">Current image</label>
+            <div class="col-xs-10">
+                <img src="{{ category.image.urlPath(image_url_prefix) }}" class="blogimg" alt=""/>
+            </div>
+        </div>
+    </div>
+          
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Save">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_category_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{{ form_end(form) }}
+{% endblock %}

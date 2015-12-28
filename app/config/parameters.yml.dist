@@ -1,0 +1,27 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_host:     192.168.9.6  #127.0.0.1
+    database_port:     ~
+    database_name:     symfony
+    database_user:     root
+    database_password: ~
+    # You should uncomment this if you want use pdo_sqlite
+    # database_path: "%kernel.root_dir%/data.db3"
+
+    mailer_transport: smtp
+    mailer_host: poczta.o2.pl:587
+    mailer_user: heyrentme
+    mailer_password: !@heyrentme12
+    # A secret key that's used to generate certain security-related tokens
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+# custom parameters
+    image_url_prefix: "/db-img/"
+    image_storage_dir: "C:\\projects\\reddragon\\dev\\web\\db-img"
+    facebook_client_id: 1390938247874229
+    facebook_client_secret: c801ab39b2606d9818641b2731ef3555
+    mailer_fromemail: heyrentme@o2.pl
+    mailer_fromname: Hey Rent Me (TEST)
+    mailer_image_url_prefix: http://test.hey-buyme.com/

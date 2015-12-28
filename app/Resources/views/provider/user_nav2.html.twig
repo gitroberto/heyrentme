@@ -1,0 +1,10 @@
+<div class="users-nav">
+    <ul>
+        <li><a href="{{ path('profil') }}" {% if page == 'profil' %}class="active"{% endif %}>Profil</a></li>
+        <li><a href="{{ path('einstellungen') }}" {% if page == 'einstellungen' %}class="active"{% endif %}>Einstellungen</a></li>
+        <li><a href="{{ path('dashboard') }}" {% if page == 'dashboard' %}class="active"{% endif %}>Dashboard</a></li>
+        <li><a href="{{ path('fos_user_security_logout') }}">ausloggen</a></li>
+        <li><a href="#">Konto löschen</a></li>
+        <li><a href="{{ path('start-page') }}">zurück zu angebote</a></li>
+    </ul>
+</div>

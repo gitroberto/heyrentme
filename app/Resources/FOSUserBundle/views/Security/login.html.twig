@@ -1,0 +1,19 @@
+<script src="/js/login.js"></script>
+{% block fos_user_content %}
+
+
+<form action="{{ path("fos_user_security_check") }}" method="post" id="formLogin">
+    
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+    
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+    
+    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" placeholder="EMAIL" />
+    
+    <input type="password" id="password" name="_password" required="required" class="lock-icon" placeholder="PASSWORT" />
+
+    <input type="submit" id="_submit" name="_submit" value="LOGIN" />
+</form>
+{% endblock fos_user_content %}

@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="main-header ">
+    <img src="/img/bike-heading.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+    <img src="/img/bike-heading-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading ver-step0">
+            <div class="row">
+                <div class="col-sm-8 full">
+                    <h1 class="vermietung-mobile mobile-hidden">Sportequipment vermieten</h1>
+                    <div class="text-align">
+                      <h1 class="vermietung-mobile desktop-hide-inline">Sportequipment</h1>
+                    </div>
+                    <div class="text-align">
+                      <h1 class="vermietung-mobile desktop-hide-inline">vermieten</h1>
+                    </div>
+                    <ul class="heading-list mobile-hidden">
+                        <li>Mache etwas sinnvolles mit deinen ungenutzten Gegenständen</li>
+                        <li>Lerne neue Menschen kennen</li>
+                        <li>Nutze unsere <span class="text-yellow">Test & Buy Option</span> </li>
+                        <li>Verdiene etwas Geld dabei</li>
+                    </ul>
+                    <a class="button-black backgound-yellow text-black no-hover mobile-hidden">Jetzt kostenlos mitmachen!</a>
+                </div>
+                <div class="ad mobile-hidden col-sm-4">
+                    <img src="/img/placeholder/ad.jpg" alt="ad" class="img-responsive"/>
+                    <div class="product-info product-ad">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <ul>
+                                    <li><span class="marked glyphicon glyphicon-star"></span> </li>
+                                    <li><span class="marked glyphicon glyphicon-star"></span> </li>
+                                    <li><span class="marked glyphicon glyphicon-star"></span> </li>
+                                    <li><span class="glyphicon glyphicon-star"></span> </li>
+                                    <li><span class="glyphicon glyphicon-star"></span> </li>
+                                </ul>
+                                <p class="product-name">
+                                    dein inserat bei hey! Vienna
+                                </p>
+                            </div>
+                        </div>
+                        <img src="/img/woman2.png" alt="cart" class="product-user">
+                        <img src="/img/new-icon.svg" alt="cart" class="cart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+  <section class="main-categories main-offers vermietung">
+    <div class="container  background-white rent-container bg-white">
+        <nav class="crumbs">
+            <ul class="col-xs-8">
+                <li><a href="{{ path('start-page') }}">hey! TSC</a></li>
+                <li><a href="{{ path('rentme') }}">hey! rentme</a></li>
+                <li><a href="{{ path('rental') }}">Anbieten / Vermieten</a></li>
+                <li><a class="active-crumb" href="#">{{ subcategory.name }}</a></li>
+            </ul>
+        </nav>
+        <div class="mobile-hidden"> <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+          <option value="/heyrentme">HAUPKATEGORIE</option>
+          <option value="/heyrentme">HAUS & GARTEN</option>
+          <option value="/heyrentme">FREIZEIT & EVENTS</option>
+          <option value="/heyrentme">LEBENSHILFE</option>
+          <option value="/heyrentme">OFFICE</option>
+          <option value="/heyrentme">WERKZEUG</option>
+          <option value="/heyrentme">SPORT-EQUIPMENT</option>
+          <option value="/heyrentme">KINDERARTIKEL</option>
+          <option value="/heyrentme">TECHNIK</option>
+        </select>
+  </div>
+        <span class="clearfix"></span>
+        {{ form_start(form) }}
+        <div class="err-msg">
+            {{ form_errors(form) }}
+        </div>
+         <div class="row">
+                <div class="col-xs-12 border-bottom-white form-head">
+                    <div class="form-container">
+                        <div class="row">
+                            <div class="col-md-6 ">
+                                <span class="number-one"></span>
+                                <p class="form-heading">Was möchtest du anbieten?</p>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="form-info">Dein Equipment ist bis zu <b>1.500,- €</b> über <a href="#">unsere Plattform versichert!</a> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-container form-input">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {# <input type="text" name="name2" placeholder="Z.B. Cube Mountainbike*" class="what-input" id="name2"> #}
+                                {{ form_widget(form.equipment, { 'attr': { 'class': 'what-input', 'placeholder': 'Z.B. Cube Mountainbike*' } }) }}
+                                <div class="err-msg">
+                                    {{ form_errors(form.equipment) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="row">
+            <div class="col-xs-12 border-bottom-white form-head">
+                <div class="form-container">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <span class="number-two"></span>
+                            <p class="form-heading">Anleitung schicken an..</p>
+                        </div>
+                        <div class="col-md-7">
+                            <span class="form-info">Deine Email dient nur zur Kontaktaufnahme und wird nicht weitergegeben!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-container form-input max-inputs">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-md-4 padding-left-none">
+                                {#<input type="text" name="name3" placeholder="NAME" class="" id="name3">#}
+                                {{ form_widget(form.name, { 'attr': { 'placeholder': 'NAME' } }) }}
+                                <div class="err-msg">
+                                    {{ form_errors(form.name) }}
+                                </div>
+                            </div>
+                            <div class="col-md-4 padding-left-none-mobile">
+                                {# <input type="text" name="name4" placeholder="EMAIL*" class="" id="name4"> #}
+                                {{ form_widget(form.email, { 'attr': { 'placeholder': 'EMAIL*' } }) }}
+                                <div class="err-msg">
+                                    {{ form_errors(form.email) }}
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="submit" class="green-big-button" value="Anleitung schicken">
+      {{ form_end(form) }}
+    </div>
+    </div>
+  </section>
+  </div>
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_users_list') }}" >Users</a></li>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  
+{% endblock %}
+
+{% block body %}
+<h1>User details</h1>
+
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="form-horizontal">
+    <div class="err-msg">{{ form_errors(form) }}</div>
+   
+     <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Image</label>
+          <div class="col-xs-10 control-readonly">      
+              <img alt ="{{ user.ProfilePicture(true, image_url_prefix) }}" src="{{ user.ProfilePicture(true, image_url_prefix) }}" />
+          </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Username</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.email }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Name</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.name }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Surname</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.surname }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Enabled</label>
+          <div class="err-msg">{{ form_errors(form) }}</div>
+          <div class="col-xs-10 control-readonly">              
+                {{ form_widget(form.Enabled) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Created at</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.createdAt.format('Y-m-d H:i') }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Modified at</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.modifiedAt.format('Y-m-d H:i') }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Last login</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.lastlogin.format('Y-m-d H:i') }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">About myself</label>
+          <div class="col-xs-10 control-readonly"> 
+              <p>{{ user.aboutMyself }}</p>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Phone prefix</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.phonePrefix }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Phone</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.phone }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">IBAN</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.iban }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">BIC</label>
+          <div class="col-xs-10 control-readonly">              
+            {{ user.bic }}
+          </div>
+        </div>
+    </div>
+    
+   
+          
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Save">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_users_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{{ form_end(form) }}
+{% endblock %}

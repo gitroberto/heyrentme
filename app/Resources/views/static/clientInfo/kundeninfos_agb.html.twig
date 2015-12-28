@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <header class="home-header" id="pages-header">    
+    <div class="main-header ">
+        <img src="/img/info2.jpg" alt="rent me heading." class="img-responsive max-1600"/>
+        <div class="container rent-heading help-heading">
+            <div class="row">
+                <div class="col-sm-8 text-white">
+                    <h1>Kundeninfos</h1><br>
+                    <a href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  </header>
+  <section>
+    <div class="container background-white rent-container">
+        {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_agb", "pageNameShort":"AGBs" } )) }}
+        <span class="clearfix"></span>
+        <!-- Left nav -->
+        <div class="row help-page">
+            {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_agb" } )) }}
+            <div class="col-sm-9 content faq">
+                <p class="text-bold">AGB</p>
+                <div class="panel-group" id="panel-quote-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="panel-heading">
+                            <p class="panel-title">AGB User<span class="pull-right"><a>
+                              <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span>
+                            </p>
+                        </div>
+                        <div id="collapseQuote" class="panel-collapse collapse2 collapse">
+                            <div class="panel-body">
+                                <p class="panel-head">Ist hey! rentme sicher?</p>
+                                <p>Das ist eine Mountainbike Beschreibung consed dolore conse ex ex exerciduis at.
+                                    Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla
+                                    consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num
+                                    volore.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-group" id="panel-quote-group2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="panel-heading1">
+                            <p class="panel-title">AGB Anbieter
+                                <span class="pull-right"><a><span
+                                            class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span>
+                            </p>
+                        </div>
+                        <div id="collapseQuote2" class="panel-collapse collapse1 collapse">
+                            <div class="panel-body">
+                                <p class="panel-head">Das besondere an deinem Angebot?</p>
+
+                                <p>Das ist eine Mountainbike Beschreibung consed dolore conse ex ex exerciduis at.
+                                    Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla
+                                    consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num
+                                    volore.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </section>
+    <span class="add-margin mobile-hidden"></span>
+  </div>  
+{% endblock %}

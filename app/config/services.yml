@@ -1,0 +1,28 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    #<added by Seba>
+    app.provider.oauth:
+        class: AppBundle\Security\Core\User\OAuthUserProvider
+        arguments: [@fos_user.user_manager,{facebook: facebookID, google: googleID}]
+        
+    app.form.registration:
+        class: AppBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }
+            
+    app.custom_fos_user_mailer:
+        class: AppBundle\Mailer\HeyrentmeMailer
+        arguments: [%mailer_fromEmail%, @router, @templating, @mailer,{ resetting.template: %fos_user.resetting.email.template%, mailer_image_url_prefix: %mailer_image_url_prefix% }]
+        
+    form_einstellungen:
+        class: AppBundle\Form\EinstellungenType
+        tags:
+         -  { name: form.type, alias: form_einstellungen  }
+    #</added by Seba>

@@ -1,0 +1,102 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_discount_code_list') }}" class="active-crumb">Discount code</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Discount code</h1>
+
+<br/>
+<br/>
+<div class="selecttionPanel">
+    <div class="error" id="CancelDiscountMessage"></div>
+    <a id="selectAll" href="#" >select all</a>&nbsp;|&nbsp;<a id="deselectAll" href="#" >deselect all</a>&nbsp;|&nbsp;<a id="revertSelection" href="#" >revert selection</a>
+    <div id="DivCancel" class="redButtonAdmin" data-target="{{ path("admin_cancel_discount_code" ) }}" >Cancel status</div>
+</div>
+<div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover">
+                <tr>
+                        <td></td>
+                </tr>
+        </table>
+        <div id="jqgrid-pager"></div>
+</div>
+
+
+
+<div class="generatePanel">
+    <h1>Generate new dicount codes:</h1>
+    <div>
+        <div class="error" id ="ValidationMessage" ></div>
+        <label>Number of codes:</label><input id="NumberOfCodes" type="number" />
+        <div id="DivGenerate" class="redButtonAdmin" data-target="{{ path("admin_genetate_discount_code", { "numberOfCodesToGenerate" : "0" }  ) }}" >Generate</div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+    {{ include('admin/common/admin.footer.html.twig') }}
+<script>    
+
+
+    
+$(document).ready(function(){    
+ 
+    
+//*******************************************
+/*	JQGRID INIT
+/********************************************/
+
+
+function rowActions(cellvalue, options, cellobject) {
+      
+      if (cellobject[3] == "cancelled"){
+        return "";  
+      } else {
+        return   "<input type='checkbox' class='CheckboxItems' value='"   +  options.rowId + "'></a>  ";
+      }
+    }
+
+var $grid = $('#jqgrid');
+
+if( $('#jqgrid').length > 0 ) {
+        
+    
+        $grid.jqGrid({
+                url: '{{ path('admin_discount_code_jsondata') }}',
+                mtype: 'GET',
+                datatype: 'jsonp',
+                colModel:[
+                        { name: ' ', width:80, fixed:true, editable:false, sortable:false, formatter:rowActions },
+                        { name:'Id', index:'dc.id', width:1, editable:false, sortable:false, hidden: true },
+                        { name:'Code', index:'dc.code', width: 200, editable:false, sortable:true },
+                        { name:'Status', index:'dc.status', width: 100, editable:false, sortable:true },
+                        { name:'CreationDate', index:'dc.createdAt', width: 100, editable:false, sortable:true },
+                        { name:'User', index:'u.username', width: 100, editable:false, sortable:true }                        
+                ],
+                height: 300,
+                rowNum: 10,
+                rowList: [10, 50, 200],
+                pager: 'jqgrid-pager',
+                sortname: 'dc.createdAt',
+                viewrecords: false,
+                sortorder: "desc",
+                caption: "Posts",
+                multiselect: false,
+        });
+}
+
+var buttons = ' ';
+
+
+var html = $("#jqgrid_").html();
+$("#jqgrid_").html(html + buttons);
+
+}); // end ready function
+</script>    
+<script src="/js/discountCode.js"></script>
+{% endblock %}
+

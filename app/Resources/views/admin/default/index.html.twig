@@ -1,0 +1,26 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block body %}
+
+Manage
+<ul>
+    <li>
+        <a href="{{ path('admin_blog_list') }}">Blog</a>
+    </li>
+    <li>
+        <a href="{{ path('admin_category_list') }}">Category/subcategory</a>
+    </li>
+    <li>
+        <a href="{{ path('admin_discount_code_list') }}">Discount code</a>
+    </li>
+    <li>
+        <a href="{{ path('admin_feature_section_list') }}">Feature section/feature</a>
+    </li>
+    <li>
+        <a href="{{ path('admin_testimonials_list') }}">Testimonials</a>
+    </li>
+     <li>
+        <a href="{{ path('admin_users_list') }}">Users</a>
+    </li>
+</ul>
+{% endblock %}

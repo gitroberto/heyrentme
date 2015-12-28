@@ -1,0 +1,77 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_feature_section_list') }}" class="active-crumb">Feature section</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Feature section</h1>
+
+<a class="button-black backgound-yellow text-black" href="{{ path('admin_feature_section_new') }}">New feature section</a>
+
+<br/>
+<br/>
+<div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover">
+                <tr>
+                        <td></td>
+                </tr>
+        </table>
+        <div id="jqgrid-pager"></div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+    {{ include('admin/common/admin.footer.html.twig') }}
+<script>    
+$(document).ready(function(){    
+//*******************************************
+/*	JQGRID INIT
+/********************************************/
+
+
+function rowActions(cellvalue, options, cellobject) {
+      return   "<a title='Features'    href='feature/"     +  options.rowId + "'><u>Features</u></a>  "+  
+               "<a title='Edit'             href='feature-section/edit/"   +  options.rowId + "'><u>Edit</u></a>  "+
+  	       "<a title='Delete'           href='feature-section/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>";
+  }
+
+var $grid = $('#jqgrid');
+
+if($grid.length > 0 ) {
+        $grid.jqGrid({
+                url: '{{ path('admin_feature_section_jsondata') }}',
+                mtype: 'GET',
+                datatype: 'jsonp',
+                colModel:[
+                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                        { name:'Subcategory', index:'s.name', width: 200, editable:false, sortable:true },
+                        { name:'Name', index:'fs.name', width: 400, editable:false, sortable:true },
+                        { name:'exclusive', index:'fs.exclusive', width: 100, editable:false, sortable:true, search: false },
+                        { name:'Position', index:'fs.position', width: 100, editable:false, sortable:true, search: false }
+                ],
+                height: 300,
+                rowNum: 50,
+                rowList: [50, 100, 200],
+                pager: 'jqgrid-pager',
+                sortname: 'fs.position',
+                viewrecords: false,
+                sortorder: "asc",
+                caption: "Feature sections",
+                multiselect: false
+        });
+        $grid.jqGrid('filterToolbar', {
+            stringResult: false,
+            searchOnEnter: false,
+            defaultSearch: 'cn'
+        });
+}
+
+}); // end ready function
+</script>    
+    
+{% endblock %}
+

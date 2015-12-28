@@ -1,0 +1,131 @@
+.home-header {
+  min-height: 100px;
+  z-index: 9;
+  top: 0px;
+  width: 100%;
+  padding-top: 10px;
+  position: relative;
+  .button-black {
+    display: inline-block;
+    margin-top: 54px;
+    margin-right: 8px;
+    transition: all 0.4s ease;
+    &:last-child{
+      margin-right: 0px;
+    }
+  }
+}
+
+html body .main-header {
+  margin-top: 80px;
+}
+
+#heading-fixed {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: white;
+  top: 0px;
+  height: 90px;
+  z-index: 99;
+  transition: all 0.4s ease;
+}
+
+#heading-fixed.tiny, #heading-fixed.tiny > div {
+  height:70px;
+  background: black;
+  transition: all 0.4s ease;
+  border: transparent;
+}
+
+#heading-fixed.tiny .left-right-border {
+  border: transparent;
+}
+
+.button-black.tiny {
+  margin-top: 10px;
+  transition: all 0.4s ease;
+  background-color: transparent;
+  color: white;
+  &:hover {
+    background-color: @myyellow
+  }
+}
+
+.small-logo {
+  width: 10%!important;
+  transition: all 0.4s ease;
+  margin-right: 3%;
+}
+
+#mobile-nav {
+  padding: 15px 0px;
+  display: none;
+  p {
+    text-align: center;
+    color: white;
+    font-size: 19px;
+    margin-bottom: 0px;
+    margin-top: 3px;
+  }
+  span {
+    color: @myyellow;
+    font-weight: bold;
+  }
+}
+
+//Mobile Menu,
+#mobile-nav,.sb-slidebar {
+  background-color: black;
+}
+.detail-controls.mobile-share {
+  float: right;
+  margin: 0;
+}
+span#share-mobile-button {
+  background-color: transparent;
+  background-image: url('../img/icons/sicon.svg');
+  border: none;
+  margin-top: -9px;
+
+
+  &:hover {
+    background-color: inherit!important;
+  }
+}
+
+
+
+.sb-right {
+  background-color: transparent !important;
+  a {
+    width: 100%!important;
+  }
+  a.social.fb {
+    margin-top: -4px!important;
+  }
+}
+
+.sb-slidebar {
+  padding-top: 55px;
+  padding-left: 20px;
+  a {
+    color: #eeeeee;
+    font-family: 'open sans', sans-serif;
+    font-size: 17px;
+    color: #eee;
+    font-family: 'open sans',sans-serif;
+    font-size: 17px;
+    display: block;
+    width: 90%;
+    max-width: 340px;
+    padding: 25px;
+    &:hover {
+      color: white;
+    }
+  }
+  .email {
+    margin-bottom: 0px;
+    border-bottom: 0px;
+  }
+}

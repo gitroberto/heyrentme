@@ -1,0 +1,27 @@
+@media screen and (max-width:600px) {
+  .mail1 .img-header {
+    top: 0px;
+    position: absolute;
+  }
+  .mail1 .td-img {
+    position: relative;
+    padding: 0px;
+  }
+  .mail1 .paddin {
+    padding-left: 42px !important;
+  }
+  .mail1 .links {
+    display: block !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+}
+@media screen and (max-width:480px) {
+  .mail1 .page-title {
+    margin-top: 0px;
+  }
+  .mail1 .page-title-sec {
+    margin-top: 0px;
+    font-size: 25px !important;
+  }
+}

@@ -1,0 +1,289 @@
+// Feedback Modal
+.fade {
+  opacity: 0;
+   transition: none !important;
+}
+
+
+
+#feedback {
+  position: fixed;
+  right: 0px;
+  top: 39%;
+  z-index: 9;
+  cursor: pointer;
+  background-image: url('../img/feedback.svg');
+  width: 35px;
+  height: 161px;
+  transition: all 300ms ease-in;
+  &:hover {
+    background-image: url('../img/feedback-hover.svg');
+  }
+}
+
+#feedback-modal, #reg-modal, #login {
+  .modal-dialog {
+    max-width: 450px;
+  }
+  .modal-content {
+    border-radius: 0px;
+    box-shadow: none;
+    max-width: 450px;
+  }
+  .modal-title {
+    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-top: 40px;
+    letter-spacing: 1.2px;
+  }
+  input[type="text"], input[type="password"], textarea {
+    display: block;
+    width: 100%;
+    height: 48px;
+    font-size: 15px;
+    font-family: 'open sans', sans-serif;
+    border: transparent;
+    background-color: #f9f9f9;
+    padding-left: 10px;
+    margin-bottom: 17px;
+    color: black;
+    .radius;
+    border-top: 1px solid #c7c7c7;
+    border-left: 1px solid #c7c7c7;
+  }
+  textarea {
+    min-height: 140px;
+    padding-right: 10px;
+  }
+
+  input[type="submit"] {
+    background-color: #34b437;
+    width: 100%;
+    height: 47px;
+    .radius;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    color: white;
+    text-transform: uppercase;
+    font-family: 'open sans', sans-serif;
+    margin-bottom: 22px;
+    &:hover {
+      background-color: #009103;
+      transition: all 300ms ease-in;
+    }
+  }
+  input[placeholder] {
+    font-weight: bold;
+    border-color: #c7c7c7;
+    font-size: 15px;
+    font-weight: normal;
+  }
+  button.close {
+    opacity: 1;
+  }
+}
+
+.rent-dialog {
+  p {
+    font-family: 'open sans', sans-serif !important;
+    text-transform: uppercase;
+    margin-left: 20px;
+  }
+  span {
+    font-family: 'open sans', sans-serif !important;
+    text-transform: uppercase;
+  }
+}
+
+#from-time, #to-time {
+  margin-left: -36px;
+}
+
+// Register modal
+#allge-modal .modal-dialog {
+    max-width: 520px;
+}
+#allgemeine-modal {
+  .modal-dialog {
+    width: 740px;
+    max-width: 740px;
+  }
+  h4 {
+    text-align: center;
+    font-size: 31px;
+    font-weight: bold;
+    margin-left: 0px;
+    margin-bottom: 30px;
+    margin-top: 40px;
+    letter-spacing: 1.2px;
+  }
+  h5 {
+    font-weight: bold;
+  }
+  p, h5 {
+    margin-bottom: 25px;
+    padding: 0 3%;
+    letter-spacing: 0px;
+    font-size: 15px;
+    text-align: left;
+    font-family: 'open sans', sans-serif;
+  }
+}
+.register {
+  p.reg-promo {
+    margin-bottom: 25px;
+    padding: 0% 18%;
+    letter-spacing: 0.5px;
+    font-size: 18px;
+    text-align: center;
+    font-family: 'open sans', sans-serif;
+  }
+  p.anggl {
+    margin-bottom: 25px;
+    padding: 0% 10%;
+    letter-spacing: 0.5px;
+    font-size: 18px;
+    text-align: center;
+    font-family: 'open sans', sans-serif;
+  }
+  .vielen {
+    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-top: 40px;
+    letter-spacing: 1.2px;
+  }
+  p.anggl-small {
+    margin-bottom: 25px;
+    padding: 0% 10%;
+    letter-spacing: 0.1px;
+    font-size: 15px;
+    text-align: center;
+    font-family: 'open sans', sans-serif;
+  }
+  h4 {
+    margin-left: 10%;
+  }
+  .fb-button {
+    text-align: center;
+    display: block;
+
+  }
+  .oder {
+    text-align: center;
+    display: block;
+    margin-top: 31px;
+    margin-bottom: 22px;
+    color: #a3a3a3;
+    font-family: 'open sans', sans-serif;
+  }
+  a, .agb span {
+    color: black;
+    font-family: 'open sans', sans-serif;
+    font-weight: normal;
+  }
+  .agb span {
+    margin-left: 5px;
+  }
+  a {
+    text-decoration: underline;
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+
+  .has-account, .reg-forgot {
+    color: #828282;
+    margin-top: 23px;
+    display: block;
+    margin-bottom: 14px;
+  }
+  form {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .lock-icon {
+    background-repeat: no-repeat;
+    background-position: 96%;
+  }
+  .reg-forgot {
+    margin-right: 25px;
+    display: inline-block;
+    margin-left: 10px;
+
+  }
+
+}
+
+// Delate offer modal
+
+.delete-offer {
+  .modal-dialog {
+    max-width: 750px;
+    width: 90%;
+  }
+  .modal-content {
+    border-radius: 0px;
+    box-shadow: none;
+  }
+  button.close {
+    right: 10px;
+    top: 1px;
+    margin-right: 15px;
+    margin-top: 15px;
+    opacity: 1;
+  }
+
+  .content-modal {
+    padding: 50px 0 40px 0;
+    .text-bold {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .delate-info {
+      font-family: 'open sans',sans-serif;
+      font-size: 15px;
+      width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 30px;
+    }
+  }
+  text-align: center;
+  .button {
+    border: none;
+    padding: 12px 48px;
+    .radius;
+    font-size: 15px;
+    font-family: 'open sans', sans-serif;
+    text-transform: uppercase;
+  }
+}
+
+#choose-offer {
+  .button-black {
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 0px;
+    display: inline-block;
+  }
+}
+
+.angrafge-dialog {
+  max-width: 1200px !important;
+}
+@media (min-width: 768px) {
+.modal-dialog {
+  width: 1200px;
+  margin: 30px auto;
+}
+}
+.angrafge-dialog .modal-content {
+  max-width: 1200px!important;
+}

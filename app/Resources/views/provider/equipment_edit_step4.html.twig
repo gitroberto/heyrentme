@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+    {% include('provider/user_nav.html.twig') %}
+    <section class="users container background-light-grey">
+        <div class="row">
+            <!-- Left side -->
+            <div class="col-md-9">
+                <a href="{{ path('start-page') }}"><img src="/img/logo-small.svg" alt=""/></a>
+                <ul class="steps">
+                    <li class="step-1 active-step"><span class="counters"><span class="n-one"></span>Tarif</span></li>
+                    <li class="step-2 active-step"><span class="counters"><span class="n-two"></span>Beschreibung</span>
+                    </li>
+                    <li class="step-3 active-step"><span class="counters"><span class="n-three"></span>Details</span></li>
+                    <li class="step-4"><span class="counters text-bold"><span class="n-four"></span>Fertig</span></li>
+                </ul>
+            </div>
+            <!-- Right side -->
+            <div class="col-md-3 margin-rwd">
+              <div class="support">
+                <p class="head">Anbieter Support</p>
+                <p class="mail"><a href="mail:support@hey-tsc.com">support@hey-tsc.com</a></p>
+              </div>
+            </div>
+        </div>
+        <div class="row user-forms step4">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 border-bottom-white form-head">
+                        <div class="form-container form-input-border">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="number-four four-num"></span>
+
+                                    <p class="form-heading">Gratuliere ;)<span> Eingaben abgeschlossen - Wir sehen es uns gleich an!</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-md-offset-3 col-xs-6 step4-head">
+                        <img src="/img/step4a.svg" alt=""/>
+                        <p class="text-bold">Zum Start</p>
+                        <p class="small-text">Ändere dein Profilbild, schreib etwas über dich und bearbeite deine Anzeigen</p>
+                        <a href="{{ path('profil') }}" class="button-black">Zum Start</a>
+                    </div>
+                    <div class="col-md-3 col-xs-6 step4-head">
+                        <img src="/img/step4b.svg" alt=""/>
+                        <p class="text-bold">Weiteres Angebot</p>
+                        <p  class="small-text">Möchtest du ein weiteres Angebot erstellen?</p>
+                        <a href="{{ path('dashboard') }}" class="button-black">weiteres angebot</a>
+                    </div>
+                    <span class="clearfix"></span>
+                    <div class="step4-info">
+                        <p><span class="text-bold">Hinweis:  </span>  Wir müssen dein Angebot zuerst inhaltlich und formal kontrollieren bevor es freigeschalten wird. Du erhälst eine Email sobald es bei hey! TSC  erscheint. Du kannst dann deine Anzeige jederzeit ändern oder entfernen lassen.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    
+    <div class="main-header ">
+        <img src="/img/info2.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="/img/info2-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading help-heading">
+            <div class="row">
+                <div class="col-sm-8 text-white">
+                    <h1>Kundeninfos</h1><br>
+                    <a href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  </header>
+  <section>
+    <div class="container background-white rent-container">
+        {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_impressum", "pageNameShort":"Impressum" } )) }}        
+        <span class="clearfix"></span>
+        <!-- Left nav -->
+        <div class="row help-page">
+            {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_impressum" } )) }}
+            <div class="col-md-9 content">
+                <p class="text-bold">Impressum</p>
+                <p>Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem. </p>
+                <p class="text-bold">AGBs 2</p>
+                <p>Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem. </p>
+                <p class="text-bold">AGBs 3</p>
+                <p>Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem. </p>
+            </div>
+        </div>
+  </section>
+    <span class="add-margin mobile-hidden"></span>
+  </div>
+    
+{% endblock %}

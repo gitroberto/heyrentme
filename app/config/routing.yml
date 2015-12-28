@@ -1,0 +1,25 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+
+#<added by Seba>
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+ 
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+#</added by Seba>    
+
+# catchall route must be the last route in config
+catchall:
+    path: /{content}
+    defaults: 
+        _controller: AppBundle:Default:catchall
+    requirements:
+        content: .+

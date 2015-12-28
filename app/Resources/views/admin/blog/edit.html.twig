@@ -1,0 +1,103 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_blog_list') }}" class="active-crumb">Blog</a></li>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script>
+      tinymce.init({ 
+          selector: 'textarea.rich-text-edit',
+          width: 600,
+          menubar: false/*,
+          content_css: '/css/main.css'*/
+      });
+        $(function() {
+            $("#form_title").keyup(updateSlug).blur(updateSlug);
+        });
+        function updateSlug() {
+            $("#form_slug").val(getSlug($("#form_title").val()));
+        }
+  </script>
+{% endblock %}
+
+{% block body %}
+<h1>Blog post edit</h1>
+
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="form-horizontal">
+    <div class="err-msg">{{ form_errors(form) }}</div>
+    
+    {{ form_widget(form.id) }}
+
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Title</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.title) }}</div>
+            {{ form_widget(form.title, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'Title' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_slug" class="control-label col-xs-2">Slug</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.slug) }}</div>
+            {{ form_widget(form.slug, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'Slug' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_slug" class="control-label col-xs-2">Content</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.content) }}</div>
+          {{ form_widget(form.content, { 'attr': { 'class': 'rich-text-edit', 'placeholder': 'Content' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_position" class="control-label col-xs-2">Position</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.position) }}</div>
+          {{ form_widget(form.position, { 'attr': { 'class': 'text-box single-line short', 'placeholder': 'Position' }}) }}
+          </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        
+        
+        <div class="form-group">
+          <label for="form_upl" class="control-label col-xs-2">Change post image</label>
+          <div class="col-xs-10">
+            <input type="file" name="upl"/>
+          </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2">Current post image</label>
+            <div class="col-xs-10">
+                {% if blog.image %}
+                    <img src="{{ blog.image.urlPath(image_url_prefix) }}" class="thumb" alt=""/>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+          
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Save">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_blog_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{{ form_end(form) }}
+{% endblock %}

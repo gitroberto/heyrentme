@@ -1,0 +1,52 @@
+html body {
+  background-color: #f9f9f9;
+}
+a:focus {
+  outline-color:transparent !important;
+}
+
+a:focus {
+  outline: thin dotted;
+  outline: 0px auto -webkit-focus-ring-color!important;
+  outline-offset: -2px;
+}
+.button-black:focus {
+  color: white;
+}
+
+
+
+button:active, .button:active, button:focus, .button:focus, button:hover, .button:hover{
+  border:none !important;
+  outline:none !important;
+}
+
+p a {
+  color: inherit;
+  font-size: inherit;
+  &:hover {
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+header {
+  background-color: #f9f9f9;
+  margin-bottom: -5px;
+}
+
+#heading-fixed {
+  background-color: #f9f9f9;
+  max-height: 100px;
+  margin-top: 10px;
+}
+
+.full-container {
+  width: 100%!important;
+  max-width: 1630px;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1140px;
+  }
+}

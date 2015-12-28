@@ -1,0 +1,16 @@
+{% trans_default_domain 'FOSUserBundle' %}
+<script src="/js/resetPasswordRequest.js"></script>
+
+
+<form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request" id="formRecovery">
+    
+    <div>
+        {% if invalid_username is defined %}
+            <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</p>
+        {% endif %}
+        <input type="text" id="username" name="username" required="required" placeholder="EMAIL" />
+    </div>
+    <div>
+        <input type="submit" value="{{ 'resetting.request.submit'|trans }}" />
+    </div>
+</form>
