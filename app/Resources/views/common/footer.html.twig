@@ -28,7 +28,13 @@
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
                   <h4 class="modal-title">Feedback</h4>
-                  <form method="post" accept-charset="utf-8" action="/"><div style="display:none;"><input type="hidden" name="_method" value="POST"></div><input type="text" name="name2" placeholder="ROBERT" id="name2"><input type="text" name="mail2" placeholder="INFO@ROBERTLADKANI.COM" id="mail2"><input type="text" name="info2" placeholder="ANREGUNGEN ZUR WEBSITE" id="info2"><textarea name="desc2" placeholder="DEIN FEEDBACK" id="desc2" rows="5"></textarea><input type="submit" value="abschicken"></form>            </div>
+                  
+                  {{ render(controller('AppBundle:Common:feedback')) }}
+                  
+                  <div id ="FeedbackConfirmationDiv" style="display:none;" >
+                    Thank you for your feedback!
+                  </div>
+              </div>
           </div>
       </div>
   </div>

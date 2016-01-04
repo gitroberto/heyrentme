@@ -2,12 +2,22 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Feedback;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 class CommonController extends BaseController {
     
@@ -30,7 +40,69 @@ class CommonController extends BaseController {
             'categories' => $categories
         ));
     }
-       
+    
+    
+     /**
+     * 
+     * @Route("/feedback", name="feedback")
+     */
+    public function feedbackAction(Request $request) {
+        $feedback = new Feedback();
+        
+        $form = $this->createFormBuilder($feedback)
+                ->add('name', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 100))
+                    )
+                ))
+                ->add('email', 'email', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 100))
+                    )
+                ))
+                ->add('subject', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 100))
+                    )
+                ))
+                ->add('message', 'textarea', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 1000))
+                    )
+                ))
+                ->getForm();
+        //when the form is posted this method prefills entity with data from form
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            
+            $em = $this->getDoctrine()->getManager();            
+            // save to db
+            
+            $em->persist($feedback);
+            $em->flush();
+
+            
+            return $this->userFeedbackSavedAction();
+        }
+        
+        
+        return $this->render('common/feedback.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+    
+    public function userFeedbackSavedAction(){        
+        $response = new Response(json_encode("User_Feedback_Saved"));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
+    
     public function registerAction(Request $request) {     
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.registration.form.factory');

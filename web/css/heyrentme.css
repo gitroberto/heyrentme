@@ -63,6 +63,7 @@ div.err-msg  ul  li {
 #passwordRecovery input[type="password"],
 #feedback-modal input[type="password"],
 #reg-modal input[type="email"],
+#feedback-modal input[type="email"],
 #reg-modal input[type="password"],
 #login input[type="password"],
 #passwordRecovery input[type="password"],

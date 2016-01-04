@@ -1,0 +1,21 @@
+<script src="/js/feedback.js"></script>
+
+{{ form_start(form, {'method': 'post', 'action': path('feedback'), 'attr': { 'id':'formFeedback', 'class': 'feedback'}}) }}    
+
+    {{ form_errors(form) }}
+    
+    {{ form_errors(form.name) }}    
+    {{ form_widget(form.name, {'attr': {'placeholder': 'NAME'}}) }}
+        
+    {{ form_errors(form.email) }}
+    {{ form_widget(form.email, {'attr': {'placeholder': 'EMAIL'}}) }}
+    
+    {{ form_errors(form.subject) }}
+    {{ form_widget(form.subject, {'attr': {'placeholder': 'ANREGUNGEN ZUR WEBSITE'}}) }}
+    
+    {{ form_errors(form.message) }}
+    {{ form_widget(form.message, {'attr': {'placeholder': 'DEIN FEEDBACK'}}) }}
+    
+    <input type="submit" value="abschicken">
+{{ form_end(form) }}
+
