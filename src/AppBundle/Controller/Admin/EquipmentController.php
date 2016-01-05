@@ -1,6 +1,13 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Equipment;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\ExecutionContextInterface;
+
 class EquipmentController extends BaseAdminController {
     /**
      * 
