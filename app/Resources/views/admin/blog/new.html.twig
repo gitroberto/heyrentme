@@ -8,12 +8,17 @@
 {% block head %}
     {{ parent() }}
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="/js/videoembed/plugin.min.js"></script>
   <script>
       tinymce.init({ 
           selector: 'textarea.rich-text-edit',
-          width: 600,
+          width: 650,
           menubar: false/*,
-          content_css: '/css/main.css'*/
+          content_css: '/css/main.css'*/,
+            plugins: [
+                  "table contextmenu paste videoembed"
+            ],
+            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | videoembed",
       });
         $(function() {
             $("#form_title").keyup(updateSlug).blur(updateSlug);
@@ -67,6 +72,7 @@
           </div>
         </div>
     </div>
+    
           
     <div class="row">
         <div class="form-group">

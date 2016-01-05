@@ -133,6 +133,7 @@ class BlogController  extends BaseAdminController {
                         new Type(array('type' => 'integer'))
                     )
                 ))
+               
                 ->getForm();
         //when the form is posted this method prefills entity with data from form
         $form->handleRequest($request);
@@ -240,6 +241,7 @@ class BlogController  extends BaseAdminController {
                         new Type(array('type' => 'integer'))
                     )
                 ))
+               
                 ->getForm();
 
        
