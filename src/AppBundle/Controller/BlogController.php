@@ -25,7 +25,7 @@ class BlogController extends BaseController {
      */
     public function detailAction(Request $request, $slug) {
         $post = $this->getDoctrineRepo('AppBundle:Blog')->getBySlug($slug);
-        $posts = $this->getDoctrineRepo('AppBundle:Blog')->getAllOrderedByPosition();
+        $posts = $this->getDoctrineRepo('AppBundle:Blog')->getRelatedBlogsList($post->getId());
        
         $nextPost = $this->getDoctrineRepo('AppBundle:Blog')->getByPosition($post->getPosition() + 1);
         $prevPost = $this->getDoctrineRepo('AppBundle:Blog')->getByPosition($post->getPosition() - 1);

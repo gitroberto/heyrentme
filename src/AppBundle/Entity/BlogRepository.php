@@ -35,6 +35,23 @@ class BlogRepository extends EntityRepository
             ->getSingleScalarResult();
     }
     
+    public function getRelatedBlogsList($id) {
+        $q = 'select b from AppBundle:Blog b inner join AppBundle:BlogRelated br with b.id = br.relatedBlogId where br.blogId = :id order by br.position asc';
+        return $this->getEntityManager()->createQuery($q)->setParameter(':id', $id)->execute();
+    }
+    
+    public function getForRelatedOrderedByName($id) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        // build query
+        $qb->select('b')
+           ->from('AppBundle:Blog', 'b')     
+           ->where($qb->expr()->neq('b.id', $id))
+           ->orderBy("b.title", 'asc');      
+        $q = $qb->getQuery();
+        
+        return $q->getResult();        
+    }
+    
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query

@@ -1,0 +1,50 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_blog_list') }}" class="active-crumb">Blog</a></li>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    
+{% endblock %}
+
+{% block body %}
+<h1>Blog add related posts</h1>
+    
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="form-horizontal">
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Title</label>
+          <div class="col-xs-10">
+             {{ blog.title }}            
+          </div>
+        </div>
+    </div>
+    
+    {% for i in 0..maximumNumberOfRelatedPosts-1 %}
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Post for position {{ i }}</label>
+              <div class="col-xs-10">
+                 {{ form_widget(form[i], { 'attr': { 'class': 'text-box single-line' }}) }}
+              </div>
+            </div>
+        </div>
+    {% endfor %}
+          
+    
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Save selection">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_blog_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{{ form_end(form) }}
+{% endblock %}

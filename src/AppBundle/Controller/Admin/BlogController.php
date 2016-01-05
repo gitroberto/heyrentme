@@ -2,6 +2,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Blog;
+use AppBundle\Entity\BlogRelated;
 use AppBundle\Entity\Image;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -21,6 +22,74 @@ class BlogController  extends BaseAdminController {
      */
     public function indexAction() {
         return $this->render('admin/blog/index.html.twig');
+    }
+    
+    /**
+     * 
+     * @Route("/admin/blog/addrelated/{id}", name="admin_blog_add_related")
+     */
+    public function addRelatedAction(Request $request, $id) {
+        $maximumNumberOfRelatedPosts = 10; 
+        
+        $blog = $this->getDoctrineRepo('AppBundle:Blog')->find($id);
+        if (!$blog) {
+            throw $this->createNotFoundException('No blog post found for id '.$id);
+        }        
+        $blogs = $this->getDoctrineRepo('AppBundle:Blog')->getForRelatedOrderedByName($id);
+        
+        $relatedBlogs = $this->getDoctrineRepo('AppBundle:Blog')->getRelatedBlogsList($id);
+        
+        $relatedBlogsCount = count($relatedBlogs);
+        
+        $formTmp = $this->createFormBuilder(null);        
+        for($i = 0; $i < $maximumNumberOfRelatedPosts; $i++ ){
+            $selectedValue = null;
+            if ($i < $relatedBlogsCount ){
+                $selectedValue = $relatedBlogs[$i];
+            }
+            
+            
+            $formTmp->add('position_'+$i, 'entity', array(
+                  'class' => 'AppBundle:Blog',
+                  'choices' => $blogs,
+                  'empty_value' => 'Select related post',
+                  'property' => 'title',                 
+                  'required' => false,
+                  'data' => $selectedValue
+                  ));
+        }        
+        $form = $formTmp->getForm();
+        
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            //check if there is file
+            $file = $request->files->get('upl');
+            $em = $this->getDoctrine()->getManager();            
+            $this->getDoctrineRepo('AppBundle:BlogRelated')->cleanCurrentSelection($id);
+            
+            $pos = 1;
+            $data = $form->getData();
+            
+            for($i = 0; $i< $maximumNumberOfRelatedPosts; $i++){
+                $val = $data[$i];
+                if ($val != null && $val != ""){
+                    $br = new BlogRelated();
+                    $br->setBlogId($id);
+                    $br->setRelatedBlogId($val->getId());
+                    $br->setPosition($pos++);
+                    $em->persist($br);
+                }
+            }            
+            $em->flush();
+            return $this->redirectToRoute("admin_blog_list");
+        }
+        
+        
+        return $this->render('admin/blog/add_related.html.twig', array(
+            "form" => $form->createView(),
+            "blog" => $blog,
+            "maximumNumberOfRelatedPosts" => $maximumNumberOfRelatedPosts
+        ));
     }
     
      /**
