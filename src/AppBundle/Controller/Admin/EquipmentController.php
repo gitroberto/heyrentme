@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use Symfony\Component\Routing\Annotation\Route;
+
 class EquipmentController extends BaseAdminController {
     /**
      * 
