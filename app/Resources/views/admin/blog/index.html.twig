@@ -35,7 +35,8 @@ $(document).ready(function(){
 
 function rowActions(cellvalue, options, cellobject) {
       return   "<a title='Edit'             href='blog/edit/"   +  options.rowId + "'><u>Edit</u></a>  "+
-  	       "<a title='Delete'           href='blog/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>";
+  	       "<a title='Delete'           href='blog/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>"+
+               "<a title='Delete'           href='blog/add_related/" +  options.rowId + "' ><u>Related</u></a>";
   }
 
 var grid = $('#jqgrid');
