@@ -12,7 +12,6 @@
                 <li><a href="/rentme">hey! rentme</a></li>
                 <li><a href="{{ path('catchall', { 'content': category.slug }) }}">{{ category.name }}</a></li>
                 <li><a href="{{ path('catchall', { 'content': equipment.urlPath }) }}" class="active-crumb">{{ equipment.name }}</a></li>
-                <a href="javascript:inquiry()">test</a>
             </ul>
             <ul class="col-xs-5 pull-right text-right kaup-select">
                 {{ render(controller('AppBundle:Common:categoryList')) }}

@@ -38,7 +38,7 @@ class BookingController extends BaseController {
             'to' => $to,
             'days' => $days,
             'price' => $price,
-            'whereabouts' => $eq->getWhereaboutsAsString()
+            'whereabouts' => $eq->getIncompleteAddressAsString()
         );
         //</editor-fold>
         
@@ -117,7 +117,7 @@ class BookingController extends BaseController {
             $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('booking-response', array('id' => $inq->getId()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails/inquiry.html.twig', array(
+            $emailHtml = $this->renderView('Emails\mail_to_provider_offer_request.html', array(
                 'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
@@ -181,10 +181,13 @@ class BookingController extends BaseController {
             else {
                 $email = $inq->getEmail();
             }
-            $url = $request->getSchemeAndHttpHost() .
+            $url = null;
+            if ($acc > 0) {
+                $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('booking-confirmation', array('uuid' => $inq->getUuid()));
+            }
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails/response.html.twig', array(
+            $emailHtml = $this->renderView('Emails\mail_to_user_confirm_offer_accepted.html', array(
                 'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,

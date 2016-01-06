@@ -161,7 +161,7 @@ class Equipment
     public function getAddressAsString() {
         return sprintf("%s %s, %s %s", $this->addrStreet, $this->addrNumber, $this->addrPostcode, $this->addrPlace);
     }
-    public function getWhereaboutsAsString() {
+    public function getIncompleteAddressAsString() {
         return sprintf("%s, %s %s", $this->addrStreet, $this->addrPostcode, $this->addrPlace);
     }
     
