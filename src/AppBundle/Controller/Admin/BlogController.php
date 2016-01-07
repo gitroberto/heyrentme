@@ -24,12 +24,14 @@ class BlogController  extends BaseAdminController {
         return $this->render('admin/blog/index.html.twig');
     }
     
+    protected $formHelper = null;
+    protected $maximumNumberOfRelatedPosts = 10; 
     /**
      * 
      * @Route("/admin/blog/addrelated/{id}", name="admin_blog_add_related")
      */
     public function addRelatedAction(Request $request, $id) {
-        $maximumNumberOfRelatedPosts = 10; 
+        
         
         $blog = $this->getDoctrineRepo('AppBundle:Blog')->find($id);
         if (!$blog) {
@@ -37,15 +39,19 @@ class BlogController  extends BaseAdminController {
         }        
         $blogs = $this->getDoctrineRepo('AppBundle:Blog')->getForRelatedOrderedByName($id);
         
-        $relatedBlogs = $this->getDoctrineRepo('AppBundle:Blog')->getRelatedBlogsList($id);
+        $relatedBlogsCount = count($blog->getRelatedBlogs());
         
-        $relatedBlogsCount = count($relatedBlogs);
+        $formTmp = $this->createFormBuilder(null, array(
+                'constraints' => array(
+                    new Callback(array($this, 'validateUniqueSelection'))
+                )
+        ));
         
-        $formTmp = $this->createFormBuilder(null);        
-        for($i = 0; $i < $maximumNumberOfRelatedPosts; $i++ ){
+        
+        for($i = 0; $i < $this->maximumNumberOfRelatedPosts; $i++ ){
             $selectedValue = null;
             if ($i < $relatedBlogsCount ){
-                $selectedValue = $relatedBlogs[$i];
+                $selectedValue = $blog->getRelatedBlogs()[$i]->getRelatedBlog();
             }
             
             
@@ -55,27 +61,29 @@ class BlogController  extends BaseAdminController {
                   'empty_value' => 'Select related post',
                   'property' => 'title',                 
                   'required' => false,
-                  'data' => $selectedValue
+                  'data' => $selectedValue 
+                  
                   ));
         }        
         $form = $formTmp->getForm();
         
+        $this->formHelper = $form;  
         $form->handleRequest($request);
         if ($form->isValid()) {
             //check if there is file
             $file = $request->files->get('upl');
             $em = $this->getDoctrine()->getManager();            
-            $this->getDoctrineRepo('AppBundle:BlogRelated')->cleanCurrentSelection($id);
+            $this->getDoctrineRepo('AppBundle:Blog')->cleanCurrentSelection($id);
             
             $pos = 1;
             $data = $form->getData();
             
-            for($i = 0; $i< $maximumNumberOfRelatedPosts; $i++){
+            for($i = 0; $i< $this->maximumNumberOfRelatedPosts; $i++){
                 $val = $data[$i];
                 if ($val != null && $val != ""){
                     $br = new BlogRelated();
-                    $br->setBlogId($id);
-                    $br->setRelatedBlogId($val->getId());
+                    $br->setBlog($blog);
+                    $br->setRelatedBlog($val);
                     $br->setPosition($pos++);
                     $em->persist($br);
                 }
@@ -88,8 +96,38 @@ class BlogController  extends BaseAdminController {
         return $this->render('admin/blog/add_related.html.twig', array(
             "form" => $form->createView(),
             "blog" => $blog,
-            "maximumNumberOfRelatedPosts" => $maximumNumberOfRelatedPosts
+            "maximumNumberOfRelatedPosts" => $this->maximumNumberOfRelatedPosts
         ));
+    }
+    
+    
+    public function validateUniqueSelection($data, ExecutionContextInterface $context) {
+        if ($this->formHelper != null) {
+            
+            $data = $this->formHelper->getData();
+            $selectedIds = array();
+            $notUniqueBlogs = array();
+            for($i = 0; $i< $this->maximumNumberOfRelatedPosts; $i++){
+                $val = $data[$i];
+                if ($val != null && $val != ""){          
+                    if (in_array($val->getId(), $selectedIds)){
+                        if (!in_array($val->getTitle(), $notUniqueBlogs)){
+                            $notUniqueBlogs[count($notUniqueBlogs)] = $val->getTitle();
+                        }
+                       
+                    } else {
+                        $selectedIds[count($selectedIds)] = $val->getId();
+                    }
+                }
+            }
+            
+            if (count($notUniqueBlogs)){
+                foreach($notUniqueBlogs as $notUniqueTitle)
+                $context->buildViolation('Blog "' . $notUniqueTitle . '" selected more than once.')
+                        ->addViolation();
+            }
+            
+        }
     }
     
      /**

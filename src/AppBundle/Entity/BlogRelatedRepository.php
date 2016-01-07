@@ -13,8 +13,5 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class BlogRelatedRepository extends EntityRepository
 {    
-    public function cleanCurrentSelection($blogId) {
-        $q = "delete from AppBundle:BlogRelated br where br.blogId = :blogId";
-        $this->getEntityManager()->createQuery($q)->setParameter('blogId', $blogId)->execute();
-    }
+    
 }

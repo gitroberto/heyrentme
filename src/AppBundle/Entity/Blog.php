@@ -113,6 +113,30 @@ class Blog
         return $this->image;
     }
     
+    /**
+     * @ORM\OneToMany(targetEntity="BlogRelated", mappedBy="blog")
+     */
+    protected $relatedBlogs;
+
+    public function addRelatedBlog(Blog $blog)
+    {
+        $this->blog[] = $blog;
+
+        return $this;
+    }
+    
+    public function removeRelatedBlog(Blog $blog)
+    {
+        $this->relatedBlogs->removeElement($blog);
+    }
+
+    public function getRelatedBlogs()
+    {
+        return $this->relatedBlogs;
+    }
+    
+    
+    
     public function __construct()
     {
         

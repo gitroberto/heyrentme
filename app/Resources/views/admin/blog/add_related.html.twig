@@ -23,12 +23,13 @@
           </div>
         </div>
     </div>
-    
+    <div class="err-msg">{{ form_errors(form) }}</div>
     {% for i in 0..maximumNumberOfRelatedPosts-1 %}
         <div class="row">
             <div class="form-group">
               <label for="form_name" class="control-label col-xs-2">Post {{ i + 1 }}</label>
               <div class="col-xs-10">
+                  <div class="err-msg">{{ form_errors(form[i]) }}</div>
                  {{ form_widget(form[i], { 'attr': { 'class': 'text-box single-line' }}) }}
               </div>
             </div>

@@ -35,10 +35,11 @@ class BlogRepository extends EntityRepository
             ->getSingleScalarResult();
     }
     
-    public function getRelatedBlogsList($id) {
-        $q = 'select b from AppBundle:Blog b inner join AppBundle:BlogRelated br with b.id = br.relatedBlogId where br.blogId = :id order by br.position asc';
-        return $this->getEntityManager()->createQuery($q)->setParameter(':id', $id)->execute();
+    public function cleanCurrentSelection($blogId) {
+        $q = "delete from AppBundle:BlogRelated br where br.blog = :blogId";
+        $this->getEntityManager()->createQuery($q)->setParameter('blogId', $blogId)->execute();
     }
+   
     
     public function getForRelatedOrderedByName($id) {
         $qb = $this->getEntityManager()->createQueryBuilder();

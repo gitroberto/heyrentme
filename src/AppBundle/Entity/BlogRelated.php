@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,22 +14,18 @@ class BlogRelated
 {
     
     /**
-    * @ORM\Column(type="integer")
-    * @ORM\Id
-    * @ORM\GeneratedValue(strategy="AUTO")
-    */
-    protected $id;
+     * @ORM\ManyToOne(targetEntity="Blog")
+     * @ORM\JoinColumn(name="related_blog_id", referencedColumnName="id")
+     * @ORM\Id
+     */
+    protected $relatedBog;
     
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="Blog")
+     * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
+     * @ORM\Id
      */
-    protected $blogId;
-    
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $relatedBlogId;
-    
+    protected $blog;
     
     /**
      * @ORM\Column(type="integer")
@@ -36,50 +33,28 @@ class BlogRelated
     protected $position;   
         
     
-    /**
-     * Set id
-     *
-     * @return Subcategory
-     * dummy for a sake of $form->handleRequest($request) becouse it looks for setId($id)
-     */
-    public function setId($id)
+    public function setBlog(\AppBundle\Entity\Blog $blog)
     {
-        return $this;
-    }
-    
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setBlogId($blogId)
-    {
-        $this->blogId = $blogId;
+        $this->blog = $blog;
         return $this;
     }
 
     
-    public function getBlogId()
+    public function getBlog()
     {
-        return $this->blogId;
+        return $this->blog;
     }
     
-     public function setRelatedBlogId($relatedBlogId)
+     public function setRelatedBlog(\AppBundle\Entity\Blog $relatedBlog)
     {
-        $this->relatedBlogId = $relatedBlogId;
+        $this->relatedBog = $relatedBlog;
         return $this;
     }
 
     
-    public function getRelatedBlogId()
+    public function getRelatedBlog()
     {
-        return $this->relatedBlogId;
+        return $this->relatedBog;
     }
 
     public function setPosition($position)
