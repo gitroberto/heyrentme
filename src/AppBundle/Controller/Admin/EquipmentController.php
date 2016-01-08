@@ -18,7 +18,7 @@ class EquipmentController extends BaseAdminController {
     }
     
     /**
-     * @Route("/admin/equipment/jsondata", name="admin_blog_jsondata")
+     * @Route("/admin/equipment/jsondata", name="admin_equipment_jsondata")
      */
     public function JsonData(Request $request)
     {  
@@ -29,22 +29,24 @@ class EquipmentController extends BaseAdminController {
         $callback = $request->get('callback');
         
         
-        $repo = $this->getDoctrineRepo('AppBundle:Blog');        
+        $repo = $this->getDoctrineRepo('AppBundle:Equipment');        
         $dataRows = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page);
         $rowsCount = $repo->countAll();
         $pagesCount = ceil($rowsCount / $pageSize);
         
         $rows = array(); // rows as json result        
         foreach ($dataRows as $dataRow) { // build single row
+            $i=0;
             $row = array();
             $row['id'] = $dataRow->getId();
             $cell = array();
-            $cell[0] = null;
-            $cell[1] = $dataRow->getId();
-            $cell[2] = $dataRow->getTitle();
-            $cell[3] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
-            $cell[4] = $dataRow->getModifiedAt()->format('Y-m-d H:i');
-            $cell[5] = $dataRow->getPosition();
+            $cell[$i++] = null;
+            $cell[$i++] = $dataRow->getId();
+            $cell[$i++] = $dataRow->getName();
+            $cell[$i++] = $dataRow->getDescription();
+            $cell[$i++] = $dataRow->getPrice();
+            $cell[$i++] = $dataRow->getUser()->getUsername();
+            $cell[$i++] = $dataRow->getStatus();
             
             $row['cell'] = $cell;
             array_push($rows, $row);

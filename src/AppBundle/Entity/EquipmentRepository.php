@@ -31,6 +31,40 @@ class EquipmentRepository extends EntityRepository
         return $q->getResult();        
     }
     
+    public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        // build query
+        $qb->select('e, u')
+            ->from('AppBundle:Equipment', 'e')
+            ->join('e.user','u');
+        // sort by
+        if (!empty($sortColumn)) {
+            if (!empty($sortDirection)) {
+                $qb->orderBy($sortColumn, $sortDirection);
+            }
+            else {
+                $qb->orderBy($sortColumn);
+            }
+        }
+
+        $q = $qb->getQuery();
+        // page and page size
+        if (!empty($pageSize)) {
+            $q->setMaxResults($pageSize);
+        }
+        if (!empty($page) && $page != 1) {
+            $q->setFirstResult(($page - 1) * $pageSize);
+        }
+        return $q->getResult();        
+    }
+    
+    public function countAll() {
+        return $this->createQueryBuilder('e')
+            ->select('count(e.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    
     /*
     public function getAll($categoryId = null) {
         $qb = $this->getEntityManager()->createQueryBuilder();

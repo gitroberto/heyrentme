@@ -33,7 +33,7 @@ $(document).ready(function(){
 
 
 function rowActions(cellvalue, options, cellobject) {
-      return   "<a title='Check'             href='equipment/check/"   +  options.rowId + "'><u>Edit</u></a>  ";
+      return   "<a title='Check'             href='equipment/check/"   +  options.rowId + "'><u>check</u></a>  ";
   }
 
 var grid = $('#jqgrid');
@@ -45,17 +45,18 @@ if( $('#jqgrid').length > 0 ) {
                 datatype: 'jsonp',
                 colModel:[
                         { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions },
-                        { name:'Id', index:'b.id', width:1, editable:false, sortable:false, hidden: true },
-                        { name:'Title', index:'b.title', width: 200, editable:false, sortable:true },
-                        { name:'CreationDate', index:'b.createdAt', width: 100, editable:false, sortable:true },
-                        { name:'ModificationDate', index:'b.modifiedAt', width: 100, editable:false, sortable:true },
-                        { name:'Position', index:'b.position', align:"right", width: 100, editable:false, sortable:true},
+                        { name:'Id', index:'e.id', width:1, editable:false, sortable:false, hidden: true },
+                        { name:'Name', index:'e.name', width: 100, editable:false, sortable:true },
+                        { name:'Description', index:'e.description', width: 200, editable:false, sortable:true },
+                        { name:'Price', index:'e.price', width: 100, editable:false, sortable:true },
+                        { name:'User', index:'u.username',  width: 100, editable:false, sortable:true},
+                        { name:'Status', index:'e.status', width: 100, editable:false, sortable:true},
                 ],
                 height: 300,
                 rowNum: 10,
                 rowList: [10, 50, 200],
                 pager: 'jqgrid-pager',
-                sortname: 'b.position',
+                sortname: 'e.name',
                 viewrecords: false,
                 sortorder: "asc",
                 caption: "Posts",
