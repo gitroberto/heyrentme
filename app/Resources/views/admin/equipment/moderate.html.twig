@@ -1,0 +1,170 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_equipment_list') }}" class="active-crumb">Equipment</a></li>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}      
+{% endblock %}
+
+{% block body %}
+<h1>Equipment moderation</h1>
+
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="form-horizontal">
+    <div class="err-msg">{{ form_errors(form) }}</div>    
+    {{ form_widget(form.id) }}
+    <div class="page">
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Name</label>
+              <div class="col-xs-10 control-readonly">
+                {{ equipment.Name }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Preis pro Tag:</label>
+              <div class="col-xs-10 control-readonly">
+                {{ equipment.Price }},- € 
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Original-Wert (ca.)</label>
+              <div class="col-xs-10 control-readonly">
+                {{ equipment.value }},- € 
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Kaution</label>
+              <div class="col-xs-10 control-readonly">
+                {{ equipment.Deposit }},- € 
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Original-Rechnung ist vorhanden</label>
+              <div class="col-xs-10 control-readonly">
+                {{ equipment.invoice }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Verkaufspreis</label>
+              <div class="col-xs-10 control-readonly">
+                {{ equipment.priceBuy }},- € 
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Gewerbliches Angebot</label>
+              <div class="col-xs-10 control-readonly">
+                {{ equipment.industrial }}
+              </div>
+            </div>
+        </div>
+    </div>
+          
+    <div class="page" >
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Images</label>
+              <div class="col-xs-10 control-readonly">
+                {% for img in equipment.images %}
+                    <span class="media-img">
+                        <img src="{{ img.urlPath(image_url_prefix) }}" alt=""/>
+                    </span>
+                {% endfor %}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Beschreibe dein Angebot</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ equipment.description }}
+              </div>
+            </div>
+        </div>
+              
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Strasse</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ equipment.addrStreet }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">House nr</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ equipment.addrNumber }}
+              </div>
+            </div>
+        </div>
+              
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">PLZ</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ equipment.addrPostcode }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">ORT</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ equipment.addrPlace }}
+              </div>
+            </div>
+        </div>
+              
+              
+    </div>
+          
+          
+    
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Status</label>
+          <div class="col-xs-10  control-readonly">
+              <div class="err-msg">{{ form_errors(form.status) }}</div>
+            {{ form_widget(form.status, { 'attr': { 'class': 'check-box single-line'}}) }}
+          </div>
+        </div>
+    </div>
+          
+          
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Reason</label>
+          <div class="col-xs-10  control-readonly">
+              <div class="err-msg">{{ form_errors(form.reason) }}</div>
+            {{ form_widget(form.reason, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'reason' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Save">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_blog_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{{ form_end(form) }}
+{% endblock %}

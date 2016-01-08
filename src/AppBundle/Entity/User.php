@@ -260,6 +260,9 @@ class User extends BaseUser
     
     
     
+    
+    
+    
     public function getProfilePicture($large, $imageUrlPrefix)
     {
         $imageUrl = "/img/placeholder/user-big.png";
@@ -319,6 +322,16 @@ class User extends BaseUser
     public function getDiscountCodes()
     {
         return $this->discountCodes;
+    }
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Equipment", mappedBy="user")
+     */
+    protected $equipments;
+    
+    public function getEquipments()
+    {
+        return $this->equipments;
     }
     
     public function __construct()

@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
+
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 class EquipmentController extends BaseAdminController {
     /**
      * 
@@ -46,7 +50,7 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getDescription();
             $cell[$i++] = $dataRow->getPrice();
             $cell[$i++] = $dataRow->getUser()->getUsername();
-            $cell[$i++] = $dataRow->getStatus();
+            $cell[$i++] = $dataRow->getStatusStr();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -64,4 +68,78 @@ class EquipmentController extends BaseAdminController {
         return $resp;
         
     }
+    
+    
+    /**
+     * 
+     * @Route("/admin/equipment/moderate/{id}", name="admin_equipment_moderate")
+     */
+    public function moderateAction(Request $request, $id) {
+        $equipment = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+
+        if (!$equipment) {
+            throw $this->createNotFoundException('No equipment found for id '.$id);
+        }
+        
+        $options = array();
+        $options[0] = 
+        
+        $form = $this->createFormBuilder($equipment, array(
+                    'constraints' => array(
+                        new Callback(array($this, 'validateReason'))
+                    )
+                ))
+                ->add('id', 'hidden')
+                ->add('status', 'choice', array(
+                    'choices' => array(
+                        'select status' => null,
+                        'Approve' => Equipment::STATUS_APPROVED,
+                        'Reject' => Equipment::STATUS_REJECTED
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
+                ->add('reason', 'textarea', array(
+                    'required' => false,
+                    'constraints' => array(                        
+                        new Length(array('max' => 500))
+                    )
+                ))
+                ->getForm();
+
+        $this->formHelper = $form;  
+        //when the form is posted this method prefills entity with data from form
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            
+            $equipment->setStatus($form['status']->getData());
+            $equipment->setReason($form['reason']->getData());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($equipment);
+            $em->flush();
+            return $this->redirectToRoute("admin_equipment_list");
+        }
+        
+        return $this->render('admin/equipment/moderate.html.twig', array(            
+            "form" => $form->createView(),
+            "equipment" => $equipment
+            
+        ));
+    }
+    protected $formHelper = null;
+    public function validateReason($equipment, ExecutionContextInterface $context) {
+        if ($this->formHelper != null) {            
+            $status = $this->formHelper['status']->getData();
+            $reason = $this->formHelper['reason']->getData();
+            if ($status == Equipment::STATUS_REJECTED && ($reason == null || $reason == "") ){
+            $context->buildViolation('You have to enter rejection reason.')
+                        ->addViolation();
+            }
+        }
+    }
+    
 }

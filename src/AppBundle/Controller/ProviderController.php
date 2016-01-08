@@ -347,6 +347,7 @@ class ProviderController extends BaseController {
             
             // save to db
             $em = $this->getDoctrine()->getManager();
+            $equipment->checkStatusOnSave();
             $em->persist($equipment);
             $em->flush();
             
@@ -422,6 +423,7 @@ class ProviderController extends BaseController {
             //</editor-fold>
             // save to db
             $em = $this->getDoctrine()->getManager();
+            $eq->checkStatusOnSave();
             $em->persist($eq);
             $em->flush();
             
@@ -536,6 +538,7 @@ class ProviderController extends BaseController {
             $eq->setAddrPlace($data['place']);            
             //</editor-fold>
             $em = $this->getDoctrine()->getManager();
+            $eq->checkStatusOnSave();
             $em->flush();
             
             // store images
@@ -783,6 +786,21 @@ class ProviderController extends BaseController {
                 $em->flush();
             }
             
+            
+
+            if ($eq->getStatus() == Equipment::STATUS_INCOMPLETE){   
+                #following part was added because otherwise equipment status change was not save in db
+                $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eqid);
+                if (!$eq) {
+                    throw $this->createNotFoundException();
+                }  
+                
+                $em = $this->getDoctrine()->getManager();
+                $eq->setStatus(Equipment::STATUS_NEW);
+                
+                $em->flush();
+            }         
+           
             return $this->redirectToRoute('equipment-edit-4');
         }
 

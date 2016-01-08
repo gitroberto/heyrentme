@@ -14,7 +14,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="equipment")
  */
 class Equipment
-{
+{    
+    const STATUS_NEW = 1;
+    const STATUS_MODIFIED = 2;
+    const STATUS_APPROVED = 3;
+    const STATUS_REJECTED = 4;  
+    const STATUS_INCOMPLETE = 5;
+    
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -115,9 +121,14 @@ class Equipment
     protected $features;        
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer")
      */
     protected $status;
+    
+    /**
+     * @ORM\Column(type="string", length=500)
+     */
+    protected $reason;
     
     public function getUrlPath() {
        $s = Utils::slugify($this->getName());
@@ -171,6 +182,7 @@ class Equipment
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->status = Equipment::STATUS_INCOMPLETE;
     }
 
     /**
@@ -183,6 +195,22 @@ class Equipment
         return $this->id;
     }
     
+    #dummy method
+    public function setId($id)
+    {
+        return $this;
+    }
+    
+    public function setReason($reason)
+    {
+        $this->reason = $reason;
+        return $this;
+    }
+     public function getReason()
+    {
+        return $this->reason;
+    }
+    
     public function setStatus($status)
     {
         $this->status = $status;
@@ -191,6 +219,18 @@ class Equipment
      public function getStatus()
     {
         return $this->status;
+    }
+    
+    public function getStatusStr() {
+        switch ($this->status) {
+            case self::STATUS_NEW: return "new";
+            case self::STATUS_MODIFIED: return "modified";
+            case self::STATUS_APPROVED: return "approved";
+            case self::STATUS_REJECTED: return "rejected";
+            case self::STATUS_INCOMPLETE: return "incomplete";
+            default:
+                throw new RuntimeException("Equipment status corrupt!");
+        }
     }
 
     /**
@@ -702,5 +742,11 @@ class Equipment
     public function getDiscounts()
     {
         return $this->discounts;
+    }
+    
+    public function checkStatusOnSave(){
+        if ($this->status == Equipment::STATUS_APPROVED || $this->status == Equipment::STATUS_REJECTED) {
+            $this->status = Equipment::STATUS_MODIFIED;
+        }
     }
 }

@@ -33,7 +33,7 @@ $(document).ready(function(){
 
 
 function rowActions(cellvalue, options, cellobject) {
-      return   "<a title='Check'             href='equipment/check/"   +  options.rowId + "'><u>check</u></a>  ";
+      return   "<a title='Moderate'             href='equipment/moderate/"   +  options.rowId + "'><u>moderate</u></a>  ";
   }
 
 var grid = $('#jqgrid');
@@ -56,7 +56,7 @@ if( $('#jqgrid').length > 0 ) {
                 rowNum: 10,
                 rowList: [10, 50, 200],
                 pager: 'jqgrid-pager',
-                sortname: 'e.name',
+                sortname: 'e.status',
                 viewrecords: false,
                 sortorder: "asc",
                 caption: "Posts",
