@@ -35,12 +35,32 @@ class Booking {
      * @ORM\Column(type="integer")
      */
     private $rating;
+    /** 
+     * @ORM\Column(type="decimal")
+     */
+    private $price;
+    /** 
+     * @ORM\Column(type="decimal")
+     */
+    private $deposit;
+    /** 
+     * @ORM\Column(type="decimal")
+     */
+    private $totalPrice;
+    
     /**
      * @ORM\OneToOne(targetEntity="Inquiry", inversedBy="booking");
      * @ORM\JoinColumn(name="inquiry_id", referencedColumnName="id")
      */
     private $inquiry;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="DiscountCode")
+     * @ORM\JoinColumn(name="discount_code_id", referencedColumnName="id")
+     */    
+    private $discountCode;
 
+    
     /**
      * Get id
      *
@@ -169,5 +189,101 @@ class Booking {
     public function getInquiry()
     {
         return $this->inquiry;
+    }
+
+    /**
+     * Set discountCode
+     *
+     * @param \AppBundle\Entity\DiscountCode $discountCode
+     *
+     * @return Booking
+     */
+    public function setDiscountCode(\AppBundle\Entity\DiscountCode $discountCode = null)
+    {
+        $this->discountCode = $discountCode;
+
+        return $this;
+    }
+
+    /**
+     * Get discountCode
+     *
+     * @return \AppBundle\Entity\DiscountCode
+     */
+    public function getDiscountCode()
+    {
+        return $this->discountCode;
+    }
+
+    /**
+     * Set price
+     *
+     * @param string $price
+     *
+     * @return Booking
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set deposit
+     *
+     * @param string $deposit
+     *
+     * @return Booking
+     */
+    public function setDeposit($deposit)
+    {
+        $this->deposit = $deposit;
+
+        return $this;
+    }
+
+    /**
+     * Get deposit
+     *
+     * @return string
+     */
+    public function getDeposit()
+    {
+        return $this->deposit;
+    }
+
+    /**
+     * Set totalPrice
+     *
+     * @param string $totalPrice
+     *
+     * @return Booking
+     */
+    public function setTotalPrice($totalPrice)
+    {
+        $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPrice
+     *
+     * @return string
+     */
+    public function getTotalPrice()
+    {
+        return $this->totalPrice;
     }
 }

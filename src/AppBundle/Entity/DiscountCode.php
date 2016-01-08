@@ -71,13 +71,6 @@ class DiscountCode {
         return $this->status;
     }
     
-    /**
-     * @ORM\OneToOne(targetEntity="Inquiry", inversedBy="discountCode");
-     * @ORM\JoinColumn(name="inquiry_id", referencedColumnName="id")
-     */
-    private $inquiry;
-
-    
     public function getStatusStr() {
         switch ($this->status) {
             case self::STATUS_NEW: return "new";
@@ -158,31 +151,5 @@ class DiscountCode {
     public function __construct()
     {
         
-    }
-
-   
-
-    /**
-     * Set inquiry
-     *
-     * @param \AppBundle\Entity\Inquiry $inquiry
-     *
-     * @return DiscountCode
-     */
-    public function setInquiry(\AppBundle\Entity\Inquiry $inquiry = null)
-    {
-        $this->inquiry = $inquiry;
-
-        return $this;
-    }
-
-    /**
-     * Get inquiry
-     *
-     * @return \AppBundle\Entity\Inquiry
-     */
-    public function getInquiry()
-    {
-        return $this->inquiry;
     }
 }

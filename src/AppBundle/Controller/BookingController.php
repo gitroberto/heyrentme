@@ -117,7 +117,7 @@ class BookingController extends BaseController {
             $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('booking-response', array('id' => $inq->getId()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails\mail_to_provider_offer_request.html', array(
+            $emailHtml = $this->renderView('Emails\mail_to_provider_offer_request.html.twig', array(
                 'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
@@ -187,7 +187,7 @@ class BookingController extends BaseController {
                     $this->generateUrl('booking-confirmation', array('uuid' => $inq->getUuid()));
             }
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails\mail_to_user_confirm_offer_accepted.html', array(
+            $emailHtml = $this->renderView('Emails\mail_to_user_confirm_offer_accepted.html.twig', array(
                 'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
@@ -248,37 +248,55 @@ class BookingController extends BaseController {
         
         if ($form->isValid()) {            
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
             
+            // create booking object            
             $bk = new Booking();
             $bk->setInquiry($inq);
             $bk->setStatus(Booking::STATUS_BOOKED);
+            $bk->setPrice($inq->getPrice());
+            $bk->setDeposit($inq->getDeposit());
             
-            // save booking
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($bk);
-            $em->flush();
-            
-            // calcualte discount
+            // validate discount
+            $discountCode = null;
             if (!empty($data['discountCode'])) {
                 $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($data['discountCode']);
-                $dcode->setStatus(DiscountCode::STATUS_USED);
-                $dcode->setInquiry($inq);
-                $p = $inq->getPrice() - 5;
-                $inq->setPrice($p);
-                $this->getDoctrine()->getManager()->flush();
+                if ($dcode !== null) {
+                    $user = $inq->getUser();
+                    if ($dcode->getStatus() === DiscountCode::STATUS_ASSIGNED && $dcode->getUser()->getId() === $user->getId()) {
+                        $discountCode = $dcode; // only here the discount is valid
+                    }
+                }
             }
             
+            // calculate discount, total price
+            if ($discountCode !== null) {                
+                $discountCode->setStatus(DiscountCode::STATUS_USED);
+                $bk->setDiscountCode($discountCode);
+                $p = $bk->getPrice() - 5;
+                $bk->setTotalPrice($p);
+            }
+            else {
+                $bk->setTotalPrice($bk->getPrice());
+            }
+            
+            // save booking
+            $em->persist($bk);
+            $em->flush();                        
             
             // send email to provider & user
             //<editor-fold>
             $provider = $inq->getEquipment()->getUser();
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             
-            $emailHtml = $this->renderView('Emails/booking_confirmation_provider.html.twig', array(
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('einstellungen');
+            $emailHtml = $this->renderView('Emails\mail_to_provider_confirm_booking.html.twig', array(
                 'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
-                'equipment' => $inq->getEquipment()
+                'equipment' => $inq->getEquipment(),
+                'discountCode' => $discountCode,
+                'url' => $url
             ));
             $message = Swift_Message::newInstance()
                 ->setSubject('Du hast soeben eine Anfrage erhalten')
@@ -293,10 +311,11 @@ class BookingController extends BaseController {
             else {
                 $email = $inq->getEmail();
             }
-            $emailHtml = $this->renderView('Emails/booking_confirmation_user.html.twig', array(
+            $emailHtml = $this->renderView('Emails\mail_to_user_confirm_booking.html.twig', array(
                 'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
+                'discountCode' => $discountCode,
                 'equipment' => $inq->getEquipment()
             ));
             $message = Swift_Message::newInstance()
