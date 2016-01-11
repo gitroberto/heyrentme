@@ -31,10 +31,11 @@ class EquipmentController extends BaseAdminController {
         $pageSize = $request->get('rows');
         $page = $request->get('page');
         $callback = $request->get('callback');
+        $sStatus = $request->get('e_status');
         
         
         $repo = $this->getDoctrineRepo('AppBundle:Equipment');        
-        $dataRows = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page);
+        $dataRows = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus);
         $rowsCount = $repo->countAll();
         $pagesCount = ceil($rowsCount / $pageSize);
         

@@ -36,21 +36,22 @@ function rowActions(cellvalue, options, cellobject) {
       return   "<a title='Moderate'             href='equipment/moderate/"   +  options.rowId + "'><u>moderate</u></a>  ";
   }
 
-var grid = $('#jqgrid');
+var $grid = $('#jqgrid');
 
-if( $('#jqgrid').length > 0 ) {
-        grid.jqGrid({
+if( $grid.length > 0 ) {
+        var optionsStr = ":All;1:New;2:Modified;3:Approved;4:Rejected;5:Incomplete";
+        $grid.jqGrid({
                 url: '{{ path('admin_equipment_jsondata') }}',
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions },
-                        { name:'Id', index:'e.id', width:1, editable:false, sortable:false, hidden: true },
-                        { name:'Name', index:'e.name', width: 100, editable:false, sortable:true },
-                        { name:'Description', index:'e.description', width: 200, editable:false, sortable:true },
-                        { name:'Price', index:'e.price', width: 100, editable:false, sortable:true },
-                        { name:'User', index:'u.username',  width: 100, editable:false, sortable:true},
-                        { name:'Status', index:'e.status', width: 100, editable:false, sortable:true},
+                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                        { name:'Id', index:'e.id', width:1, editable:false, sortable:false, hidden: true, search: false },
+                        { name:'Name', index:'e.name', width: 100, editable:false, sortable:true, search: false },
+                        { name:'Description', index:'e.description', width: 200, editable:false, sortable:true, search: false },
+                        { name:'Price', index:'e.price', width: 100, editable:false, sortable:true, search: false },
+                        { name:'User', index:'u.username',  width: 100, editable:false, sortable:true, search: false},
+                        { name:'Status', index:'e.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: false }},
                 ],
                 height: 300,
                 rowNum: 10,
@@ -61,6 +62,12 @@ if( $('#jqgrid').length > 0 ) {
                 sortorder: "asc",
                 caption: "Posts",
                 multiselect: false,
+        });
+        $grid.jqGrid('filterToolbar', {
+            stringResult: false,
+            searchOnEnter: false,
+            defaultSearch: 'e',
+            clearSearch: false
         });
 }
 

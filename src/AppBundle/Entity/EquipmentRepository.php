@@ -14,9 +14,10 @@ use Doctrine\ORM\EntityRepository;
 class EquipmentRepository extends EntityRepository
 {
     public function getAllBySubcategory($subcategoryId) {
-        $sql = "select e from AppBundle:Equipment e where e.subcategory = :subcategoryId";
+        $sql = "select e from AppBundle:Equipment e where e.subcategory = :subcategoryId and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
+        $query->setParameter('approved', Equipment::STATUS_APPROVED);
         return $query->getResult();        
     }   
     public function getAllByUserId($userId) {
@@ -31,12 +32,17 @@ class EquipmentRepository extends EntityRepository
         return $q->getResult();        
     }
     
-    public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page) {
+    public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
         $qb->select('e, u')
             ->from('AppBundle:Equipment', 'e')
             ->join('e.user','u');
+        
+        if (!empty($sStatus)) {
+            $qb->andWhere($qb->expr()->eq('e.status', ':status'));
+        }
+        
         // sort by
         if (!empty($sortColumn)) {
             if (!empty($sortDirection)) {
@@ -48,6 +54,10 @@ class EquipmentRepository extends EntityRepository
         }
 
         $q = $qb->getQuery();
+        if (!empty($sStatus)) {
+            $q->setParameter(':status', $sStatus);
+        }
+        
         // page and page size
         if (!empty($pageSize)) {
             $q->setMaxResults($pageSize);
@@ -94,6 +104,8 @@ class EquipmentRepository extends EntityRepository
             ->join('e.subcategory', 's')
             ->leftJoin('e.images', 'i')
             ->leftJoin('e.discounts', 'd');
+        
+        $qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
         
         if ($params->getCategoryId() != null) {
             $qb->andWhere("s.category = {$params->getCategoryId()}");
