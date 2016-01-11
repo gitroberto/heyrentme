@@ -5,13 +5,16 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
-
  * @ORM\Table(name="booking")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BookingRepository")
  */
 class Booking {
     
     const STATUS_BOOKED = 1;
+    const STATUS_USER_CANCELLED = 2;
+    const STATUS_PROVIDER_CANCELLED = 3;
+    const STATUS_SUCCESS = 4;
     
     /**
      * @ORM\Column(name="id", type="integer")
@@ -47,6 +50,36 @@ class Booking {
      * @ORM\Column(type="decimal")
      */
     private $totalPrice;
+
+    
+    /** 
+     * @ORM\Column(type="datetime")
+     */
+    private $noticeRentUserAt;
+    /** 
+     * @ORM\Column(type="datetime")
+     */
+    private $noticeRentProviderAt;
+    /** 
+     * @ORM\Column(type="datetime")
+     */
+    private $noticeAllOkAt;
+    /** 
+     * @ORM\Column(type="datetime")
+     */
+    private $noticeReturnUserAt;
+    /** 
+     * @ORM\Column(type="datetime")
+     */
+    private $noticeReturnProviderAt;
+    /** 
+     * @ORM\Column(type="datetime")
+     */
+    private $noticeRateUserAt;
+    /** 
+     * @ORM\Column(type="datetime")
+     */
+    private $noticeRateProviderAt;
     
     /**
      * @ORM\OneToOne(targetEntity="Inquiry", inversedBy="booking");
@@ -285,5 +318,173 @@ class Booking {
     public function getTotalPrice()
     {
         return $this->totalPrice;
+    }
+
+    /**
+     * Set noticeRentUserAt
+     *
+     * @param \DateTime $noticeRentUserAt
+     *
+     * @return Booking
+     */
+    public function setNoticeRentUserAt($noticeRentUserAt)
+    {
+        $this->noticeRentUserAt = $noticeRentUserAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeRentUserAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeRentUserAt()
+    {
+        return $this->noticeRentUserAt;
+    }
+
+    /**
+     * Set noticeRentProviderAt
+     *
+     * @param \DateTime $noticeRentProviderAt
+     *
+     * @return Booking
+     */
+    public function setNoticeRentProviderAt($noticeRentProviderAt)
+    {
+        $this->noticeRentProviderAt = $noticeRentProviderAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeRentProviderAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeRentProviderAt()
+    {
+        return $this->noticeRentProviderAt;
+    }
+
+    /**
+     * Set noticeAllOkAt
+     *
+     * @param \DateTime $noticeAllOkAt
+     *
+     * @return Booking
+     */
+    public function setNoticeAllOkAt($noticeAllOkAt)
+    {
+        $this->noticeAllOkAt = $noticeAllOkAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeAllOkAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeAllOkAt()
+    {
+        return $this->noticeAllOkAt;
+    }
+
+    /**
+     * Set noticeReturnUserAt
+     *
+     * @param \DateTime $noticeReturnUserAt
+     *
+     * @return Booking
+     */
+    public function setNoticeReturnUserAt($noticeReturnUserAt)
+    {
+        $this->noticeReturnUserAt = $noticeReturnUserAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeReturnUserAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeReturnUserAt()
+    {
+        return $this->noticeReturnUserAt;
+    }
+
+    /**
+     * Set noticeReturnProviderAt
+     *
+     * @param \DateTime $noticeReturnProviderAt
+     *
+     * @return Booking
+     */
+    public function setNoticeReturnProviderAt($noticeReturnProviderAt)
+    {
+        $this->noticeReturnProviderAt = $noticeReturnProviderAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeReturnProviderAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeReturnProviderAt()
+    {
+        return $this->noticeReturnProviderAt;
+    }
+
+    /**
+     * Set noticeRateUserAt
+     *
+     * @param \DateTime $noticeRateUserAt
+     *
+     * @return Booking
+     */
+    public function setNoticeRateUserAt($noticeRateUserAt)
+    {
+        $this->noticeRateUserAt = $noticeRateUserAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeRateUserAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeRateUserAt()
+    {
+        return $this->noticeRateUserAt;
+    }
+
+    /**
+     * Set noticeRateProviderAt
+     *
+     * @param \DateTime $noticeRateProviderAt
+     *
+     * @return Booking
+     */
+    public function setNoticeRateProviderAt($noticeRateProviderAt)
+    {
+        $this->noticeRateProviderAt = $noticeRateProviderAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeRateProviderAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeRateProviderAt()
+    {
+        return $this->noticeRateProviderAt;
     }
 }

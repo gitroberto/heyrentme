@@ -26,26 +26,16 @@
                 Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
             </h1>
             <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">
-                Deine Buchung war erfolgreich! Wir schicken vor der Buchung noch eine Erinnerung. 
-                Weiter unten findest du den genauen Buchungs- und Kontaktdaten. 
-                Hier kannst du die Buchung bis 24 Std. vor dem Buchungstermin 
-                {# provide cancel url #}
-                <a style="color: black;" href="#">stornieren.</a>
+                Falls nichts anderes mit <span style="font-weight: bold;">{{ provider.name }}</span> vereinbart wurde, 
+                bereite bitte die Rückgabe für das Equipment vor. Die Rückgabe erfolgt in in Kürze.
             </p>
         </td>
     </tr>
     <tr>
         <td style="padding: 20px;padding-top: 10px;">
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;font-weight: bold;margin-top: 0px;margin-bottom: 0px">Buchungsdaten:</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;"> <span style="font-weight: bold;">Beginn:</span> {{ inquiry.fromAt|date('D d F Y H:i') }}</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Ende:</span> {{ inquiry.toAt|date('D d F Y H:i') }}</span></p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Gesamtkosten:</span>  {{ inquiry.price|number_format(0) }},- €</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Kaution:</span> {{ inquiry.deposit|number_format(0) }},- €</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Zeitpunkt Rückgabe:</span> {{ inquiry.toAt|date('D d F Y H:i') }}</span></p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> {{ equipment.addressAsString }}</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Anbieter Kontakt:</span> +43 {{ equipment.user.fullPhone }}</p>
-            {% if discountCode %}
-                <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Rabatt:</span> 5,- € (wird dem Anbieter von hey! VIENNA nach Buchungstermin überwiesen)</p>
-            {% endif %}
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 22px;font-size: 15px;line-height: 22px;margin-top: 25px;margin-bottom: 0px;">Buchungsnr.: {{ inquiry.id }}</p>         
         </td>
     </tr>
