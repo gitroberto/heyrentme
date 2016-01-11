@@ -88,4 +88,44 @@ EOT;
         $q = $this->getEntityManager()->createQuery($dql);
         return $q->getResult();
     }
+    public function getAllForAllOkUserReminder(DateTime $datetime) {
+        // exact start of booking        
+        // we assume scheduler will run every 5 minutes
+                
+        $delta = new DateInterval('PT4M59S'); // 0 hrs 4 min 59 sec
+        $t = $datetime->add($delta);
+        $tStr = $t->format('Y-m-d H:i:s');
+        
+        $dql = <<<EOT
+                select b, i, e
+                from AppBundle:Booking b
+                    join b.inquiry i
+                    join i.equipment e
+                where
+                    b.noticeAllOkUserAt is null
+                    and i.toAt < '{$tStr}'
+EOT;
+        $q = $this->getEntityManager()->createQuery($dql);
+        return $q->getResult();
+    }
+    public function getAllForAllOkProviderReminder(DateTime $datetime) {
+        // exact start of booking        
+        // we assume scheduler will run every 5 minutes
+                
+        $delta = new DateInterval('PT4M59S'); // 0 hrs 4 min 59 sec
+        $t = $datetime->add($delta);
+        $tStr = $t->format('Y-m-d H:i:s');
+        
+        $dql = <<<EOT
+                select b, i, e
+                from AppBundle:Booking b
+                    join b.inquiry i
+                    join i.equipment e
+                where
+                    b.noticeAllOkProviderAt is null
+                    and i.fromAt < '{$tStr}'
+EOT;
+        $q = $this->getEntityManager()->createQuery($dql);
+        return $q->getResult();
+    }
 }

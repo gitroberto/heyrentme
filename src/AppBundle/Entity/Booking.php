@@ -63,7 +63,11 @@ class Booking {
     /** 
      * @ORM\Column(type="datetime")
      */
-    private $noticeAllOkAt;
+    private $noticeAllOkUserAt;
+    /** 
+     * @ORM\Column(type="datetime")
+     */
+    private $noticeAllOkProviderAt;
     /** 
      * @ORM\Column(type="datetime")
      */
@@ -369,30 +373,6 @@ class Booking {
     }
 
     /**
-     * Set noticeAllOkAt
-     *
-     * @param \DateTime $noticeAllOkAt
-     *
-     * @return Booking
-     */
-    public function setNoticeAllOkAt($noticeAllOkAt)
-    {
-        $this->noticeAllOkAt = $noticeAllOkAt;
-
-        return $this;
-    }
-
-    /**
-     * Get noticeAllOkAt
-     *
-     * @return \DateTime
-     */
-    public function getNoticeAllOkAt()
-    {
-        return $this->noticeAllOkAt;
-    }
-
-    /**
      * Set noticeReturnUserAt
      *
      * @param \DateTime $noticeReturnUserAt
@@ -486,5 +466,53 @@ class Booking {
     public function getNoticeRateProviderAt()
     {
         return $this->noticeRateProviderAt;
+    }
+
+    /**
+     * Set noticeAllOkUserAt
+     *
+     * @param \DateTime $noticeAllOkUserAt
+     *
+     * @return Booking
+     */
+    public function setNoticeAllOkUserAt($noticeAllOkUserAt)
+    {
+        $this->noticeAllOkUserAt = $noticeAllOkUserAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeAllOkUserAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeAllOkUserAt()
+    {
+        return $this->noticeAllOkUserAt;
+    }
+
+    /**
+     * Set noticeAllOkProviderAt
+     *
+     * @param \DateTime $noticeAllOkProviderAt
+     *
+     * @return Booking
+     */
+    public function setNoticeAllOkProviderAt($noticeAllOkProviderAt)
+    {
+        $this->noticeAllOkProviderAt = $noticeAllOkProviderAt;
+
+        return $this;
+    }
+
+    /**
+     * Get noticeAllOkProviderAt
+     *
+     * @return \DateTime
+     */
+    public function getNoticeAllOkProviderAt()
+    {
+        return $this->noticeAllOkProviderAt;
     }
 }

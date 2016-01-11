@@ -39,6 +39,7 @@ class SchedulerService {
 
         $now = new DateTime();
         $this->sendRentReminders($now);
+        $this->sendAllOkReminders($now);
         $this->sendReturnReminders($now);
     }
     
@@ -121,6 +122,76 @@ class SchedulerService {
                 $this->logger->error($e->getTraceAsString());
             }
             
+        }
+    }
+    protected function sendAllOkReminders(DateTime $datetime) {        
+        // users
+        $this->logger->debug('sending ALL OK reminders for USERS');
+        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForAllOkUserReminder($datetime);        
+        foreach ($bookings as $bk) {
+            try {
+                $inq = $bk->getInquiry();
+
+                if ($inq->getUser() !== null) {
+                    $email = $inq->getUser()->getEmail();
+                }
+                else {
+                    $email = $inq->getEmail();
+                }
+                $emailHtml = $this->templating->render('Emails\mail_to_user_everything_ok.html.twig', array(
+                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'inquiry' => $inq
+                ));
+                $message = Swift_Message::newInstance()
+                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+                    ->setFrom($this->from)
+                    ->setTo($email)
+                    ->setBody($emailHtml, 'text/html');
+                $this->mailer->send($message);
+
+                $bk->setNoticeAllOkUserAt(new DateTime());
+                $this->em->flush();
+                
+                $msg = sprintf("\t%s, from-date: %s", $email, $inq->getFromAt()->format("Y-m-d H:i:s"));
+                $this->logger->debug($msg);
+            } catch (Exception $e) {
+                $msg = sprintf("\t%s, FAILED", $email);
+                $this->logger->error($msg);
+                $this->logger->error($e->getTraceAsString());
+            }
+        }
+        
+        // providers
+        $this->logger->debug('sending ALL OK reminders for PROVIDERS');
+        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForAllOkProviderReminder($datetime);        
+        foreach ($bookings as $bk) {
+            try {
+                $inq = $bk->getInquiry();
+                $eq = $inq->getEquipment();
+                $provider = $eq->getUser();
+
+                $email = $provider->getEmail();
+                $emailHtml = $this->templating->render('Emails\mail_to_provider_everything_ok.html.twig', array(
+                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'provider' => $provider
+                ));
+                $message = Swift_Message::newInstance()
+                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+                    ->setFrom($this->from)
+                    ->setTo($email)
+                    ->setBody($emailHtml, 'text/html');
+                $this->mailer->send($message);
+
+                $bk->setNoticeAllOkProviderAt(new DateTime());
+                $this->em->flush();
+                
+                $msg = sprintf("\t%s, from-date: %s", $email, $inq->getFromAt()->format("Y-m-d H:i:s"));
+                $this->logger->debug($msg);
+            } catch (Exception $e) {
+                $msg = sprintf("\t%s, FAILED", $email);
+                $this->logger->error($msg);
+                $this->logger->error($e->getTraceAsString());
+            }
         }
     }
     protected function sendReturnReminders(DateTime $datetime) {        
