@@ -29,4 +29,4 @@ services:
     
     scheduler:
         class: AppBundle\Service\SchedulerService
-        arguments: [@doctrine.orm.entity_manager, @mailer, @templating, @router, { mailer_image_url_prefix: %mailer_image_url_prefix%, mailer_fromemail: %mailer_fromemail%, mailer_fromname: %mailer_fromname% }]
+        arguments: [@doctrine.orm.entity_manager, @mailer, @templating, @monolog.logger.scheduler, @router, { mailer_image_url_prefix: %mailer_image_url_prefix%, mailer_fromemail: %mailer_fromemail%, mailer_fromname: %mailer_fromname% }]
