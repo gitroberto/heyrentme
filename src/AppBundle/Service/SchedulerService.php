@@ -295,6 +295,7 @@ class SchedulerService {
                     $email = $inq->getEmail();
                 }
                 // TODO: build url with uuid
+                
                 $emailHtml = $this->templating->render('Emails\mail_to_user_rate_provider.html.twig', array(
                     'mailer_image_url_prefix' => $this->imageUrlPrefix,
                     'inquiry' => $inq,

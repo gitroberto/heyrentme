@@ -375,4 +375,22 @@ class BookingController extends BaseController {
         return new JsonResponse(array('result' => 'ok'));
     }
     
+    /**
+     * @Route("/booking/rate-user/{uuid}", name="rate-user")
+     */
+    public function rateUserAction() {
+        return $this->render('booking/rate-user.html.twig', array(
+            
+            
+        ));
+    }
+
+    /**
+     * @Route("/booking/rate/{uuid}", name="rate-provider")
+     */
+    public function rateAction() {
+        return $this->render('booking/rate.html.twig', array(
+        ));
+    }
+
 }
