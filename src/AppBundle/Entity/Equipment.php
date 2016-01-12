@@ -745,8 +745,29 @@ class Equipment
     }
     
     public function checkStatusOnSave(){
-        if ($this->status == Equipment::STATUS_APPROVED || $this->status == Equipment::STATUS_REJECTED) {
-            $this->status = Equipment::STATUS_MODIFIED;
+        if ($this->status == Equipment::STATUS_APPROVED || $this->status == Equipment::STATUS_REJECTED) {            
+            $this->changeStatus(Equipment::STATUS_MODIFIED, null);
         }
+    }
+    
+    public function changeStatus($newStatus, $reason){
+        
+        
+        $this->status = $newStatus;
+        switch($newStatus){
+            case Equipment::STATUS_APPROVED:
+            case Equipment::STATUS_REJECTED:
+                #$mailer = $this->get('fos_user.mailer');
+                #$mailer->sendNewModifiedEquipmentInfoMessage($this);                
+                break;            
+            case Equipment::STATUS_INCOMPLETE:
+                break;
+            case Equipment::STATUS_NEW:
+            case Equipment::STATUS_MODIFIED:
+                #$mailer = $this->get('fos_user.mailer');
+                #$mailer->sendNewModifiedEquipmentInfoMessage($this);                
+                break;
+        }
+        
     }
 }

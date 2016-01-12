@@ -6,11 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
-
+use AppBundle\Entity\Equipment;
       
 class HeyrentmeMailer implements MailerInterface {
    
-    
+        
     public function __construct($fromEmail, UrlGeneratorInterface  $router,EngineInterface $templating, $mailer, array $parameters)
     {
         $this->router = $router;
@@ -19,6 +19,45 @@ class HeyrentmeMailer implements MailerInterface {
         $this->mailer = $mailer;
         $this->parameters = $parameters;
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function sendNewModifiedEquipmentInfoMessage(Equipment $eq)
+    {
+        $from = $this->fromEmail;                
+        $to = $this->parameters['admin_email'];
+                        
+        $template = 'Emails/Equipment/new_modified_item.html.twig';
+        $url = $this->router->generate('admin_equipment_moderate', array('id' => $eq->getId()));        
+        
+        $rendered = $this->templating->render($template, array(                        
+            'equipment_url' =>  $url,
+            'equpment' => $eq,            
+            'mailer_image_url_prefix' => $this->parameters['mailer_image_url_prefix']
+        ));
+        $this->sendEmailMessage($rendered, $from, $to, "New/modified equipment.");
+        
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function sendApprovedRejectedInfoMessage(Equipment $eq, $reason)
+    {
+        $from = $this->fromEmail;                
+        $to = $eq->getUser()->getEmail();
+                        
+        $template = 'Emails/Equipment/equipment_approved_rejected.html.twig';        
+        
+        $rendered = $this->templating->render($template, array(                                    
+            'equpment' => $eq,
+            'mailer_image_url_prefix' => $this->parameters['mailer_image_url_prefix'],
+            'reason' => $reason
+        ));
+        $this->sendEmailMessage($rendered, $from, $to, "New/modified equipment.");
+        
+    }
+    
     /**
      * {@inheritdoc}
      */

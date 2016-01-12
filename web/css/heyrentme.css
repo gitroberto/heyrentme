@@ -373,3 +373,7 @@ img.testimonialDisplayImg {
     border-bottom: 1px solid #ababab;
     margin-bottom: 25px;
 }
+
+img.thmb {
+    max-width: 150px;
+}

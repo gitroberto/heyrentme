@@ -82,7 +82,9 @@
               <div class="col-xs-10 control-readonly">
                 {% for img in equipment.images %}
                     <span class="media-img">
-                        <img src="{{ img.urlPath(image_url_prefix) }}" alt=""/>
+                        <a href ="{{ img.urlPath(image_url_prefix) }}">
+                            <img class="thmb" src="{{ img.urlPath(image_url_prefix) }}" alt=""/>
+                        </a>
                     </span>
                 {% endfor %}
               </div>
@@ -160,7 +162,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" class="button-black backgound-yellow text-black" value="Save">
-                <a class="button-black backgound-yellow text-black" href="{{ path('admin_blog_list') }}">Cancel</a>
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_equipment_list') }}">Cancel</a>
             </div>
         </div>
     </div>

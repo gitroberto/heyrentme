@@ -25,3 +25,4 @@ parameters:
     mailer_fromemail: heyrentme@o2.pl
     mailer_fromname: Hey Rent Me (TEST)
     mailer_image_url_prefix: http://test.hey-buyme.com/
+    admin_email: sebastian.bera@dantesoft.com

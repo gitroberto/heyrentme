@@ -795,8 +795,8 @@ class ProviderController extends BaseController {
                     throw $this->createNotFoundException();
                 }  
                 
-                $em = $this->getDoctrine()->getManager();
-                $eq->setStatus(Equipment::STATUS_NEW);
+                $em = $this->getDoctrine()->getManager();                
+                $eq->changeStatus(Equipment::STATUS_NEW, null);
                 
                 $em->flush();
             }         

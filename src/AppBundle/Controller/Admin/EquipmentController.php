@@ -116,9 +116,7 @@ class EquipmentController extends BaseAdminController {
         $form->handleRequest($request);
         
         if ($form->isValid()) {
-            
-            $equipment->setStatus($form['status']->getData());
-            $equipment->setReason($form['reason']->getData());
+            $equipment->changeStatus($form['status']->getData(), $form['reason']->getData());            
             $em = $this->getDoctrine()->getManager();
             $em->persist($equipment);
             $em->flush();
