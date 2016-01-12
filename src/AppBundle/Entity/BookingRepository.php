@@ -12,8 +12,8 @@ class BookingRepository extends EntityRepository {
         // 6 hrs before booking        
         // we assume scheduler will run every 5 minutes
                 
-        $delta = new DateInterval('PT6H4M59S'); // 6 hrs 4 min 59 sec
-        $t = $datetime->add($delta);
+        $delta = new DateInterval('PT5H55M01S'); // sub 6 hrs add 4 min 59 sec
+        $t = $datetime->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -32,8 +32,8 @@ EOT;
         // 6 hrs before booking        
         // we assume scheduler will run every 5 minutes
                 
-        $delta = new DateInterval('PT6H4M59S'); // 6 hrs 4 min 59 sec
-        $t = $datetime->add($delta);
+        $delta = new DateInterval('PT5H55M01S'); // sub 6 hrs add 4 min 59 sec
+        $t = $datetime->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -52,8 +52,8 @@ EOT;
         // 3 hrs before end of booking        
         // we assume scheduler will run every 5 minutes
                 
-        $delta = new DateInterval('PT3H4M59S'); // 3 hrs 4 min 59 sec
-        $t = $datetime->add($delta);
+        $delta = new DateInterval('PT2H55M01S'); // sub 3 hrs add 4 min 59 sec
+        $t = $datetime->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -72,8 +72,8 @@ EOT;
         // 3 hrs before end of booking        
         // we assume scheduler will run every 5 minutes
                 
-        $delta = new DateInterval('PT3H4M59S'); // 3 hrs 4 min 59 sec
-        $t = $datetime->add($delta);
+        $delta = new DateInterval('PT2H55M01S'); // sub 3 hrs add 4 min 59 sec
+        $t = $datetime->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -83,7 +83,7 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeReturnProviderAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.toAt < '{$tStr}'
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
         return $q->getResult();
@@ -103,7 +103,7 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeAllOkUserAt is null
-                    and i.toAt < '{$tStr}'
+                    and i.fromAt < '{$tStr}'
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
         return $q->getResult();
@@ -124,6 +124,46 @@ EOT;
                 where
                     b.noticeAllOkProviderAt is null
                     and i.fromAt < '{$tStr}'
+EOT;
+        $q = $this->getEntityManager()->createQuery($dql);
+        return $q->getResult();
+    }
+    public function getAllForRateUserReminder(DateTime $datetime) {
+        // 3 hrs after end of booking        
+        // we assume scheduler will run every 5 minutes
+                
+        $delta = new DateInterval('PT3H4M59S'); // 3 hrs 4 min 59 sec
+        $t = $datetime->add($delta);
+        $tStr = $t->format('Y-m-d H:i:s');
+        
+        $dql = <<<EOT
+                select b, i, e
+                from AppBundle:Booking b
+                    join b.inquiry i
+                    join i.equipment e
+                where
+                    b.noticeRateUserAt is null
+                    and i.toAt < '{$tStr}'
+EOT;
+        $q = $this->getEntityManager()->createQuery($dql);
+        return $q->getResult();
+    }
+    public function getAllForRateProviderReminder(DateTime $datetime) {
+        // 3 hrs after end of booking        
+        // we assume scheduler will run every 5 minutes
+                
+        $delta = new DateInterval('PT3H4M59S'); // 3 hrs 4 min 59 sec
+        $t = $datetime->add($delta);
+        $tStr = $t->format('Y-m-d H:i:s');
+        
+        $dql = <<<EOT
+                select b, i, e
+                from AppBundle:Booking b
+                    join b.inquiry i
+                    join i.equipment e
+                where
+                    b.noticeRateProviderAt is null
+                    and i.toAt < '{$tStr}'
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
         return $q->getResult();

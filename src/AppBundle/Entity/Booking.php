@@ -84,6 +84,14 @@ class Booking {
      * @ORM\Column(type="datetime")
      */
     private $noticeRateProviderAt;
+    /** 
+     * @ORM\Column(type="string")
+     */
+    private $rateUserUuid;
+    /** 
+     * @ORM\Column(type="string")
+     */
+    private $rateProviderUuid;
     
     /**
      * @ORM\OneToOne(targetEntity="Inquiry", inversedBy="booking");
@@ -514,5 +522,53 @@ class Booking {
     public function getNoticeAllOkProviderAt()
     {
         return $this->noticeAllOkProviderAt;
+    }
+
+    /**
+     * Set rateUserUuid
+     *
+     * @param string $rateUserUuid
+     *
+     * @return Booking
+     */
+    public function setRateUserUuid($rateUserUuid)
+    {
+        $this->rateUserUuid = $rateUserUuid;
+
+        return $this;
+    }
+
+    /**
+     * Get rateUserUuid
+     *
+     * @return string
+     */
+    public function getRateUserUuid()
+    {
+        return $this->rateUserUuid;
+    }
+
+    /**
+     * Set rateProviderUuid
+     *
+     * @param string $rateProviderUuid
+     *
+     * @return Booking
+     */
+    public function setRateProviderUuid($rateProviderUuid)
+    {
+        $this->rateProviderUuid = $rateProviderUuid;
+
+        return $this;
+    }
+
+    /**
+     * Get rateProviderUuid
+     *
+     * @return string
+     */
+    public function getRateProviderUuid()
+    {
+        return $this->rateProviderUuid;
     }
 }
