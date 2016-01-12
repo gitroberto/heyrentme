@@ -23,41 +23,15 @@
     <tr>
         <td style="padding: 20px;padding-top: 0px;padding-bottom: 0px;">
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 20px;" class="page-title">
-                Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
+                Hallo {{ provider.name }},
             </h1>
-            {% if inquiry.accepted > 0 %}
-                <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">
-                    {{ equipment.user.name }} hat deine Anfrage angenommen. Du kannst das Angebot jetzt buchen. 
-                    Du erhälst<span style="font-weight: bold;"> 5 € Startguthaben</span> bei einer Neu-Anmeldung! 
-                </p>
-                <a href="{{ url }}" style="background-color: #34b437;color: #fff;text-decoration: none;margin: 0 auto;display: block;width: 70%;max-width: 380px;padding: 9px 5px;text-align: center;font-size: 24px;border-radius: 6px;border-top-left-radius: 0px;margin-top: 35px;margin-bottom: 30px;font-family: helvetica, arial;">
-                    Jetzt Buchen
-                </a>
-            {% else %}
-                <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">
-                    {{ equipment.user.name }} hat deine Anfrage abgelehnt.
-                </p>
-            {% endif %}
+            <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">Falls nichts anderes mit <span style="font-weight: bold;">Ilse</span> vereinbart wurde, erfolgt in Kürze die Rückgabe deines Equipments.</p>
         </td>
     </tr>
     <tr>
-        <td style="padding: 20px;padding-top: 0px;">
-            <p style="font-family: helvetica, arial;font-style: italic;font-size: 15px;font-weight: 100;line-height: 22px;margin-bottom: 20px;">Hallo Ilse,<br>
-                {{ inquiry.response }}
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding: 20px;padding-top: 0px;">
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;font-weight: bold;margin-top: 0px;margin-bottom: 0px">Buchungsdaten:</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;"> <span style="font-weight: bold;">Beginn:</span> {{ inquiry.fromAt|date('D d F Y H:i') }}</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Ende:</span> {{ inquiry.toAt|date('D d F Y H:i') }}</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Gesamtkosten:</span>  {{ inquiry.price|number_format(0) }},- €</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Kauption:</span> {{ inquiry.deposit|number_format(0) }},- €</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> 
-                {{ equipment.incompleteAddressAsString }}
-                (Die genaue Adresse und Kontaktdaten werden nach Buchung bekanntgegeben)
-            </p>
+        <td style="padding: 20px;padding-top: 10px;">
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Zeitpunkt Rückgabe:</span> {{ inquiry.toAt|date('D d F Y H:i') }}</span></p>
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> Grosse Neugasse 53/4, 1050 Wien{{ equipment.addressAsString }}</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 22px;font-size: 15px;line-height: 22px;margin-top: 25px;margin-bottom: 0px;">Buchungsnr.: {{ inquiry.id }}</p>         
         </td>
     </tr>

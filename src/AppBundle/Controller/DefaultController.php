@@ -6,6 +6,7 @@ use AppBundle\Utils\SearchParams;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends BaseController {
     
@@ -195,10 +196,6 @@ class DefaultController extends BaseController {
      * @Route("/test")
      */
     public function testAction() {
-        $repo = $this->getDoctrineRepo('AppBundle:Equipment');
-        $eq = $repo->find(128);
-        $r = $repo->getEquipmentFeatures($eq);
-        return new JsonResponse($r);
+        return new Response('ok');
     }
-    
-    }
+}

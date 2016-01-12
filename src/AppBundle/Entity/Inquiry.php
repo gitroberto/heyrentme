@@ -86,10 +86,6 @@ class Inquiry {
      * @ORM\OneToOne(targetEntity="Booking", mappedBy="inquiry")
      */
     private $booking;    
-    /**
-     * @ORM\OneToOne(targetEntity="DiscountCode", mappedBy="inquiry")
-     */
-    private $discountCode;
 
     /**
      * Get id
@@ -483,29 +479,5 @@ class Inquiry {
     public function getBooking()
     {
         return $this->booking;
-    }
-
-    /**
-     * Set discountCode
-     *
-     * @param \AppBundle\Entity\DiscountCode $discountCode
-     *
-     * @return Inquiry
-     */
-    public function setDiscountCode(\AppBundle\Entity\DiscountCode $discountCode = null)
-    {
-        $this->discountCode = $discountCode;
-
-        return $this;
-    }
-
-    /**
-     * Get discountCode
-     *
-     * @return \AppBundle\Entity\DiscountCode
-     */
-    public function getDiscountCode()
-    {
-        return $this->discountCode;
     }
 }
