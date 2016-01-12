@@ -377,3 +377,9 @@ img.testimonialDisplayImg {
 img.thmb {
     max-width: 150px;
 }
+
+a.thmb-link {
+    display: block;
+    float: left;
+    margin-right: 5px;
+}

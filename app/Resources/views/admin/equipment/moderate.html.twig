@@ -81,13 +81,14 @@
               <label for="form_name" class="control-label col-xs-2">Images</label>
               <div class="col-xs-10 control-readonly">
                 {% for img in equipment.images %}
-                    <span class="media-img">
-                        <a href ="{{ img.urlPath(image_url_prefix) }}">
-                            <img class="thmb" src="{{ img.urlPath(image_url_prefix) }}" alt=""/>
-                        </a>
-                    </span>
+
+                    <a class="thmb-link" href ="{{ img.urlPath(image_url_prefix) }}">
+                        <img class="thmb" src="{{ img.urlPath(image_url_prefix) }}" alt=""/>
+                    </a>
+                    
                 {% endfor %}
               </div>
+              <div class="clear"></div>
             </div>
         </div>
         <div class="row">
