@@ -1,38 +1,52 @@
 {% extends "base.html.twig" %}
 {% block body %}
-    
-    <div class="main-header ">
-        <img src="/img/info2.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
-        <img src="/img/info2-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
-        <div class="container rent-heading help-heading">
-            <div class="row">
-                <div class="col-sm-8 text-white">
-                    <h1>Kundeninfos</h1><br>
-                    <a href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
-                </div>
-            </div>
+        
+            
+    <div class="main-header "> <img src="/img/info2.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/> <img src="/img/info2-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+      <div class="container rent-heading help-heading">
+        <div class="row">
+          <div class="col-sm-8 text-white">
+            <h1>Kundeninfos</h1>
+            <br>
+            <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
         </div>
+      </div>
     </div>
-  </div>
-  </header>
-  <section>
+    </div>
+    </header>
+    <section>
     <div class="container background-white rent-container">
-        {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_impressum", "pageNameShort":"Impressum" } )) }}        
-        <span class="clearfix"></span>
-        <!-- Left nav -->
-        <div class="row help-page">
-            {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_impressum" } )) }}
-            <div class="col-md-9 content">
-                <p class="text-bold">Impressum</p>
-                <p>Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem. </p>
-                <p class="text-bold">AGBs 2</p>
-                <p>Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem. </p>
-                <p class="text-bold">AGBs 3</p>
-                <p>Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem. </p>
-            </div>
+      <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+        <option value="kundeninfos_presse.php">Presse</option>
+        <option value="kundeninfos_kontakt.php">Kontakt</option>
+        <option selected="selected" value="kundeninfos_impressum.php">Impressum</option>
+        <option value="kundeninfos_agb.php">AGB</option>
+      </select>
+      {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_impressum", "pageNameShort":"Impressum" } )) }}        
+      <span class="clearfix"></span> 
+      <!-- Left nav -->
+      <div class="row help-page">
+        {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_impressum" } )) }}
+        <div class="col-md-9 content">
+          <p class="text-bold">Impressum</p>
+          <p>hey! The sharing community GmbH<br>
+            Zentagasse 40-42/1/17<br>
+            A-1050 Vienna | Austria <br>
+            <br>
+            UId: ATU 69841139<br>
+            Steuernummer: 04 403/2159<br>
+            Firmenbuchnr: FN 43886 i<br>
+            Geschäftsführer: Robert Ladkani, MA <br>
+            <br>
+            Mail: <a href="mailto:hello@heysharing.com">hello@heysharing.com</a><br>
+            Support: <a href="mailto:support@heysharing.com">support@heysharing.com</a> </p>
+          <p class="text-bold">Rechtshinweis:</p>
+          <p>® Copyright hey! The sharing community GmbH. Alle Inhalte sind urheberrechtlich, als wesentliche Teile von Datenbanken oder als sonstige gewerbliche Schutzrechte geschützt. Alle Rechte vorbehalten. Insbesondere dürfen Vervielfältigungen, Nachdrucke, öffentliches Zugänglichmachen, insbesondere durch Aufnahme in fremde Internetangebote und Online-Dienste, Links auf die Seite der hey! The Sharing Community GmbH sowie Vervielfältigungen auf Datenträger aller Art, auch auszugsweise, nur nach vorheriger schriftlicher Zustimmung durch die hey! The Sharing Community GmbH erfolgen. Für Inhalte von Webseiten, auf die durch einen Link verwiesen wird und Inhalte, die ausdrücklich oder konkludent, z.B. mittels Urhebervermerk oder entsprechendes Branding als fremde Inhalte gekennzeichnet sind, übernimmt die hey! The Sharing Community GmbH keine Haftung.<br>
+            <br>
+            Dieses Impressum gilt auch für unsere Social Media Auftritte auf <a href="https://www.facebook.com/heySharingCommunity/" target="_blank">Facebook</a>, <a href="https://twitter.com/hey_sharing" target="_blank">Twitter</a> und <a href="https://vimeo.com/heysharing" target="_blank">Vimeo</a>.</p>
         </div>
-  </section>
-    <span class="add-margin mobile-hidden"></span>
-  </div>
-    
+      </div>
+      </section>
+      <span class="add-margin mobile-hidden"></span> </div>
+
 {% endblock %}

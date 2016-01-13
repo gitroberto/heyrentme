@@ -1,40 +1,49 @@
 {% extends "base.html.twig" %}
 {% block body %}
-    <div class="main-header ">
-        <img src="/img/info2.jpg" alt="rent me heading." class="img-responsive max-1600"/>
-        <div class="container rent-heading help-heading">
-            <div class="row">
-                <div class="col-sm-8 text-white">
-                    <h1>Kundeninfos</h1><br>
-                    <a href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
-                </div>
-            </div>
+    <div class="main-header "> <img src="/img/info2.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/> <img src="/img/info2-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+      <div class="container rent-heading help-heading">
+        <div class="row">
+          <div class="col-sm-8 text-white">
+            <h1>Kundeninfos</h1>
+            <br>
+            <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
         </div>
+      </div>
     </div>
-  </div>
-  </header>
-  <section>
+    </div>
+    </header>
+    <section>
     <div class="container background-white rent-container">
+      <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+        <option selected="selected" value="kundeninfos_presse.php">Presse</option>
+        <option value="kundeninfos_kontakt.php">Kontakt</option>
+        <option value="kundeninfos_impressum.php">Impressum</option>
+        <option value="kundeninfos_agb.php">AGB</option>
+      </select>
+      <nav class="crumbs">
         {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_presse", "pageNameShort":"Presse" } )) }}
-        <span class="clearfix"></span>
-        <!-- Left nav -->
-        <div class="row help-page">
-            {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_presse" } )) }}
-            <div class="col-md-9 content">
-                <p class="text-bold">Presse</p>
-                <div class="presse">
-                    <div>
-                        <span><img src="/img/presse-logo.svg" alt=""/></span>
-                        <p><a href="#">Pressematerial gesammelt vom 21. August 2015</a><br>Bildmaterial, Pressetexte, Video</p>
-                    </div>
-                    <div>
-                        <span><img src="/img/presse-logo2.svg" alt=""/></span>
-                        <p><a>Artikel Wiener Zeitung vom 12. September</a><br>Urbanes Innovationspotential<p>
-                    </div>
-                </div>
+      </nav>
+      <span class="clearfix"></span> 
+      <!-- Left nav -->
+      <div class="row help-page">
+        {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_presse" } )) }}
+        <div class="col-md-9 content">
+          <div style="margin-top:0" class="presse">
+            <div> <span><img src="/img/hey-logo-presse.png" alt=""/></span>
+              <p><a href="#">Pressematerial gesammelt vom 21. August 2015<br>
+                Bildmaterial, Pressetexte, Video</a></p>
             </div>
+            <div> <span><img src="/img/wiener_zeitung.png" alt=""/></span>
+              <p><a href="#">Artikel Wiener Zeitung vom 12. September<br>
+                Urbanes Innovationspotential</a>        
+              <p> 
+               <div> <span><img src="/img/junge_wirtschaft.png" alt=""/></span>
+              <p><a href="#">Junge Wirtschaft Magazin<br>
+                November Ausgabe 2015 / "Wien bringt´s"</a></p>
+            </div>
+          </div>
         </div>
-  </section>
-    <span class="add-margin mobile-hidden"></span>
-  </div>
+      </div>
+      </section>
+      <span class="add-margin mobile-hidden"></span> </div>
 {% endblock %}

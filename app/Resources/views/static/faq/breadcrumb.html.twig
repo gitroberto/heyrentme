@@ -1,15 +1,13 @@
 <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
-    <option value="{{ path("hilfe_faq_euipment_mieten") }}">Hilfe / Equipment mieten</option>
-    <option value="{{ path("hilfe_faq_euipment_anbieten") }}">Hilfe / Equipment anbieten</option>
-    <option value="{{ path("hilfe_faq_talente_buchen") }}">Hilfe / Talente buchen</option>
-    <option value="{{ path("hilfe_faq_talente_anbieten") }}">Hilfe / Talente anbieten</option>
-    <option value="{{ path("hilfe_faq_faq_anbieter") }}">FAQ Nutzer</option>
-    <option value="{{ path("hilfe_faq_faq_nutzer") }}">FAQ Anbieter</option>
+    <option value="{{ path("hilfe_faq_euipment_mieten") }}">Equipment mieten</option>
+    <option value="{{ path("hilfe_faq_euipment_anbieten") }}">Equipment anbieten</option>
+    <option value="{{ path("hilfe_faq_talent_buchen") }}">Talente buchen</option>
+    <option value="{{ path("hilfe_faq_talent_anbieten") }}">Talente anbieten</option>
+    <option value="{{ path("hilfe_faq_faq") }}">FAQ</option>
   </select>
   <nav class="crumbs">
       <ul class="col-xs-10">
-          <li><a href="{{ path('start-page') }}">hey! TSC</a></li>
-          <li><a href="{{ path('rentme') }}">hey! rentme</a></li>
-          <li><a href="{{ path(pageName) }}" class="active-crumb">FAQ</a></li>
+          <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
+          <li><a href="{{ path(pageName) }}" class="active-crumb">HILFE &amp; FAQ</a></li>
       </ul>
   </nav>
