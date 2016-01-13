@@ -9,6 +9,7 @@ use AppBundle\Utils\Utils;
 use DateInterval;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -347,7 +348,9 @@ class ProviderController extends BaseController {
             
             // save to db
             $em = $this->getDoctrine()->getManager();
-            $equipment->checkStatusOnSave();
+            if ($equipment->checkStatusOnSave()){
+                $this->sendNewModifiedEquipmentInfoMessage($request, $eq);
+            }
             $em->persist($equipment);
             $em->flush();
             
@@ -423,7 +426,9 @@ class ProviderController extends BaseController {
             //</editor-fold>
             // save to db
             $em = $this->getDoctrine()->getManager();
-            $eq->checkStatusOnSave();
+            if ($eq->checkStatusOnSave()){
+                $this->sendNewModifiedEquipmentInfoMessage($request, $eq);
+            }
             $em->persist($eq);
             $em->flush();
             
@@ -538,7 +543,9 @@ class ProviderController extends BaseController {
             $eq->setAddrPlace($data['place']);            
             //</editor-fold>
             $em = $this->getDoctrine()->getManager();
-            $eq->checkStatusOnSave();
+            if ($eq->checkStatusOnSave()){
+                $this->sendNewModifiedEquipmentInfoMessage($request, $eq);
+            }
             $em->flush();
             
             // store images
@@ -797,6 +804,7 @@ class ProviderController extends BaseController {
                 
                 $em = $this->getDoctrine()->getManager();                
                 $eq->changeStatus(Equipment::STATUS_NEW, null);
+                $this->sendNewModifiedEquipmentInfoMessage($request, $eq);
                 
                 $em->flush();
             }         
@@ -965,5 +973,28 @@ class ProviderController extends BaseController {
             'offers'=> $offers, 
             'image_url_prefix'=> $this->getParameter('image_url_prefix')            
         ));
+    }
+    
+    public function sendNewModifiedEquipmentInfoMessage(Request $request, Equipment $eq)
+    {      
+                        
+        $template = 'Emails/Equipment/new_modified_item.html.twig';        
+        
+        $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));        
+        
+        $emailHtml = $this->renderView($template, array(                                    
+            'equipment' => $eq,
+            'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),            
+            'url' => $url
+        ));
+        
+        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+        $message = Swift_Message::newInstance()
+            ->setSubject('New/modified equipment notification.')
+            ->setFrom($from)
+            ->setTo($eq->getUser()->getEmail())
+            ->setBody($emailHtml, 'text/html');
+        $this->get('mailer')->send($message);
+        
     }
 }

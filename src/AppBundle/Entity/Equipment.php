@@ -747,11 +747,14 @@ class Equipment
     public function checkStatusOnSave(){
         if ($this->status == Equipment::STATUS_APPROVED || $this->status == Equipment::STATUS_REJECTED) {            
             $this->changeStatus(Equipment::STATUS_MODIFIED, null);
+            return true;
         }
+        return false;
     }
     
     public function changeStatus($newStatus, $reason){
         
+        #TODO: Move status management code (emails etc) into one method
         
         $this->status = $newStatus;
         switch($newStatus){

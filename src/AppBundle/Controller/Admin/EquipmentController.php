@@ -3,10 +3,12 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Equipment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\ExecutionContextInterface;
+
 
 
 use Symfony\Component\Validator\Constraints\Length;
@@ -119,7 +121,9 @@ class EquipmentController extends BaseAdminController {
             $equipment->changeStatus($form['status']->getData(), $form['reason']->getData());            
             $em = $this->getDoctrine()->getManager();
             $em->persist($equipment);
+            $this->sendApprovedRejectedInfoMessage($request, $equipment, $form['reason']->getData());
             $em->flush();
+            
             return $this->redirectToRoute("admin_equipment_list");
         }
         
@@ -140,5 +144,34 @@ class EquipmentController extends BaseAdminController {
             }
         }
     }
+    
+    public function sendApprovedRejectedInfoMessage(Request $request, Equipment $eq, $reason)
+    {      
+                        
+        $template = 'Emails/Equipment/equipment_approved_rejected.html.twig';        
+        
+        $userLink = $request->getSchemeAndHttpHost() . $this->generateUrl('equipment-edit-1', array('id' => $eq->getId()));        
+        
+        $emailHtml = $this->renderView($template, array(                                    
+            'equpment' => $eq,
+            'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+            'reason' => $reason,
+            'userLink' => $userLink,
+            'status_approved' => Equipment::STATUS_APPROVED,
+            'status_rejected' => Equipment::STATUS_REJECTED
+        ));
+        
+        $subject = $eq->getStatus() == Equipment::STATUS_APPROVED ? "Equipment approved." : "Equipment rejected.";
+        
+        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+        $message = Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($eq->getUser()->getEmail())
+            ->setBody($emailHtml, 'text/html');
+        $this->get('mailer')->send($message);
+        
+    }
+    
     
 }
