@@ -179,6 +179,7 @@ class BlogController  extends BaseAdminController {
         if ($form->isValid()) {
             //check if there is file
             $file = $request->files->get('upl');
+            $file2 = $request->files->get('upl_big');
             //$date = new DateTime();            
             //$blog->setCreationDate($date);
             //$blog->setModificationDate($date);
@@ -211,6 +212,34 @@ class BlogController  extends BaseAdminController {
                 $em->flush();
                 
                 $blog->setImage($img);
+            }
+            if ($file2 != null && $file2->isValid()) {
+                
+                // TODO: save image code is redundant: make it a method of ImageRepository
+                // save file
+                $uuid = Utils::getUuid();
+                $image_storage_dir = $this->getParameter('image_storage_dir');
+                
+                $destDir = 
+                    $image_storage_dir .
+                    DIRECTORY_SEPARATOR .
+                    'blog' .
+                    DIRECTORY_SEPARATOR;
+                $destFilename = sprintf("%s.%s", $uuid, $file2->getClientOriginalExtension());
+                
+                $file2->move($destDir, $destFilename);
+                
+                // create object
+                $img = new Image();
+                $img->setUuid($uuid);
+                $img->setName($file2->getClientOriginalName());
+                $img->setExtension($file2->getClientOriginalExtension());
+                $img->setPath('blog');
+                              
+                $em->persist($img);
+                $em->flush();
+                
+                $blog->setBigImage($img);
             }
             
             // save to db
@@ -291,14 +320,15 @@ class BlogController  extends BaseAdminController {
             //$blog->setModificationDate(new \DateTime());
             //check if there is file
             $file = $request->files->get('upl');
+            $file2 = $request->files->get('upl_big');
             
             $em = $this->getDoctrine()->getManager();
             
             if ($file != null && $file->isValid()) {
                 
                 //remove old Image (both file from filesystem and entity from db)
-                $this->getDoctrineRepo('AppBundle:Image')->removeImage($blog, $this->getParameter('image_storage_dir'));
-                
+                $this->getDoctrineRepo('AppBundle:Image')->removeImage($blog->getImage(), $this->getParameter('image_storage_dir'));
+                $blog->setImage(null);                
                 
                 // save file
                 $uuid = Utils::getUuid();
@@ -325,6 +355,38 @@ class BlogController  extends BaseAdminController {
                 $em->flush();
                 
                 $blog->setImage($img);
+            }            
+            if ($file2 != null && $file2->isValid()) {
+                
+                //remove old Image (both file from filesystem and entity from db)
+                $this->getDoctrineRepo('AppBundle:Image')->removeImage($blog->getBigImage(), $this->getParameter('image_storage_dir'));
+                $blog->setImage(null);
+                
+                // save file
+                $uuid = Utils::getUuid();
+                $image_storage_dir = $this->getParameter('image_storage_dir');
+                
+                //$destDir = sprintf("%sblog\\",$image_storage_dir);                
+                $destDir = 
+                        $image_storage_dir .
+                        DIRECTORY_SEPARATOR .
+                        'blog' .
+                        DIRECTORY_SEPARATOR;
+                $destFilename = sprintf("%s.%s", $uuid, $file2->getClientOriginalExtension());
+                
+                $file2->move($destDir, $destFilename);
+                
+                // create object
+                $img = new Image();
+                $img->setUuid($uuid);
+                $img->setName($file2->getClientOriginalName());
+                $img->setExtension($file2->getClientOriginalExtension());
+                $img->setPath('blog');
+                              
+                $em->persist($img);
+                $em->flush();
+                
+                $blog->setBigImage($img);
             }            
             
             // save to db
@@ -354,7 +416,8 @@ class BlogController  extends BaseAdminController {
         }
         
         //remove old Image (both file from filesystem and entity from db)
-        $this->getDoctrineRepo('AppBundle:Image')->removeImage($blog, $this->getParameter('image_storage_dir'));
+        $this->getDoctrineRepo('AppBundle:Image')->removeImage($blog->getImage(), $this->getParameter('image_storage_dir'));
+        $blog->setImage(null);
                 
         $em = $this->getDoctrine()->getManager();
         $em->remove($blog);

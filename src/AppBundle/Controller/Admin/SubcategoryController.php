@@ -185,8 +185,8 @@ class SubcategoryController extends BaseAdminController {
             if ($file != null && $file->isValid()) {
                 
                 //remove old Image (both file from filesystem and entity from db)
-                $this->getDoctrineRepo('AppBundle:Image')->removeImage($subcategory, $this->getParameter('image_storage_dir'));
-                
+                $this->getDoctrineRepo('AppBundle:Image')->removeImage($subcategory->getImage(), $this->getParameter('image_storage_dir'));
+                $subcategory->setImage(null);
                 
                 // save file
                 $uuid = Utils::getUuid();
@@ -244,8 +244,8 @@ class SubcategoryController extends BaseAdminController {
         
         }
         //remove old Image (both file from filesystem and entity from db)
-        $this->getDoctrineRepo('AppBundle:Image')->removeImage($subcategory, $this->getParameter('image_storage_dir'));
-        
+        $this->getDoctrineRepo('AppBundle:Image')->removeImage($subcategory->getImage(), $this->getParameter('image_storage_dir'));
+        $subcategory->setImage(null);
         
         $category = $subcategory->getCategory();
         

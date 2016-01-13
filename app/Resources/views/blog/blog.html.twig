@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 {% block body %}
     <div class="main-header ">
-        <img src="/img/info.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="{% if posts|length > 0 and posts[0].bigImage %}{{ posts[0].bigImage.urlPath(image_url_prefix) }}{% else %}/img/blog-big-default.jpg{% endif %}" alt="rent me heading." class="img-responsive max-1600 max-320"/>
         <img src="/img/blog-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
         <div class="container rent-heading help-heading blog-heading mobile-blog-heading">
             <div class="row">

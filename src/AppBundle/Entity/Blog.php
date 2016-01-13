@@ -52,6 +52,11 @@ class Blog
      * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
      */
     protected $image;
+    /**
+     * @ORM\OneToOne(targetEntity="Image")
+     * @ORM\JoinColumn(name="big_image_id", referencedColumnName="id")
+     */
+    protected $bigImage;
 
     public function setId($id)
     {
@@ -216,4 +221,28 @@ class Blog
     }
     
     
+
+    /**
+     * Set bigImage
+     *
+     * @param \AppBundle\Entity\Image $bigImage
+     *
+     * @return Blog
+     */
+    public function setBigImage(\AppBundle\Entity\Image $bigImage = null)
+    {
+        $this->bigImage = $bigImage;
+
+        return $this;
+    }
+
+    /**
+     * Get bigImage
+     *
+     * @return \AppBundle\Entity\Image
+     */
+    public function getBigImage()
+    {
+        return $this->bigImage;
+    }
 }

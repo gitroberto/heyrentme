@@ -19,19 +19,18 @@ class ImageRepository extends \Doctrine\ORM\EntityRepository
         return $query->getResult();        
     }
     
-    public function removeImage($object, $image_storage_dir) {
-        $oldImage = $object->getImage();
-        if ($oldImage != null) {
+    public function removeImage($image, $image_storage_dir) {
+        if ($image != null) {
             /*$fullPath = sprintf("%s%s\\%s",
                 $image_storage_dir,
-                $oldImage->getPath(),
-                $oldImage->getName());*/
+                $image->getPath(),
+                $image->getName());*/
             $fullPath = 
                 $image_storage_dir .
                     DIRECTORY_SEPARATOR .
-                    $oldImage->getPath() .
+                    $image->getPath() .
                     DIRECTORY_SEPARATOR .
-                    $oldImage->getUuid() . '.' . $oldImage->getExtension();
+                    $image->getUuid() . '.' . $image->getExtension();
             
             $fs = new Filesystem();
             if (file_exists($fullPath)){
@@ -39,12 +38,9 @@ class ImageRepository extends \Doctrine\ORM\EntityRepository
             }
             $em = $this->getEntityManager();
 
-            $object->setImage(null); 
-            $em->remove($oldImage);
+            $em->remove($image);
             $em->flush();
         }
-        
-        return $object;
     }
     
     public function removeAllImages($object, $image_storage_dir) {
