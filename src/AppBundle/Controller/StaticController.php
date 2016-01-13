@@ -112,4 +112,17 @@ class StaticController extends BaseController {
         return $this->render('static/clientInfo/kundeninfos_impressum.html.twig');
     }
     
+    /** 
+     * @Route("/tutorial/photo", name="tutorial-photo")
+     */
+    public function photoTutorialAction() {
+        return $this->render('static/tutorial/photo.html.twig');
+    }
+
+    /** 
+     * @Route("/tutorial/video", name="tutorial-video")
+     */
+    public function videoTutorialAction() {
+        return $this->render('static/tutorial/video.html.twig');
+    }
 }

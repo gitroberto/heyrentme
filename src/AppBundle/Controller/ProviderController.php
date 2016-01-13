@@ -26,6 +26,19 @@ class ProviderController extends BaseController {
     /**
      * @Route("/provider", name="provider")
      * @Route("/provider/")
+     * @Route("/provider/dashboard", name="dashboard")
+     */
+    public function dashboardAction(Request $request) {
+        $user = $this->getUser();        
+        $offers = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());        
+        
+        return $this->render('provider/dashboard.html.twig', array( 
+            'offers'=> $offers, 
+            'image_url_prefix'=> $this->getParameter('image_url_prefix')            
+        ));
+    }
+    
+    /**
      * @Route("/provider/profil", name="profil")
      */
     public function profilAction(Request $request) {
@@ -961,19 +974,6 @@ class ProviderController extends BaseController {
         $resp = new JsonResponse($result, $status);        
         return $resp;        
     }    
-    
-    /**
-     * @Route("/provider/dashboard", name="dashboard")
-     */
-    public function dashboardAction(Request $request) {
-        $user = $this->getUser();        
-        $offers = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());        
-        
-        return $this->render('provider/dashboard.html.twig', array( 
-            'offers'=> $offers, 
-            'image_url_prefix'=> $this->getParameter('image_url_prefix')            
-        ));
-    }
     
     public function sendNewModifiedEquipmentInfoMessage(Request $request, Equipment $eq)
     {      
