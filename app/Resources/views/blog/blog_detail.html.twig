@@ -19,10 +19,10 @@
                 <div class="col-md-10 col-sm-7 col-xs-7"><h1>{{ post.title }}</h1></div>
                 <div class="col-md-2 col-sm-5 col-xs-5 detail-controls">
                     {% if prevPost != null %}
-                        <a href="{{ path('blog_detail', { 'slug': prevPost.slug }) }}"><span class="left-icon"></span></a>
+                        <a href="{{ path('blog_detail', { 'slug': prevPost.slug }) }}" title="{{ prevPost.title }}"><span class="left-icon"></span></a>
                     {% endif %}
                     {% if nextPost != null %}
-                        <a href="{{ path('blog_detail', { 'slug':  nextPost.slug }) }}"><span class="right-icon"></span></a>
+                        <a href="{{ path('blog_detail', { 'slug':  nextPost.slug }) }}" title="{{ nextPost.title }}"><span class="right-icon"></span></a>
                     {% endif %}
                 </div>
             </div>
