@@ -12,14 +12,20 @@
   <script>
       tinymce.init({ 
           selector: 'textarea.rich-text-edit',
-          width: 650,
+          width: 850,
           menubar: false/*,
           content_css: '/css/main.css'*/,
-            plugins: [
-                  "table contextmenu paste videoembed"
+          plugins: [
+                  "table contextmenu paste videoembed",
+                  'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                    'searchreplace wordcount visualblocks visualchars code fullscreen',
+                    'insertdatetime media nonbreaking save directionality',
+                    'emoticons template textcolor colorpicker textpattern imagetools'
             ],
-            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | videoembed",
-      });
+            toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | videoembed",
+            toolbar2: 'print preview media | forecolor backcolor emoticons',
+            image_advtab: true
+        });
         $(function() {
             $("#form_title").keyup(updateSlug).blur(updateSlug);
         });
