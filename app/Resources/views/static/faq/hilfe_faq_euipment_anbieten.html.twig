@@ -75,7 +75,11 @@
                 </div>
             </div>
             <div class="col-xs-12">
-                    <a style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" href="{{ path("rentme") }}">Jetzt Equipment anbieten</a>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <a style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" data-toggle="modal" data-target="#choose-category" href="#">Jetzt Equipment anbieten</a>
+                    {% else %}
+                        <a style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" href="{{ path("rental") }}">Jetzt Equipment anbieten</a>
+                    {% endif %}
                 </div>
               <div>              
                 <p style="font-size:13px;">*) Die hey! sharing community Garantie ist für die Schadenfälle vorgesehen, in denen Deine Kaution nicht mehr ausreicht. Sie deckt im Streitfall den aktuellen Wiederbeschaffungswert, jedoch max. bis zu € 750,- ab. Unser Serviceteam hilft Dir im Fall des Falles rasch und unkompliziert. Wichtig sind dabei die saubere Dokumentation und Übermittlung des Übergabeprotokolls, Ausleihvereinbarung und entsprechenden Angaben zum Fall wie Bilder, Beschreibung des Hergang. Wir empfehlen auch die vorherige Konsultation der Haushaltsversicherung zwecks Deckung des Schadens.</p>
