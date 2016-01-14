@@ -181,18 +181,6 @@ class DefaultController extends BaseController {
     
     public function renderEquipmentListAction(Request $request, $equipments) {
         
-        //$sp = $this->getSearchParams($request);
-        //$sp->updateFromRequest($request);
-        
-        //$equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAll($sp);
-        
-        // store id list in session (for prev/next traversal)
-        //$ids = array();
-        //foreach ($equipments as $eq) {
-        //    array_push($ids, $eq->getId());
-        //}
-        //$request->getSession()->set('SearchList', $ids);
-        
         return $this->render('default/equipment-list.html.twig', array(
             'equipments' => $equipments
         ));
