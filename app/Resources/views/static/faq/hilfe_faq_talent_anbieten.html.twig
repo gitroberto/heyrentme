@@ -1,0 +1,86 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+    <div class="main-header ">
+        <img src="/img/info.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="/img/info-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading help-heading">
+            <div class="row">
+                <div class="col-sm-8 text-white">
+                    <h1>Hilfe & FAQ</h1><br>
+                    <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+  <section>
+    <div class="container background-white rent-container">
+        <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+  <option value="hilfe_equipment_mieten.php">Equipment mieten</option>
+      <option value="hilfe_equipment_anbieten.php">Equipment anbieten</option>
+      <option value="hilfe_talent_buchen.php">Talent buchen</option>
+      <option selected="selected" value="hilfe_talent_anbieten.php">Talent anbieten</option>
+      <option value="faq.php">FAQ</option>
+        </select>
+        {{ render(controller('AppBundle:Static:breadcrumb', { "pageName": "hilfe_faq_talent_anbieten" } )) }}
+        <span class="clearfix"></span>
+        <!-- Left nav -->
+        <div class="row help-page">
+        {{ render(controller('AppBundle:Static:leftmenu', { "pageName":"hilfe_faq_talent_anbieten" } )) }}            
+        <div class="col-md-9 content blog-content">
+            <div class="row">
+                <div class="col-md-4">
+                    <div>
+                        <h3>Talent anbieten</h3>
+                        <span class="number-one"></span>
+                        <img src="/img/placeholder/blog.png" alt=""/>
+                        <p>Wie du dich und deine Dienstleistung präsentierst hat maßgeblichen Einfluss auf die Buchung. Viele positive Bewertung führen in Folge auch dazu, noch mehr Buchungen zu bekommen. Wir helfen dir mit Anleitungen und einem Qualitäts-Check, dich und dein Angebot von der besten Seite zu zeigen.</p>
+                        
+                        <ul>
+                            <li>In wenigen Minuten ist deine Profilseite und Dienstleistung online und bereit zur Buchung. Die Teilnahme ist kostenlos und unverbindlich.</li>
+                            <li>Du legst die Konditionen und Verfügbarkeit selbst fest.</li>
+                            <li>Als besonderes Service bieten wir den Dreh eines Provilvideos oder auch nur Post Production von deinem eigenen Material an. Mehr dazu findest du in unserem <a href="#">Video-Tutorial.</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <h3>Buchungsanfragen</h3>
+                        <span class="number-two"></span>
+                        <img src="/img/placeholder/blog2.png" alt=""/>
+                        <p>Von der Anfrage bis zur Abwicklung - unsere Plattform führt dich Schritt für Schritt durch die Buchung. Kommuniziere als Anbieter stets zuverlässig und zeitnah mit deinen Kunden.
+</p>                         
+                        <ul>
+                            <li>Du entscheidest bei jeder Anfrage selbst, ob du deinen Service auch für den Kunden anbieten möchtest.</li>
+                            <li>Eine positive Bewertung durch den Kunden erhöht deine Buchungsanfragen und hilft dir dabei auf unserer Plattform besser gefunden zu werden.</li>
+                            <li>Für jede erfolgreiche Buchung erhälst du Bonuspunkte und verbesserst damit die Möglichkeit auf ein kostenloses Portrait-Video und/oder Interview über dich und dein Angebot.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <h3>Abwicklung</h3>
+                        <span class="number-three"></span>
+                        <img src="/img/placeholder/blog3.png" alt=""/>
+                        <p>Triff dich mit dem Kunden an der vereinbarten Location. Der Kunde wird dir das Honorar für deinen Service in Bar mitnehmen. 
+                        </p>
+                        <ul>
+                            <li>Möchte der Kunde deinen Dienstleistung erneut in Anspruch nehmen, profitierst du mehrfach wenn er dich wieder über unsere Plattform bucht. Du steigerst damit deine Bewertung, wirst mit deinem Angebot besser gefunden und erhälst Bonuspunkte.</li>
+                            <li>Bewertest du deine Kunden zeitnah, sorgst du für Transparenz und Vertrauen in der Community.</li>
+                            <li>Teile deine Erlebnisse währenddessen oder danach gerne mit deinen Freunden und der hey! sharing community.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="col-xs-12">
+                    <a data-toggle="modal" data-target="#feedback-modal" style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" href="#">Jetzt Talent anbieten</a>
+                </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <span class="add-margin mobile-hidden"></span>
+  </div>
+
+{% endblock %}

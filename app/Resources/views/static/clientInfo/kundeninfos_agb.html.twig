@@ -1,71 +1,220 @@
 {% extends "base.html.twig" %}
 {% block body %}
-    <header class="home-header" id="pages-header">    
-    <div class="main-header ">
-        <img src="/img/info2.jpg" alt="rent me heading." class="img-responsive max-1600"/>
-        <div class="container rent-heading help-heading">
-            <div class="row">
-                <div class="col-sm-8 text-white">
-                    <h1>Kundeninfos</h1><br>
-                    <a href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
-                </div>
-            </div>
+    <div class="main-header "> <img src="/img/info2.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/> <img src="/img/info2-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+      <div class="container rent-heading help-heading">
+        <div class="row">
+          <div class="col-sm-8 text-white">
+            <h1>Kundeninfos</h1>
+            <br>
+            <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
         </div>
+      </div>
     </div>
-  </div>
-  </header>
-  <section>
+    </div>
+    </header>
+    <section>
     <div class="container background-white rent-container">
-        {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_agb", "pageNameShort":"AGBs" } )) }}
-        <span class="clearfix"></span>
-        <!-- Left nav -->
-        <div class="row help-page">
-            {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_agb" } )) }}
-            <div class="col-sm-9 content faq">
-                <p class="text-bold">AGB</p>
-                <div class="panel-group" id="panel-quote-group">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" id="panel-heading">
-                            <p class="panel-title">AGB User<span class="pull-right"><a>
-                              <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span>
-                            </p>
-                        </div>
-                        <div id="collapseQuote" class="panel-collapse collapse2 collapse">
-                            <div class="panel-body">
-                                <p class="panel-head">Ist hey! rentme sicher?</p>
-                                <p>Das ist eine Mountainbike Beschreibung consed dolore conse ex ex exerciduis at.
-                                    Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla
-                                    consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num
-                                    volore.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+      <select class="mobile-menu-select desktop-hide" name="forma"  onchange="location = this.options[this.selectedIndex].value;">
+        <option value="kundeninfos_presse.php">Presse</option>
+        <option value="kundeninfos_kontakt.php">Kontakt</option>
+        <option value="kundeninfos_impressum.php">Impressum</option>
+        <option selected="selected" value="kundeninfos_agb.php">AGB</option>
+      </select>
+      {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_agb", "pageNameShort":"AGBs" } )) }}
+      <span class="clearfix"></span> 
+      <!-- Left nav -->
+      <div class="row help-page">
+        {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_agb" } )) }}
+        <div class="col-sm-9 content faq">
+          <div class="panel-group" id="panel-quote-group">
+            <div class="panel panel-default">
+              <div class="panel-heading" id="panel-heading">
+                <p class="panel-title">Allgemeine Geschäftsbedingungen<span class="pull-right"><a> <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span> </p>
+              </div>
+              <div id="collapseQuote" class="panel-collapse collapse2 collapse">
+                <div class="panel-body">
+                  <p>Die folgenden Allgemeinen Geschäftsbedingungen enthalten die wesentlichen Regelungen für den Umgang und die Nutzung des Online-Dienstes der hey! The Sharing Community GmbH, Zentagasse 40-42/1, A-1050 Wien, vertreten durch den Geschäftsführer Robert Ladkani (im Folgenden “hey! sharing community″ genannt) und allen Nutzern bei Rechtsgeschäften und rechtsgeschäftsähnlichen Handlungen zwischen dem Nutzer und der hey! The Sharing Community GmbH. Abweichende Geschäftsbedingungen des Nutzers finden keine Anwendung.</p>
+                  <p class="panel-head faq-header faq-header-below">§ 1. Allgemeines</p>
+                  <p>a) hey! sharing community betreibt eine Online-Plattform, auf der es Nutzern ermöglicht wird, Miet- und Buchungsaufträge jeglicher Art mit einem Anbieter abzuschließen. Unter dem Begriff „Nutzer“ sind diejenigen Personen zu verstehen, die sich der Leistungen der hey! The Sharing Community GmbH zu Informationszwecken, zum Abschluss von Miet- und Buchungsaufträge oder deren Anbahnung bedienen. Anbieter“ sind Anbieter von Diensten, oder Mietobjekten, die ihr Angebot über die Online-Plattform von hey! sharing community bewerben.<br>
+                    <br>
+                    b) hey! sharing community bietet selbst keine Artikel/Dienstleistungen an und wird selbst nicht Vertragspartner der zwischen dem Nutzer dieses Marktplatzes und Anbietern geschlossenen Verträge. Die Nutzer als auch Anbieter sind verpflichtet, bei der Nutzung der hey! sharing community-Website sowie anderer Leistungen von hey! sharing community die geltenden Gesetze zu befolgen. Es liegt in der eigenen Verantwortung eines jeden Mitglieds sicherzustellen, dass seine Angebote oder Inhalte rechtmäßig sind und keine Rechte Dritter verletzen.<br>
+                    <br>
+                    c) Die Nutzer und Anbieter dürfen Adressen, Kontaktdaten und E-Mail-Adressen, die sie durch die Nutzung der Website erhalten haben, für keine anderen Zwecke nutzen, als für die
+                    vertragliche und vorvertragliche Kommunikation. Insbesondere ist es verboten, diese Daten weiterzuverkaufen oder sie für die Zusendung von Werbung zu nutzen.</p>
+                  <p class="panel-head faq-header faq-header-below">§ 2. Anmeldung/Registrierung</p>
+                  <p>a) Die Nutzung der von hey! sharing community betriebenen Online-Plattform zum Anbieten von Angeboten setzt die vorherige Registrierung als Anbieter voraus. Die Nutzung zur Anmietung von Artikeln setzt die Registrierung als Nutzer (Mieter) voraus. Die Nutzung der Plattform als Nutzer ist kostenfrei. Ein Anspruch darauf, von hey! sharing community als Anbieter oder Nutzer registriert zu werden, besteht nicht. Eine Anmeldung ist lediglich unbeschränkt geschäftsfähigen natürlichen Personen oder juristischen Personen gestattet. Bei juristischen Personen darf eine Anmeldung nur durch die Vertretungsberechtigten Personen erfolgen. Minderjährige und nicht oder lediglich beschränkt geschäftsfähige natürliche Personen sind von der Registrierung und mithin der Nutzung ausgeschlossen. Mit der Anmeldung erkennt der Nutzer als auch der Anbieter die Allgemeinen Geschäftsbedingungen von hey! sharing community an und garantiert, von der Nutzung der von hey! sharing community angebotenen Dienste nicht ausgeschlossen zu sein. hey! sharing community behält sich die Ablehnung einer Registrierung, ohne Angabe von Gründen, vor. <br>
+                    <br>
+                    b) Bei der Anmeldung/Registrierung legt der Nutzer bzw. Anbieter einen von ihm zu bestimmenden Mitgliedsnamen und ein entsprechendes Passwort fest. Es ist hierbei unzulässig, einen Mitgliedsnamen zu verwenden, durch den Rechte Dritter, insbesondere Immaterialgüterrechte wie Gewerbliche Schutzrechte, Urheber- und Leistungsrechte, beeinträchtigt und/oder verletzt werden und/oder gegen die guten Sitten verstößt. Der Nutzer bzw. Anbieter ist zur Geheimhaltung seines Passwortes verpflichtet. Bei Abhandenkommen und Kenntnis und/oder Kennenmüssen der Nutzung des Mitgliedskontos durch Dritte hat der Nutzer bzw. Anbieter hey! sharing community unverzüglich hiervon in Kenntnis zu setzen. <br>
+                    <br>
+                    c) Die im Rahmen der Anmeldung/Registrierung von hey! sharing community erhobenen Daten, sind von dem Anbieter/Nutzer entsprechend vollständig und wahrheitsgemäß anzugeben. Änderungen seiner Nutzerdaten, die nach der Anmeldung entstehen, hat dieser hey! sharing community unverzüglich mitzuteilen bzw. umgehend in seinem Mitgliedskonto zu aktualisieren. <br>
+                    <br>
+                    d) hey! sharing community ist jederzeit berechtigt, die sofortige Sperrung des Mitgliedskontos zu veranlassen, sofern hierzu berechtigte Gründe vorliegen, insbesondere: Bei berechtigtem Verdacht, dass die Nutzung durch Dritte erfolgt, bei vorsätzlich und/oder grob fahrlässig gemachten falschen Angaben, bei der Registrierung, bei sonstigen Verstößen gegen die Allgemeinen Geschäfts- und Nutzungsbedingen von hey! sharing community oder sonstigen wichtigen Gründen. Im Falle einer Sperrung des Nutzerkontos ist es dem betroffenen Nutzer bis zu einer ausdrücklichen vorherigen Zustimmung von hey! sharing community untersagt, sich erneut registrieren zu lassen und ein neues Nutzerkonto zu eröffnen. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 3. Anfragen, Abschluss von Mietverträgen, Stornierungen</p>
+                  <p>a) Grundsätzlich sind alle Anfragen von Nutzern über die Plattform von hey! sharing community unverbindlich. Die Anfrage eines Nutzers stellt ein Angebot zum Abschluss einer verbindlichen Reservierung dar. Eine rechtsverbindliche Buchung kommt erst dann zu Stande, sofern dem Nutzer eine verbindliche Reservierungsbestätigung zugesendet wird. Der Anbieter bevollmächtigt insofern hey! sharing community im Namen des Anbieter die Reservierung zu bestätigen. Der Mieter hat bei Nichtverfügbarkeit keinen Anspruch auf ein bestimmtes Angebot. Alle für dieses Angebot relevanten Angaben befinden sich auf der jeweiligen Angebotsseite und stammen vom jeweiligen Anbieter. hey! sharing community übernimmt für die Richtigkeit und Vollständigkeit der Angaben keine Haftung. Nach verbindlicher Buchungsbestätigung werden dem Nutzer die Daten des Anbieter mitgeteilt, so dass im Anschluss ein Mietvertrag bzw. Buchungsauftrag, mit Grundlage der Geschäftsbedingungen des Anbieter (bei gewerblichen Anbietern), geschlossen werden kann. Bei privaten Equipment-Vermieter gelten ausschließlich die Allgemeinen Geschäftsbedingungen für Vermieter der hey! The Sharing Community GmbH. <br>
+                    <br>
+                    b) Der Nutzer gibt bei Buchungen seine persönlichen Daten ein und schließt diese durch das Anklicken „Jetzt Buchen“ im letzten Teil des Bestellvorganges ab. Vor dem Absenden der Reservierung erhält der Nutzer nochmals eine Übersicht der Daten. 
+                    Die Abwicklung der vertraglichen Leistungspflichten ist Sache der Vertragsparteien.
+                    hey! sharing community enthält sich aller weiteren Angelegenheiten und ist im Falle eines Schadens aufgrund von nicht eingehaltenen oder unterlassenen Vereinbarungen zwischen den Vertragsparteien nicht haftbar zu machen. hey! sharing community stellt lediglich den Kontakt zwischen Nutzer und Anbieter her. Weitere Vertragsverhandlungen sowie das Erbringen von Vertragsleistungen liegen nicht im Anwendungsbereich der hey! sharing community. <br>
+                    <br>
+                    c) Der Anbieter darf den Mieter aus Gründen, die der Anbieter nicht offen legen muss, ablehnen. In diesem Fall wird dem Mieter ein bereits bezahlter bzw. abgebuchter Mietpreis erstattet. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 4. Haftung des Mieters bei Artikel-Buchungen von Privat-Anbietern</p>
+                  <p>a) Der Mieter erklärt sich einverstanden, Im Fall einer Artikel-Buchung zum vereinbarten Termin einen Personalausweis sowie die vom Vermieter angeführte Kaution in Bar mitzunehmen. Dem Mieter und Vermieter wird für Artikel-Buchungen von der hey! sharing community ein Übergabeprotokoll zur Verfügung gestellt. <br>
+                    <br>
+                    b) Kommt es innerhalb des Buchungszeitraums zu einem kleineren Schaden (z.B. Kratzer) so hat der Vermieter das Recht eine Schadenssumme von der Kaution einzubehalten. Die Höhe der Schadenssumme ist zwischen Vermieter und Mieter direkt zu vereinbaren. <br>
+                    <br>
+                    c) Kommt es innerhalb des Buchungszeitraums zu einer Beschädigung des Mietgegenstands, die sich nicht durch die hinterlegte Kaution decken lässt, oder wird der Mietgegenstand gestohlen, so haftet der Mieter für den daraus entstanden Schaden (maximal bis zu einer Summe von € 750,-) gegenüber dem Vermieter. Nach Überprüfung des Falls wird die hey! The Sharing Community GmbH, falls erforderlich, den Privat-Vermieter, dabei unterstützen die Schadenssumme beim Mieter einzufordern. <br>
+                    <br>
+                    d) Der Mieter erklärt sich einverstanden den Mietgegenstand zum vereinbarten Zeitpunkt und Übergabeort wieder zurückzugeben. Der Mieter wird für den Rückgabertermin durch die hey! sharing community eine Erinnerungs-Email erhalten. Kann er den Termin nicht einhalten, so hat er den Vermieter darüber rechtzeitig zu informieren und einen neuen Termin zu vereinbaren. Im Fall einer verspäteten Rückgabe erhält der Vermieter das Recht für diesen Zeitraum einen angemessenen Betrag von der Kaution einzubehalten (Pro Tag Verspätung maximal den Tagestarif). Erscheint der Mieter nicht zum vereinbarten Termin und meldet sich auch binnen 24 Std. nach Rückgabetermin nicht beim Vermieter so wird die hey! The Sharing Community GmbH den Vermieter dabei unterstützen, den Mieter zu kontaktieren und falls erforderlich die Behörden einschalten um den Fall zur Anzeige zu bringen. Ein solches Handeln führt auch zum Ausschluss von der hey! sharing community. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 5. Haftung hey! sharing community</p>
+                  <p>a) hey! sharing community haftet für Schäden nur, wenn und soweit hey! sharing community Vorsatz oder grobe Fahrlässigkeit zur Last fällt, es sei denn, es handelt sich um die Verletzung wesentlicher Vertragspflichten. Eine Haftung für den Ersatz mittelbarer Schäden, insbesondere für entgangenen Gewinn, besteht nur bei Vorsatz oder grober Fahrlässigkeit. <br>
+                    <br>
+                    b) Wichtiger Hinweis: Es ist nicht auszuschließen, dass vereinzelt Nutzer den Dienst von hey! sharing community in betrügerischer Absicht nutzen. Hierfür übernehmen wir keine Haftung. Die Anbieter sind verpflichtet sich über die Identität des Vertragspartners zu vergewissern. Des Weiteren hat der Anbieter die Möglichkeit, mit Hilfe der gegebenen Bewertungen weitere Informationen heranzuziehen (siehe Bewertungen). </p>
+                  <p class="panel-head faq-header faq-header-below">§ 6. Freistellung von Ansprüchen Dritter</p>
+                  <p>hey! sharing community wird vom Anbieter und/oder Nutzern von allen Ansprüche Dritter freigestellt, die aufgrund unzulässiger Angebote von rechtlich geschützten Mietsachen (mit einbezogen sind Abbildungen und Videos, die die Uhrheberrechte Dritter verletzen), verbotenen Angeboten, Bewertungen, Inhalte und Beschreibungen gegenüber hey! sharing community geltend gemacht werden. Die Kosten einer Rechtsverteidigung einschließlich sämtlicher Gerichts- und Anwaltskosten in gesetzlicher Höhe sind mit einbezogen. Um eine Überprüfung der Ansprüche zu ermöglichen, die für eine Verteidigung von hey! sharing community erforderlich sind, ist der Anbieter und/oder Nutzer, der die Dienste von hey! sharing community in Anspruch nimmt, verpflichtet seine Informationen wahrheitsgemäß, vollständig und unverzüglich zur Verfügung zu stellen. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 7. Bewertungen</p>
+                  <p>a) Nutzern und Anbieter ist es nach dem Zustandekommen eines Mietverhältnisses bzw. Angebots-Buchung möglich, eine Bewertung über den Vertragspartner abzugeben. hey! sharing community enthält sich der Bewertung und bezieht damit keine Stellung zu diesen. Somit stellen die Bewertungen keine Empfehlungen seitens der hey! The Sharing Community GmbH dar. Es erfolgt darüber hinaus keine Prüfung der Bewertungen durch hey! sharing community. Die Angaben dürfen nicht gegen gesetzliche Bestimmungen verstoßen. Es ist nicht gestattet, sich selbst zu bewerten oder Dritte zu einer bestimmten Bewertung zu veranlassen. In die Bewertung dürfen keine Umstände einfließen, die außerhalb der konkreten Vertragsbeziehung liegen. hey! sharing community behält sich das Recht vor, Bewertungen, die nicht der Wahrheit entsprechen, nicht sachgerecht sind und in irgendeiner Weise den Vertragspartner verunglimpfen oder beleidigen, zu ändern, zu kürzen oder zu entfernen. <br>
+                    <br>
+                    b) Die Bewertungen geben den Mietern und Anbietern die Möglichkeit, Angebote mit Hilfe von Bewertungen nach deren Seriositätsgehalt zu überprüfen. Die Bewertungen beziehen sich auf
+                    über das hey! sharing community-Portal vermittelte Angebote und sind selbst von den Nutzern / Anbietern eingestellt. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 8. Verweise, Links und Inhalte Dritter</p>
+                  <p>hey! sharing community hat keinerlei Einfluss auf die aktuelle und zukünftige Gestaltung und auf die Inhalte der gelinkten/verknüpften Seiten. Eine inhaltliche Kontrolle von Seiten oder Servern Dritter findet nicht statt. hey! sharing community distanziert sich ausdrücklich von den auf Seiten oder Servern Dritter dargestellten Inhalten und übernimmt für diese keine Verantwortung. hey! sharing community übernimmt des Weiteren keine Verantwortung für die innerhalb des eigenen Internetangebotes gesetzten Links und Verweise. hey! sharing community übernimmt darüber hinaus keine Verantwortung für die Einstellung von gelieferten und/oder gelinkten Seiten und Inhalten, insbesondere für aus deren Nutzung bzw. Nichtnutzung entstehende Schäden. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 9. Geistiges Eigentum</p>
+                  <p>a) Inhalte und Gestaltung der von hey! sharing community dargestellten Seiten sind urheberrechtlich geschützt. Das Recht zur Vervielfältigung, Verbreitung, Übertragung und/oder öffentliche Zugängigmachung bleibt alleiniges Nutzungsrecht von hey! sharing community. Weiterhin werden geschützte Marken und geschäftliche Bezeichnungen oder andere Inhalte wiedergegeben und/oder verwendet, die Rechten Dritter unterliegen. <br>
+                    <br>
+                    b) Mit der Übermittlung von Bildern, Videos, Texten und Beschreibungen der angebotenen Artikel und Dienstleistungen wird hey! sharing community ausdrücklich das Recht eingeräumt mit diesen Bildern, Videos, Texten und Beschreibungen auf hey! sharing community, auf anderen Webseiten und in anderen Medien ohne Entgelt für den Dienst der hey! The Sharing Community GmbH zu werben. Diesbezüglich wird hey! sharing community ein
+                    einfaches Nutzungsrecht eingeräumt. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 10. Datenschutz</p>
+                  <p>Wir erheben, verarbeiten und nutzen Ihre Daten nur im Rahmen der gesetzlichen Bestimmungen und zur Abwicklung der gebuchten Leistungen sowie zur Kundenbetreuung. Diese Datenschutzerklärung gilt ausschließlich für die Nutzung der von uns angebotenen Webseiten. Sie gilt nicht für die Webseiten anderer Dienstanbieter, auf die wir lediglich durch einen Link verweisen. Bei der Nutzung unserer Webseiten bleiben Sie anonym, solange Sie uns nicht von sich aus freiwillig personenbezogene Daten zur Verfügung stellen. Personenbezogene Daten werden nur dann erhoben, wenn dies für die Nutzung der auf der Webseite angebotenen Leistungen, insbesondere Formularangebote, erforderlich ist. Wir werden die von Ihnen zur Verfügung gestellten Daten streng vertraulich behandeln. Ohne Ihre ausdrückliche Einwilligung geben wir keine persönlichen Daten weiter, es sei denn, dass wir rechtlich dazu verpflichtet sind oder dies zur Durchführung der Buchung erforderlich ist. Wir weisen jedoch darauf hin, dass es bei der Übermittlung von Daten im Internet immer dazu kommen kann, dass Dritte Ihre Daten zur Kenntnis nehmen oder verfälschen. Sofern Sie es wünschen, geben wir Auskunft über die gespeicherten Daten, beziehungsweise löschen diese. Wenn Sie Daten berichtigen, löschen oder einsehen wollen, genügt hierfür ein Schreiben an die im Impressum angegebene Adresse. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 11. Schriftform, anwendbares Recht, Gerichtsstand</p>
+                  <p>Sämtliche Erklärungen, die im Rahmen des mit hey! sharing community abzuschließenden Nutzungsvertrags übermittelt werden, müssen in Schriftform erfolgen. Diese Nutzungsbedingungen unterliegen der ausschließlichen Anwendung des österreichischen Rechts. Gerichtsstand ist unter Berücksichtigung der verbraucherrechtlichen Vorschriften ausschließlich Wien. Vertragssprache ist deutsch. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 12. Änderung der Allgemeinen Nutzungsbedingungen</p>
+                  <p>hey! sharing community behält sich vor, diese AGB jederzeit und ohne Nennung von Gründen zu ändern. Die geänderten Bedingungen werden den Nutzern/Anbietern der hey! The Sharing Community GmbH per E-Mail spätestens zwei Wochen vor ihrem Inkrafttreten zugesendet. Widerspricht ein Mitglied der Geltung der neuen AGB nicht innerhalb von zwei Wochen nach Empfang der E-Mail, gelten die geänderten AGB als angenommen. Im Falle eines Widerspruchs ist hey! sharing community berechtigt, das Nutzungsverhältnis ohne Einhaltung einer Frist zu beenden. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 13. Beendigung der Nutzungsvereinbarung</p>
+                  <p>hey! sharing community kann den Nutzungsvertrag mit dem Nutzer bzw. Anbieter jederzeit unter Beachtung einer Kündigungsfrist von zwei Wochen zum Ende eines Monats kündigen. Das Recht zur außerordentlichen Kündigung bleibt hiervon unberührt. </p>
+                  <p class="panel-head faq-header faq-header-below">§ 14. Salvatorische Klausel</p>
+                  <p>Sofern eine Bestimmung dieser AGB unwirksam ist, bleiben die übrigen Bestimmungen davon unberührt. Die unwirksame Bestimmung gilt als durch eine solche ersetzt, die dem Sinn und
+                    Zweck der unwirksamen Bestimmung in rechtswirksamer Weise wirtschaftlich am nächsten kommt. Gleiches gilt für eventuelle Regelungslücken. </p>
                 </div>
-                <div class="panel-group" id="panel-quote-group2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" id="panel-heading1">
-                            <p class="panel-title">AGB Anbieter
-                                <span class="pull-right"><a><span
-                                            class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span>
-                            </p>
-                        </div>
-                        <div id="collapseQuote2" class="panel-collapse collapse1 collapse">
-                            <div class="panel-body">
-                                <p class="panel-head">Das besondere an deinem Angebot?</p>
-
-                                <p>Das ist eine Mountainbike Beschreibung consed dolore conse ex ex exerciduis at.
-                                    Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla
-                                    consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num
-                                    volore.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
+          <div class="panel-group" id="panel-quote-group2">
+            <div class="panel panel-default">
+              <div class="panel-heading" id="panel-heading1">
+                <p class="panel-title">AGB für Equipment-Anbieter<span class="pull-right"><a><span
+                                                class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span> </p>
+              </div>
+              <div id="collapseQuote2" class="panel-collapse collapse1 collapse">
+                <div class="panel-body">
+                  <p class="panel-head faq-header">§ 1. Allgemeines</p>
+                  <p>Auf der Plattform <a href="#">www.heysharing.com</a> (Betreiber ist die hey! The Sharing Community Gmbh hier “hey! sharing community” genannt) wird es Vermietern ermöglicht, Gegenstände einzustellen und zum Vermieten anzubieten. Die Inanspruchnahme dieser Dienstleistung erfordert die vorherige Registrierung als Vermieter.</p>
+                   <p class="panel-head faq-header faq-header-below">§ 2. Vertragsabschluss</p>
+                  <p>Mit Absenden des Registrierungsformulars gibt der Vermieter ein verbindliches Angebot auf Abschluss eines entsprechenden Vertrages mit hey! sharing community ab. Gleichzeitig erklärt der Vermieter damit die Allgemeinen sowie die Besonderen Geschäftsbedingungen von  hey! sharing community gelesen, verstanden und akzeptiert zu haben und macht diese ausdrücklich zur Grundlage des Vertrages. Bezüglich der Registrierung und der weiteren Modalitäten des Vertrages gelten die in den Allgemeinen Geschäftsbedingungen geregelten Einzelheiten entsprechend.</p>
+                   <p class="panel-head faq-header faq-header-below">§ 3. Einstellen von Angeboten</p>
+                  <p>a) Der Vermieter hat die Möglichkeit, einzelne Mietsachen in den Dienst einzustellen und über den Dienst zur Miete anzubieten. Der Vermieter ist verpflichtet, die von ihm angebotene Mietsache in einer passenden Kategorie zu platzieren, sie richtig und vollständig zu beschreiben, sowie alle für die Mietentscheidung wesentlichen Mietbedingungen und Eigenschaften und Merkmale der Mietsache wahrheitsgemäß anzugeben und Artikel/Leistungen aus dem Angebot zu entfernen, sofern diese nicht weiter zur Vermietung bereitstehen. hey! sharing community behält sich vor, Angebote die falsch eingestellt worden sind in die richtigen jeweiligen Kategorien zu platzieren, um eine optimale Chance auf Vermittlung zu gewährleisten.
+    <br><br>
+    b) Die hey! sharing community behält sich vor, Angebote zu bearbeiten, ändern, kürzen oder zu entfernen, wenn diese Rechte Dritter verletzen, nicht ordentlich beschrieben sind oder Anfragen der Anbieter nicht ordnungsgemäß bearbeitet werden.
+    <br><br>
+    c) Der Vermieter erklärt sich einverstanden, dass hey! sharing community Veränderungen an den eingestellten Angeboten vornimmt, um die Produktivität und Profitabilität zu steigern.</p>
+                   <p class="panel-head faq-header faq-header-below">§ 4. Hochladen von Bildern und Videoclips</p>
+                  <p>a) Vermietern ist es möglich, durch Hochladen von Bildern und Videoclips ihre Angebote besser zu beschreiben und hervorzuheben. Diese dienen ausschließlich zur besseren Beschreibung der eigenen Angebote oder als Bewertung für gebuchte Angebote.
+    <br>
+    <br>
+    b) Den Kunden und Vermietern ist es untersagt, Bilder und Videoclips in den Dienst einzustellen, die urheberrechtlich (siehe § 5. Urheberrechtliches) geschützt und/oder vom Inhalt gegen die Guten Sitten verstoßen. hey! sharing community behält sich das Recht vor, Bilder und Videos, die gegen diesen Paragraphen verstoßen oder aus ähnlichen Beweggründen ohne Angabe von Gründen, zu entfernen.</p>
+                   <p class="panel-head faq-header faq-header-below">§ 5. Urheberrecht</p>
+                  <p>a) Das Einstellen von urheberrechtlich oder leistungsrechtlich geschützten Angeboten ist Kunden und Vermietern untersagt, es sei denn, es liegt eine Zustimmung des Rechteinhabers vor. Der Vermieter versichert, dass er zur Vermietung des angebotenen Gegenstandes berechtigt ist und kann auf Verlangen von hey! sharing community dieses auch nachweisen. Er ist somit verpflichtet, die Zustimmung auf eine Anfrage seitens hey! sharing community schriftlich nachzuweisen. hey! sharing community behält sich das Recht vor, Angebote zu entfernen, solange ein schriftlicher Nachweis über die Zustimmung des Rechteinhabers nicht erfolgt ist.
+    <br><br>
+    b) Der Vermieter versichert, dass er selbst Urheber oder berechtigt ist, die von ihm eingestellten Fotos, Videos oder sonstige Medien nutzen zu dürfen und das ihm eine schriftliche Zustimmung des Berechtigten vorliegt, die er auf Verlangen von hey! sharing community unverzüglich vorzulegen hat.
+    </p>
+                   <p class="panel-head faq-header faq-header-below">§ 6. Verbotenes</p>
+                  <p>Es ist verboten, Artikel o.ä. anzubieten, die gegen gesetzliche Vorschriften und/oder gegen die guten Sitten verstoßen. Hierzu zählen insbesondere, Artikel, deren Bewerbung und Vermietung Urheber- und Leistungsschutzrechte Dritter, gewerbliche Schutzrechte sowie sonstige Rechte verletzen, Propagandaartikel und Artikel mit Kennzeichen verfassungswidriger Organisationen, pornografische und jugendgefährdende Artikel, Waffen im Sinne des Waffengesetzes, insbesondere Schuss-, Hieb- und Stichwaffen, lebende Tiere, Produkte und Präparate geschützter Tierarten sowie geschützte Pflanzen und deren Präparate, radioaktive Stoffe, Gift- und Explosivstoffe sowie sonstige gesundheitsgefährdende Chemikalien, sonstige Artikel, die gegen die guten Sitten verstoßen. hey! sharing community ist berechtigt und behält es sich vor, Angebote, die insbesondere die oben aufgeführten Inhalte haben, ohne Angaben von Gründen jederzeit unverzüglich zu entfernen.
+    </p>
+                   <p class="panel-head faq-header faq-header-below">§ 7. Übergabe von Mietgegenständen</p>
+                  <p>a) Der Vermieter erklärt sich einverstanden, zum Zeitpunkt der Mietübergabe- und Rückgabe am vereinbarten Übergabeort anwesend zu sein. Sollte das nicht möglich sein, oder sollte eine andere Person die Übergabe durchführen, so hat er den Mieter davon rechtzeitig in Kenntnis zu setzen.
+    <br><br>
+    b) Wird bei der Übergabe seitens des Mieters festgestellt, dass die Mietsache nicht funktionstüchtig ist, oder wesentliche Eigenschaften und Merkmale der Mietsache vom Vermieter nicht wahrheitsgemäß angegeben wurden, so hat er das Recht einseitig von der Buchung zurückzutreten. hey! sharing community behält sich vor, das Angebot in diesem Fall von der Plattform zu entfernen (Siehe § 3. Einstellen von Angeboten).
+    </p>
+                   <p class="panel-head faq-header faq-header-below">§ 8. Kaution & Übergabeprotokoll</p>
+                  <p>a) Der Vermieter kann für die Mietsache selbst eine Kaution und deren Höhe bestimmen. Zur Inanspruchnahme der hey! Garantie ist die Kaution mindestens mit 25% vom angegeben Restwerts der Mietsache anzuführen. Die Kaution ist vom Mieter zur Übergabe in Bar mitzunehmen und wird vom Vermieter bis zur Rückgabe verwahrt. Sollten die Mietsache kleinere Schäden (z.B. Kratzer) aufweisen (siehe Übergabeprotokoll), so hat der Vermieter das Recht eine Schadenssumme von der Kaution abzuziehen. Die Höhe der eingeforderten Schadenssumme ist direkt mit dem Mieter zu vereinbaren. 
+    <br><br>
+    b) Von hey! sharing community wird zur Vermietungsabwicklung ein Übergabeprotokoll zur Verfügung gestellt. Das Protokoll dient dazu, bei der Übergabe bereits vorhandene Schäden der Mietsache festzuhalten. Es wird dringend empfohlen, das Protokoll von beiden Seiten vollständig auszufüllen und zu unterzeichnen. Teil eines vollständigen Übergabeprotokolls ist auch das dokumentieren bereits vorhandener Schäden der Mietsache (entweder fotografisch oder schriftlich), der Telefonnummer und des Personalausweis des Mieters (einscannen oder abfotografieren).
+    </p>
+                 <p class="panel-head faq-header faq-header-below">§ 9. Inanspruchnahme der hey! Garantie</p>
+                  <p>a) Werden bei Rückgabe Schäden entdeckt, die die Höhe der Kaution übersteigen (z.B. Bruch oder Diebstahl) so stellt die hey! sharing community dem Vermieter eine Schadensersatzsumme in Höhe von bis zu € 750,- zu (siehe Maximalhöhe der hey! Garantie). Vorraussetzungen für Auszahlung der hey! Garantie sind:
+    <br><br>
+    b) Die hey! Garantie gilt nur für Privat-Vermieter<br><br>
+    c) Der Mieter hat seinen ordentlichen Wohnsitz in Österreich<br><br>
+    d) Die Kaution muss mindestens 25% des angegeben Restwerts der Vermietsache ausmachen
+    <br>
+    <br>
+    f) Folgende Daten müssen zur Bearbeitung des Schadenfalls an die hey! sharing community elektronisch übermittelt werden: Kontonummer des Vermieters zur Auszahlung der hey! Garantie, Artikelnummer, Originalrechnung (falls vorhanden), vollständig ausgefülltes Übergabeprotokoll (siehe § 8. Übergabeprotokoll), Fotos vom Schaden, im Fall eines Diebstahls eine polizeiliche Diebstahlanzeige. Ist der Mieter nicht mit der Mietsache zur Rückgabe erschienen, oder liegt keine Diebstahlanzeige vor, so ist nur die Originalrechnung und das vollständig ausgefüllte Übergabeprotokoll zu übermitteln.  
+    <br>
+    <br>
+    g) Nach Überprüfung des Falls und Genehmigung der hey! Garantie erhält der Vermieter innerhalb von 7 Werktagen den Garantiebetrag auf das von ihm angeführte Konto. Der Vermieter stimmt mit Auszahlung der Garantieleistung zu, dass damit (gemäß § 67 VersVG) alle Forderungen gegenüber dem Mieter auf die hey! The Sharing Community GmbH übergehen. 
+    <br>
+    <br>
+    h) Missbrauch der hey! Garantie durch Vermieter oder Mieter führt zum Auschluss aus der hey! sharing community.  
+    <br><br>
+    Maximalhöhe der hey! Garantie
+    <br><br>
+    Fall A) Es liegt eine Originalrechnung vor (Maximalhöhe der hey! Garantie beträgt 750,- €)
+    <br><br>
+    a) Auf Basis der Originalrechnung wird von der hey! sharing community der Restwert der Mietsache ermittelt. Der Restwert wird einheitlich für alle Mietsachen aus dem Originalwert abzüglich 25% Wertverlust für das 1. Jahr und 10% für jedes weitere Jahr errechnet. Die hey! Garantie errechnet sich aus diesem Restwert abzüglich der Kaution.
+    <br><br>
+    Fall B) Es liegt keine Originalrechnung vor (Maximalhöhe der hey! Garantie beträgt 450,- €)
+    <br><br>
+    a) Der Vermieter erklärt sich einverstanden, dass der Restwert der Mietsache von der hey! sharing community festgelegt wird. Dazu hat der Vermieter wahrheitsgemäß Angaben zum Kaufpreis und Alter des Produkts anzuführen. Auf Basis von Originalpreis und Alter wird der aktuelle Wert bestimmt. Die hey! Garantie errechnet sich aus dem Restwert abzüglich der Kaution.
+    </p>
+                   <p class="panel-head faq-header faq-header-below">§ 10. Steuerliches</p>
+                  <p>Für die ordnungsgemäße Abführung der ggf. anfallenden Steuern und Abgaben ist der Vermieter allein verantwortlich.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-group" id="panel-quote-group3">
+            <div class="panel panel-default">
+              <div class="panel-heading" id="panel-heading3">
+                <p class="panel-title">AGB für Dienstleistungs-Anbieter<span class="pull-right"><a><span
+                                                class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span> </p>
+              </div>
+              <div id="collapseQuote3" class="panel-collapse collapse3 collapse">
+                <div class="panel-body">
+                  <p class="panel-head faq-header">§ 1. Allgemeines</p>
+                  <p>Auf der Plattform <a href="#">www.heysharing.com</a> (Betreiber ist die hey! The Sharing Community Gmbh hier “hey! sharing community” genannt) wird es Dienstleistern ermöglicht, eine oder mehrere Leistungs-Angebote einzustellen und zur Buchung anzubieten. Die Inanspruchnahme dieser Dienstleistung erfordert die vorherige Registrierung als Dienstleistungs-Anbieter.</p>
+                   <p class="panel-head faq-header faq-header-below">§ 2. Vertragsabschluss</p>
+                  <p>Mit Absenden des Registrierungsformulars gibt der Dienstleister ein verbindliches Angebot auf Abschluss eines entsprechenden Vertrages mit hey! sharing community ab. Gleichzeitig erklärt der Dienstleister damit die Allgemeinen sowie die Besonderen Geschäftsbedingungen von hey! sharing community gelesen, verstanden und akzeptiert zu haben und macht diese ausdrücklich zur Grundlage des Vertrages. Bezüglich der Registrierung und der weiteren Modalitäten des Vertrages gelten die in den Allgemeinen Geschäftsbedingungen geregelten Einzelheiten entsprechend.</p>
+                   <p class="panel-head faq-header faq-header-below">§ 3. Einstellen von Angeboten</p>
+                  <p>a) Der Dienstleister hat die Möglichkeit, einzelne Leistungs-Angebote in den Dienst einzustellen und über den Dienst zur Buchung anzubieten. Der Dienstleister ist verpflichtet, die von ihm angebotene Leistung in einer passenden Kategorie zu platzieren, sie richtig und vollständig zu beschreiben, sowie alle für die Buchungsentscheidung wesentlichen Bedingungen und wahrheitsgemäß anzugeben und Leistungen aus dem Angebot zu entfernen, sofern diese nicht weiter zur Buchung bereitstehen. hey! sharing community behält sich vor, Angebote die falsch eingestellt worden sind in die richtigen jeweiligen Kategorien zu platzieren, um eine optimale Chance auf Vermittlung zu gewährleisten.
+    <br><br>
+    b) Die hey! sharing community behält sich vor, Angebote zu bearbeiten, ändern, kürzen oder zu entfernen, wenn diese Rechte Dritter verletzen, nicht ordentlich beschrieben sind oder Anfragen der Anbieter nicht ordnungsgemäß bearbeitet werden.
+    <br><br>
+    c) Der Dienstleister erklärt sich einverstanden, dass hey! sharing community Veränderungen an den eingestellten Angeboten vornimmt, um die Produktivität und Profitabilität zu steigern.</p>
+                   <p class="panel-head faq-header faq-header-below">§ 4. Hochladen von Bildern und Videoclips</p>
+                  <p>a) Dienstleister ist es möglich, durch Hochladen von Bildern und Videoclips ihre Angebote besser zu beschreiben und hervorzuheben. Diese dienen ausschließlich zur besseren Beschreibung der eigenen Angebote oder als Bewertung für gebuchte Angebote.
+    <br>
+    <br>
+    b) Den Dienstleister ist es untersagt, Bilder und Videoclips in den Dienst einzustellen, die urheberrechtlich (siehe § 5. Urheberrechtliches) geschützt und/oder vom Inhalt gegen die Guten Sitten verstoßen. hey! sharing community behält sich das Recht vor, Bilder und Videos, die gegen diesen Paragraphen verstoßen oder aus ähnlichen Beweggründen ohne Angabe von Gründen, zu entfernen.</p>
+                   <p class="panel-head faq-header faq-header-below">§ 5. Urheberrecht</p>
+                  <p>a) Das Einstellen von urheberrechtlich oder leistungsrechtlich geschützten Angeboten ist Dienstleister untersagt, es sei denn, es liegt eine Zustimmung des Rechteinhabers vor. Der Dienstleister versichert, dass er zum Anbieten der angebotenen Leistung berechtigt ist und kann auf Verlangen von hey! sharing community dieses auch nachweisen. Er ist somit verpflichtet, die Zustimmung auf eine Anfrage seitens hey! sharing community schriftlich nachzuweisen. hey! sharing community behält sich das Recht vor, Angebote zu entfernen, solange ein schriftlicher Nachweis über die Zustimmung des Rechteinhabers nicht erfolgt ist.
+    <br><br>
+    b) Der Dienstleister versichert, dass er selbst Urheber oder berechtigt ist, die von ihm eingestellten Fotos, Videos oder sonstige Medien nutzen zu dürfen und das ihm eine schriftliche Zustimmung des Berechtigten vorliegt, die er auf Verlangen von hey! sharing community unverzüglich vorzulegen hat.
+    </p>
+                   <p class="panel-head faq-header faq-header-below">§ 6. Verbotenes</p>
+                  <p>Es ist verboten, Angebote o.ä. anzubieten, die gegen gesetzliche Vorschriften und/oder gegen die guten Sitten verstoßen. Hierzu zählen insbesondere, Leistungen, deren Bewerbung und Vermietung Urheber- und Leistungsschutzrechte Dritter, gewerbliche Schutzrechte sowie sonstige Rechte verletzen, pornografische und jugendgefährdende Angebote. hey! sharing community ist berechtigt und behält es sich vor, Angebote, die insbesondere die oben aufgeführten Inhalte haben, ohne Angaben von Gründen jederzeit unverzüglich zu entfernen.
+    </p>
+                   <p class="panel-head faq-header faq-header-below">§ 7. Berechtigung zur Aussübung einer Dienstleistung</p>
+                  <p>Der Dienstleister muss über eine ordnungsgemäße Berechtigung verfügen, eine angebotene Leistung auch aussüben zu dürfen. Er ist somit verpflichtet, einen Berechtigungsnachweis (z.B. Gewerbeschein) auf eine Anfrage seitens hey! sharing community schriftlich nachzuweisen. hey! sharing community behält sich das Recht vor, Angebote zu entfernen, solange ein schriftlicher Nachweis über den Berechtigungsnachweis nicht erfolgt ist.
+    </p>
+                   <p class="panel-head faq-header faq-header-below">§ 8. Steuerliches</p>
+                  <p>Für die ordnungsgemäße Abführung der ggf. anfallenden Steuern und Abgaben ist der Vermieter allein verantwortlich.
+    </p>
+
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-  </section>
-    <span class="add-margin mobile-hidden"></span>
-  </div>  
+      </div>
+      </section>
+        <span class="add-margin mobile-hidden"></span> </div>
 {% endblock %}

@@ -5,11 +5,14 @@
 <div class="col-sm-3 sidebar mobile-hidden">
     <nav>
         <ul>
-            <li><a id="kundeninfos_agb" class="leftmenu" href="{{ path("kundeninfos_agb") }}" >AGb</a></li>
-            <li><a id="kundeninfos_datenschutz" class="leftmenu" href="{{ path("kundeninfos_datenschutz") }}">Datenschutz</a></li>
-            <li><a id="kundeninfos_presse" class="leftmenu" href="{{ path("kundeninfos_presse") }}">Presse</a></li>
-            <li><a id="kundeninfos_kontakt" class="leftmenu" href="{{ path("kundeninfos_kontakt") }}">Kontakt</a></li>
-            <li><a id="kundeninfos_impressum" class="leftmenu" href="{{ path("kundeninfos_impressum") }}">Impressum</a></li>
+            <li><a id="kundeninfos_presse" class="leftmenu {% if pageName == "kundeninfos_presse" %}active-link{% endif %}" href="{{ path("kundeninfos_presse") }}">
+                    Presse</a></li>
+            <li><a id="kundeninfos_kontakt" class="leftmenu {% if pageName == "kundeninfos_kontakt" %}active-link{% endif %}" href="{{ path("kundeninfos_kontakt") }}">
+                    Kontakt</a></li>
+            <li><a id="kundeninfos_impressum" class="leftmenu {% if pageName == "kundeninfos_impressum" %}active-link{% endif %}" href="{{ path("kundeninfos_impressum") }}">
+                    Impressum</a></li>
+            <li><a id="kundeninfos_agb" class="leftmenu {% if pageName == "kundeninfos_agb" %}active-link{% endif %}" href="{{ path("kundeninfos_agb") }}" >
+                    AGB</a></li>
         </ul>
     </nav>
 </div>

@@ -1,0 +1,88 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+    <div class="main-header ">
+        <img src="/img/info.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="/img/info-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading help-heading">
+            <div class="row">
+                <div class="col-sm-8 text-white">
+                    <h1>Hilfe & FAQ</h1><br>
+                    <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+  <section>
+    <div class="container background-white rent-container">
+        <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+      <option value="hilfe_equipment_mieten.php">Equipment mieten</option>
+      <option value="hilfe_equipment_anbieten.php">Equipment anbieten</option>
+      <option selected="selected" value="hilfe_talent_buchen.php">Talent buchen</option>
+      <option value="hilfe_talent_anbieten.php">Talent anbieten</option>
+      <option value="faq.php">FAQ</option>
+        </select>
+            {{ render(controller('AppBundle:Static:breadcrumb', { "pageName":"hilfe_faq_talent_buchen" } )) }}
+        <span class="clearfix"></span>
+        <!-- Left nav -->
+        <div class="row help-page">
+            {{ render(controller('AppBundle:Static:leftmenu', { "pageName":"hilfe_faq_talent_buchen" } )) }}
+        <div class="col-md-9 content blog-content">
+            <div class="row">
+                <div class="col-md-4">
+                    <div>
+                        <h3>Angebot suchen</h3>
+                        <span class="number-one"></span>
+                        <img src="/img/placeholder/blog.png" alt=""/>
+                        <p>Suchst du einen privaten Trainer, um eine neue Sportart zu erlernen, eine Babysitterin für kommendes Wochenende, einen DJ für die Geburtstagsparty deines Partners, einen Fotografen für Bewerbungsfotos oder andere Dienstleister für eine spezifische Aufgabenstellung. 
+                        </p>
+                         <p>Die hey! sharing community bietet eine Auswahl an Dienstleistern aus den unterschiedlichsten Tätigkeitsfeldern die dich tatkräftig und professionell unterstützen!</p>
+                        <ul>
+                            <li>Keine Anmelde- oder Grundgebühr</li>
+                            <li>Übersichtliche Bewertungen der Community stärken Vertrauen und geben Sicherheit bei der Auswahl und Nutzung.</li>
+                            <li>Du kannst mehrere unverbindliche Anfragen parallel stellen, um Dienstleistungen zu vergleichen.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <h3>Anfrage stellen/buchen</h3>
+                        <span class="number-two"></span>
+                        <img src="/img/placeholder/blog2.png" alt=""/>
+                        <p>hey! sharing community führt dich von der Zusage bis zur Zahlung durch die Buchung. Die Kommunikation mit den Anbietern ist einfach und sicher, damit du auch zeitnah deine Wunsch-Buchung durchführen kannst.
+</p>
+                         
+                        <ul>
+                            <li>Du kommunizierst über die hey! sharing community und erhälst alle Reaktionen der Anbieter auch per Email.</li>
+                            <li>Versichere dich, dass der Anbieter den Auftrag verstanden hat und auch allfällige Rahmenbedingungen wie Equipment, Ort, Anreise, etc. geklärt sind.</li>
+                            <li>Nach Zusage des Anbieters kannst du durch Bestätigung das Angebot gleich buchen.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <h3>Service-Angebot nutzen</h3>
+                        <span class="number-three"></span>
+                        <img src="/img/placeholder/blog3.png" alt=""/>
+                        <p>Triff dich mit dem Anbieter wie vereinbarten Location um das Angebot zu nutzen. Den vereinbarten Betrag bitte direkt für den Anbieter mitnehmen (zur Zeit ist nur Barzahlung möglich).
+                        </p>
+                        <ul>
+                            <li>Nimm unsere tollen, außergewöhnlichen und nützlichen Services in deiner Nähe in Anspruch.</li>
+                            <li>Unterstütze kleine Gewerbetreibende und lerne dabei auch die Menschen dahinter kennen.</li>
+                            <li>Bewerte am Ende dein hey! sharing community Erlebnis um Vertrauen und Transparenz zu schaffen.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="col-xs-12">
+                    <a data-toggle="modal" data-target="#feedback-modal" style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" href="#">Jetzt Talente buchen</a>
+                </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <span class="add-margin mobile-hidden"></span>
+  </div>
+
+{% endblock %}

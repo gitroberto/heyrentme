@@ -1,0 +1,204 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<div class="main-header "> <img src="/img/info.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/> <img src="/img/info-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+  <div class="container rent-heading help-heading">
+    <div class="row">
+      <div class="col-sm-8 text-white">
+        <h1>Hilfe & FAQ</h1>
+        <br>
+        <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
+    </div>
+  </div>
+</div>
+</header>
+<section>
+  <div class="container background-white rent-container">
+    <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+ <option value="hilfe_equipment_mieten.php">Equipment mieten</option>
+      <option value="hilfe_equipment_anbieten.php">Equipment anbieten</option>
+      <option value="hilfe_talent_buchen.php">Talent buchen</option>
+      <option value="hilfe_talent_anbieten.php">Talent anbieten</option>
+      <option selected="selected" value="faq.php">FAQ</option>
+    </select>
+    {{ render(controller('AppBundle:Static:breadcrumb', { "pageName":"hilfe_faq_faq" } )) }}
+    <span class="clearfix"></span> 
+    <!-- Left nav -->
+    <div class="row help-page">
+      {{ render(controller('AppBundle:Static:leftmenu', { "pageName":"hilfe_faq_faq" } )) }}
+      <div class="col-md-9 content faq">      
+        <div class="panel-group" id="panel-quote-group">
+          <div class="panel panel-default">
+            <div class="panel-heading" id="panel-heading">
+              <p class="panel-title">Die hey! sharing community<span class="pull-right"><a><span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span> </p>
+            </div>
+            <div id="collapseQuote" class="panel-collapse collapse2 collapse">
+              <div class="panel-body">
+                <p class="panel-head faq-header">Was bietet die  hey! sharing community?</p>
+                <p>hey! sharing community ist eine Präsentations- und Buchungsplattform für Dienstleistungen und Equipment in Österreich. Über das Netzwerk kann Equipment (z.B. Werkzeug, Sportequipment, technische Geräte etc.) und bestimmte Services (u.a. Sport- & Fitnesstraining, Kinderbetreuung, Tiersitting, Kreativdienstleistungen) angeboten werden. Nutzer finden damit neue, interessante Angebote in Ihrer unmittelbaren Nachbarschaft und können direkt Buchungsanfragen stellen. Für die Buchung, Bezahlung und Übergaben haben wir durchdachte Prozesse entwickelt. hey! sharing community steht aber auch für eine lebendige Community mit vielen on- und offline Events. In unserem Blog und auf sozialen Medien werden wir regelmäßig über unsere Anbieter, Angebote und Sharing Erlebnisse berichten. </p>
+                <p class="panel-head faq-header faq-header-below ">Worin unterscheidet sich die hey! sharing community von anderen Angeboten?</p>
+                <p>Die Kombination unterschiedlicher Angebote auf hey! sharing community macht den Unterschied. Als Nutzer hast du die einzigartige Möglichkeit einerseits Dienstleistungen & Talente anzubieten oder zu buchen aber auch tolle Equipment Angebote von privaten Anbietern als auch gewerblichen Anbietern in deiner unmittelbaren Umgebung. <br>
+                  <br>
+                  Als Beispiel versetze dich in die Aufgabe eine Sommerparty zu organisieren. In der hey! sharing community findest du sowohl Equipment wie Griller, Stehtische, etc. aber auch Dienstleister wie DJs, Fotografen, Partyclowns, etc. die deine Party zu einem unvergesslichen hey! sharing Erlebnis machen.
+                  Vielen andere Kombinationen sind denkbar wie die Unterstützung eines Sporttrainers beim Ausprobieren eines Sportgeräts, dass du dir von der Community ausgeborgt hast, Handwerker und Werkzeug, und Vieles mehr. <br>
+                  <br>
+                  Durch unsere App weißt du auch immer Bescheid ob sich gerade interessante Angebote in deiner Nähe befinden und kannst somit direkt eine Buchung durchführen. </p>
+                <p class="panel-head faq-header faq-header-below ">Keine Anmelde- oder Grundgebühr</p>
+                <p>Die Nutzung von hey! sharing community ist gratis - für dich als Anbieter oder Mieter bedeutet es keine Abogebühren Grundkosten oder Einstellgebühren. Möchtest du etwas buchen oder anbieten so fallen dafür erst bei Buchung Servicegebühren an. Für Buchungen sind es je nach Höhe der Buchung 6-12% und für den Anbieter pro erfolgreicher Buchung 3%. <br>
+                  <br>
+                  Beispiel: Ein Werkzeug wird mit 10 € am Tag angeboten und für 6 Tage gebucht. Zur Gesamtsumme von 60,- € kommen in diesem Fall 10% (6,- €) Servicegebühr. Vom Anbieter werden 3% (1,80 €) einbehalten. Es fallen für die Buchung keine weiteren Transaktionskosten an. <br>
+                  <br>
+                  Hinweis: In der Einführungsphase sind auch unsere Buchungsgebühren kostenlos! </p>
+                <p class="panel-head faq-header faq-header-below ">Welche Vorteile bringt mir hey! sharing community als Nutzer?</p>
+                <p>Du hast manchmal ein Equipment (Sportgerät, Werkzeug, technisches Gerät) nicht zur Hand oder benötigst eine Dienstleistung im Privatbereich - Mit hey! sharing community hast du jetzt die Möglichkeit aus einer Vielzahl toller Angebote auszuwählen und sie direkt zu buchen. <br>
+                  <br>
+                  Die Vorteile im Überblick:
+                <ul>
+                  <li>Rasche und unkomplizierte Buchung vieler Equipmentangebote in deiner Nähe.</li>
+                  <li>Teste tolle neue Produkte und Produktinnovationen.</li>
+                  <li>Schone die Umwelt durch Ressourcenschonung.</li>
+                  <li>Entdecke und buche Talente und Professionisten in deiner Umgebung.</li>
+                  <li>Lerne neue Menschen kennen und werde teil einer neuen Community.</li>
+                </ul>
+                </p>
+                <p class="panel-head faq-header faq-header-below ">Welche Vorteile bringt mir hey! sharing community als Anbieter?</p>
+                <p>Du möchtest deine Dienstleistung, dein Talent oder ein Equipment anbieten. Du möchtest deine Kundenbasis ausbauen und verfügst über keine oder nur sehr kleine Marketingbudgets. Auf hey! sharing community hast du jetzt die Möglichkeit ein Angebot kostenlos einzustellen und damit direkt Buchungsanfragen zu erhalten. <br>
+                  <br>
+                  Die Vorteile im Überblick:
+                <ul>
+                  <li>Präsentiere dich und dein Angebot einer wachsenden Community</li>
+                  <li>Nutze unsere direkten Buchungsmöglichkeiten.</li>
+                  <li>Bestimme selbst wie viel du für dein Angebot verlangen möchtest.</li>
+                  <li>Nutze die Möglichkeit dich kreativ mit einem kurzen Profil-Video und/oder Interview vorzustellen.</li>
+                  <li>Werde mit deinem Angebot online besser gefunden.</li>
+                  <li>Das anbieten von Dienstleistungen auf hey! sharing community ist kostenlos - für jede erfolgreich durchgeführte Buchungen zahlst du eine Servicegebühr von 3%.</li>
+                  <li>Lerne neue Menschen und Kunden kennen.</li>
+                </ul>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-group" id="panel-quote-group2">
+          <div class="panel panel-default">
+            <div class="panel-heading" id="panel-heading1">
+              <p class="panel-title">Equipment mieten <span class="pull-right"><a><span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span> </p>
+            </div>
+            <div id="collapseQuote2" class="panel-collapse collapse1 collapse">
+              <div class="panel-body">
+                <p class="panel-head faq-header">Auf was muss ich als Equipment-Mieter achten?</p>
+                <p>Vertrauen ist einer der wichtigsten Faktoren der sharing community. Es werden in der sharing community nicht nur Anbieter sondern auch Mieter bewertet. Den besten Erfolg bei einer Equipment-Anfrage hast du, wenn du dich kurz vorstellst und schreibst wofür du das Equipment benötigst (z.B. Brauche Schlagbohrer für Wohnungsausbau). Sei beim Übergabetermin bitte pünktlich und nimm den vereinbarten Betrag, Kaution sowie einen Personalausweis mit. Achte auf einen sorgsamen Umgang mit dem Gerät und bringe es zu dem vereinbarten Termin auch wieder pünktlich zurück. Solltest du dich beim Übergabetermin verspäten, so gib dem Anbieter bitte rechtzeitig Bescheid. </p>
+                <p class="panel-head faq-header faq-header-below ">Wie funktioniert das mit der Kaution?</p>
+                <p>Der Vermieter legt im eigenen Ermessen eine Kaution für den Gegenstand fest, den er vermieten möchte. Diese Kaution ist bei Übergabe an den Vermieter in bar zu übergeben. Sofern es zu keinen Schäden des Equipments kommt erhältst du diese Kaution in bar zurück. <br>
+                  <br>
+                  Bei der Übergabe wird ein Übergabeprotokoll durchgeführt um zu überprüfen ob bereits Vorschäden (Kratzer etc.) vorliegen. Sollte während des Mietvorgangs etwas passieren und ein Schaden entstehen, werden solche Fälle über die hinterlegte Kaution direkt und unkompliziert mit dem Anbieter geregelt. Verfügst du über eine private Haftpflichtversicherung, so wird diese in den meisten Fällen für den entstandenen Schaden aufkommen. </p>
+                <p class="panel-head faq-header faq-header-below ">Umgang bei Totalschaden während der Miete</p>
+                <p>Die hey! sharing community Garantie ist für die Schadenfälle vorgesehen, in denen Deine Kaution nicht mehr ausreicht. Sie deckt im Streitfall den aktuellen Wiederbeschaffungswert, jedoch max. bis zu € 750,- ab. Unser Serviceteam hilft Dir im Fall des Falles rasch und unkompliziert. Wichtig sind dabei die saubere Dokumentation und Übermittlung des Übergabeprotokolls, Ausleihvereinbarung und entsprechenden Angaben zum Fall wie Bilder, Beschreibung des Hergang. Wir empfehlen auch die vorherige Konsultation der Haftpflichtversicherung zwecks Deckung des Schadens. <br>
+                  <br>
+                  Wie bei jedem anderen Verleihservice, trägst du während der Mietzeit eine gewisse Verantwortung für das Equipment. Solltest du mit dem Equipment während der Mietzeit durch fahrlässigen Umgang einen Total-Schaden verursachen liegt die Haftung grundsätzlich bei dir (die meisten Haftpflichtversicherungen decken allerdings einen solchen Schaden ab). Wir bieten unseren Equipment-Anbietern eine Garantie bis zu maximal 750,- € falls ein Total-Schaden verursacht wurde. Der Mieter hat in diesem Fall für 75% des Schadens aufzukommen. Wurde bereits eine Kaution hinterlegt so wird diese vom Anbieter einbehalten.<br>
+                  <br>
+                  Beispiel: Es wird ein Gerät im Wert von 500,- € gebucht und vom Anbieter eine Kaution von 100,- € verlangt. Es entsteht ein Total-Schaden oder das Equipment wird während der Miete gestohlen. Wir bezahlen dem Anbieter nach Überprüfung des Falls 400,- € (100 ,- € werden vom Anbieter einbehalten). 75% (daher 300,- €) hat dabei der Mieter zu tragen. Verfügst du über eine private Haftpflichtversicherung so wird diese in den meisten Fällen für den entstandenen Schaden aufkommen. Mißbrauch unseres Garantie-Services durch Anbieter oder Mieter führt zum Ausschluß bei hey! sharing community. </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-group" id="panel-quote-group3">
+          <div class="panel panel-default">
+            <div class="panel-heading" id="panel-heading3">
+              <p class="panel-title">Equipment anbieten <span class="pull-right"><a><span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span> </p>
+            </div>
+            <div id="collapseQuote3" class="panel-collapse collapse3 collapse">
+              <div class="panel-body">
+                <p class="panel-head faq-header">Welche Vorteile bringt mir hey! sharing community als Equipment-Anbieter?</p>
+                <p>Du hast Equipment daheim herumstehen, dass du nur selten benutzt - Du bist ein gewerblicher Verleih wirst mit deinem Angebot online aber nur schwer gefunden - mit hey! sharing community hast du jetzt die Möglichkeit mehr aus deinem Equipment zu machen und für andere mit deinem Angebot besser gefunden zu werden. <br>
+                  <br>
+                  Die Vorteile im Überblick:
+                <ul>
+                  <li>Verleihe dein ungenutztes Equipment an nette Leute in der Nachbarschaft und verdiene etwas Geld dabei.</li>
+                  <li>Nutze die hey! sharing community Garantie von 750 € sowie eine Kaution - Damit ist dein Equipment für den Verleih geschützt.</li>
+                  <li>Werde mit deinem bestehenden Verleih-Angebot besser online gefunden.</li>
+                  <li>Lerne neue Menschen kennen und werde teil einer wachsenden Community.</li>
+                </ul>
+                </p>
+                <p class="panel-head faq-header faq-header-below ">Ist mein Privat-Equipment für den Verleih geschützt?</p>
+                <p>Ja - Alle Personen die etwas mieten müssen sich zuerst bei uns registrieren. Jeder Mieter wird auch von anderen Mietern über den Umgang mit Equipment bewertet (User-Rating). Du kannst selbst eine Kaution für den Verleih verlangen und der Mieter wird sich bei der Übergabe einen Personalausweis mitnehmen. Bei dem Übernahmeprotokoll, dass wir zur Verfüng stellen, wird bei Übergabe überprüft ob bereits Schäden am Equipment bestehen. Wird nach der Rückgabe ein Kratzer entdeckt oder ein Equipment viel zu spät zurückgegeben, so werden solche Fälle über die hinterlegte Kaution geregelt. <br>
+                  <br>
+                  Sollte mal ein größerer Schaden auftreten oder das Equipment gestohlen werden, bieten wir über unsere Plattform zusätzlich eine Garantie von bis zu 750 €. Unser Serviceteam hilft Dir im Fall des Falles rasch und unkompliziert. Wichtig sind dabei die saubere Dokumentation und Übermittlung des Übergabeprotokolls, Ausleihvereinbarung und entsprechenden Angaben zum Fall wie Bilder, Beschreibung des Hergang. Wir empfehlen auch die vorherige Konsultation der Haushaltsversicherung zwecks Deckung des Schadens. </p>
+                <p class="panel-head faq-header faq-header-below ">Wie genau funktioniert die hey! sharing community Garantie für Equipment</p>
+                <p>Beim Einstellen deines Equipments fragen wir dich nach dem Wert des Equipments oder du kannst angeben, dass du über eine Original-Rechnung verfügst. Wurde dein Equipment beschädigt und der Fall übersteigt den Wert der von dir festgelegten Kaution (z.B. Die Kaution beträgt 200,- der Schaden liegt aber bei 1.000,- €), so wende dich bitte an uns. Wir überprüfen den Fall und erstatten dir den Schadenswert bis zu 750,- € unkompliziert und schnell zurück. Wir bieten diesen Service nach einem Fair-Use Prinzip an. Sollte sich bei Überprüfung herausstellen, dass ein Mißbrauch vorliegt, können wir das Service nicht anbieten. Falls noch weitere Fragen zur Garantie bestehen schreibe uns bitte eine Mail an <a href="mailto:support@heysharing.com">support@heysharing.com</a>. </p>
+                <p class="panel-head faq-header faq-header-below ">Wie funktioniert das mit der Kaution?</p>
+                <p>Der Vermieter legt im eigenen Ermessen eine Kaution für den Gegenstand fest, den er vermieten möchte. Diese Kaution ist bei Übergabe an den Vermieter in bar zu übergeben. Sofern es zu keinen Schäden des Equipments kommt erhältst du diese Kaution in bar zurück. <br>
+                  <br>
+                  Bei der Übergabe wird ein Übergabeprotokoll durchgeführt um zu überprüfen ob bereits Vorschäden (Kratzer etc.) vorliegen. Sollte während des Mietvorgangs etwas passieren und ein Schaden entstehen, werden solche Fälle über die hinterlegte Kaution direkt und unkompliziert mit dem Anbieter geregelt. Verfügst du über eine private Haftpflichtversicherung, so wird diese in den meisten Fällen für den entstandenen Schaden aufkommen. </p>
+                <p class="panel-head faq-header faq-header-below ">Umgang bei Totalschaden während der Miete</p>
+                <p>Wie bei jedem anderen Verleihservice, trägst du während der Mietzeit eine gewisse Verantwortung für das Equipment. Solltest du mit dem Equipment während der Mietzeit durch fahrlässigen Umgang einen Total-Schaden verursachen liegt die Haftung grundsätzlich bei dir (die meisten Haftpflichtversicherungen decken allerdings einen solchen Schaden ab). Wir bieten unseren Equipment-Anbietern eine Garantie bis zu maximal 750,- € falls ein Total-Schaden verursacht wurde. Der Mieter hat in diesem Fall für 75% des Schadens aufzukommen. Wurde bereits eine Kaution hinterlegt so wird diese vom Anbieter einbehalten. Beispiel: Es wird ein Gerät im Wert von 500,- € gebucht und vom Anbieter eine Kaution von 100,- € verlangt. Es entsteht ein Total-Schaden oder das Equipment wird während der Miete gestohlen. Wir bezahlen dem Anbieter nach Überprüfung des Falls 400,- € (100 ,- € werden vom Anbieter einbehalten). 75% (daher 300,- €) hat dabei der Mieter zu tragen. Verfügst du über eine private Haftpflichtversicherung so wird diese in den meisten Fällen für den entstandenen Schaden aufkommen. Mißbrauch unseres Garantie-Services durch Anbieter oder Mieter führt zum Ausschluß bei hey! sharing community. </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-group" id="panel-quote-group4">
+          <div class="panel panel-default">
+            <div class="panel-heading" id="panel-heading4">
+              <p class="panel-title">Talent buchen <span class="pull-right"><a><span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span> </p>
+            </div>
+            <div id="collapseQuote4" class="panel-collapse collapse4 collapse">
+              <div class="panel-body">
+                <p class="panel-head faq-header">Wie läuft die Buchung eines Services ab?</p>
+                <p>Du benötigst eine Dienstleistung oder ein Talent? Such dir einen Wunsch-Service und stelle über unsere Plattform eine Anfrage. Hier führst du an, für welchen Zeitraum du den Service buchen möchtest, für welchen Zweck und wo diese Dienstleistung in Anspruch genommen werden soll.
+                <ul>
+                  <li>Nach der Anfrage erhälst du eine Rückmeldung durch den Anbieter. Du kannst auch mehrere Anbieter anfragen, wenn du z.B. für einen bestimmten Termin auf jeden Fall die Dienstleistung benötigst.</li>
+                  <li>Du erhältst daraufhin Antworten von den Anbietern und einen Gesamtpreis für deine Anfrage. Du kannst dem Anbieter noch Fragen zur Buchung stellen um Details zu klären. Anbieter werden oft auch eine Telefonnummer für weitere Rückfragen anführen (diese wird nach Buchungsbestätigung für dich freigeschalten). Mit der Bestätigung kannst du das Angebot gleich direkt und verbindlich buchen.</li>
+                  <li>Ihr trefft Euch an dem vereinbarten Ort und du nimmst den Service in Anspruch.</li>
+                  <li>Nach Abschluss und Bezahlung kannst du den Anbieter bewerten.</li>
+                  <li>Führst du bei hey! sharing community öfters Buchungen durch, erhälst du viele Vorteile. Du sammelst Punkte und erhälst damit Service-Rabatte auf weitere Buchungen. Ausserdem nimmst du damit auch an Gewinnspielen teil und erhälst die Möglichkeit tolle Preise zu gewinnen.</li>
+                </ul>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-group" id="panel-quote-group5">
+          <div class="panel panel-default">
+            <div class="panel-heading" id="panel-heading5">
+              <p class="panel-title">Talent anbieten <span class="pull-right"><a><span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span></a></span> </p>
+            </div>
+            <div id="collapseQuote5" class="panel-collapse collapse5 collapse">
+              <div class="panel-body">
+                <p class="panel-head faq-header">Welche Vorteile bringt mir hey! sharing community als Anbieter von Dienstleistungen/Talenten?</p>
+                <p>Du hast ein Talent anzubieten, der für andere interessant ist, bist Freelancer oder selbstständig als Einpersonenunternehmen (EPU) tätig? Auf hey! sharing community hast du jetzt die Möglichkeit dich und deinen Service anderen zu präsentieren und über die Plattform gebucht zu werden. <br>
+                  <br>
+                  Die Vorteile im Überblick:
+                <ul>
+                  <li>Präsentiere dich und dein Angebot einer wachsenden Community.</li>
+                  <li>Nutze unsere direkten Buchungsmöglichkeiten.</li>
+                  <li>Bestimme selbst wie viel du für dein Angebot verlangen möchtest.</li>
+                  <li>Nutze die Möglichkeit dich kreativ mit einem kurzen Profil-Video und/oder Interview vorzustellen.</li>
+                  <li>Werde mit deinem Angebot online besser gefunden.</li>
+                  <li>Das Anbieten von Dienstleistungen auf hey! sharing community ist kostenlos - für jede erfolgreich durchgeführte Buchungen zahlst du eine Servicegebühr von 3%.</li>
+                  <li>Lerne neue Menschen und Kunden kennen.</li>
+                </ul>
+                </p>
+                <p class="panel-head faq-header faq-header-below ">Wie kann ich einen Service oder Talent anbieten?</p>
+                <p>Registriere dich einfach auf der Plattform und beschreibe dein Angebot in der gewünschten Kategorie. Für bestimmte Angebote ist eine Gewerbeberechtigung erforderlich (z.B. Sporttrainer), andere Kategorien (z.B.) fallen unter sogenannte freie Gewerbe (kein Nachweis erforderlich, aber hilfreich). Unsere Plattform funktioniert nach einem Schaufensterprinzip - Du hast die Möglichkeit, Angebote einzustellen und wir unterstützen dich bei deiner Vermarktung und stellen direkte Buchungsmöglichkeiten zur Verfügung. Nutzer können deinen Service in Anspruch nehmen und ihn anschließend bewerten. Findet dein Service in der Community Anklang steigt damit auch dein Einkommen. </p>
+                <p class="panel-head faq-header faq-header-below ">Wie läuft eine Buchung als Service-Anbieter ab?</p>
+                <p> Nachdem du ein Angebot eingestellt hast (z.B. Personal Fitnesstraining) erhälst du aus unserer Community Anfragen.
+                <ul>
+                  <li>Interessenten werden dir schreiben für wann sie deinen Service gerne in Anspruch nehmen möchte, für wie lange (z.B. 2 Std.), für welchen Zweck und unter Umständen auch wo. Ist ein Interessent bereits auf der Plattform registriert, siehst du auch seine Bewertung als Kunde. Hast du einen Stundenpreis angeführt den du verlangen möchtest (z.B. 20 € p. Std.) siehst du auch gleich deinen Gesamtverdienst (z.b. 5 Std. a 20 € = 100 €,- Verdienst abzüglich 3% Servicegebühr).</li>
+                  <li>Du kannst die Anfrage annehmen oder ablehnen und ihm dazu auch eine persönliche Nachricht hinterlassen. Du kannst in der Antwortmail  auch anführen wo der Treffpunkt sein soll und wie du gerne für weitere Details kontaktiert werden möchtest. Beachte bitte, dass nur bei positiver Buchung der Interessent deine Kontaktdaten wie Tel. oder Email freigeschalten bekommt.</li>
+                  <li>Hast du der Anfrage zugestimmt kann der Interessent verbindlich buchen. Da wir gerade mit unserem Service starten und in einer Testphase befinden, läuft die Bezahlung direkt (Barzahlung) zwischen dir und dem Kunden ab.</li>
+                  <li>Ihr trefft Euch an dem vereinbarten Ort und du stellst deinen Service zur Verfügung.</li>
+                  <li>Nach Abschluss und Bezahlung kann der Kunde deinen Service bewerten. Erhälst du viele positive Bewertungen so steigt damit auch dein Ranking und du erhältst öfters Buchungsanfragen. Du kannst den Kunden nach Abschluss der Buchung ebenfalls bewerten.</li>
+                  <li>Wirst du bei hey! sharing community öfters gebucht, erhältst du weitere tolle Promotionmöglichkeiten günstiger. Wir bieten unseren Community Anbietern z.b. die Erstellung eines kreativen Profil-Videos, ein ausführliches Interview in unserem Blog und Social Media oder ein Fotoshooting.</li>
+                </ul>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<span class="add-margin mobile-hidden"></span>
+</div>
+
+{% endblock %}

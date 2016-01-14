@@ -1,14 +1,14 @@
 {% extends "base.html.twig" %}
 {% block body %}
 
-<div class="main-header ">
+    <div class="main-header ">
         <img src="/img/info.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
         <img src="/img/info-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
         <div class="container rent-heading help-heading">
             <div class="row">
                 <div class="col-sm-8 text-white">
                     <h1>Hilfe & FAQ</h1><br>
-                    <a class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
+                    <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos anmelden</a>
                 </div>
             </div>
         </div>
@@ -16,64 +16,73 @@
   </header>
   <section>
     <div class="container background-white rent-container">
+        {# TODO #}
+        <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+ <option selected="selected" value="hilfe_equipment_mieten.php">Equipment mieten</option>
+      <option value="hilfe_equipment_anbieten.php">Equipment anbieten</option>
+      <option value="hilfe_talent_buchen.php">Talent buchen</option>
+      <option value="hilfe_talent_anbieten.php">Talent anbieten</option>
+      <option value="faq.php">FAQ</option>
+        </select>
         {{ render(controller('AppBundle:Static:breadcrumb', { "pageName":"hilfe_faq_euipment_mieten" } )) }}
         <span class="clearfix"></span>
         <!-- Left nav -->
         <div class="row help-page">
-        {{ render(controller('AppBundle:Static:leftmenu', { "pageName":"hilfe_faq_euipment_mieten" } )) }}
+            {{ render(controller('AppBundle:Static:leftmenu', { "pageName":"hilfe_faq_euipment_mieten" } )) }}
         <div class="col-md-9 content blog-content">
             <div class="row">
                 <div class="col-md-4">
                     <div>
-                        <h3>Kategorie wählen</h3>
+                        <h3>Equipment suchen</h3>
                         <span class="number-one"></span>
                         <img src="/img/placeholder/blog.png" alt=""/>
-                        <p>Such dir mit Hilfe verschiedener Filter ein passendes Auto von netten Fahrzeugbesitzern in deiner Nähe, egal ob Kleinwagen, Kombi oder Transporter!
+                        <p>Suchst du Camping-Ausrüstung für dein Outdoor-Wochenende, Sport-Geräte zum Testen, Werkzeug für die anstehende Renovierung, Equipment für deine Party, technische Geräte oder andere spezielle Gebrauchsgegenstände?
                         </p>
+                         <p>Die hey! sharing community bietet dir dein Wunsch-Equipment zur Miete anstelle einer teuren Anschaffung.</p>
                         <ul>
-                            <li>Übersichtliche und einfache Suche nach privaten Carsharing-Autos zur Miete</li>
-                            <li>Deine Anfragen sind unverbindlich, du kannst mehrere Anfragen parallel stellen</li>
-                            <li>Keine Anmelde- oder Grundgebühr</li>
+                            <li>Starte sofort ohne Anmelde- oder Grundgebühr.</li>
+                            <li>Die Vermieter sind verlässliche Privatpersonen und Gewerbetreibende aus deiner Umgebung.</li>
+                            <li>Übersichtliche Bewertungen der Community stärken Vertrauen und geben Sicherheit bei der Auswahl und Nutzung.</li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div>
-                        <h3>Angebot einstellen</h3>
+                        <h3>Equipment buchen</h3>
                         <span class="number-two"></span>
                         <img src="/img/placeholder/blog2.png" alt=""/>
-                        <p>Such dir mit Hilfe verschiedener Filter ein passendes Auto von netten Fahrzeugbesitzern in deiner Nähe, egal ob Kleinwagen, Kombi oder Transporter!
-                        </p>
+                        <p>Gefällt dir ein Equipment, ermöglicht die Community es auch rasch nutzen zu können. Wir legen großen Werte auf einfache Prozesse. Nimm Kontakt mit dem Vermieter auf und stelle unverbindlich deine Anfragen.</p>
+                         
                         <ul>
-                            <li>Übersichtliche und einfache Suche nach privaten Carsharing-Autos zur Miete</li>
-                            <li>Deine Anfragen sind unverbindlich, du kannst mehrere Anfragen parallel stellen</li>
-                            <li>Keine Anmelde- oder Grundgebühr</li>
+                            <li>Nach Zusage des Vermieters kannst du das Equipment sichern und direkt buchen.</li>
+                            <li>Die Nutzungsdauer, Übergabe und Zahlung erfolgt in Absprache mit dir und dem Anbieter.</li>
+                            <li>Im Moment unterstützen wir Barzahlung direkt an den Vermieter.</li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div>
-                        <h3>Weiterempfehlen</h3>
+                        <h3>Equipment nutzen</h3>
                         <span class="number-three"></span>
                         <img src="/img/placeholder/blog3.png" alt=""/>
-                        <p>Such dir mit Hilfe verschiedener Filter ein passendes Auto von netten Fahrzeugbesitzern in deiner Nähe, egal ob Kleinwagen, Kombi oder Transporter!
+                        <p>Wir wünschen viel Spaß bei der Nutzung deines Equipments und ein positives Sharing Erlebnis! Damit während und nach der Nutzung auch alle zufrieden sind, stellen wir ein Übergabeprotokoll und eine Ausleihvereinbarung für euch zur Verfügung.
                         </p>
                         <ul>
-                            <li>Übersichtliche und einfache Suche nach privaten Carsharing-Autos zur Miete</li>
-                            <li>Deine Anfragen sind unverbindlich, du kannst mehrere Anfragen parallel stellen</li>
-                            <li>Keine Anmelde- oder Grundgebühr</li>
+                            <li>Einfache und sichere Equipment-Übergabe mit dem Übergabeprotokoll. Die Bewertung nach Nutzung, hilft zusätzlich um Vertrauen zu schaffen.</li>
+                            <li>Trotz sorgsamen Umgang kann doch mal etwas passiert. Daher werden Kratzer nach Rückgabe durch die vereinbarte Kaution abgedeckt.</li>
+                            <li>Teile deine Erlebnisse währenddessen oder danach gerne mit deinen Freunden und der hey! sharing community.</li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="text-center mobile-hidden">
-                <h4>Welches Angebot möchtest du einstellen?</h4>
-                <p class="content-categories" id="kategorie-select">Kategorie wählen</p>
-            </div>
+             <div class="col-xs-12">
+                    <a style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" href="{{ path("rentme") }}">Jetzt Equipment mieten</a>
+                </div>
           </div>
         </div>
       </div>
     </section>
   <span class="add-margin mobile-hidden"></span>
   </div>
+
 {% endblock %}

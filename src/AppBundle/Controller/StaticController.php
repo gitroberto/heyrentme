@@ -45,33 +45,26 @@ class StaticController extends BaseController {
     }
     
     /**
-     * @Route("/hilfe-faq/talente-buchen", name="hilfe_faq_talente_buchen")
+     * @Route("/hilfe-faq/talent-buchen", name="hilfe_faq_talent_buchen")
      */
-    public function hilfeFaqTalenteBuchenAction(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_talente_buchen.html.twig');
+    public function hilfeFaqTalentBuchenAction(Request $request) {               
+        return $this->render('static/faq/hilfe_faq_talent_buchen.html.twig');
     }
     
     /**
-     * @Route("/hilfe-faq/talente-anbieten", name="hilfe_faq_talente_anbieten")
+     * @Route("/hilfe-faq/talent-anbieten", name="hilfe_faq_talent_anbieten")
      */
-    public function hilfeFaqTalenteAnbietenAction(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_talente_anbieten.html.twig');
+    public function hilfeFaqTalentAnbietenAction(Request $request) {               
+        return $this->render('static/faq/hilfe_faq_talent_anbieten.html.twig');
     }
     
     
     /**
-     * @Route("/hilfe-faq/faq-anbieter", name="hilfe_faq_faq_anbieter")
+     * @Route("/hilfe-faq/faq", name="hilfe_faq_faq")
      */
     public function hilfeFaqFaqAnbieter(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_faq_anbieter.html.twig');
-    }
-    
-    /**
-     * @Route("/hilfe-faq/faq-nutzer", name="hilfe_faq_faq_nutzer")
-     */
-    public function hilfeFaqFaqNutzer(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_faq_nutzer.html.twig');
-    }
+        return $this->render('static/faq/hilfe_faq_faq.html.twig');
+    }    
 
     #ClientInfo
     /**
@@ -99,13 +92,6 @@ class StaticController extends BaseController {
     }
     
     /**
-     * @Route("/kundeninfos/datenschutz", name="kundeninfos_datenschutz")
-     */
-    public function kundeninfosDatenschutzAction(Request $request) {               
-        return $this->render('static/clientInfo/kundeninfos_datenschutz.html.twig');
-    }
-    
-    /**
      * @Route("/kundeninfos/presse", name="kundeninfos_presse")
      */
     public function kundeninfosPresseAgbAction(Request $request) {               
@@ -126,4 +112,17 @@ class StaticController extends BaseController {
         return $this->render('static/clientInfo/kundeninfos_impressum.html.twig');
     }
     
+    /** 
+     * @Route("/tutorial/photo", name="tutorial-photo")
+     */
+    public function photoTutorialAction() {
+        return $this->render('static/tutorial/photo.html.twig');
+    }
+
+    /** 
+     * @Route("/tutorial/video", name="tutorial-video")
+     */
+    public function videoTutorialAction() {
+        return $this->render('static/tutorial/video.html.twig');
+    }
 }
