@@ -138,15 +138,20 @@ class DefaultController extends BaseController {
         $subcat = $eq->getSubcategory();
         
         $featureSections = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentFeatures($eq->getId());
+        $post = $this->getDoctrineRepo('AppBundle:Blog')->getPostForEquipmentPage();
+                
+        $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getSamplePreviewEquipmentsBySubcategory($eq->getSubcategory()->getId(), $eq->getId());
         
         if ($eq != null) {
             return $this->render('default/equipment.html.twig', array(
                 'equipment' => $eq,
+                'equipments' => $equipments,
                 'category' => $subcat->getCategory(),
                 'categories' => $this->getCategories($request),
                 'featureSections' => $featureSections,
                 'next' => $next,
-                'prev' => $prev
+                'prev' => $prev,
+                'post' => $post
             ));
         }
         return null;
@@ -167,6 +172,14 @@ class DefaultController extends BaseController {
             array_push($ids, $eq->getId());
         }
         $request->getSession()->set('SearchList', $ids);
+        
+        return $this->render('default/equipment-list.html.twig', array(
+            'equipments' => $equipments
+        ));
+    }
+    
+    
+    public function renderEquipmentListAction(Request $request, $equipments) {
         
         return $this->render('default/equipment-list.html.twig', array(
             'equipments' => $equipments

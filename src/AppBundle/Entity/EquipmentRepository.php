@@ -20,6 +20,17 @@ class EquipmentRepository extends EntityRepository
         $query->setParameter('approved', Equipment::STATUS_APPROVED);
         return $query->getResult();        
     }   
+    
+    public function getSamplePreviewEquipmentsBySubcategory($subcategoryId, $eqId) {
+        #TODO: Correct query, remove hardcoded number of items
+        $sql = "select e from AppBundle:Equipment e where e.subcategory = :subcategoryId and e.id != :id and e.status = :approved";
+        $query = $this->getEntityManager()->createQuery($sql);
+        $query->setParameter('subcategoryId', $subcategoryId);
+        $query->setParameter('id', $eqId);
+        $query->setParameter('approved', Equipment::STATUS_APPROVED);        
+        return $query->setMaxResults(4)->getResult();        
+    }   
+    
     public function getAllByUserId($userId) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('e')

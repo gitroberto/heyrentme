@@ -25,7 +25,7 @@ class OAuthUserProvider extends BaseClass
         if (null === $user) {
             //check if the user has a normal account
             $user = $this->userManager->findUserByEmail($email);
-
+            $isNewUser = false;
             if (null === $user || !$user instanceof UserInterface) {
                 //if the user does not have a normal account, set it up:
                 $user = $this->userManager->createUser();
@@ -34,6 +34,8 @@ class OAuthUserProvider extends BaseClass
                 #facebook don't provide username param, email used;
                 $user->setUsername($email);
                 $user->setEnabled(true);
+                $isNewUser = true;                
+
             }
             //then set its corresponding social id
             $service = $response->getResourceOwner()->getName();
@@ -46,6 +48,10 @@ class OAuthUserProvider extends BaseClass
                     break;
             }
             $this->userManager->updateUser($user);
+            if ($isNewUser){
+                global $kernel;
+                $kernel->getContainer()->get('app.general_mailer')->SendWelcomeEmail($user, true);
+            }
         } else {
             //and then login the user
             $checker = new UserChecker();

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Mailer;
 
 use FOS\UserBundle\Controller\RegistrationController as BaseRegistrationController;
 
@@ -94,8 +95,8 @@ class RegistrationController extends BaseRegistrationController
 
         $userManager->updateUser($user);
         
-        $codeRepo = $this->getDoctrine()->getRepository('AppBundle:DiscountCode');
-        $code = $codeRepo->assignToUser($user);
+        #$codeRepo = $this->getDoctrine()->getRepository('AppBundle:DiscountCode');
+        #$code = $codeRepo->assignToUser($user);
         $this->getDoctrine()->getRepository('AppBundle:Inquiry')->updateInquiries($user);
 
         if (null === $response = $event->getResponse()) {
@@ -103,49 +104,13 @@ class RegistrationController extends BaseRegistrationController
             $response = new RedirectResponse($url);
         }
 
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
-
-        $this->SendWelcomeEmail($user, $code);
+        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));                
+        $this->get("app.general_mailer")->SendWelcomeEmail($user, true);
         
         return $response;
     }
     
-    public function SendWelcomeEmail($user, $code)
-    {
-        $from = $this->getParameter('mailer_fromEmail');        
-        #$username = 'seba';
-        $username = $user->getName(). " ". $user->getSurname();
-        $to = $user->getEmail();
-        #$to = 'sebastian0680@wp.pl'; 
-        $message = \Swift_Message::newInstance()
-        ->setSubject('Heyrentme Welcome Email.')
-        ->setFrom($from)
-        ->setTo($to)
-        ->setBody(
-            $this->renderView(
-                // app/Resources/views/Emails/registration.html.twig
-                'Emails/registration_welcome.html.twig',
-                array(
-                    'name' => $username, 
-                    'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
-                    'discountCode' => $code
-                )
-            ),
-            'text/html'
-        )
-        /*
-         * If you also want to include a plaintext version of the message
-        ->addPart(
-            $this->renderView(
-                'Emails/registration.txt.twig',
-                array('name' => $name)
-            ),
-            'text/plain'
-        )
-        */
-        ;
-        $this->get('mailer')->send($message);
-    }
+    
     
     
     /**
