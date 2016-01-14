@@ -18,6 +18,11 @@ class BlogRepository extends EntityRepository
         return $this->getEntityManager()->createQuery($q)->getResult();
     }
     
+    public function getPostForEquipmentPage() {
+        $q = "select b from AppBundle:Blog b order by b.position, b.createdAt asc";
+        return $this->getEntityManager()->createQuery($q)->setMaxResults(1)->getOneOrNullResult();
+    }
+    
     public function getByPosition($position) {
         $q = "select b from AppBundle:Blog b where b.position = :position";
         return $this->getEntityManager()->createQuery($q)->setParameter('position', $position)->getOneOrNullResult();

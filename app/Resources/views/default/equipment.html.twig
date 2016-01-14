@@ -8,15 +8,15 @@
   <section class="main-categories main-offers detail-page container left-right-border background-light-gray">
         <nav class="crumbs">
             <ul class="col-xs-7">
-                <li><a href="/">hey! VIENNA</a></li>
-                <li><a href="/rentme">hey! rentme</a></li>
+                <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
+                <li><a href="{{ path('rentme') }}">Equipment mieten</a></li>
                 <li><a href="{{ path('catchall', { 'content': category.slug }) }}">{{ category.name }}</a></li>
                 <li><a href="{{ path('catchall', { 'content': equipment.urlPath }) }}" class="active-crumb">{{ equipment.name }}</a></li>
             </ul>
             <ul class="col-xs-5 pull-right text-right kaup-select">
                 {{ render(controller('AppBundle:Common:categoryList')) }}
                 <li id="kategorie-select"><a class="active-crumb haup-ico" href="#">Hauptkategorien &nbsp;&nbsp;&nbsp;</a></li>
-                <li><a class="active-crumb" href="#">In dieser Kategorie anbieten</a></li>
+                <li><a class="active-crumb" href="javascript:anbieten({% if category %}{{ category.id }}{% endif %})" >In dieser Kategorie anbieten</a></li>
             </ul>
         </nav>
         <span class="clearfix"></span>
@@ -386,7 +386,7 @@
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
                         </select>
                     </div>
-                    <p>Deine Gesamtkosten<span class="info-icon" data-toggle="tooltip" title="Hooray!"></span></p>
+                    <p>Gesamtpreis<span class="info-icon" data-toggle="tooltip" title="Hooray!"></span></p>
                     <p class="price"><span>ab</span><b class="price-calc">{{ equipment.price|number_format(0) }}</b>,-<span class="euro-sign">&#8364;</span></p>
                     <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
                 </div>
@@ -410,19 +410,29 @@
                     {% endfor %}
                 </div>
             </div>
+            
+            {% if post %}
             <div class="user-info">
-                <img src="/img/placeholder/info.jpg" alt="info"/>
-                <div class="row">
-                    <div class="col-xs-9">
-                        <p>Die 10 besten mountainbike
-                        strecken in österreich</p>
+                <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
+                    
+                    {% if post.image %}
+                        <img src="{{ post.image.urlPath(image_url_prefix) }}" alt="{{ post.title }}" class="blogimg"/>
+                    {% else %}
+                        {# TODO: change default blog photo #}
+                        <img src="/img/placeholder/blog2.jpg" alt="{{ post.title }}" class="blogimg"/>
+                    {% endif %}
+                    
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <p>
+                                {{ post.title }}
+                              </p>
+                        </div>
                     </div>
-                    <div class="col-xs-3 grey-info">
-                        INFO
-                    </div>
-                </div>
-                <img src="/img/info-icon.svg" alt="info-icon" class="icon-info"/>
-              </div>
+                </a>
+            </div>
+            {% endif %}
+            
         </div>
         <!-- End of right side -->
     </div>
@@ -432,6 +442,7 @@
     <div class="container border-light-gray">
         <div class="row">
             <p class="see-also mobile-hidden">Das könnte dich auch interessieren:</p>
+           
             <div class="col-sm-3">
                 <div>
                 <img src="/img/placeholder/bike.png" alt="placeholder"/>

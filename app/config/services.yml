@@ -27,6 +27,10 @@ services:
          -  { name: form.type, alias: form_einstellungen  }
     #</added by Seba>
     
+    app.general_mailer:
+        class: AppBundle\Mailer\GeneralMailer
+        arguments: ['@mailer', '@templating', @doctrine.orm.entity_manager , { mailer_fromEmail: %mailer_fromemail%, mailer_image_url_prefix: %mailer_image_url_prefix%  } ]
+    
     scheduler:
         class: AppBundle\Service\SchedulerService
         arguments: [@doctrine.orm.entity_manager, @mailer, @templating, @monolog.logger.scheduler, @router, { mailer_image_url_prefix: %mailer_image_url_prefix%, mailer_fromemail: %mailer_fromemail%, mailer_fromname: %mailer_fromname% }]
