@@ -181,7 +181,7 @@ class DefaultController extends BaseController {
     
     public function renderEquipmentListAction(Request $request, $equipments) {
         
-        return $this->render('default/equipment-list.html.twig', array(
+        return $this->render('default/equipment-list-small.html.twig', array(
             'equipments' => $equipments
         ));
     }
