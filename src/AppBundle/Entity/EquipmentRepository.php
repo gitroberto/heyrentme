@@ -21,6 +21,14 @@ class EquipmentRepository extends EntityRepository
         return $query->getResult();        
     }   
     
+    public function getAllForOtherCategories($subcategoryId) {
+        $sql = "select e from AppBundle:Equipment e where e.subcategory != :subcategoryId and e.status = :approved";
+        $query = $this->getEntityManager()->createQuery($sql);
+        $query->setParameter('subcategoryId', $subcategoryId);
+        $query->setParameter('approved', Equipment::STATUS_APPROVED);
+        return $query->setMaxResults(4)->getResult();        
+    }   
+    
     public function getSamplePreviewEquipmentsBySubcategory($subcategoryId, $eqId) {
         #TODO: Correct query, remove hardcoded number of items
         $sql = "select e from AppBundle:Equipment e where e.subcategory = :subcategoryId and e.id != :id and e.status = :approved";
@@ -28,7 +36,19 @@ class EquipmentRepository extends EntityRepository
         $query->setParameter('subcategoryId', $subcategoryId);
         $query->setParameter('id', $eqId);
         $query->setParameter('approved', Equipment::STATUS_APPROVED);        
-        return $query->setMaxResults(4)->getResult();        
+        $results = $query->setMaxResults(4)->getResult();        
+        
+        if (count($results) < 4) {
+            $resultsFromOtherCats = $this->getAllForOtherCategories($subcategoryId);
+            foreach($resultsFromOtherCats as $rfoc){
+                $results[count($results)] = $rfoc;
+                if (count($results) == 4) {
+                    break;
+                }
+            }
+        }
+        
+        return $results;
     }   
     
     public function getAllByUserId($userId) {
