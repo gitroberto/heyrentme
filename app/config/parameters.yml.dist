@@ -11,9 +11,9 @@ parameters:
     # database_path: "%kernel.root_dir%/data.db3"
 
     mailer_transport: smtp
-    mailer_host: poczta.o2.pl:587
-    mailer_user: heyrentme
-    mailer_password: !@heyrentme12
+    mailer_host: w013cf73.kasserver.com
+    mailer_user: m0366f0f
+    mailer_password: MNopU4mdh8xBSoVp
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
@@ -22,7 +22,7 @@ parameters:
     image_storage_dir: "C:\\projects\\reddragon\\dev\\web\\db-img"
     facebook_client_id: 1390938247874229
     facebook_client_secret: c801ab39b2606d9818641b2731ef3555
-    mailer_fromemail: heyrentme@o2.pl
-    mailer_fromname: Hey Rent Me (TEST)
+    mailer_fromemail: test.app@hey-buyme.com
+    mailer_fromname: Hey! Rent Me (TEST)
     mailer_image_url_prefix: http://test.hey-buyme.com/
     admin_email: sebastian.bera@dantesoft.com
