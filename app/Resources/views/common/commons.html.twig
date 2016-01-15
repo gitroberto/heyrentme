@@ -110,13 +110,13 @@
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         function weiterClick() {
             var id = $("#subcategory").val();
-            var url = '{{ path('equipment-add-1', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            var url = '{{ path('equipment-add-1', { 'categoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
             window.location = url;
         }
     {% else %}
         function weiterClick() {
             var id = $("#subcategory").val();
-            var url = '{{ path('rental-detail', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            var url = '{{ path('rental-detail', { 'categoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
             window.location = url;
         }
     {% endif %}
