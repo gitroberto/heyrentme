@@ -81,6 +81,10 @@ class Equipment
      */
     protected $addrPlace;    
     /**
+     * @ORM\Column(type="string", length=500)
+     */
+    protected $offerStatus; 
+    /**
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
@@ -209,6 +213,16 @@ class Equipment
      public function getReason()
     {
         return $this->reason;
+    }
+    
+    public function setOfferStatus($offerStatus)
+    {
+        $this->offerStatus = $offerStatus;
+        return $this;
+    }
+     public function getOfferStatus()
+    {
+        return $this->offerStatus;
     }
     
     public function setStatus($status)

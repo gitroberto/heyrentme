@@ -927,7 +927,7 @@ class ProviderController extends BaseController {
         try {
             
 
-            $equipment->setStatus($text);            
+            $equipment->setOfferStatus($text);            
             $em = $this->getDoctrine()->getManager();
             $em->persist($equipment);
             $em->flush();            

@@ -54,14 +54,20 @@
             </div>
             <!-- VIDEO or GALLERY -->
             <span class="status">Letzer Status für dieses Angebot:</span>
-            <p class="detail-notice">Das ist eine Statusmeldung. Mir geht es gut und ich fühle mich heute super wohl!</p>
+            <p class="detail-notice">
+                {% if equipment.offerStatus %}
+                    {{ equipment.offerStatus }}
+                {% else %}
+                    There are no offer status yet.
+                {% endif %}            
+            </p>
             <div class="position-relative" id="media-container">
               {% if equipment.priceBuy %}
                 <img src="/img/cart.svg" alt="cart" class="cart">
               {% endif %}
-              {% if equipment.discount %}
+              {% if equipment.activeDiscount %}
                 <div class="discount discount-big">
-                  <span>-{{ equipment.discount }}%</span>
+                  <span>-{{ equipment.activeDiscount.percent }}%</span>
                 </div>
               {% endif %}
               <div id="media-content">
@@ -312,7 +318,7 @@
                 </div>
                 <!-- row end -->
                 <div class="col-xs-12">
-                    <a class="green-big-button" href="javascript:inquiry()">Jetzt Anfragen</a>
+                    <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
                 </div>
             </div>
         <!-- LEFT side ends -->
@@ -320,7 +326,7 @@
         <div class="col-md-4 right-side">
             <div class="offer-dates">
                 <h3>Anfrage für:</h3>
-                <h4>Cube Mountainbike RX27</h4>
+                <h4>{{ equipment.name }}</h4>
                 <div class="date-picker">
                     <!-- Date -->
                     <div class="date-container  position-relative">
@@ -386,14 +392,14 @@
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
                         </select>
                     </div>
-                    <p>Gesamtpreis<span class="info-icon" data-toggle="tooltip" title="Hooray!"></span></p>
+                    <p>Gesamtpreis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
                     <p class="price"><span>ab</span><b class="price-calc">{{ equipment.price|number_format(0) }}</b>,-<span class="euro-sign">&#8364;</span></p>
                     <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
                 </div>
             </div>
             <div class="user-data">
                 <h3>Details:</h3>
-                <img src="{{ equipment.user.profilePicture(true, image_url_prefix) }}" alt="Ulli" class="user-avatar"/>
+                <img src="{{ equipment.user.profilePicture(true, image_url_prefix) }}" alt="" class="user-avatar eq-details-avatar"/>
                 <p class="user-name">{{ equipment.user.name }}</p>
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
@@ -402,7 +408,7 @@
                     </p>
                   </div>
                     {% for key, val in featureSections %}
-                        <div class="user-tab cal" title="{{ key }}">
+                        <div class="user-tab" title="{{ key }}">
                             <p>
                                 {{ val }}
                             </p>
@@ -443,123 +449,8 @@
         <div class="row">
             <p class="see-also mobile-hidden">Das könnte dich auch interessieren:</p>
            
-            <div class="col-sm-3">
-                <div>
-                <img src="/img/placeholder/bike.png" alt="placeholder"/>
-                <img src="/img/cart-pro.svg" alt="cart" class="cart"/>
-                <div class="product-info">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <ul>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="glyphicon glyphicon-star"></span> </li>
-                            </ul>
-                            <p class="product-name">
-                                cannondale
-                            </p>
-                        </div>
-                        <div class="col-xs-6">
-                            <p class="price">
-                                15.00 &#8364;
-                            </p>
-                            <p class="tag">
-                                pro tag
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="col-sm-3">
-                <div>
-                <img src="/img/placeholder/bike2.png" alt="placeholder"/>
-                <div class="product-info">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <ul>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="glyphicon glyphicon-star"></span> </li>
-                                <li><span class="glyphicon glyphicon-star"></span> </li>
-                            </ul>
-                            <p class="product-name">
-                                votec
-                            </p>
-                        </div>
-                        <div class="col-xs-6">
-                            <p class="price">
-                                12.00 &#8364;
-                            </p>
-                            <p class="tag">
-                                statt 20 € pro Std
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="col-sm-3">
-                <div>
-                <img src="/img/placeholder/bike2.png" alt="placeholder"/>
-                <div class="product-info">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <ul>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="glyphicon glyphicon-star"></span> </li>
-                                <li><span class="glyphicon glyphicon-star"></span> </li>
-                            </ul>
-                            <p class="product-name">
-                                specialized
-                            </p>
-                        </div>
-                        <div class="col-xs-6">
-                            <p class="price">
-                                12.00 &#8364;
-                            </p>
-                            <p class="tag">
-                                pro tag
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="col-sm-3">
-                <div>
-                <img src="/img/placeholder/bike2.png" alt="placeholder"/>
-                <div class="product-info">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <ul>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                <li><span class="glyphicon glyphicon-star"></span> </li>
-                                <li><span class="glyphicon glyphicon-star"></span> </li>
-                            </ul>
-                            <p class="product-name">
-                                votec
-                            </p>
-                        </div>
-                        <div class="col-xs-6">
-                            <p class="price">
-                                12.00 &#8364;
-                            </p>
-                            <p class="tag">
-                                pro tag
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
+            {{ render(controller('AppBundle:Default:renderEquipmentList', { "equipments":equipments } )) }}
+            
         </div>
     </div>
   </section>

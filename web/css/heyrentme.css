@@ -383,3 +383,18 @@ a.thmb-link {
     float: left;
     margin-right: 5px;
 }
+
+.main-categories .row div img.small-eq-list {
+    max-width:100%;
+    max-height: 100%;
+}
+
+.main-categories .row div div.img-container-eq-small {
+    width: 262px;
+    height: 196px;
+}
+
+.eq-details-avatar {
+    width: 140px;
+    height: 140px;
+}
