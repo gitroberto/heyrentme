@@ -54,6 +54,23 @@ class SubcategoryRepository extends \Doctrine\ORM\EntityRepository
             ->getSingleScalarResult();
     }
     
+    public function getAllAsArray($categoryId) {
+        
+        $q = $this->createQueryBuilder('sc')
+            ->select('sc')
+            ->where('sc.category = :categoryID')
+            ->orderBy('sc.position')
+            ->setParameter('categoryID', $categoryId)
+            ->getQuery();
+        $rows = $q->getResult();
+        
+        $arr = array();
+        foreach($rows as $sc) {
+            $arr[$sc->getId()] = $sc->getName();
+        }
+        
+        return $arr;
+    }
     public function getGridOverview($categoryID, $sortColumn, $sortDirection, $pageSize, $page) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query

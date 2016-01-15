@@ -433,3 +433,8 @@ img.user-avatar-profile {
 .offer-delete-btn {
     display: inline-flex;
 }
+
+
+.max-inputs input[type="email"] {
+    width:100%
+}

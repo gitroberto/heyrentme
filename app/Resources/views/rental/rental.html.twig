@@ -32,7 +32,7 @@
                                     <li><span class="glyphicon glyphicon-star"></span> </li>
                                 </ul>
                                 <p class="product-name">
-                                    dein inserat bei hey-TSC
+                                    dein inserat bei hey! VIENNA
                                 </p>
                             </div>
                         </div>
@@ -52,26 +52,35 @@
     <div class="container background-white rent-container">
         <nav class="crumbs">
             <ul class="col-xs-8">
-                <li><a href="/">hey! TSC</a></li>
-                <li><a href="{{ path('rentme') }}">hey! rentme</a></li>
-                <li><a href="{{ path('rental') }}" class="active-crumb">Anbieten / Vermieten</a></li>
+                <li><a href="/">hey! VIENNA</a></li>
+                <li><a href="{{ path('rentme') }}" class="active-crumb">Equipment vermieten</a></li>
             </ul>
         </nav>
         <span class="clearfix"></span>
         <!-- Categories -->
-        <div class="row">
-            <div class="col-xs-12 mobile-hidden"><h2>Was möchtest du anbieten?</h2></div>
-            {% for subcat in subcategories %}
-                <a class="text-black" href="{{ path(route, { 'subcategoryId': subcat.id }) }}">
-                  <div class="col-sm-4">
-                      <div class="categories-names">
-                          <h3>{{ subcat.name }}</h3>
-                      </div>
-                      <a href="{{ path(route, { 'subcategoryId': subcat.id }) }}"><img src="{{ subcat.imageUrl }}" alt="{{ subcat.name }}"/></a>
-                  </div>
+                  
+        {% for cat in categories %}
+            {% if loop.index0 % 3 == 0 %}
+                <div class="row">
+            {% endif %}
+            {% if loop.index0 == 0 %}
+                <div class="col-xs-12 mobile-hidden"><h2>Was möchtest du anbieten?</h2></div>
+            {% endif %}
+            
+            <div class="col-sm-4">
+                <a class="text-black" href="{{ path("rental-detail", { 'categoryId': cat.id }) }}">
+                    <div class="categories-names">
+                        <h3>{{ cat.name }}</h3>
+                    </div>
                 </a>
-            {% endfor %}
-        </div>
+                <a href="{{ path("rental-detail", { 'categoryId': cat.id }) }}">
+                    <img src="{{ cat.imageUrl }}" alt="{{ cat.name }}"/>
+                </a>
+            </div>
+            {% if loop.index0 % 3 == 2 %}
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
     <!-- Categories -->
     </div>

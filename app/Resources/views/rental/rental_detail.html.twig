@@ -51,10 +51,9 @@
     <div class="container  background-white rent-container bg-white">
         <nav class="crumbs">
             <ul class="col-xs-8">
-                <li><a href="{{ path('start-page') }}">hey! TSC</a></li>
-                <li><a href="{{ path('rentme') }}">hey! rentme</a></li>
-                <li><a href="{{ path('rental') }}">Anbieten / Vermieten</a></li>
-                <li><a class="active-crumb" href="#">{{ subcategory.name }}</a></li>
+                <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
+                <li><a href="{{ path('rental') }}">Equipment vermieten</a></li>
+                <li><a class="active-crumb" href="{{ path("rental-detail", { 'categoryId': category.id }) }}">{{ category.name }}</a></li>
             </ul>
         </nav>
         <div class="mobile-hidden"> <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
@@ -70,75 +69,62 @@
         </select>
   </div>
         <span class="clearfix"></span>
-        {{ form_start(form) }}
+        {{ form_start(form, { 'attr': { 'class': 'first-step-form'} }) }}
         <div class="err-msg">
             {{ form_errors(form) }}
         </div>
-         <div class="row">
-                <div class="col-xs-12 border-bottom-white form-head">
-                    <div class="form-container">
-                        <div class="row">
-                            <div class="col-md-6 ">
-                                <span class="number-one"></span>
-                                <p class="form-heading">Was möchtest du anbieten?</p>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="form-info">Dein Equipment ist bis zu <b>1.500,- €</b> über <a href="#">unsere Plattform versichert!</a> </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12">
-                    <div class="form-container form-input">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                {# <input type="text" name="name2" placeholder="Z.B. Cube Mountainbike*" class="what-input" id="name2"> #}
-                                {{ form_widget(form.equipment, { 'attr': { 'class': 'what-input', 'placeholder': 'Z.B. Cube Mountainbike*' } }) }}
-                                <div class="err-msg">
-                                    {{ form_errors(form.equipment) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        
         <div class="row">
-            <div class="col-xs-12 border-bottom-white form-head">
-                <div class="form-container">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <span class="number-two"></span>
-                            <p class="form-heading">Anleitung schicken an..</p>
-                        </div>
-                        <div class="col-md-7">
-                            <span class="form-info">Deine Email dient nur zur Kontaktaufnahme und wird nicht weitergegeben!</span>
-                        </div>
-                    </div>
-                </div>
+        <div class="col-xs-12 border-bottom-white form-head">
+          <div class="form-container">
+            <div class="row">
+              <div class="col-md-6 "> <span class="number-one"></span>
+                <p class="form-heading">Bitte wähle eine Detailkategorie</p>
+              </div>
+              <div class="col-md-6"> <span class="form-info">Nutze unsere <a data-toggle="modal" data-target="#hey-garantie" href="#">hey! Garantie</a> von bis zu <b>750,- €</b> für Privatanbieter!</span> </div>
             </div>
-            <div class="col-xs-12">
-                <div class="form-container form-input max-inputs">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="col-md-4 padding-left-none">
-                                {#<input type="text" name="name3" placeholder="NAME" class="" id="name3">#}
-                                {{ form_widget(form.name, { 'attr': { 'placeholder': 'NAME' } }) }}
-                                <div class="err-msg">
-                                    {{ form_errors(form.name) }}
-                                </div>
-                            </div>
-                            <div class="col-md-4 padding-left-none-mobile">
-                                {# <input type="text" name="name4" placeholder="EMAIL*" class="" id="name4"> #}
-                                {{ form_widget(form.email, { 'attr': { 'placeholder': 'EMAIL*' } }) }}
-                                <div class="err-msg">
-                                    {{ form_errors(form.email) }}
-                                </div>
-                              </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="col-xs-12">
+          <div class="form-container form-input">
+            <div class="row">
+              <div class="col-sm-12">
+                {{ form_widget(form.subcategoryId, { 'attr': { 'class': 'selectpicker', 'title': 'Detailkategorie Wählen' } }) }}
+                <div class="err-msg">
+                    {{ form_errors(form.subcategoryId) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="row">
+        <div class="col-xs-12 border-bottom-white form-head">
+          <div class="form-container">
+            <div class="row">
+              <div class="col-md-5"> <span class="number-two"></span>
+                <p class="form-heading">Anleitung erhalten</p>
+              </div>
+              <div class="col-md-7"> <span class="form-info">Deine Email dient nur zur Kontaktaufnahme und wird nicht weitergegeben!</span> </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="form-container form-input max-inputs">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="col-md-4 padding-left-none-mobile">
+                    {# <input type="text" name="name4" placeholder="EMAIL*" class="" id="name4"> #}
+                    {{ form_widget(form.email, { 'attr': { 'placeholder': 'EMAIL*' } }) }}
+                    <div class="err-msg">
+                        {{ form_errors(form.email) }}
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>        
         <input type="submit" class="green-big-button" value="Anleitung schicken">
       {{ form_end(form) }}
     </div>

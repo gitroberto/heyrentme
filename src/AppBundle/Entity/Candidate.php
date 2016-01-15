@@ -15,23 +15,9 @@ class Candidate
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=128, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="email", type="string", length=128, nullable=false)
      */
     private $email;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="equipment", type="string", length=128, nullable=true)
-     */
-    private $equipment;
 
     /**
      * @var \DateTime
@@ -62,30 +48,6 @@ class Candidate
 
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Candidate
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * Set email
      *
      * @param string $email
@@ -107,30 +69,6 @@ class Candidate
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set equipment
-     *
-     * @param string $equipment
-     *
-     * @return Candidate
-     */
-    public function setEquipment($equipment)
-    {
-        $this->equipment = $equipment;
-
-        return $this;
-    }
-
-    /**
-     * Get equipment
-     *
-     * @return string
-     */
-    public function getEquipment()
-    {
-        return $this->equipment;
     }
 
     /**

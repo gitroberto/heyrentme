@@ -31,6 +31,7 @@ class EquipmentRepository extends EntityRepository
     
     public function getSamplePreviewEquipmentsBySubcategory($subcategoryId, $eqId) {
         #TODO: Correct query, remove hardcoded number of items
+        // TODO: refactor: write query with proper "order by" and take first four items
         $sql = "select e from AppBundle:Equipment e where e.subcategory = :subcategoryId and e.id != :id and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);

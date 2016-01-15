@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 
@@ -17,34 +16,29 @@ class RentalController extends BaseController {
      * @Route("/rental", name="rental")
      */
     public function rentalAction(Request $request) {
-        $subcats = $this->getSubcategories($request);
-        $route = $this->isGranted('IS_AUTHENTICATED_REMEMBERED') ? 'equipment-add-1' : 'rental-detail';
+        $subcats = $this->getCategories($request);
         
         return $this->render('rental/rental.html.twig', array(
-            'subcategories' => $subcats,
-            'route' => $route
+            'categories' => $subcats
         ));
     }
     
     /**
-     * @Route("/rental-detail/{subcategoryId}", name="rental-detail")
+     * @Route("/rental-detail/{categoryId}", name="rental-detail")
      */
-    public function rentalDetailAction(Request $request, $subcategoryId) {
-        $subcategory = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+    public function rentalDetailAction(Request $request, $categoryId) {
+        $category = $this->getDoctrineRepo('AppBundle:Category')->find($categoryId);
+        $subcatsArr = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllAsArray($category->getId());
+        $subcatArr = array_merge(array('' => 'Detailkategorie Wählen'), $subcatsArr);
 
         // build form
         //<editor-fold>
         $form = $this->createFormBuilder()
-            ->add('equipment', 'text', array(
+            ->add('subcategoryId', 'choice', array(
+                'choices' => $subcatsArr,
+                'choices_as_values' => false,
                 'constraints' => array(
-                    new NotBlank(),
-                    new Length(array('max' => 128))
-                )
-            ))
-            ->add('name', 'text', array(
-                'required' => false,
-                'constraints' => array(                    
-                    new Length(array('max' => 128))
+                    new NotBlank()
                 )
             ))
             ->add('email', 'email', array(
@@ -59,13 +53,13 @@ class RentalController extends BaseController {
         
         if ($form->isValid()) {
             $data = $form->getData();
+            
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
 
             // create Candidate object
             $cand = new Candidate();
-            $cand->setSubcategory($subcategory);
-            $cand->setName($data['name']);
+            $cand->setSubcategory($subcat);
             $cand->setEmail($data['email']);
-            $cand->setEquipment($data['equipment']);
             
             // save to database
             $em = $this->getDoctrine()->getManager();
@@ -79,12 +73,12 @@ class RentalController extends BaseController {
                     $this->get('router')->generate('rentme'));
             $emailHtml = $this->renderView('Emails/candidate.html.twig', array(
                 'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
-                'custom_message' => $subcategory->getEmailBody(),
+                //'custom_message' => $subcategory->getEmailBody(),
                 'url' => $url
             ));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             $message = Swift_Message::newInstance()
-                ->setSubject('Willkomen bei')
+                ->setSubject('Willkommen bei hey! VIENNA')
                 ->setFrom($from)
                 ->setTo($cand->getEmail())
                 ->setBody($emailHtml, 'text/html');
@@ -95,7 +89,7 @@ class RentalController extends BaseController {
         }
         
         return $this->render('rental/rental_detail.html.twig', array(
-            'subcategory' => $subcategory,
+            'category' => $category,
             'form' => $form->createView()
         ));
     }
