@@ -61,21 +61,25 @@
                                 <div class="buttons">
                                   <a class="button-black first-button col-xs-3" href="{{ path("equipment-edit-1", { "id": o.id } ) }}">bearbeiten</a>
                                   <a data-dismiss="modal" data-toggle="modal" data-target="#confirmDelete_{{ o.id }}" class="button-black col-xs-3" href="#">entfernen</a>
-                                    <div id="confirmDelete_{{ o.id }}" class="modal  register" role="dialog" aria-labelledby="login-title">
+                                    <div id="confirmDelete_{{ o.id }}" class="modal delete-offer" role="dialog" aria-labelledby="login-title">
                                         <div class="modal-dialog" role="document">
                                             <!-- Modal content-->
                                             <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>                                                
-                                                    <div id="deleteOffer">
-                                                        <h1>Angebot "{{ o.name }}" entfernen?</h1>
-                                                        Mochest du dieses Angebot wirklich loschen?<br>
-                                                        Dieser Schritt ist nicht ruckgangig zu machen.<br>
-
-                                                        <a class="button-red"  href="{{ path("equipment-delete", { "id": o.id } ) }}">angebot entfernen</a>
-                                                    </div>
+                                                
+                                                <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                                                
+                                                <div id="deleteOffer" class="content-modal">
+                                                    <p class="text-bold">Angebot "{{ o.name }}" entfernen?</p>
+                                                    <p class="delate-info">
+                                                        Mochest du dieses Angebot wirklich loschen?
+                                                        Dieser Schritt ist nicht ruckgangig zu machen.
+                                                    </p>
+                                                    <a class="offer-delete-btn button btn-danger"  href="{{ path("equipment-delete", { "id": o.id } ) }}">angebot entfernen</a>
                                                     <div class="clear"></div>
                                                 </div>
+
+                                                
+                                                
                                             </div>
                                         </div>
                                     </div>     
