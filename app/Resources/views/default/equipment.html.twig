@@ -16,7 +16,11 @@
             <ul class="col-xs-5 pull-right text-right kaup-select">
                 {{ render(controller('AppBundle:Common:categoryList')) }}
                 <li id="kategorie-select"><a class="active-crumb haup-ico" href="#">Hauptkategorien &nbsp;&nbsp;&nbsp;</a></li>
-                <li><a class="active-crumb" href="javascript:anbieten({% if category %}{{ category.id }}{% endif %})" >In dieser Kategorie anbieten</a></li>
+                <li>                    
+                    <a class="active-crumb" 
+                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten({{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
+                       >In dieser Kategorie anbieten</a>
+                </li>
             </ul>
         </nav>
         <span class="clearfix"></span>

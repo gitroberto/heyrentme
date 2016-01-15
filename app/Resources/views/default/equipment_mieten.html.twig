@@ -32,7 +32,7 @@
             <nav class="crumbs">
                 <ul class="col-xs-8">
                     <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
-                    <li><a href="{{ path('rentme') }}" class="active-crumb">hey! rentme</a></li>
+                    <li><a href="{{ path('rentme') }}" class="active-crumb">Equipment mieten</a></li>
                 </ul>
             </nav>
             {{ render(controller('AppBundle:Common:categoryList', { 'mobile': true })) }}
@@ -50,9 +50,13 @@
                 {% for cat in categories %}
                     <div class="col-sm-4">
                         <div class="categories-names">
-                            <a href="{{ path('catchall', { 'content': cat.slug }) }}"><h3>{{ cat.name }}</h3></a>
+                            <a href="{{ path('catchall', { 'content': cat.slug }) }}">
+                                <h3>{{ cat.name }}</h3>
+                            </a>
                         </div>
-                        <a href="{{ path('catchall', { 'content': cat.slug }) }}"><img src="{{ cat.imageUrl }}" alt="{{ cat.name }}"/></a>
+                        <a href="{{ path('catchall', { 'content': cat.slug }) }}">
+                            <img src="{{ cat.imageUrl }}" alt="{{ cat.name }}"/>
+                        </a>
                     </div>
                 {% endfor %}
                   </div>

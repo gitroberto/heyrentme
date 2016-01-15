@@ -438,3 +438,7 @@ img.user-avatar-profile {
 .max-inputs input[type="email"] {
     width:100%
 }
+
+.category-drop-down {
+    max-width: 170px;
+}

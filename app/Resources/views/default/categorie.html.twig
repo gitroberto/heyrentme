@@ -41,12 +41,14 @@
                 <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
                 <li><a href="{{ path('rentme') }}" {% if not category %}class="active-crumb"{% endif %}>Equipment mieten</a></li>
                 {% if category %}
-                    <li><a href=""{{ path('catchall', { 'content': category.slug }) }}#categories" class="active-crumb">{{ category.name }}</a></li>
+                    <li><a href=""{{ path('catchall', { 'content': category.slug }) }}" class="active-crumb">{{ category.name }}</a></li>
                 {% endif %}
             </ul>
             <ul class="col-xs-6 pull-right text-right kaup-select">
                 <li>
-                    <a class="active-crumb" href="javascript:anbieten({% if category %}{{ category.id }}{% endif %})">In dieser Kategorie anbieten</a>                    
+                    <a class="active-crumb" 
+                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten({{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
+                       >In dieser Kategorie anbieten</a>                    
                 </li>
             </ul>
             <ul class="col-xs-4 pull-right text-right">
