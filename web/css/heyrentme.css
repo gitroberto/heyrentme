@@ -217,8 +217,9 @@ img.profileImage {
 }
 
 img.headerProfileImage {
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 40px;
+  max-height: 40px;
+  border-radius: 50%;
 }
 
 
@@ -397,4 +398,11 @@ a.thmb-link {
 .eq-details-avatar {
     width: 140px;
     height: 140px;
+}
+
+img.user-avatar-profile {    
+    border-radius: 50%;
+    margin-bottom: 15px;
+    margin-right: 5px;
+    margin-top: 5px;
 }

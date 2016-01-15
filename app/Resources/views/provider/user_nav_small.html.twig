@@ -1,0 +1,12 @@
+<div class="col-md-3 user-area">
+    <div class="support">
+        <p class="head">{{ user.Name }}</p>
+        <a href="{{ path('profil') }}">            
+            <img alt ="" src="{{ user.ProfilePicture(true, image_url_prefix) }}" class="user-avatar-profile" />
+        </a>                
+        <a href="{{ path('einstellungen') }}" class="button-black" >Einstellungen</a>                    
+    </div>
+</div>
+
+
+

@@ -10,150 +10,156 @@
 <section class="users container background-light-grey dashboard">
     <div class="row">
         <!-- Left side -->
-        <div class="col-md-9">
+        <div class="col-md-9 margin-bottom-60">
             <a href="{{ path('start-page') }}"><img src="/img/logo-small.svg" alt=""/></a>
           </div>
         <!-- Right side -->
         <div class="col-md-3 margin-rwd">
-          <div class="support">
-            <p class="head"Support Hotline</p>
-            <p class="">MO-FR 9:00 - 18:00</p>
-            <p class="">+43 1 586 48 90</p>
+          <div class="support">            
+            <p class="head">Anbieter Support</p>
+            <p class="mail"><a href="mail:support@heysharing.com">support@heysharing.com</a></p>
           </div>
         </div>
     </div>
     <div class="row ">
-        <div class="col-md-9 col-xs-12">
+        
+        {% if offers %}
+            <div class="col-md-9 col-xs-12">
+            {% for o in offers %}
+                <div class="col-xs-12">
+                    <div class="xol-xs-12">
+                        <div class="row user-offers">
+                            <div class="col-md-4 offer-detail">
+                                {% if o.images|length > 0 %}
+                                    <img src="{{ o.images[0].urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
+                                {% else %}
+                                    <img src="/img/equipment-default.jpg" alt="placeholder" class="img-responsive" />
+                                {% endif %}
 
-        {% for o in offers %}
-            <div class="col-xs-12">
-                <div class="xol-xs-12">
-                    <div class="row user-offers">
-                        <div class="col-md-4 offer-detail">
-                            {% if o.images|length > 0 %}
-                                <img src="{{ o.images[0].urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
-                            {% else %}
-                                <img src="/img/equipment-default.jpg" alt="placeholder" class="img-responsive" />
-                            {% endif %}
-                            
-                            
-                            <div class="product-info">
-                                
-                                <div class="row">
-                                    <div class="col-xs-8">
-                                        <ul>
-                                            <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                            <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                            <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                            <li><span class="glyphicon glyphicon-star"></span></li>
-                                            <li><span class="glyphicon glyphicon-star"></span></li>
-                                        </ul>
-                                        <p class="product-name">{{ o.name }}</p>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <p class="price">{{ o.price }} &#8364;</p>
-                                        <p class="tag">pro tag</p>
+
+                                <div class="product-info">
+
+                                    <div class="row">
+                                        <div class="col-xs-8">
+                                            <ul>
+                                                <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                                <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                                <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                                <li><span class="glyphicon glyphicon-star"></span></li>
+                                                <li><span class="glyphicon glyphicon-star"></span></li>
+                                            </ul>
+                                            <p class="product-name">{{ o.name }}</p>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <p class="price">{{ o.price }} &#8364;</p>
+                                            <p class="tag">pro tag</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="buttons">
-                              <a class="button-black first-button col-xs-3" href="{{ path("equipment-edit-1", { "id": o.id } ) }}">bearbeiten</a>
-                              <a data-dismiss="modal" data-toggle="modal" data-target="#confirmDelete_{{ o.id }}" class="button-black col-xs-3" href="#">entfernen</a>
-                                <div id="confirmDelete_{{ o.id }}" class="modal  register" role="dialog" aria-labelledby="login-title">
-                                    <div class="modal-dialog" role="document">
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>                                                
-                                                <div id="deleteOffer">
-                                                    <h1>Angebot "{{ o.name }}" entfernen?</h1>
-                                                    Mochest du dieses Angebot wirklich loschen?<br>
-                                                    Dieser Schritt ist nicht ruckgangig zu machen.<br>
-                                                    
-                                                    <a class="button-red"  href="{{ path("equipment-delete", { "id": o.id } ) }}">angebot entfernen</a>
+                            <div class="col-md-8">
+                                <div class="buttons">
+                                  <a class="button-black first-button col-xs-3" href="{{ path("equipment-edit-1", { "id": o.id } ) }}">bearbeiten</a>
+                                  <a data-dismiss="modal" data-toggle="modal" data-target="#confirmDelete_{{ o.id }}" class="button-black col-xs-3" href="#">entfernen</a>
+                                    <div id="confirmDelete_{{ o.id }}" class="modal  register" role="dialog" aria-labelledby="login-title">
+                                        <div class="modal-dialog" role="document">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>                                                
+                                                    <div id="deleteOffer">
+                                                        <h1>Angebot "{{ o.name }}" entfernen?</h1>
+                                                        Mochest du dieses Angebot wirklich loschen?<br>
+                                                        Dieser Schritt ist nicht ruckgangig zu machen.<br>
+
+                                                        <a class="button-red"  href="{{ path("equipment-delete", { "id": o.id } ) }}">angebot entfernen</a>
+                                                    </div>
+                                                    <div class="clear"></div>
                                                 </div>
-                                                <div class="clear"></div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>     
-                              
-                              
-                              <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
-                              <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" id="BtnSave_{{ o.id }}" >speichern</a>
-                            </div>
-                            <div class="clear" ></div>
-                            <div>
-                                <ul id = "DivMessage_{{ o.id }}" style="display:none;"></ul>
-                                <textarea id="TxtStatus_{{ o.id }}"  class="place_black placeholderStatusDashboard"  >{{ o.offerStatus }}</textarea>                                
-                                
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="search-form mobile-kategorie-form">
-                                            <div class="select-link">
-                                                {% if o.activeDiscount %}
-                                                    <input id="HiddenDiscountType_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().type()}}" />
-                                                    <input id="HiddenPercent_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().percent()}}" />
-                                                    <input id="HiddenDuration_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().Duration()}}" />
-                                                {% endif %}
-                                                    <select id="DiscountType_{{ o.id }}" title='No discount' name="gender2" class="selectpicker bs-select-hidden ">
-                                                        <option value="-1" >No discount</option>
-                                                        {% if o.IsNewOfferDiscountPossible %}
-                                                        <option value="1" >New offer discount</option>
-                                                        {% endif %}
-                                                        {% if o.IsTemporaryDiscountPossible %}                                                        
-                                                        <option value="2" >Temporary discount</option>
-                                                        {% endif %}
-                                                    </select>                                                                                                 
+                                    </div>     
+
+
+                                  <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
+                                  <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" id="BtnSave_{{ o.id }}" >speichern</a>
+                                </div>
+                                <div class="clear" ></div>
+                                <div>
+                                    <ul id = "DivMessage_{{ o.id }}" style="display:none;"></ul>
+                                    <textarea id="TxtStatus_{{ o.id }}"  class="place_black placeholderStatusDashboard"  >{{ o.offerStatus }}</textarea>                                
+
+                                </div>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <div class="search-form mobile-kategorie-form">
+                                                <div class="select-link">
+                                                    {% if o.activeDiscount %}
+                                                        <input id="HiddenDiscountType_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().type()}}" />
+                                                        <input id="HiddenPercent_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().percent()}}" />
+                                                        <input id="HiddenDuration_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().Duration()}}" />
+                                                    {% endif %}
+                                                        <select id="DiscountType_{{ o.id }}" title='No discount' name="gender2" class="selectpicker bs-select-hidden ">
+                                                            <option value="-1" >No discount</option>
+                                                            {% if o.IsNewOfferDiscountPossible %}
+                                                            <option value="1" >New offer discount</option>
+                                                            {% endif %}
+                                                            {% if o.IsTemporaryDiscountPossible %}                                                        
+                                                            <option value="2" >Temporary discount</option>
+                                                            {% endif %}
+                                                        </select>                                                                                                 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xs-1 infos">
-                                        <span class="info-icon"></span>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <div class="search-form mobile-kategorie-form">
-                                            <div class="select-link">
-                                                <select id="Percent_{{ o.id }}" name="gender2" class="selectpicker bs-select-hidden " disabled="disabled" >
-                                                    <option value="-1" >0%</option>                                                    
-                                                    <option value="1" >5%</option>                                                    
-                                                    <option value="2" >10%</option>                                                    
-                                                    <option value="3" >15%</option>                                                    
-                                                    <option value="4" >20%</option>
-                                                    <option value="5" >25%</option>                                                    
-                                                    <option value="6" >30%</option>
-                                                </select>
+                                        <div class="col-xs-1 infos">
+                                            <span class="info-icon"></span>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="search-form mobile-kategorie-form">
+                                                <div class="select-link">
+                                                    <select id="Percent_{{ o.id }}" name="gender2" class="selectpicker bs-select-hidden " disabled="disabled" >
+                                                        <option value="-1" >0%</option>                                                    
+                                                        <option value="1" >5%</option>                                                    
+                                                        <option value="2" >10%</option>                                                    
+                                                        <option value="3" >15%</option>                                                    
+                                                        <option value="4" >20%</option>
+                                                        <option value="5" >25%</option>                                                    
+                                                        <option value="6" >30%</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <div class="search-form mobile-kategorie-form">
-                                            <div class="select-link">
-                                                <select id="Duration_{{ o.id }}" disabled="disabled" title='Dauer' name="gender2" class="selectpicker bs-select-hidden ">
-                                                    <option value = "-1">Dauer</option>
-                                                </select>
+                                        <div class="col-xs-3">
+                                            <div class="search-form mobile-kategorie-form">
+                                                <div class="select-link">
+                                                    <select id="Duration_{{ o.id }}" disabled="disabled" title='Dauer' name="gender2" class="selectpicker bs-select-hidden ">
+                                                        <option value = "-1">Dauer</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xs-12 id">
-                                        <p>Angebot-ID: {{ o.id }} </p>
+                                        <div class="col-xs-12 id">
+                                            <p>Angebot-ID: {{ o.id }} </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            {% endfor %}
             </div>
-        {% endfor %}
-           
-        </div>
-        <div class="col-md-3">
-          {{ include('provider/user_nav2.html.twig', { 'page': 'dashboard' }) }}
-        </div>
+        {% else %}
+            <div class="col-md-9 offer">
+                <p>Erstelle dein erstes Angebot!</p>
+                <a class="green-big-button" data-target="#choose-offer" data-toggle="modal" href="#">Angebot hinzufügen</a>                
+            </div>
+        {% endif %}
+        
+        
+          {{ include('provider/user_nav_small.html.twig', { 'page': 'dashboard', 'user': user }) }}
+        
     </div>
 </section>
 <script>

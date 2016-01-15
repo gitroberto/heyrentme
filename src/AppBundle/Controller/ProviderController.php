@@ -34,7 +34,8 @@ class ProviderController extends BaseController {
         
         return $this->render('provider/dashboard.html.twig', array( 
             'offers'=> $offers, 
-            'image_url_prefix'=> $this->getParameter('image_url_prefix')            
+            'image_url_prefix'=> $this->getParameter('image_url_prefix'),
+            'user' => $user
         ));
     }
     
