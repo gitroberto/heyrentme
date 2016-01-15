@@ -408,7 +408,7 @@
                     </p>
                   </div>
                     {% for key, val in featureSections %}
-                        <div class="user-tab" title="{{ key }}">
+                        <div class="user-tab cal" title="{{ key }}">
                             <p>
                                 {{ val }}
                             </p>
@@ -447,9 +447,10 @@
   <section class="main-categories main-offers featured-offers mobile-visible">
     <div class="container border-light-gray">
         <div class="row">
-            <p class="see-also mobile-hidden">Das könnte dich auch interessieren:</p>
-           
+            {% if equipments %}
+            <p class="see-also mobile-hidden">Das könnte dich auch interessieren:</p>           
             {{ render(controller('AppBundle:Default:renderEquipmentList', { "equipments":equipments } )) }}
+            {% endif %}
             
         </div>
     </div>
