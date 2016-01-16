@@ -43,7 +43,7 @@ $(document).ready(function () {
         size: 4
     });
 
-    $('.selectpicker').selectpicker('val', 'Mustard');
+    //$('.selectpicker').selectpicker('val', 'Mustard'); // what is this line for???
 
     $('.selectpickerspc').selectpicker({
         style: 'btn-info kaup-show',

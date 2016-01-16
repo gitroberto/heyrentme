@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Candidate;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -28,25 +29,22 @@ class RentalController extends BaseController {
      */
     public function rentalDetailAction(Request $request, $categoryId) {
         $category = $this->getDoctrineRepo('AppBundle:Category')->find($categoryId);
-        $subcatsArr = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllAsArray($category->getId());
-        $subcatArr = array_merge(array('' => 'Detailkategorie Wählen'), $subcatsArr);
+        
+        return $this->render('rental/rental_detail.html.twig', array(
+            'category' => $category
+        ));
+    }
+    
+    /**
+    * @Route("/rental-form/{categoryId}", name="rental-form")
+    */
+    public function rentalFormAction(Request $request, $categoryId) {
+        $category = $this->getDoctrineRepo('AppBundle:Category')->find($categoryId);
+        
 
         // build form
         //<editor-fold>
-        $form = $this->createFormBuilder()
-            ->add('subcategoryId', 'choice', array(
-                'choices' => $subcatsArr,
-                'choices_as_values' => false,
-                'constraints' => array(
-                    new NotBlank()
-                )
-            ))
-            ->add('email', 'email', array(
-                'constraints' => array(
-                    new Email(array('checkHost' => true))
-                )
-            ))
-            ->getForm();
+        $form = $this->createRentalForm($category->getId());
         //</editor-fold>
         
         $form->handleRequest($request);
@@ -54,7 +52,7 @@ class RentalController extends BaseController {
         if ($form->isValid()) {
             $data = $form->getData();
             
-            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find(intval($data['subcategoryId']));
 
             // create Candidate object
             $cand = new Candidate();
@@ -85,12 +83,40 @@ class RentalController extends BaseController {
             $this->get('mailer')->send($message);
             //</editor-fold>
             
-            return $this->redirectToRoute('rentme');
+            // successful submission, reset values
+            $form = $this->createRentalForm($category->getId(), array('success' => 1));
+            
+            return $this->render('rental/rental_form.html.twig', array(
+                'category' => $category,
+                'form' => $form->createView()
+            ));
         }
         
-        return $this->render('rental/rental_detail.html.twig', array(
+        return $this->render('rental/rental_form.html.twig', array(
             'category' => $category,
             'form' => $form->createView()
         ));
+    }
+    
+    private function createRentalForm($categoryId, $data = array()) {
+        $subcatsArr = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown($categoryId);
+        $url = $this->generateUrl('rental-form', array('categoryId' => $categoryId));        
+
+        return $this->createFormBuilder($data)
+            ->setAction($url)
+            ->add('subcategoryId', 'choice', array(
+                'choices' => $subcatsArr,
+                'choices_as_values' => false,
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+            ->add('email', 'email', array(
+                'constraints' => array(
+                    new Email(array('checkHost' => true))
+                )
+            ))
+            ->add('success', 'hidden')
+            ->getForm();
     }
 }

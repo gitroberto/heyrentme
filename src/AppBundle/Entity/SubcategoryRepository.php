@@ -54,7 +54,7 @@ class SubcategoryRepository extends \Doctrine\ORM\EntityRepository
             ->getSingleScalarResult();
     }
     
-    public function getAllAsArray($categoryId) {
+    public function getAllForDropdown($categoryId) {
         
         $q = $this->createQueryBuilder('sc')
             ->select('sc')
@@ -64,7 +64,7 @@ class SubcategoryRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery();
         $rows = $q->getResult();
         
-        $arr = array();
+        $arr = array('' => 'Detailkategorie Wählen');
         foreach($rows as $sc) {
             $arr[$sc->getId()] = $sc->getName();
         }
