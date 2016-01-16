@@ -119,4 +119,11 @@ class RentalController extends BaseController {
             ->add('success', 'hidden')
             ->getForm();
     }
+
+    /**
+     * @Route("/rental-guidelines/{subcategoryId}", name="rental-guidelines")
+     */
+    public function guidelinesAction(Request $request, $subcategoryId) {
+        return new Response('ok');
+    }
 }

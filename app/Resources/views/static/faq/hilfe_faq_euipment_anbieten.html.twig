@@ -76,7 +76,7 @@
             </div>
             <div class="col-xs-12">
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <a style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" data-toggle="modal" data-target="#choose-category" href="#">Jetzt Equipment anbieten</a>
+                        <a style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" data-toggle="modal" data-target="#choose-offer-detail" href="#">Jetzt Equipment anbieten</a>
                     {% else %}
                         <a style="width: 100%; margin: 20px 0; margin-bottom:30px; padding: 6px 0;" class="green-big-button" href="{{ path("rental") }}">Jetzt Equipment anbieten</a>
                     {% endif %}
