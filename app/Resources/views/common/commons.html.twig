@@ -146,13 +146,21 @@
     }
     function weiterClick() {
         var id = $("#subcategory-dropdown").val();
-        console.log(id);
         if (id != "") {
             var url = '{{ path('equipment-add-1', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
             window.location = url;
         }
     }
     function anleitungClick() {
-        alert('to be completed'); // TODO: see RentalController > guidelinesAction
+        var id = $("#subcategory-dropdown").val();
+        if (id != "") {
+            var url = '{{ path('rental-guidelines', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            $.getJSON(url)
+                .done(function(json) {
+                    $("#choose-offer-detail").modal('hide');
+                    $("#choose-offer").modal('hide');
+                    $("#danke").modal();
+                });
+        }
     }
 </script>

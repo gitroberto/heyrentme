@@ -124,6 +124,27 @@ class RentalController extends BaseController {
      * @Route("/rental-guidelines/{subcategoryId}", name="rental-guidelines")
      */
     public function guidelinesAction(Request $request, $subcategoryId) {
-        return new Response('ok');
+        $user = $this->getUser();
+        //$subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+        
+        // todo: anleitung depends on subcategory id?
+        
+        $url = sprintf('%s%s?register', 
+                $request->getSchemeAndHttpHost(),
+                $this->get('router')->generate('provider'));
+        $emailHtml = $this->renderView('Emails/candidate.html.twig', array(
+            'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+            //'custom_message' => $subcategory->getEmailBody(),
+            'url' => $url
+        ));
+        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+        $message = Swift_Message::newInstance()
+            ->setSubject('Anleitung hey! VIENNA')
+            ->setFrom($from)
+            ->setTo($user->getEmail())
+            ->setBody($emailHtml, 'text/html');
+        $this->get('mailer')->send($message);
+        
+        return new JsonResponse(array('status' => 'ok'));
     }
 }
