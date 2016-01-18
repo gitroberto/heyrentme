@@ -123,9 +123,8 @@ function CreateOption(val, text){
         return $("<option>").val(val).text(val+" "+text);
     }
 }
-
-
-var defaultStatusText = "Neues zu diesem Angebot.. Z.B. Zur Zeit nicht verfügbar,Aktuell ein wenig günstiger etc.";
+                         
+var defaultStatusText = "Neues zu diesem Angebot.. Z.B. Aktuell ein wenig günstiger.";
 function SaveStatusAndDiscount(){
     
     var id = $(this).attr("id").split("_")[1];
