@@ -80,15 +80,15 @@
 <script src="http://malsup.github.com/jquery.form.js"></script> 
 <script>
     $(function() {
-        $("form").ajaxForm({
-            target: $("form"),
+        $("#anleitung-form").ajaxForm({
+            target: $("#anleitung-form"),
             success: makeAjaxForm
         });
     });
     function makeAjaxForm(data, status, xhr) {
         // check response
-        $("form").ajaxForm({
-            target: $("form"),
+        $("#anleitung-form").ajaxForm({
+            target: $("#anleitung-form"),
             success: makeAjaxForm
         });
         $(".selectpicker").selectpicker({
