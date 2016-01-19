@@ -59,9 +59,23 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="buttons">
-                                  <a class="button-black first-button col-xs-3" href="{{ path("equipment-edit-1", { "id": o.id } ) }}">bearbeiten</a>
-                                  <a data-dismiss="modal" data-toggle="modal" data-target="#confirmDelete_{{ o.id }}" class="button-black col-xs-3" href="#">entfernen</a>
-                                    <div id="confirmDelete_{{ o.id }}" class="modal delete-offer" role="dialog" aria-labelledby="login-title">
+                                  <a class="button-black first-button col-xs-3" href="#" data-dismiss="modal" data-toggle="modal" data-target="#edit-offer_{{ o.id }}" >bearbeiten</a>
+                                  <div id="edit-offer_{{ o.id }}" class="modal fade delete-offer" role="dialog">
+                                        <div class="modal-dialog"> 
+                                          <!-- Modal content-->
+                                          <div class="modal-content">
+                                            <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                                            <div class="content-modal">
+                                              <p class="text-bold">Angebot “{{ o.name }}” bearbeiten?</p>
+                                              <p class="delate-info">Bitte beachte, dass dein Angebot erst von uns angesehen werden muss, bevor die Änderungen aktiv werden.</p>
+                                              <a class="button-black backgound-yellow text-black" href="{{ path("equipment-edit-1", { "id": o.id } ) }}">Angebot bearbeiten</a> </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                  
+                                  <a  data-toggle="modal" data-target="#confirmDelete_{{ o.id }}" class="button-black col-xs-3" href="#">entfernen</a>
+                                  
+                                    <div id="confirmDelete_{{ o.id }}" class="modal fade delete-offer" role="dialog" >
                                         <div class="modal-dialog" role="document">
                                             <!-- Modal content-->
                                             <div class="modal-content">
@@ -82,7 +96,8 @@
                                                 
                                             </div>
                                         </div>
-                                    </div>     
+                                    </div>
+                                    
 
 
                                   <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
@@ -104,32 +119,33 @@
                                                         <input id="HiddenPercent_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().percent()}}" />
                                                         <input id="HiddenDuration_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().Duration()}}" />
                                                     {% endif %}
-                                                        <select id="DiscountType_{{ o.id }}" title='No discount' name="gender2" class="selectpicker bs-select-hidden ">
-                                                            <option value="-1" >No discount</option>
+                                                        <select id="DiscountType_{{ o.id }}" title='diskont Wählen' name="gender2" class="selectpicker bs-select-hidden ">
+                                                            <option value="-1" >Diskont Wählen</option>
                                                             {% if o.IsNewOfferDiscountPossible %}
-                                                            <option value="1" >New offer discount</option>
+                                                            <option value="1" >Neues Angebot</option>
                                                             {% endif %}
                                                             {% if o.IsTemporaryDiscountPossible %}                                                        
-                                                            <option value="2" >Temporary discount</option>
+                                                            <option value="2" >Zeitlich begrenzt</option>
                                                             {% endif %}
                                                         </select>                                                                                                 
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-xs-1 infos">
-                                            <span class="info-icon"></span>
+                                            <a data-target="#discount" data-toggle="modal" href="#">
+                                                <span class="info-icon"></span>
+                                            </a>
                                         </div>
                                         <div class="col-xs-3">
                                             <div class="search-form mobile-kategorie-form">
                                                 <div class="select-link">
-                                                    <select id="Percent_{{ o.id }}" name="gender2" class="selectpicker bs-select-hidden " disabled="disabled" >
-                                                        <option value="-1" >0%</option>                                                    
-                                                        <option value="1" >5%</option>                                                    
-                                                        <option value="2" >10%</option>                                                    
-                                                        <option value="3" >15%</option>                                                    
-                                                        <option value="4" >20%</option>
-                                                        <option value="5" >25%</option>                                                    
-                                                        <option value="6" >30%</option>
+                                                    <select id="Percent_{{ o.id }}" title="0%" name="gender2" class="selectpicker bs-select-hidden " disabled="disabled" >
+                                                        <option value="-1" >0%</option>                                                                                                            
+                                                        <option value="1" >-10%</option>                                                    
+                                                        <option value="2" >-15%</option>                                                    
+                                                        <option value="3" >-20%</option>
+                                                        <option value="4" >-25%</option>                                                    
+                                                        <option value="5" >-30%</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -165,6 +181,25 @@
           {{ include('provider/user_nav_small.html.twig', { 'page': 'dashboard', 'user': user }) }}
         
     </div>
+    
+    <div id="discount" class="modal fade delete-offer" role="dialog">
+        <div class="modal-dialog"> 
+          <!-- Modal content-->
+          <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+            <div class="content-modal">
+              <p class="text-bold">Discount-Optionen</p>
+              <p class="modal-long-text">
+              <span style="font-weight:bold">Option 1: Neues Angebot</span><br><br>
+              Bist du ein neuer Anbieter bei der hey! sharing community, dann kannst du einmalig (max. 4 Wochen) oder bis du 3 Bewertungen erhälst einen Diskont anbieten um dein Angebot noch attraktiver zu machen.<br><br>
+               <span style="font-weight:bold">Option 2: Zeitlich begrenzt</span><br><br>
+              Möchtest du spontan potentiellen Interessenten ein Angebot machen? Bei der hey! sharing community hast 2x pro Monat die Möglichkeit einen temporären Discount anzubieten. Diese Option kann für maximal 24 Std. gesetzt werden.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+          
 </section>
 <script>
     var url = "{{ path("equipment-saveStatus") }}";
