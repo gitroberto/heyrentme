@@ -111,6 +111,10 @@ button, input[type="submit"], input[type="button"] {
 	margin-top: -5px;
 }
 
+.form-container input[type="text"] { 
+    text-transform:none;
+}
+
 .delete-offer .content-modal .delate-info {
     width: 80%; 
 }
@@ -298,6 +302,63 @@ color:black;
     background-repeat: no-repeat;
     background-position: right;
 }
+
+/* Image Fixes */
+
+.kaup-select #kaup-hidden img {
+    max-width: 138px;
+}
+
+.kaup-select #kaup-hidden a p {
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 'open sans',sans-serif;
+    text-transform: uppercase;
+}
+
+.kaup-select #kaup-hidden a  {
+   color:#000000;
+}
+
+.about-us p {
+    width: 97.5%;
+}
+
+
+/*.info {
+    background-image:none;
+	background-size: none;
+    padding-top: 0;
+}
+
+.lower-info {
+     background-image:none;
+}
+
+.info-img {
+  position: absolute;
+  z-index: -1;
+  width:100%;
+}
+
+.info .container {
+padding-top:4.5%;
+}
+*/
+
+
+.info {
+    background-image: url('../img/allgemein-final/hilfe.jpg');
+	padding-top: 2.5%;
+    max-width: 1600px;
+    max-height: 520px;
+}
+
+.lower-info {
+    background-image: url('../img/allgemein-final/kundeninfos.jpg');
+}
+
 
 /* Mobile Fixes */
 
