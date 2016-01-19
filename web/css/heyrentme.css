@@ -217,9 +217,10 @@ div.err-msg  ul  li {
 }
 
 
-img.profileImage {
-  max-width: 250px;
-  max-height: 250px;
+img.profileImage {    
+  max-width: 207px;
+  max-height: 206px;
+  border-radius: 50%;
 }
 
 img.headerProfileImage {
@@ -436,7 +437,7 @@ img.user-avatar-profile {
     text-decoration: none;
 }
 
-.offer-delete-btn {
+.delete-btn {
     display: inline-flex;
 }
 
@@ -447,4 +448,12 @@ img.user-avatar-profile {
 
 .category-drop-down {
     max-width: 170px;
+}
+
+input.no-image {
+    background-image: none;
+}
+
+input.input-image {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAxCAMAAABEQrEuAAAAyVBMVEXwyBTwyBbwyRrwyhvxyh7xyyDxyyPxzCTxzCbxzSryzizyzi7y0DXz1Ejz1En02Fb12V712mD12mH122T13Gn23Wz23W323nD23nL233X233j34YD34oL34oT344b344f344j45Ir45Iv45I745Y/45ZD455j455n56aH56qb777r777z777378L778cH78sj88sr89M789ND89NH89db999v9+OL9+eb9+ef++uz+++3+/PP+/PT+/fX//fj//vn//vz///7////fQXjyAAAAxElEQVR42u3LSxNCUBjGcYpSdCVFF90U0kW5FXE63/9DNY3MsDrHwoyF/+Z93sWPqKurbOT09g6uIokNmqfPWVlfoNHAFcdo8DvD+IAJuvE8Gcu4gydE0EpGC0zwxNZNl7vBE6qdLlstRzC86c3+eSbPIEHvCXO9+ijxsLh2Js66owSQ878MUAJKySXJ5EoQU7C+zxYTYwhHxQTlOFQxQRgGUboQhKIiDS1CJf+vQpTQgv0i0y7QUILWI5gp0mmirq6afQH2GB3qNYSssQAAAABJRU5ErkJggg==");
 }

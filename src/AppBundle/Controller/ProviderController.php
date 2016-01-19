@@ -868,6 +868,24 @@ class ProviderController extends BaseController {
     }
     
     /**
+     * @Route("/provider/delete", name="delete-user")
+     */
+    public function deleteUserAction(Request $request) {    
+        $user = $this->getUser();
+        
+        //$eqid = 118; // TODO: remove this; dev only!        
+        if (!$user) {
+            throw $this->createNotFoundException();
+        }  
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->remove($user);
+        $em->flush();
+        
+        return $this->redirectToRoute("fos_user_security_logout");
+    }
+    
+    /**
      * @Route("/provider/saveStatus", name="equipment-saveStatus")
      */
     public function saveStatusAction(Request $request) {
