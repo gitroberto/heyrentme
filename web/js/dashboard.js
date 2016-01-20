@@ -75,26 +75,26 @@ function CreateDurationOptionsAndEnableDiscounts(selectedVal, id){
 }
 
 function CreateDurationOptions(selectedVal, id){
-    var maxValue=0;
-    var type= "";
+    var maxValue=24;
+    //var type= "hour";
 
-    if (selectedVal == 1){
-        maxValue = 4;
-        type = "week";        
-    } else if (selectedVal == 2) {
-        maxValue = 24;
-        type = "hour";        
-    }
+    //if (selectedVal == 1){
+    //    maxValue = 4;
+    //    type = "week";        
+    //} else if (selectedVal == 2) {
+    //    maxValue = 24;
+    //    type = "hour";        
+    //}
         
     var $control = $("#"+discountDurationPrefix+id);        
     $control.html("");
     $control.append(CreateOption(-1, "Dauer"));
-    var suffix = "";    
+    var suffix = "Std.";    
     for(var i = 1; i <= maxValue; i++){        
-        if (i > 1){
-            suffix = "s";
+        if (i % 2 == 0){            
+            $control.append(CreateOption(i, suffix));
         }
-        $control.append(CreateOption(i, type + suffix));
+        
     }
 }
 
