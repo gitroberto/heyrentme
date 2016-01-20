@@ -133,6 +133,13 @@ class Equipment
      * @ORM\Column(type="string", length=500)
      */
     protected $reason;
+
+    /**
+     * @ORM\OneToOne(targetEntity="EquipmentAge")
+     * @ORM\JoinColumn(name="equipment_age_id", referencedColumnName="id")
+     */
+    protected $age;
+    
     
     public function getUrlPath() {
        $s = Utils::slugify($this->getName());
@@ -786,5 +793,29 @@ class Equipment
                 break;
         }
         
+    }
+
+    /**
+     * Set age
+     *
+     * @param \AppBundle\Entity\EquipmentAge $age
+     *
+     * @return Equipment
+     */
+    public function setAge(\AppBundle\Entity\EquipmentAge $age = null)
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    /**
+     * Get age
+     *
+     * @return \AppBundle\Entity\EquipmentAge
+     */
+    public function getAge()
+    {
+        return $this->age;
     }
 }

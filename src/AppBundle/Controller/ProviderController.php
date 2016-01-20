@@ -302,12 +302,14 @@ class ProviderController extends BaseController {
             'value' => $equipment->getValue(),
             'priceBuy' => $equipment->getPriceBuy(),
             'invoice' => $equipment->getInvoice(),
-            'industrial' => $equipment->getIndustrial()
+            'industrial' => $equipment->getIndustrial(),
+            'ageId' => $equipment->getAge()->getId()
         );
         //</editor-fold>
         
         // build form
         //<editor-fold>
+        $ageArr = $this->getDoctrineRepo('AppBundle:EquipmentAge')->getAllForDropdown();        
         $form = $this->createFormBuilder($data)
                 ->add('name', 'text', array(
                     'constraints' => array(
@@ -315,28 +317,35 @@ class ProviderController extends BaseController {
                         new Length(array('max' => 256))
                     )
                 ))
-                ->add('price', 'number', array(
+                ->add('price', 'integer', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Range(array('min' => 0))
+                        new Range(array('min' => 10, 'max' => 2500))
                     )
                 ))
-                ->add('deposit', 'number', array(
+                ->add('deposit', 'integer', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Range(array('min' => 0))
+                        new Range(array('min' => 0, 'max' => 1000))
                     )
                 ))
-                ->add('value', 'number', array(
+                ->add('value', 'integer', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Range(array('min' => 0))
+                        new Range(array('min' => 50, 'max' => 2000))
                     )
                 ))
-                ->add('priceBuy', 'number', array(
+                ->add('priceBuy', 'integer', array(
                     'required' => false,
                     'constraints' => array(
-                        new Range(array('min' => 0))
+                        new Range(array('min' => 0, 'max' => 20000))
+                    )
+                ))
+                ->add('ageId', 'choice', array(
+                    'choices' => $ageArr,
+                    'choices_as_values' => false,
+                    'constraints' => array(
+                        new NotBlank()
                     )
                 ))
                 ->add('invoice', 'checkbox', array('required' => false))
@@ -348,6 +357,7 @@ class ProviderController extends BaseController {
         
         if ($form->isValid()) {
             $data = $form->getData();
+            $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
 
             // map fields, TODO: consider moving to Equipment's method
             //<editor-fold> map fields            
@@ -358,6 +368,7 @@ class ProviderController extends BaseController {
             $equipment->setPriceBuy($data['priceBuy']);
             $equipment->setInvoice($data['invoice']);
             $equipment->setIndustrial($data['industrial']);
+            $eq->setAge($age);
             //</editor-fold>
             
             // save to db
@@ -382,35 +393,43 @@ class ProviderController extends BaseController {
         
         // build form
         //<editor-fold>
+        $ageArr = $this->getDoctrineRepo('AppBundle:EquipmentAge')->getAllForDropdown();        
         $form = $this->createFormBuilder()
                 ->add('name', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Length(array('max' => 256))
+                        new Length(array('max' => 22))
                     )
                 ))
-                ->add('price', 'number', array(
+                ->add('price', 'integer', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Range(array('min' => 0))
+                        new Range(array('min' => 10, 'max' => 2500))
                     )
                 ))
-                ->add('deposit', 'number', array(
+                ->add('deposit', 'integer', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Range(array('min' => 0))
+                        new Range(array('min' => 0, 'max' => 1000))
                     )
                 ))
-                ->add('value', 'number', array(
+                ->add('value', 'integer', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Range(array('min' => 0))
+                        new Range(array('min' => 50, 'max' => 2000))
                     )
                 ))
-                ->add('priceBuy', 'number', array(
+                ->add('priceBuy', 'integer', array(
                     'required' => false,
                     'constraints' => array(
-                        new Range(array('min' => 0))
+                        new Range(array('min' => 0, 'max' => 20000))
+                    )
+                ))
+                ->add('ageId', 'choice', array(
+                    'choices' => $ageArr,
+                    'choices_as_values' => false,
+                    'constraints' => array(
+                        new NotBlank()
                     )
                 ))
                 ->add('invoice', 'checkbox', array('required' => false))
@@ -426,7 +445,8 @@ class ProviderController extends BaseController {
             $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
             $user = $this->getUser();
             // map fields, TODO: consider moving to Equipment's method
-            //<editor-fold> map fields            
+            //<editor-fold> map fields
+            $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
             $eq = new Equipment();
             $eq->setName($data['name']);
             $eq->setUser($user);
@@ -437,6 +457,7 @@ class ProviderController extends BaseController {
             $eq->setPriceBuy($data['priceBuy']);
             $eq->setInvoice($data['invoice']);
             $eq->setIndustrial($data['industrial']);
+            $eq->setAge($age);
             //</editor-fold>
             // save to db
             $em = $this->getDoctrine()->getManager();

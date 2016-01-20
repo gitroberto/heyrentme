@@ -43,29 +43,25 @@
                       </div>
                   </div>
                   <div class="col-xs-12">
-                      <div class="form-container form-input form-last-item">
+                       <div class="form-container form-input form-last-item">
                           <div class="row">
-                              <div class="col-sm-6">
-                                  <label for="price">Name:</label>
-                                  {{ form_widget(form.name, { 'attr': { 'placeholder': 'mountain bike cube' } }) }}
+                              <div class="col-sm-7">
+                                  <label for="name">Angebotsname:</label>
+                                  {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
+                                  {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 22 Zeichen', 'class': 'normal-input' } }) }}
                                   <div class="err-msg">{{ form_errors(form.name) }}</div>
                               </div>
-                              <!--<div class="col-sm-6 text-right">
-                                  <label class="chbox"><input type="checkbox"> <span> Keine Angabe</span></label>
-                              </div>-->
-                          </div>
-                          <div class="row">
-                              <div class="col-sm-6">
-                                  <label for="price">Preis pro Tag:</label>
-                                  {# <input type="text" name="name2" placeholder="ab.: 10" class="small-input " id="preis_pro_tag">,- € #}
-                                  {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': 'ab.: 10' }}) }},- € 
+                               <div class="col-sm-5">
+                                  <label for="form[price]">Preis pro Tag:</label>
+                                  {#<input type="number" name="name2" placeholder="0" class="small-input" id="preis_pro_tag" min="10" max="2500" required> ,- €#}
+                                  {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }},- € 
                                   <div class="err-msg">{{ form_errors(form.price) }}</div>
                               </div>
                               <!--<div class="col-sm-6 text-right">
                                   <label class="chbox"><input type="checkbox"> <span> Keine Angabe</span></label>
                               </div>-->
                           </div>
-                      </div>
+                      </div>                      
                   </div>
                   <div class="col-xs-12 border-bottom-white form-head smaller-form">
                       <div class="form-container">
@@ -84,28 +80,33 @@
                                       Mieter in bar zur Übergabe mitgenommen wird.
                                       Die Kaution schützt dich vor generellen Unannehmlichkeiten, kleinen Kratzern etc.
                                       Sollte es zu Diebstahl oder Bruch kommen, bieten
-                                      wir dir zusätzlich eine <strong><u>hey-tsc Garantie</u> bis zu 1.500,00 € an.</strong></p>
+                                      wir dir zusätzlich eine <u>hey! Garantie</u> bis zu 750,- € an.
+                                    </p>
 
                                   <div class="kaution row">
                                       <div class="col-xs-5">
                                         <span>Original-Wert (ca.)</span>
                                         {# <input type="text" name="name2" placeholder="z.B.: 500" class="small-input " id="name2">    ,- € #}
-                                        {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': 'z.B.: 500' }}) }},- € 
+                                        {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }},- € 
                                         <div class="err-msg">{{ form_errors(form.value) }}</div>
                                       </div>
                                       <div class="col-xs-3">
                                         <div class="search-form mobile-kategorie-form">
                                             <div class="select-link">
+                                                {#
                                                 <select title='Alter (ca.)' name="gender2" class="selectpicker bs-select-hidden ">
                                                     <option>Alter (ca.)</option>
                                                 </select>
+                                                #}
+                                                {{ form_widget(form.ageId, { 'attr': { 'class': 'selectpicker bs-select-hidden', 'title': 'Alter (ca.)' }}) }}
+                                                <div class="err-msg">{{ form_errors(form.ageId) }}</div>
                                             </div>
                                         </div>
                                       </div>
                                       <div class="col-xs-4">
                                         <span>Kaution</span>
                                         {# <input type="text" name="name2" placeholder="z.B.: 20" class="small-input " id="name2">    ,- € #}
-                                        {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input', 'placeholder': 'z.B.: 20' }}) }},- € 
+                                        {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '1000' }}) }},- € 
                                         <div class="err-msg">{{ form_errors(form.deposit) }}</div>
                                       </div>
                                   </div>
@@ -117,6 +118,12 @@
                                   #}
                               </div>
                           </div>
+                        <div class="chbox-holder">
+                            {# <input type="checkbox" id="chxx"> #}
+                            {{ form_widget(form.invoice) }}
+                            <label for="form_invoice"><span></span>Original-Rechnung ist vorhanden</label>
+                        </div>
+
                       </div>
                   </div>
                   <div class="col-xs-8 left-offer">
@@ -129,20 +136,15 @@
                                   <div class="former">
                                       <div class="row">
                                           <div class="col-xs-12">
-                                              <p>Möchtest du dein Fahrrad auch unter “Test & Buy” anführen?
+                                              <p>Möchtest du dein Equipment auch unter “Test & Buy” anführen?
                                                   Der Mieter weiß dann, dass du dein Fahrrad auch zum
                                                   Verkauf anbieten möchtest. Den Kaufpreis kannst du direkt mit dem
                                                   Mieter vereinbaren.</p>
 
-                                                <div class="chbox-holder">
-                                                    {# <input type="checkbox" id="chxx"> #}
-                                                    {{ form_widget(form.invoice) }}
-                                                    <label for="form_invoice"><span></span>Original-Rechnung ist vorhanden</label>
-                                                </div>
                                               <div class="kaution">
-                                                <span>Verkaufspreis</span>
+                                                <span>Verkaufspreis bei Kauf</span>
                                                 {# <input type="text" name="name2" placeholder="z.B.: 250" class="small-input " id="name2">,- € #}
-                                                {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': 'z.B.: 250' }}) }},- € 
+                                                {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }},- € 
                                                 <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
                                               </div>
                                           </div>
@@ -154,7 +156,7 @@
                   </div>
                   <div class="col-xs-4 right-offer">
                       <div class="ad  mobile-hidden">
-                          <img src="/img/placeholder/bike3.jpg" alt="ad" class="img-responsive">
+                          <img src="/img/allgemein-final/form_e_1.jpg" alt="ad" class="img-responsive">
 
                           <div class="product-info product-ad">
                               <div class="row">
@@ -167,11 +169,11 @@
                                           <li><span class="glyphicon glyphicon-star"></span></li>
                                       </ul>
                                       <p class="product-name">
-                                          cube mountainbike
+                                          PRODUKT MIT KAUFOPTION
                                       </p>
                                   </div>
                               </div>
-                              <img src="/img/new-icon.svg" alt="cart" class="cart">
+                              <img src="/img/cart.png" alt="cart" class="cart">
                           </div>
                       </div>
                   </div>
@@ -205,8 +207,10 @@
               <div class="support">
                   <p class="head">Dein Verdienst</p>
                   <div class="range"><input type="text" id="range_30" name="example_name" value=""/></div>
-                  <p class="price">0 €</p>
-                  <p class="price-info">pro Jahr bei 50 Tagen Vermietung</p>
+                  <p class="price">
+                      {{ form.vars.value.price|default('0')|number_format(0) }} €
+                  </p>
+                  <p class="price-info">pro Jahr bei 1 Tag Vermietung</p>
               </div>
           </div>
   </section>

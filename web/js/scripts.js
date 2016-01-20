@@ -162,7 +162,7 @@ $(document).ready(function () {
       return !isNaN(parseFloat(n)) && isFinite(n);
     }
     $("#preis_pro_tag").on('change keydown keypress keyup mousedown click mouseup', function() {
-      var preis = $("#preis_pro_tag").val();
+      var preis = $("#form_price").val();
       if(isNumber(preis)) {
         var days = parseInt($("#range_30").val());
         var sumf = days * preis;
