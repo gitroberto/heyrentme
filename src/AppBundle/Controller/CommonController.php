@@ -49,6 +49,12 @@ class CommonController extends BaseController {
     public function feedbackAction(Request $request) {
         $feedback = new Feedback();
         
+        if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $user = $this->getUser();
+            $feedback->setName(sprintf("%s %s", $user->getName(), $user->getSurname()));
+            $feedback->setEmail($user->getEmail());
+        }
+        
         $form = $this->createFormBuilder($feedback)
                 ->add('name', 'text', array(
                     'constraints' => array(
