@@ -43,7 +43,7 @@ class ProviderController extends BaseController {
      * @Route("/provider/profil", name="profil")
      */
     public function profilAction(Request $request) {
-        
+        /*
         $session = $request->getSession();
         if ($request->getMethod() == "GET") {
             $session->set('UserAddFile', null);
@@ -123,8 +123,8 @@ class ProviderController extends BaseController {
             
             
         }
-                
-        return $this->render('provider/profil.html.twig', array( 'form'=> $form->createView() ) );
+         */       
+        return $this->render('provider/profil.html.twig');
     }
    
     /**
@@ -132,30 +132,37 @@ class ProviderController extends BaseController {
      */
     public function userImage(Request $request) {                
         $file = $request->files->get('upl');
-        if ($file->isValid()) {
-            $session = $request->getSession();
-            $eqFiles = $session->get('UserAddFile');
-            
+        if ($file->isValid()) {            
             $uuid = Utils::getUuid();
             $path = 
                 $this->getParameter('image_storage_dir') .
                 DIRECTORY_SEPARATOR .
-                'temp' .
+                'user' .
                 DIRECTORY_SEPARATOR;
             $name = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
             $fullPath = $path . $name;
-
             $file->move($path, $name);
             
-            $ef = array(
-                $uuid,
-                $file->getClientOriginalName(),
-                strtolower($file->getClientOriginalExtension()),
-                $fullPath
-            );
-
-            $session->set('UserAddFile', $ef);
+            $em = $this->getDoctrine()->getManager();
+            $user = $this->getUser();
             
+            $img = new Image();
+            $img->setUuid($uuid);
+            $img->setName($file->getClientOriginalName());
+            $img->setExtension($file->getClientOriginalExtension());
+            $img->setPath('user');            
+
+            $em->persist($img);
+            $em->flush();
+            
+            $oldImg = $user->getImage();
+            if ($oldImg != null) {
+                $user->setImage(null);
+                $this->getDoctrineRepo('AppBundle:Image')->removeImage($oldImg, $this->getParameter('image_storage_dir'));
+            }
+            
+            $user->setImage($img);
+            $em->flush();
         }
         return new Response($status = 200);
     }

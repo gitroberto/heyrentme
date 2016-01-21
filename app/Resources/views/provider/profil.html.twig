@@ -52,7 +52,7 @@
                                     </div>
                                     
                                     
-                                    
+                                    {#
                                     <div>&nbsp;</div>
                                     <form method="post" action="{{ path('profil') }}" enctype="multipart/form-data">     
                                     {{ form_start(form, {'method': 'post', 'action': path('profil'), 'attr': { 'enctype':'multipart/form-data'}}) }}    
@@ -61,6 +61,7 @@
                                         {{ form_widget(form.aboutMyself, {'attr': {'placeholder': 'ÜBER MICH' }}) }}
                                         <input type="submit" class="green-big-button step3-button submit-green" value="Einstellungen speichern >>">
                                     {{ form_end(form) }}
+                                    #}
                                 </div>
                             </div>
                         </div>
@@ -78,5 +79,12 @@
     <script src="/js/vendors/upload/jquery.iframe-transport.js"></script>
     <script src="/js/vendors/upload/jquery.fileupload.js"></script>
     <script src="/js/vendors/upload/script.js"></script>
+    <script>
+        $("#upload").fileupload({
+           success: function(e, data) {
+               window.location = '{{ path('profil') }}';
+           }
+        });
+    </script>
   </div>
 {% endblock %}
