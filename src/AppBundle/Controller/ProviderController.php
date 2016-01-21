@@ -416,7 +416,7 @@ class ProviderController extends BaseController {
             $equipment->setPriceBuy($data['priceBuy']);
             $equipment->setInvoice($data['invoice']);
             $equipment->setIndustrial($data['industrial']);
-            $eq->setAge($age);
+            $equipment->setAge($age);
             //</editor-fold>
             
             // save to db
