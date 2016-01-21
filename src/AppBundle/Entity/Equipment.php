@@ -140,6 +140,34 @@ class Equipment
      */
     protected $age;
     
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $timeMorning;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $timeAfternoon;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $timeEvening;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $timeWeekend;
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $descType;
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $descSpecial;
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $descCondition;
     
     public function getUrlPath() {
        $s = Utils::slugify($this->getName());
@@ -817,5 +845,173 @@ class Equipment
     public function getAge()
     {
         return $this->age;
+    }
+
+    /**
+     * Set timeMorning
+     *
+     * @param boolean $timeMorning
+     *
+     * @return Equipment
+     */
+    public function setTimeMorning($timeMorning)
+    {
+        $this->timeMorning = $timeMorning;
+
+        return $this;
+    }
+
+    /**
+     * Get timeMorning
+     *
+     * @return boolean
+     */
+    public function getTimeMorning()
+    {
+        return $this->timeMorning;
+    }
+
+    /**
+     * Set timeAfternoon
+     *
+     * @param boolean $timeAfternoon
+     *
+     * @return Equipment
+     */
+    public function setTimeAfternoon($timeAfternoon)
+    {
+        $this->timeAfternoon = $timeAfternoon;
+
+        return $this;
+    }
+
+    /**
+     * Get timeAfternoon
+     *
+     * @return boolean
+     */
+    public function getTimeAfternoon()
+    {
+        return $this->timeAfternoon;
+    }
+
+    /**
+     * Set timeEvening
+     *
+     * @param boolean $timeEvening
+     *
+     * @return Equipment
+     */
+    public function setTimeEvening($timeEvening)
+    {
+        $this->timeEvening = $timeEvening;
+
+        return $this;
+    }
+
+    /**
+     * Get timeEvening
+     *
+     * @return boolean
+     */
+    public function getTimeEvening()
+    {
+        return $this->timeEvening;
+    }
+
+    /**
+     * Set timeWeekend
+     *
+     * @param boolean $timeWeekend
+     *
+     * @return Equipment
+     */
+    public function setTimeWeekend($timeWeekend)
+    {
+        $this->timeWeekend = $timeWeekend;
+
+        return $this;
+    }
+
+    /**
+     * Get timeWeekend
+     *
+     * @return boolean
+     */
+    public function getTimeWeekend()
+    {
+        return $this->timeWeekend;
+    }
+
+    /**
+     * Set descType
+     *
+     * @param string $descType
+     *
+     * @return Equipment
+     */
+    public function setDescType($descType)
+    {
+        $this->descType = $descType;
+
+        return $this;
+    }
+
+    /**
+     * Get descType
+     *
+     * @return string
+     */
+    public function getDescType()
+    {
+        return $this->descType;
+    }
+
+    /**
+     * Set descSpecial
+     *
+     * @param string $descSpecial
+     *
+     * @return Equipment
+     */
+    public function setDescSpecial($descSpecial)
+    {
+        $this->descSpecial = $descSpecial;
+
+        return $this;
+    }
+
+    /**
+     * Get descSpecial
+     *
+     * @return string
+     */
+    public function getDescSpecial()
+    {
+        return $this->descSpecial;
+    }
+
+    /**
+     * Set descCondition
+     *
+     * @param string $descCondition
+     *
+     * @return Equipment
+     */
+    public function setDescCondition($descCondition)
+    {
+        $this->descCondition = $descCondition;
+
+        return $this;
+    }
+
+    /**
+     * Get descCondition
+     *
+     * @return string
+     */
+    public function getDescCondition()
+    {
+        return $this->descCondition;
     }
 }

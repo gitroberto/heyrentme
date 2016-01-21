@@ -35,13 +35,13 @@
                               <div class="col-sm-12">
                                   <span class="number-three number-rwd"></span>
                                   <p class="form-heading">Details!</p>
-                                  <a href="{{ path('equipment-edit-4') }}" class="pull-right margin-top-15 open-sans">Überspringen &gt;&gt;</a>
                               </div>
                           </div>
                       </div>
                   </div>
                 {{ form_start(form) }}
                 <div class="err-msg">{{ form_errors(form) }}</div>
+                {#
                   {% for section in subcategory.featureSections %}
                         <div class="col-xs-12 border-bottom-white form-head describe">
                             <div class="form-container">
@@ -76,19 +76,105 @@
                             </div>
                         </div>
                   {% endfor %}
-                  <div class="col-xs-12">
-                      <div class="form-container form-input-border">
-                          <div class="row">
-                            <div class="phone-inputs">
-                              <span>+43</span>
-                              {#<input type="number" name="phone1" maxlength="3" min="0" placeholder="000" />#}
-                              {{ form_widget(form.phonePrefix, { 'attr': { 'placeholder': '000' } }) }}                              
-                              {#<input type="number" maxlength="7" name="phone2" min="0" placeholder="1234567" />#}
-                              {{ form_widget(form.phone, { 'attr': { 'placeholder': '1234567' } }) }}
-                            </div>
-                          </div>
-                      </div>
+                #}
+<!-- Formular 3 Checkboxes -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Wann wäre dir ein Treffen generell am liebsten?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-container form-input-border">
+              <div class="row">
+                <div class="col-xs-3">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.timeMorning) }}
+                    <label for="form_timeMorning"><span></span>Vormittags</label>
                   </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.timeAfternoon) }}
+                    <label for="form_timeAfternoon"><span></span>Nachmittags</label>
+                  </div>
+                </div>
+                 <div class="col-xs-3">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.timeEvening) }}
+                    <label for="form_timeEvening"><span></span>Abends</label>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.timeWeekend) }}
+                    <label for="form_timeWeekend"><span></span>Wochenende</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+         
+          
+           <!-- Formular Input Text -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container border-bottom-white">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Genauer Equipment-Typ (z.B. genaue Produktbeschreibung / für Erwachsene, Kinder, Damen, Herren)</p>
+                </div>
+              </div>
+            </div>
+              <div class="form-container form-input-border padding-30">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{ form_widget(form.descType, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+                    <div class="err-msg">{{ form_errors(form.descType) }}</div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+		 <!-- Formular Input Text -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container border-bottom-white">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Besondere Auststattung, Extras</p>
+                </div>
+              </div>
+            </div>
+              <div class="form-container form-input-border padding-30">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{ form_widget(form.descSpecial, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+                    <div class="err-msg">{{ form_errors(form.descSpecial) }}</div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+          <!-- Formular Input Text -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container border-bottom-white">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Spezielle Angebotskonditionen</p>
+                </div>
+              </div>
+            </div>
+              <div class="form-container form-input-border padding-30">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{ form_widget(form.descCondition, { 'attr': { 'placeholder': 'Schreib hier, falls du dein Angebot zu speziellen Geschäftsbedingungen anbieten möchtest. Maximal 1000 Zeichen verfügbar' } }) }}
+                    <div class="err-msg">{{ form_errors(form.descCondition) }}</div>
+                  </div>
+                </div>
+              </div>                
                   <input type="submit" class="green-big-button green-button" value="Einstellungen speichern und fertig">
                   {{ form_end(form) }}
               </div>
@@ -97,6 +183,7 @@
       </div>
   </section>
   </div>
+{#
   <script>
     $(function() {
         $("input[type='radio']").change(function() {
@@ -130,4 +217,5 @@
         });
     });
   </script>
+  #}
 {% endblock %}

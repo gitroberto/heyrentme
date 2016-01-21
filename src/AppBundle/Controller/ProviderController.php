@@ -565,7 +565,8 @@ class ProviderController extends BaseController {
         //<editor-fold>        
         $form = $this->createFormBuilder($data, array(
                 'constraints' => array(
-                    new Callback(array($this, 'validateImages'))
+                    new Callback(array($this, 'validateImages')),
+                    new Callback(array($this, 'validatePhone'))
                 )
             ))
             ->add('description', 'textarea', array(
@@ -829,32 +830,36 @@ class ProviderController extends BaseController {
         }
         
         $data = array(
-            'phone' => $user->getPhone(),
-            'phonePrefix' => $user->getPhonePrefix()
+            'timeMorning' => $eq->getTimeMorning(),
+            'timeAfternoon' => $eq->getTimeAfternoon(),
+            'timeEvening' => $eq->getTimeEvening(),
+            'timeWeekend' => $eq->getTimeWeekend(),
+            'descType' => $eq->getDescType(),
+            'descSpecial' => $eq->getDescSpecial(),
+            'descCondition' => $eq->getDescCondition()
         );
         
         // TODO: add server-side validation for features
-        $form = $this->createFormBuilder($data, array(
-                'constraints' => array(
-                    new Callback(array($this, 'validatePhone'))
-                )
-            ))
-            ->add('phone', 'text', array(
+        $form = $this->createFormBuilder($data)
+            ->add('timeMorning', 'checkbox', array('required' => false))
+            ->add('timeAfternoon', 'checkbox', array('required' => false))
+            ->add('timeEvening', 'checkbox', array('required' => false))
+            ->add('timeWeekend', 'checkbox', array('required' => false))
+            ->add('descType', 'textarea', array(
                 'required' => false,
-                'attr' => array(
-                    'maxlength' => 10, 
-                    'pattern' => '^[0-9]{1,10}$'),
-                'constraints' => array(
-                    new Regex(array('pattern' => '/^\d{1,10}$/', 'message' => 'Please fill in a valid phone number'))
-                )
-            ))
-            ->add('phonePrefix', 'text', array(
-                'required' => false, 
-                'attr' => array('maxlength' => 3, 'pattern' => '^[0-9]{1,3}$'),
-                'constraints' => array(
-                    new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Please fill in a valid phone number'))
-                )
-            ))
+                'attr' => array('maxlength' => 500),
+                'constraints' => array(new Length(array('max' => 500)))
+            ))    
+            ->add('descSpecial', 'textarea', array(
+                'required' => false,
+                'attr' => array('maxlength' => 500),
+                'constraints' => array(new Length(array('max' => 500)))
+            ))    
+            ->add('descCondition', 'textarea', array(
+                'required' => false,
+                'attr' => array('maxlength' => 1000),
+                'constraints' => array(new Length(array('max' => 1000)))
+            ))                
             ->getForm();
       
         $form->handleRequest($request);
@@ -862,6 +867,7 @@ class ProviderController extends BaseController {
         // TODO: add server-side validation
         if ($form->isValid()) {
             $data = $form->getData();
+            /*
             // parse params
             //<editor-fold>
             $params = $request->request->all();
@@ -890,17 +896,22 @@ class ProviderController extends BaseController {
             //</editor-fold>
             
             $this->getDoctrineRepo('AppBundle:Equipment')->saveFeatures($eqid, $features);
+            */
             
-            // save phone
-            if (!empty($data['phone']) and !empty($data['phone'])) {
-                $em = $this->getDoctrine()->getManager();
-                $u = $em->getRepository('AppBundle:User')->find($user->getId());
-                $u->setPhone($data['phone']);
-                $u->setPhonePrefix($data['phonePrefix']);
-                $em->flush();
-            }
+            // map fields
+            //<editor-fold>
+            $eq->setTimeMorning($data['timeMorning']);
+            $eq->setTimeAfternoon($data['timeAfternoon']);
+            $eq->setTimeEvening($data['timeEvening']);
+            $eq->setTimeWeekend($data['timeWeekend']);
+            $eq->setDescType($data['descType']);
+            $eq->setDescSpecial($data['descSpecial']);
+            $eq->setDescCondition($data['descCondition']);
+            //</editor-fold>
             
-            
+            // save
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
 
             if ($eq->getStatus() == Equipment::STATUS_INCOMPLETE){   
                 #following part was added because otherwise equipment status change was not save in db
@@ -909,7 +920,6 @@ class ProviderController extends BaseController {
                     throw $this->createNotFoundException();
                 }  
                 
-                $em = $this->getDoctrine()->getManager();                
                 $eq->changeStatus(Equipment::STATUS_NEW, null);
                 $this->sendNewModifiedEquipmentInfoMessage($request, $eq);
                 
@@ -919,13 +929,13 @@ class ProviderController extends BaseController {
             return $this->redirectToRoute('equipment-edit-4');
         }
 
-        $features = $this->getDoctrineRepo('AppBundle:Equipment')->getFeaturesAsArray($eq->getId());
+        //$features = $this->getDoctrineRepo('AppBundle:Equipment')->getFeaturesAsArray($eq->getId());
         
         return $this->render('provider\equipment_edit_step3.html.twig', array(
-            'form' => $form->createView(),
+            'form' => $form->createView()/*,
             'subcategory' => $eq->getSubcategory(),
             'features' => $features,
-            'featureSectionRepo' => $this->getDoctrineRepo('AppBundle:FeatureSection')
+            'featureSectionRepo' => $this->getDoctrineRepo('AppBundle:FeatureSection')*/
         ));
     }
     
