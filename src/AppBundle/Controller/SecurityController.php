@@ -55,6 +55,8 @@ class SecurityController extends BaseSecurityController
         }
                 
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        
         if ($user != "anon." ){           
             return $this->userIsLoggedAction();
         }

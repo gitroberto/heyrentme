@@ -53,10 +53,9 @@
     </div>
     <div class="row">
         <div class="form-group">
-          <label for="form_name" class="control-label col-xs-2">Enabled</label>
-          <div class="err-msg">{{ form_errors(form) }}</div>
+          <label for="form_name" class="control-label col-xs-2">Enabled</label>          
           <div class="col-xs-10 control-readonly">              
-                {{ form_widget(form.Enabled) }}
+                {{ user.enabled }}
           </div>
         </div>
     </div>
@@ -125,6 +124,16 @@
         </div>
     </div>
     
+          
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Status</label>
+          <div class="err-msg">{{ form_errors(form) }}</div>
+          <div class="col-xs-10 control-readonly">              
+                {{ form_widget(form.status) }}                
+          </div>
+        </div>
+    </div>
    
           
     <div class="row">          

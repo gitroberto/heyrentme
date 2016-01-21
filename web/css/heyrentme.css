@@ -467,3 +467,7 @@ html body .dashboard .user-offers .buttons .col-xs-3 {
 .user-upload {
     margin-right: 0px;
 }
+
+img.profileImage {
+    cursor: default;
+}
