@@ -65,7 +65,10 @@
                       <div class="form-container border-bottom-white">
                           <div class="row">
                               <div class="col-sm-12">
-                                  <p class="form-heading-small margin-none">Beschreibe dein Angebot*</p>
+                                  <p class="form-heading-small margin-none">
+                                      Beschreibe dein Angebot*
+                                      (Hier bitte keine persönlichen Kontaktdaten oder Web-Links)
+                                  </p>
                                   <div class="err-msg">{{ form_errors(form) }}</div>
                               </div>
                           </div>
@@ -80,7 +83,7 @@
                                       {# <input type="checkbox" id="c2hx"> #}
                                       {{ form_widget(form.make_sure) }}
                                       <label for="form_make_sure"><span></span>Bitte versichere, dass dein Equipment zum Zeitpunkt der Buchung funktionstüchtig und
-      einsatzbereit sein wird.</label>
+      einsatzbereit ist.*</label>
                                   </div>
                                   <div class="err-msg">{{ form_errors(form.make_sure) }}</div>
                               </div>
@@ -89,7 +92,7 @@
                       <div class="form-container border-bottom-white margin-ort">
                           <div class="row ort">
                               <div class="col-sm-12">
-                                  <p class="form-heading-small margin-none">Übergabeort</p>
+                                  <p class="form-heading-small margin-none">Übergabeort*</p>
                               </div>
                           </div>
                       </div>
@@ -99,34 +102,53 @@
                                   <div class="row">
                                     <div class="col-xs-8">
                                       {# <input type="text" placeholder="Strasse*" /> #}
-                                        {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse' } }) }}
+                                        {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse*' } }) }}
                                         <div class="err-msg">{{ form_errors(form.street, { 'attr': { 'class': 'err-msg' } }) }}</div>
                                     </div>
                                     <div class="col-xs-4">
                                       {# <input type="text" placeholder="Hausnr.*" /> #}
-                                        {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.' } }) }}
+                                        {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.*', 'class': 'security' } }) }}
                                         <div class="err-msg">{{ form_errors(form.number, { 'attr': { 'class': 'err-msg' } }) }}</div>
                                     </div>
                                   </div>
                                   <div class="row">
                                     <div class="col-xs-3">
                                       {# <input type="text" placeholder="Plz*" /> #}
-                                        {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'Plz' } }) }}
+                                        {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ*' } }) }}
                                         <div class="err-msg">{{ form_errors(form.postcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
                                     </div>
                                     <div class="col-xs-5">
                                       {# <input type="text" placeholder="Ort*" /> #}
-                                        {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort' } }) }}
+                                        {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort*' } }) }}
                                         <div class="err-msg">{{ form_errors(form.place, { 'attr': { 'class': 'err-msg' } }) }}</div>
                                     </div>
                                   </div>
                               </div>
                           </div>
                       </div>
+                      <div class="form-container border-bottom-white margin-ort">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Tel.-Nr. für Rückfragen*</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-container form-input-border">
+              <div class="row">
+                <div class="phone-inputs"> <span>+43</span>
+                  {{ form_widget(form.phonePrefix, { 'attr': { 'placeholder': '000' } }) }}
+                  {{ form_widget(form.phone, { 'attr': { 'placeholder': '1234567', 'class': 'security' } }) }}
+                  <div class="err-msg">{{ form_errors(form.phonePrefix, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                  <div class="err-msg">{{ form_errors(form.phone, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                </div>
+              </div>
+          </div>  
                       <div class="chbox-holder alone-chbox">
                           {# <input type="checkbox" id="c2hxx"> #}
                           {{ form_widget(form.accept) }}
-                          <label for="form_accept"><span></span>Ich akzeptiere die <a href="#" data-toggle="modal" data-target=".allgemeine">Allgemeinen Geschäftsbedingungen</a></label>
+                          <label for="form_accept"><span></span>
+                              Ich habe die <a href="{{ path('kundeninfos_agb') }}" target="_blank">AGB</a> gelesen und stimme diesen zu.*
+                          </label>
                       </div>
                       <div class="err-msg">{{ form_errors(form.accept) }}</div>
                       <input type="submit" class="yellow-button user-submit" value="Einstellungen speichern">
@@ -147,15 +169,16 @@
                   </p>
                   <div id="owl-demo" class="owl-carousel user-owl">
                       <div class="item">
-                          <img src="/img/placeholder/bike5.jpg" alt=""/>                    </div>
+                          <img src="/img/allgemein-final/form_e_1.jpg" alt=""/>                    </div>
                       <div class="item">
-                          <img src="/img/placeholder/bike5.jpg" alt=""/>                    </div>
+                          <img src="/img/allgemein-final/form_e_2.jpg" alt=""/>                    </div>
                       <div class="item">
-                          <img src="/img/placeholder/bike5.jpg" alt=""/>                    </div>
+                          <img src="/img/allgemein-final/form_e_3.jpg" alt=""/>                    </div>
                   </div>
               </div>
           </div>
           <div class="col-xs-4">
+              {#
               <div class="support portfolios videos">
                   <p class="head">hey! Angebotsvideo</p>
                   <p class="text-bold">Möchtest du für dein Angebot gerne
@@ -172,6 +195,7 @@
                           <a href="https://vimeo.com/148946960" target="_blank"> <img src="/img/video_service3.jpg" alt=""/></a>                     </div>
                   </div>
               </div>
+              #}
           </div>
       </div>
   </section>
@@ -191,8 +215,9 @@
                   <p>
                       Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
                   </p>
+              </div>
           </div>
-      </div>
+    </div>
   </div>
   <div id="allge-modal" class="modal fade allge register" role="dialog">
       <div class="modal-dialog">
@@ -216,6 +241,7 @@
 
                     Falls du die Email dennoch nicht erhalten hast, lasse sie dir  erneut senden oder kontaktiere uns<br />
                   </p>
+              </div>
           </div>
       </div>
   </div>
@@ -224,5 +250,4 @@
   <script src="/js/vendors/upload/jquery.iframe-transport.js"></script>
   <script src="/js/vendors/upload/jquery.fileupload.js"></script>
   <script src="/js/vendors/upload/script.js"></script>
-  </div>
 {% endblock %}

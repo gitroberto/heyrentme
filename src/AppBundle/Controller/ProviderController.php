@@ -541,12 +541,15 @@ class ProviderController extends BaseController {
         }
         
         // initialize form data
+        $user = $this->getUser();
         $data = array( 
             'description' => $eq->getDescription(),
             'street' => $eq->getAddrStreet(),
             'number' => $eq->getAddrNumber(),
             'postcode' => $eq->getAddrPostcode(),
-            'place' => $eq->getAddrPlace()
+            'place' => $eq->getAddrPlace(),
+            'phonePrefix' => $user->getPhonePrefix(),
+            'phone' => $user->getPhone()
         );
         
         if ($request->getMethod() == "GET") {
@@ -609,6 +612,22 @@ class ProviderController extends BaseController {
                     new Callback(array($this, 'validateAccept'))
                 )
             ))
+            ->add('phone', 'text', array(
+                'required' => false,
+                'attr' => array(
+                    'maxlength' => 10, 
+                    'pattern' => '^[0-9]{1,10}$'),
+                'constraints' => array(
+                    new Regex(array('pattern' => '/^\d{1,10}$/', 'message' => 'Please fill in a valid phone number'))
+                )
+            ))
+            ->add('phonePrefix', 'text', array(
+                'required' => false, 
+                'attr' => array('maxlength' => 3, 'pattern' => '^[0-9]{1,3}$'),
+                'constraints' => array(
+                    new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Please fill in a valid phone number'))
+                )
+            ))
             ->getForm();
         //</editor-fold>
         
@@ -634,6 +653,11 @@ class ProviderController extends BaseController {
             // store images
             $eqFiles = $session->get('EquipmentAddFileArray');
             $this->handleImages($eqFiles, $eq, $em);
+            
+            // update user
+            $user->setPhonePrefix($data['phonePrefix']);
+            $user->setPhone($data['phone']);
+            $em->flush();
             
             // clean up
             $session->remove('EquipmentAddFileArray');            
