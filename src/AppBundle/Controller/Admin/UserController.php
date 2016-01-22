@@ -106,13 +106,13 @@ class UserController extends BaseAdminController {
         $email = $request->get('u_email');
         $name = $request->get('u_name');
         $surname = $request->get('u_surname');
-        $enabled = $request->get('u_enabled');        
+        $status = $request->get('u_status');        
         $createdAt = $request->get('u_createdAt');
         $modifiedAt = $request->get('u_modifiedAt');
         
         $repo = $this->getDoctrineRepo('AppBundle:User');
         $dataRows = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, 
-                $email, $name, $surname, $enabled, $createdAt, $createdAt, $modifiedAt);
+                $email, $name, $surname, $status, $createdAt, $createdAt, $modifiedAt);
         $rowsCount = $repo->countAll();
         $pagesCount = ceil($rowsCount / $pageSize);
         
@@ -128,7 +128,6 @@ class UserController extends BaseAdminController {
             $cell[$i++] = $dataRow->getUsername();
             $cell[$i++] = $dataRow->getName();
             $cell[$i++] = $dataRow->getSurname();
-            $cell[$i++] = $dataRow->isEnabled();
             $cell[$i++] = $dataRow->getStatusStr();
             $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
             $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');            

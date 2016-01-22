@@ -10,7 +10,7 @@ namespace AppBundle\Entity;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $email, $name, $surname, $enabled, $createdAt, $modifiedAt) {
+    public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $email, $name, $surname, $status, $createdAt, $modifiedAt) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
         $qb->select('u')
@@ -26,8 +26,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             $qb->andWhere($qb->expr()->like('u.surname', ':surname'));
         }
         
-        if (!empty($enabled)) {
-            $qb->andWhere($qb->expr()->like('u.enabled', ':enabled'));
+        if (!empty($status)) {
+            $qb->andWhere($qb->expr()->eq('u.status', ':status'));
         }
         
         if (!empty($createdAt)) {
@@ -61,8 +61,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         if (!empty($surname)) {
             $q->setParameter(':surname', "%{$surname}%");
         }
-        if (!empty($enabled)) {
-            $q->setParameter(':enabled', "%{$enabled}%");
+        if (!empty($status)) {
+            $q->setParameter(':status', $status);
         }
         if (!empty($createdAt)) {
             $q->setParameter(':createdAt', "%{$createdAt}%");

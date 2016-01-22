@@ -39,6 +39,7 @@ function rowActions(cellvalue, options, cellobject) {
 var $grid = $('#jqgrid');
 
 if($grid.length > 0 ) {
+        var optionsStr = ":All;1:ok;2:blocked;3:deleted";
         $grid.jqGrid({
                 url: '{{ path('admin_users_jsondata') }}',
                 mtype: 'GET',
@@ -49,14 +50,13 @@ if($grid.length > 0 ) {
                         { name:'Username', index:'u.email', width: 200, editable:false, sortable:true },
                         { name:'Name', index:'u.name', width: 200, editable:false, sortable:true },
                         { name:'Surname', index:'u.surname', width: 200, editable:false, sortable:true },
-                        { name:'Enabled', index:'u.enabled', width: 200, editable:false, sortable:true, search: false },
-                        { name:'Status', index:'u.status', width: 100, editable:false, sortable:true, search: false },
-                        { name:'CreationDate', index:'u.createdAt', width: 100, editable:false, sortable:true, search: false },
-                        { name:'ModificationDate', index:'u.modifiedAt', width: 100, editable:false, sortable:true, search: false },                        
+                        { name:'Status', index:'u.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: true } },
+                        { name:'CreationDate', index:'u.createdAt', width: 120, editable:false, sortable:true, search: false },
+                        { name:'ModificationDate', index:'u.modifiedAt', width: 120, editable:false, sortable:true, search: false },                        
                 ],
-                height: 300,
-                rowNum: 10,
-                rowList: [10, 50, 200],
+                height: 500,
+                rowNum: 50,
+                rowList: [20, 50, 200],
                 pager: 'jqgrid-pager',
                 sortname: 'u.username',
                 viewrecords: false,
