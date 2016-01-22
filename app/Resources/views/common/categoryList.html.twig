@@ -2,9 +2,12 @@
     <p class="display-block"><a class="haup-link">Equipment mieten / hey! rentme</a></p>
     <span id="close-haup" class="haup-close-icon"></span>
     {% for cat in categories %}
-        <p>
-            <a href="{{ path('catchall', { 'content': cat.slug }) }}"><img src="{{ cat.imageUrl }}" class="category-drop-down" alt=""/></a>
-            <a href="{{ path('catchall', { 'content': cat.slug }) }}">{{ cat.name }}</a>
-        </p>
+        
+        <a href="{{ path('catchall', { 'content': cat.slug }) }}">
+            <p>
+                <img src="{{ cat.imageUrl }}" class="category-drop-down" alt=""/>
+                {{ cat.name }}
+            </p>
+        </a>
     {% endfor %}
 </li>
