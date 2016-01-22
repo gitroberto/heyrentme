@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Discount;
 use AppBundle\Entity\Equipment;
 use AppBundle\Entity\Image;
+use AppBundle\Entity\User;
 use AppBundle\Utils\Utils;
 use DateInterval;
 use DateTime;
@@ -987,7 +988,7 @@ class ProviderController extends BaseController {
         }  
         
         $em = $this->getDoctrine()->getEntityManager();
-        $em->remove($user);
+        $user->setStatus(User::STATUS_DELETED);        
         $em->flush();
         
         return $this->redirectToRoute("fos_user_security_logout");
