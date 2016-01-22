@@ -101,48 +101,53 @@
         </div>
         <div class="row">
             <div class="form-group">
-              <label for="form_name" class="control-label col-xs-2">Beschreibe dein Angebot</label>
+              <label for="form_name" class="control-label col-xs-2">Beschreibung</label>
               <div class="col-xs-10 control-readonly">
                  {{ equipment.description }}
               </div>
             </div>
         </div>
-              
         <div class="row">
             <div class="form-group">
-              <label for="form_name" class="control-label col-xs-2">Strasse</label>
+              <label for="form_name" class="control-label col-xs-2">desc. #2</label>
               <div class="col-xs-10 control-readonly">
-                 {{ equipment.addrStreet }}
+                 {{ equipment.descType }}
               </div>
             </div>
         </div>
         <div class="row">
             <div class="form-group">
-              <label for="form_name" class="control-label col-xs-2">House nr</label>
+              <label for="form_name" class="control-label col-xs-2">desc. #3</label>
               <div class="col-xs-10 control-readonly">
-                 {{ equipment.addrNumber }}
+                 {{ equipment.descSpecial }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">desc #4</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ equipment.descCondition }}
               </div>
             </div>
         </div>
               
         <div class="row">
             <div class="form-group">
-              <label for="form_name" class="control-label col-xs-2">PLZ</label>
+              <label for="form_name" class="control-label col-xs-2">pick-up time</label>
               <div class="col-xs-10 control-readonly">
-                 {{ equipment.addrPostcode }}
+                 {{ equipment.timeAsString }}
               </div>
             </div>
         </div>
         <div class="row">
             <div class="form-group">
-              <label for="form_name" class="control-label col-xs-2">ORT</label>
+              <label for="form_name" class="control-label col-xs-2">Address</label>
               <div class="col-xs-10 control-readonly">
-                 {{ equipment.addrPlace }}
+                 {{ equipment.addressAsString }}
               </div>
             </div>
         </div>
-              
-              
     </div>
           
           
