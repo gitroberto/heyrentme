@@ -30,7 +30,8 @@ class BaseController extends Controller
                     'id' => $cat->getId(),
                     'name' => $cat->getName(),
                     'slug' => $cat->getSlug(),
-                    'imageUrl' => $cat->getImage()->getUrlPath($this->getParameter('image_url_prefix'))
+                    'imageUrl' => $cat->getImage()->getUrlPath($this->getParameter('image_url_prefix')),
+                    'bigImageUrl' => $cat->getBigImage() !== null ? $cat->getBigImage()->getUrlPath($this->getParameter('image_url_prefix')) : null
                 );
             }
             $session->set('CategoryList', $categories);

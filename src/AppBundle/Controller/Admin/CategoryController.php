@@ -63,6 +63,7 @@ class CategoryController extends BaseAdminController {
         if ($form->isValid()) {
             //check if there is file
             $file = $request->files->get('upl');
+            $file2 = $request->files->get('uplBig');
             
             $em = $this->getDoctrine()->getManager();
             
@@ -93,6 +94,34 @@ class CategoryController extends BaseAdminController {
                 $em->flush();
                 
                 $category->setImage($img);
+            }
+            if ($file2 != null && $file2->isValid()) {
+                
+                // save file
+                $uuid = Utils::getUuid();
+                $image_storage_dir = $this->getParameter('image_storage_dir');
+                
+                $destDir = 
+                    $image_storage_dir .
+                    DIRECTORY_SEPARATOR .
+                    'category' .
+                    DIRECTORY_SEPARATOR;
+                $destFilename = sprintf("%s.%s", $uuid, $file2->getClientOriginalExtension());
+                
+                $file2->move($destDir, $destFilename);
+                
+                // create object
+                $img = new Image();
+                $img->setUuid($uuid);
+                $img->setName($destFilename);
+                $img->setExtension($file2->getClientOriginalExtension());
+                $img->setOriginalPath($file2->getClientOriginalName());
+                $img->setPath('category');
+                              
+                $em->persist($img);
+                $em->flush();
+                
+                $category->setBigImage($img);
             }
             
             // save to db
@@ -156,6 +185,7 @@ class CategoryController extends BaseAdminController {
             
             //check if there is file
             $file = $request->files->get('upl');
+            $file2 = $request->files->get('uplBig');
             
             $em = $this->getDoctrine()->getManager();
             
@@ -191,6 +221,42 @@ class CategoryController extends BaseAdminController {
                 $em->flush();
                 
                 $category->setImage($img);
+            }            
+            if ($file2 != null && $file2->isValid()) {
+                
+                //remove old Image (both file from filesystem and entity from db)
+                $old = $category->getBigImage();
+                if ($old !== null) {
+                    $this->getDoctrineRepo('AppBundle:Image')->removeImage($old, $this->getParameter('image_storage_dir'));
+                    $category->setBigImage(null);                
+                }
+                
+                // save file
+                $uuid = Utils::getUuid();
+                $image_storage_dir = $this->getParameter('image_storage_dir');
+                
+                //$destDir = sprintf("%scategory\\",$image_storage_dir);                
+                $destDir = 
+                        $image_storage_dir .
+                        DIRECTORY_SEPARATOR .
+                        'category' .
+                        DIRECTORY_SEPARATOR;
+                $destFilename = sprintf("%s.%s", $uuid, $file2->getClientOriginalExtension());
+                
+                $file2->move($destDir, $destFilename);
+                
+                // create object
+                $img = new Image();
+                $img->setUuid($uuid);
+                $img->setName($destFilename);
+                $img->setExtension($file2->getClientOriginalExtension());
+                $img->setOriginalPath($file2->getClientOriginalName());
+                $img->setPath('category');
+                              
+                $em->persist($img);
+                $em->flush();
+                
+                $category->setBigImage($img);
             }            
             
             // save to db

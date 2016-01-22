@@ -40,6 +40,11 @@ class Category
      * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
      */
     protected $image;
+    /**
+     * @ORM\OneToOne(targetEntity="Image")
+     * @ORM\JoinColumn(name="big_image_id", referencedColumnName="id")
+     */
+    protected $bigImage;
     
 
     /**
@@ -199,5 +204,29 @@ class Category
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set bigImage
+     *
+     * @param \AppBundle\Entity\Image $bigImage
+     *
+     * @return Category
+     */
+    public function setBigImage(\AppBundle\Entity\Image $bigImage = null)
+    {
+        $this->bigImage = $bigImage;
+
+        return $this;
+    }
+
+    /**
+     * Get bigImage
+     *
+     * @return \AppBundle\Entity\Image
+     */
+    public function getBigImage()
+    {
+        return $this->bigImage;
     }
 }

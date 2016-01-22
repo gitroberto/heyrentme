@@ -2,12 +2,12 @@
 
 {% block body %}
   <div class="main-header ">
-        <img src="/img/bike-heading.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
-        <img src="/img/bike-heading-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+         <img src="{% if category.bigImageUrl %}{{ category.bigImageUrl }}{% else %}/img/cat-final/e_sport.jpg{% endif %}" alt="Sport & Freizeit" class="img-responsive max-1600 max-320"/>
+         <img src="{% if category.imageUrl %}{{ category.imageUrl }}{% else %}/img/cat-final/e_sport_small.jpg{% endif %}" alt="Sport & Freizeit" class="img-responsive min-320"/>
         <div class="main-search kategorie-search">
-            <h2 class="heading mobile-hidden">Sport & Freizeit bei <span class="text-yellow text-bold"> hey! VIENNA</span></h2>
+            <h2 class="heading mobile-hidden">{{ category.name }} bei <span class="text-yellow text-bold"> hey! VIENNA</span></h2>
             <div class="mobile-headers">
-              <h1 class="text-white text-background desktop-hide-inline">Sport & Freizeit bei</h1>
+              <h1 class="text-white text-background desktop-hide-inline">{{ category.name }} bei</h1>
             </div>
             <div class="mobile-headers">
               <h1 class="margin-bottom-40 text-white text-background desktop-hide-inline"><span
