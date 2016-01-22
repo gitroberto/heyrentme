@@ -191,6 +191,8 @@ div.err-msg  ul  li {
 #userImageUpload {
     padding: 0px;
     border: none;
+    margin-right: 25px;
+    margin-left: 25px;
     
 }
 
@@ -460,4 +462,12 @@ input.input-image {
 
 html body .dashboard .user-offers .buttons .col-xs-3 {
     text-align: center;
+}
+
+.user-upload {
+    margin-right: 0px;
+}
+
+img.profileImage {
+    cursor: default;
 }

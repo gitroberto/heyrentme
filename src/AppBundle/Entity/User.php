@@ -15,6 +15,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User extends BaseUser
 {
+    const STATUS_OK = 1;
+    const STATUS_BLOCKED = 2;
+    const STATUS_DELETED = 3;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -70,6 +74,31 @@ class User extends BaseUser
     public function setName($name)
     {
         $this->name = $name;
+    }
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $status;
+    
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+     public function getStatus()
+    {
+        return $this->status;
+    }
+    
+    public function getStatusStr() {
+        switch ($this->status) {
+            case self::STATUS_OK: return "ok";
+            case self::STATUS_BLOCKED: return "blocked";
+            case self::STATUS_DELETED: return "deleted";
+            default:
+                throw new RuntimeException("User status corrupt!");
+        }
     }
     
     /**
@@ -337,6 +366,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->status = User::STATUS_OK;
         // your own logic
     }
 

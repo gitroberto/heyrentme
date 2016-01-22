@@ -2,10 +2,13 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\User;
+use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserController extends BaseAdminController {
      /**
@@ -14,6 +17,28 @@ class UserController extends BaseAdminController {
      */
     public function indexAction() {
         return $this->render('admin/user/index.html.twig');
+    }
+    
+    public function sendUserBlockedMessage(Request $request, User $user)
+    {      
+                        
+        $template = 'Emails/User/mail_user_blocked.html.twig';       
+        
+        $emailHtml = $this->renderView($template, array(                                    
+            'user' => $user,
+            'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix')            
+        ));
+        
+        $subject = "User bloked.";
+        
+        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+        $message = Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($user->getEmail())
+            ->setBody($emailHtml, 'text/html');
+        $this->get('mailer')->send($message);
+        
     }
     
     /**
@@ -27,9 +52,18 @@ class UserController extends BaseAdminController {
             throw $this->createNotFoundException('No user found for id '.$id);
         }        
         
-        $form = $this->createFormBuilder($user)
-                
-                ->add('Enabled', 'checkbox', array('required' => false))
+        $form = $this->createFormBuilder($user)->add('status', 'choice', array(
+                    'choices' => array(                        
+                        'Ok' => User::STATUS_OK,
+                        'Blocked' => User::STATUS_BLOCKED,
+                        'Deleted' => User::STATUS_DELETED
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
                 ->getForm();
 
        
@@ -41,6 +75,10 @@ class UserController extends BaseAdminController {
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
+            
+            if ($user->getStatus() == User::STATUS_BLOCKED){
+                $this->sendUserBlockedMessage($request, $user);
+            }
 
             return $this->redirect($this->generateUrl('admin_users_list' ));
                     
@@ -91,6 +129,7 @@ class UserController extends BaseAdminController {
             $cell[$i++] = $dataRow->getName();
             $cell[$i++] = $dataRow->getSurname();
             $cell[$i++] = $dataRow->isEnabled();
+            $cell[$i++] = $dataRow->getStatusStr();
             $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
             $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');            
             $row['cell'] = $cell;
