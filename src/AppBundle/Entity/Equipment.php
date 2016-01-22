@@ -823,6 +823,23 @@ class Equipment
         
     }
 
+    public function getTimeAsString() {
+        $arr = array();
+        if ($this->getTimeMorning()) {
+            array_push($arr, 'Nachm.');
+        }
+        if ($this->getTimeAfternoon()) {
+            array_push($arr, 'Vorm.');
+        }
+        if ($this->getTimeEvening()) {
+            array_push($arr, 'Abends');
+        }
+        if ($this->getTimeWeekend()) {
+            array_push($arr, 'WE');
+        }
+        return implode(" / ", $arr);
+    }
+    
     /**
      * Set age
      *

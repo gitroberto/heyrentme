@@ -137,7 +137,7 @@ class DefaultController extends BaseController {
         
         $subcat = $eq->getSubcategory();
         
-        $featureSections = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentFeatures($eq->getId());
+        //$featureSections = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentFeatures($eq->getId());
         $post = $this->getDoctrineRepo('AppBundle:Blog')->getPostForEquipmentPage();
                 
         $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getSamplePreviewEquipmentsBySubcategory($eq->getSubcategory()->getId(), $eq->getId());
@@ -148,7 +148,7 @@ class DefaultController extends BaseController {
                 'equipments' => $equipments,
                 'category' => $subcat->getCategory(),
                 'categories' => $this->getCategories($request),
-                'featureSections' => $featureSections,
+                //'featureSections' => $featureSections,
                 'next' => $next,
                 'prev' => $prev,
                 'post' => $post

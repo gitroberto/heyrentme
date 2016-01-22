@@ -153,17 +153,11 @@
                     <div id="collapseQuote" class="panel-collapse collapse2 collapse">
                         <div class="panel-body">
                            <p class="panel-head">Das besondere an deinem Angebot?</p>
-                            <p>
-                                Das ist eine Mountainbike Beschreibung consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore.
-                            </p>
+                            <p>{{ equipment.descType }}</p>
                             <p class="panel-head">Bester Einsatzbereich?</p>
-                            <p>
-                                Das ist eine Mountainbike Beschreibung consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore.
-                            </p>
+                            <p>{{ equipment.descSpecial }}</p>
                             <p class="panel-head">Was sollte man noch darüber wissen?</p>
-                            <p>
-                                Das ist eine Mountainbike Beschreibung consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore.
-                            </p>
+                            <p>{{ equipment.descCondition }}</p>
                         </div>
                     </div>
                 </div>
@@ -411,6 +405,7 @@
                       {{ equipment.price }} € pro Tag
                     </p>
                   </div>
+                    {#
                     {% for key, val in featureSections %}
                         <div class="user-tab cal" title="{{ key }}">
                             <p>
@@ -418,6 +413,10 @@
                             </p>
                         </div>
                     {% endfor %}
+                    #}
+                    <div class="user-tab cal">
+                        <p>{{ equipment.timeAsString }}</p>
+                    </div>
                 </div>
             </div>
             
