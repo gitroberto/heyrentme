@@ -41,13 +41,7 @@
 
                                     <div class="row">
                                         <div class="col-xs-8">
-                                            <ul>
-                                                <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                                <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                                <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                                <li><span class="glyphicon glyphicon-star"></span></li>
-                                                <li><span class="glyphicon glyphicon-star"></span></li>
-                                            </ul>
+                                            {{ include('common/stars.html.twig', { rating: o.rating }) }}
                                             <p class="product-name">{{ o.name }}</p>
                                         </div>
                                         <div class="col-xs-4">

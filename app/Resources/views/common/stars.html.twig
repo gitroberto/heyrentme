@@ -1,0 +1,12 @@
+{% if rating %}
+    {% set x = rating|round(1) %}
+    <ul title="{{ rating|number_format(1) }}">
+        <li><span class="glyphicon glyphicon-star {% if x >= 0.5 %}marked{% endif %}"></span> </li>
+        <li><span class="glyphicon glyphicon-star {% if x >= 1.5 %}marked{% endif %}"></span> </li>
+        <li><span class="glyphicon glyphicon-star {% if x >= 2.5 %}marked{% endif %}"></span> </li>
+        <li><span class="glyphicon glyphicon-star {% if x >= 3.5 %}marked{% endif %}"></span> </li>
+        <li><span class="glyphicon glyphicon-star {% if x >= 4.5 %}marked{% endif %}"></span> </li>
+    </ul>
+{% else %}
+    <ul></ul>
+{% endif %}

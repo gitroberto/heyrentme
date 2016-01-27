@@ -47,6 +47,7 @@
                         <img src="{{ inquiry.user.getProfilePicture(false, image_url_prefix) }}" alt=""/>
                     {% endif %}
                     <p>{% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %}</p>
+                    {# todo: ratings for a user #}
                     <ul data-toggle="modal" data-target=".bewertungen">
                         <li><span class="marked glyphicon glyphicon-star"></span></li>
                         <li><span class="marked glyphicon glyphicon-star"></span></li>

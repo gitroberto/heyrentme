@@ -141,6 +141,7 @@ class DefaultController extends BaseController {
         $post = $this->getDoctrineRepo('AppBundle:Blog')->getPostForEquipmentPage();
                 
         $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getSamplePreviewEquipmentsBySubcategory($eq->getSubcategory()->getId(), $eq->getId());
+        $opinions = $this->getDoctrineRepo('AppBundle:EquipmentRating')->getAllSorted($eq->getId());
         
         if ($eq != null) {
             return $this->render('default/equipment.html.twig', array(
@@ -151,7 +152,8 @@ class DefaultController extends BaseController {
                 //'featureSections' => $featureSections,
                 'next' => $next,
                 'prev' => $prev,
-                'post' => $post
+                'post' => $post,
+                'opinions' => $opinions
             ));
         }
         return null;

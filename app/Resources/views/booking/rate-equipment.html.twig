@@ -18,13 +18,7 @@
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
-                                <ul>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="glyphicon glyphicon-star"></span></li>
-                                    <li><span class="glyphicon glyphicon-star"></span></li>
-                                </ul>
+                                {{ include('common/stars.html.twig', { rating: eq.rating }) }}
                                 <p class="product-name">{{ equipment.name }}</p>
                             </div>
                                 <div class="col-xs-6"><p class="price">{{ equipment.price|number_format(0) }} €</p>

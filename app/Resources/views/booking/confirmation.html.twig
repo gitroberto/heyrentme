@@ -14,20 +14,14 @@
             <h1>{{ inquiry.equipment.name }} / Jetzt Buchen</h1>
             <div class="row summary">
                 <div class="ad col-md-4 col-sm-12">
-                    <img src="/img/placeholder/ad.jpg" alt="ad" class="img-responsive"/>
+                    <img src="{{ inquiry.equipment.images[0].urlPath(image_url_prefix) }}" alt="{{ inquiry.equipment.name }}" class="img-responsive"/>
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
-                                <ul>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="glyphicon glyphicon-star"></span></li>
-                                    <li><span class="glyphicon glyphicon-star"></span></li>
-                                </ul>
-                                <p class="product-name">cannondale</p>
+                                {{ include('common/stars.html.twig', { rating: inquiry.equipment.rating }) }}
+                                <p class="product-name">{{ inquiry.equipment.name }}</p>
                             </div>
-                            <div class="col-xs-6"><p class="price">12.00 €</p>
+                            <div class="col-xs-6"><p class="price">{{ inquiry.equipment.price|number_format(0) }} €</p>
                                 <p class="tag">pro tag</p>
                             </div>
                         </div>
