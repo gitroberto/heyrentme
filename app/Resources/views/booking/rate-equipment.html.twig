@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+  <div class="request-container head-req">
+    <img src="/img/detail-bg.jpg" alt="image" class="img-responsive max-320"/></div>
+    <img src="/img/detail-bg-rwd.jpg" alt="image" class="img-responsive min-320"/></div>
+  </div>
+  <div class="container request-container">
+      {{ form_start(form) }}
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>{{ equipment.name }} / Jetzt Bewerten</h1>
+            <div class="row">
+                <div class="ad col-sm-4">
+                    <img src="{{ equipment.images[0].urlPath(image_url_prefix) }}" alt="{{ equipment.name }}" class="img-responsive"/>
+                    <div class="product-info product-ad">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <ul>
+                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
+                                    <li><span class="glyphicon glyphicon-star"></span></li>
+                                    <li><span class="glyphicon glyphicon-star"></span></li>
+                                </ul>
+                                <p class="product-name">{{ equipment.name }}</p>
+                            </div>
+                                <div class="col-xs-6"><p class="price">{{ equipment.price|number_format(0) }} €</p>
+                                <p class="tag">pro tag</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div id="rate"></div>
+                    {{ form_widget(form.rating) }}
+                    <div class="err-msg">{{ form_errors(form) }}</div> {# hidden field errors appear in form's errors #}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row bewertung-request-form">
+        <div class="col-xs-12">
+            <span class="label-span">Text zur Bewertung*</span>
+            <span class="sign-span">300 Zeichen verbleibend </span>
+        </div>
+        <div class="col-xs-12">            
+            {{ form_widget(form.opinion, { 'attr': { 'placeholder': 'Warum hast du diese Bewertung gewählt?
+Was hat dir gefallen oder nicht gefallen?
+Wem würdest du diesen Artikel empfehlen?' } }) }}
+            <div class="err-msg">{{ form_errors(form.opinion) }}</div>
+            <span class="must-sign">*Bitte ausfüllen</span>
+            <button>Jetzt Bewerten</button>
+        </div>
+    </div>
+    <span class="add-margin-bottom-300"></span>
+    {{ form_end(form) }}
+  </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(function() {
+        var $r = $("#rate");
+        $r.raty({ 
+            path: '/img/raty',
+            {% if form.vars.value and form.vars.value.rating %}
+                score: {{ form.vars.value.rating }},
+            {% endif %}
+            targetScore: '#form_rating'
+        });
+    });
+</script>
+{% endblock %}

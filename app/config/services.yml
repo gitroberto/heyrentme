@@ -19,7 +19,7 @@ services:
             
     app.custom_fos_user_mailer:
         class: AppBundle\Mailer\HeyrentmeMailer
-        arguments: [%mailer_fromEmail%, @router, @templating, @mailer,{ resetting.template: %fos_user.resetting.email.template%, mailer_image_url_prefix: %mailer_image_url_prefix%, admin_email: %admin_email% }]
+        arguments: [%mailer_fromEmail%, @router, @templating, @mailer,{ resetting.template: %fos_user.resetting.email.template%, mailer_image_url_prefix: %mailer_app_url_prefix%, admin_email: %admin_email% }]
         
     form_einstellungen:
         class: AppBundle\Form\EinstellungenType
@@ -29,8 +29,8 @@ services:
     
     app.general_mailer:
         class: AppBundle\Mailer\GeneralMailer
-        arguments: ['@mailer', '@templating', @doctrine.orm.entity_manager , { mailer_fromEmail: %mailer_fromemail%, mailer_image_url_prefix: %mailer_image_url_prefix%  } ]
+        arguments: ['@mailer', '@templating', @doctrine.orm.entity_manager , { mailer_fromEmail: %mailer_fromemail%, mailer_image_url_prefix: %mailer_app_url_prefix%  } ]
     
     scheduler:
         class: AppBundle\Service\SchedulerService
-        arguments: [@doctrine.orm.entity_manager, @mailer, @templating, @monolog.logger.scheduler, @router, { mailer_image_url_prefix: %mailer_image_url_prefix%, mailer_fromemail: %mailer_fromemail%, mailer_fromname: %mailer_fromname% }]
+        arguments: [@doctrine.orm.entity_manager, @mailer, @templating, @monolog.logger.scheduler, @router, { mailer_app_url_prefix: %mailer_app_url_prefix%, mailer_fromemail: %mailer_fromemail%, mailer_fromname: %mailer_fromname% }]

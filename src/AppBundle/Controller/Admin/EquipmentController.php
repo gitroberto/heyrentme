@@ -159,7 +159,7 @@ class EquipmentController extends BaseAdminController {
         
         $emailHtml = $this->renderView($template, array(                                    
             'equipment' => $eq,
-            'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+            'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
             'reason' => $reason,
             'userLink' => $userLink,
             'status_approved' => Equipment::STATUS_APPROVED,

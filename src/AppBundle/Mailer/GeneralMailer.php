@@ -39,7 +39,7 @@ class GeneralMailer {
                 'Emails/registration_welcome.html.twig',
                 array(
                     'name' => $username, 
-                    'mailer_image_url_prefix' => $this->parameters['mailer_image_url_prefix'],
+                    'mailer_app_url_prefix' => $this->parameters['mailer_app_url_prefix'],
                     'discountCode' => $code
                 )
             ),

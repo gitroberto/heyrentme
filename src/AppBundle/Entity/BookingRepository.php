@@ -13,7 +13,8 @@ class BookingRepository extends EntityRepository {
         // we assume scheduler will run every 5 minutes
                 
         $delta = new DateInterval('PT5H55M01S'); // sub 6 hrs add 4 min 59 sec
-        $t = $datetime->sub($delta);
+        $t = clone $datetime;
+        $t->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -33,7 +34,8 @@ EOT;
         // we assume scheduler will run every 5 minutes
                 
         $delta = new DateInterval('PT5H55M01S'); // sub 6 hrs add 4 min 59 sec
-        $t = $datetime->sub($delta);
+        $t = clone $datetime;
+        $t->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -53,7 +55,8 @@ EOT;
         // we assume scheduler will run every 5 minutes
                 
         $delta = new DateInterval('PT2H55M01S'); // sub 3 hrs add 4 min 59 sec
-        $t = $datetime->sub($delta);
+        $t = clone $datetime;
+        $t->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -73,7 +76,8 @@ EOT;
         // we assume scheduler will run every 5 minutes
                 
         $delta = new DateInterval('PT2H55M01S'); // sub 3 hrs add 4 min 59 sec
-        $t = $datetime->sub($delta);
+        $t = clone $datetime;
+        $t->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -93,7 +97,8 @@ EOT;
         // we assume scheduler will run every 5 minutes
                 
         $delta = new DateInterval('PT4M59S'); // 0 hrs 4 min 59 sec
-        $t = $datetime->add($delta);
+        $t = clone $datetime;
+        $t->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -113,7 +118,8 @@ EOT;
         // we assume scheduler will run every 5 minutes
                 
         $delta = new DateInterval('PT4M59S'); // 0 hrs 4 min 59 sec
-        $t = $datetime->add($delta);
+        $t = clone $datetime;
+        $t->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -133,7 +139,8 @@ EOT;
         // we assume scheduler will run every 5 minutes
                 
         $delta = new DateInterval('PT3H4M59S'); // 3 hrs 4 min 59 sec
-        $t = $datetime->add($delta);
+        $t = clone $datetime;
+        $t->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT
@@ -153,7 +160,8 @@ EOT;
         // we assume scheduler will run every 5 minutes
                 
         $delta = new DateInterval('PT3H4M59S'); // 3 hrs 4 min 59 sec
-        $t = $datetime->add($delta);
+        $t = clone $datetime;
+        $t->sub($delta);
         $tStr = $t->format('Y-m-d H:i:s');
         
         $dql = <<<EOT

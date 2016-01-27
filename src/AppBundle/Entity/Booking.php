@@ -37,10 +37,6 @@ class Booking {
     /** 
      * @ORM\Column(type="integer")
      */
-    private $rating;
-    /** 
-     * @ORM\Column(type="decimal")
-     */
     private $price;
     /** 
      * @ORM\Column(type="decimal")
@@ -91,7 +87,7 @@ class Booking {
     /** 
      * @ORM\Column(type="string")
      */
-    private $rateProviderUuid;
+    private $rateEquipmentUuid;
     
     /**
      * @ORM\OneToOne(targetEntity="Inquiry", inversedBy="booking");
@@ -186,30 +182,6 @@ class Booking {
     public function getModifiedAt()
     {
         return $this->modifiedAt;
-    }
-
-    /**
-     * Set rating
-     *
-     * @param integer $rating
-     *
-     * @return Booking
-     */
-    public function setRating($rating)
-    {
-        $this->rating = $rating;
-
-        return $this;
-    }
-
-    /**
-     * Get rating
-     *
-     * @return integer
-     */
-    public function getRating()
-    {
-        return $this->rating;
     }
 
     /**
@@ -549,26 +521,26 @@ class Booking {
     }
 
     /**
-     * Set rateProviderUuid
+     * Set rateEquipmentUuid
      *
-     * @param string $rateProviderUuid
+     * @param string $rateEquipmentUuid
      *
      * @return Booking
      */
-    public function setRateProviderUuid($rateProviderUuid)
+    public function setRateEquipmentUuid($rateEquipmentUuid)
     {
-        $this->rateProviderUuid = $rateProviderUuid;
+        $this->rateEquipmentUuid = $rateEquipmentUuid;
 
         return $this;
     }
 
     /**
-     * Get rateProviderUuid
+     * Get rateEquipmentUuid
      *
      * @return string
      */
-    public function getRateProviderUuid()
+    public function getRateEquipmentUuid()
     {
-        return $this->rateProviderUuid;
+        return $this->rateEquipmentUuid;
     }
 }

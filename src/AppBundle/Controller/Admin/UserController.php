@@ -26,7 +26,7 @@ class UserController extends BaseAdminController {
         
         $emailHtml = $this->renderView($template, array(                                    
             'user' => $user,
-            'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix')            
+            'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix')            
         ));
         
         $subject = "User bloked.";

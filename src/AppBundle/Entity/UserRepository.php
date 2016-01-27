@@ -89,4 +89,26 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }   
+
+    /* score */
+    public function addRating($userRating) {
+        $em = $this->getEntityManager();
+        $em->persist($userRating);
+        $em->flush();
+        $this->updateScore($userRating->getUser()->getId());
+    }
+    public function updateScore($userId) {
+        $sql = <<<EOT
+            update fos_user
+            set rating = (
+                    select avg(rating)
+                    from user_rating
+                    where user_id = {$userId}
+            )
+            where id = {$userId}
+EOT;
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->exec($sql);
+        $conn->close();        
+    }
 }

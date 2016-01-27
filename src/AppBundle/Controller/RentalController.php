@@ -70,7 +70,7 @@ class RentalController extends BaseController {
                     $request->getSchemeAndHttpHost(),
                     $this->get('router')->generate('rentme'));
             $emailHtml = $this->renderView('Emails/candidate.html.twig', array(
-                'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 //'custom_message' => $subcategory->getEmailBody(),
                 'url' => $url
             ));
@@ -133,7 +133,7 @@ class RentalController extends BaseController {
                 $request->getSchemeAndHttpHost(),
                 $this->get('router')->generate('provider'));
         $emailHtml = $this->renderView('Emails/candidate.html.twig', array(
-            'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+            'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
             //'custom_message' => $subcategory->getEmailBody(),
             'url' => $url
         ));

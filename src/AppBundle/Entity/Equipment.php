@@ -168,6 +168,16 @@ class Equipment
      * @ORM\Column(type="string")
      */
     protected $descCondition;
+    /**
+     * @ORM\Column(type="decimal")
+     */
+    protected $rating;
+    /**
+     * @ORM\OneToMany(targetEntity="EquipmentRating", mappedBy="equipment")
+     */
+    protected $ratings;
+
+    
     
     public function getUrlPath() {
        $s = Utils::slugify($this->getName());
@@ -1030,5 +1040,63 @@ class Equipment
     public function getDescCondition()
     {
         return $this->descCondition;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param string $rating
+     *
+     * @return Equipment
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return string
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * Add rating
+     *
+     * @param \AppBundle\Entity\EquipmentRating $rating
+     *
+     * @return Equipment
+     */
+    public function addRating(\AppBundle\Entity\EquipmentRating $rating)
+    {
+        $this->ratings[] = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Remove rating
+     *
+     * @param \AppBundle\Entity\EquipmentRating $rating
+     */
+    public function removeRating(\AppBundle\Entity\EquipmentRating $rating)
+    {
+        $this->ratings->removeElement($rating);
+    }
+
+    /**
+     * Get ratings
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRatings()
+    {
+        return $this->ratings;
     }
 }

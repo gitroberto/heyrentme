@@ -4,7 +4,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Booking;
 use AppBundle\Entity\DiscountCode;
+use AppBundle\Entity\EquipmentRating;
 use AppBundle\Entity\Inquiry;
+use AppBundle\Entity\UserRating;
 use AppBundle\Utils\Utils;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -118,7 +120,7 @@ class BookingController extends BaseController {
                     $this->generateUrl('booking-response', array('id' => $inq->getId()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             $emailHtml = $this->renderView('Emails\mail_to_provider_offer_request.html.twig', array(
-                'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
                 'equipment' => $eq,
@@ -188,7 +190,7 @@ class BookingController extends BaseController {
             }
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             $emailHtml = $this->renderView('Emails\mail_to_user_confirm_offer_accepted.html.twig', array(
-                'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
                 'equipment' => $eq,
@@ -291,7 +293,7 @@ class BookingController extends BaseController {
             
             $url = $request->getSchemeAndHttpHost() . $this->generateUrl('einstellungen');
             $emailHtml = $this->renderView('Emails\mail_to_provider_confirm_booking.html.twig', array(
-                'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
                 'equipment' => $inq->getEquipment(),
@@ -312,7 +314,7 @@ class BookingController extends BaseController {
                 $email = $inq->getEmail();
             }
             $emailHtml = $this->renderView('Emails\mail_to_user_confirm_booking.html.twig', array(
-                'mailer_image_url_prefix' => $this->getParameter('mailer_image_url_prefix'),
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
                 'discountCode' => $discountCode,
@@ -374,5 +376,129 @@ class BookingController extends BaseController {
         }
         return new JsonResponse(array('result' => 'ok'));
     }
-    
+ 
+    /** 
+     * @Route("/booking/rate-user/{uuid}", name="rate-user")
+     */
+    public function rateUserAction(Request $request, $uuid) {
+        $bk = $this->getDoctrineRepo('AppBundle:Booking')->findOneByRateUserUuid($uuid);
+        
+        if ($bk === null) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+            // todo: check user identity
+        }
+        
+        $inq = $bk->getInquiry();
+        $bkUser = $inq->getUser();
+        
+        // build form
+        //<editor-fold>
+            $form = $this->createFormBuilder()
+                ->add('rating', 'hidden', array(
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
+                ->add('opinion', 'textarea', array(
+                    'attr' => array(
+                        'max-length' => 300
+                    ),
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 300))
+                    )
+                ))
+                ->getForm();
+        //</editor-fold>
+            
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $data = $form->getData();
+            
+            $ur = new UserRating();
+            $ur->setUser($bkUser);
+            $ur->setBooking($bk);
+            $ur->setOpinion($data['opinion']);
+            $ur->setRating($data['rating']);
+            
+            $this->getDoctrineRepo('AppBundle:User')->addRating($ur);
+            
+            $bk->setRateUserUuid(null);
+            $em->flush();
+            
+            return $this->redirectToRoute("start-page");
+        }
+        
+        
+        return $this->render('booking/rate-user.html.twig', array(
+            'user' => $bkUser,
+            'form' => $form->createView()
+        ));
+    }
+ 
+    /** 
+     * @Route("/booking/rate-equipment/{uuid}", name="rate-equipment")
+     */
+    public function rateEquipmentAction(Request $request, $uuid) {
+        $bk = $this->getDoctrineRepo('AppBundle:Booking')->findOneByRateEquipmentUuid($uuid);
+        
+        if ($bk === null) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+            // todo: check user identity
+        }
+        
+        $inq = $bk->getInquiry();
+        $eq = $inq->getEquipment();
+        
+        // build form
+        //<editor-fold>
+            $form = $this->createFormBuilder()
+                ->add('rating', 'hidden', array(
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
+                ->add('opinion', 'textarea', array(
+                    'attr' => array(
+                        'max-length' => 300
+                        
+                    ),
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 300))
+                    )
+                ))
+                ->getForm();
+        //</editor-fold>
+            
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $data = $form->getData();
+            
+            $er = new EquipmentRating();
+            $er->setEquipment($eq);
+            $er->setBooking($bk);
+            $er->setOpinion($data['opinion']);
+            $er->setRating($data['rating']);
+            
+            $this->getDoctrineRepo('AppBundle:Equipment')->addRating($er);
+            
+            $bk->setRateEquipmentUuid(null);
+            $em->flush();
+            
+            return $this->redirectToRoute("start-page");
+        }
+        
+        
+        return $this->render('booking/rate-equipment.html.twig', array(
+            'equipment' => $eq,
+            'form' => $form->createView()
+        ));
+    }
 }

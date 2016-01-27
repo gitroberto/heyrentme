@@ -24,5 +24,5 @@ parameters:
     facebook_client_secret: c801ab39b2606d9818641b2731ef3555
     mailer_fromemail: test.app@hey-buyme.com
     mailer_fromname: Hey! Rent Me (TEST)
-    mailer_image_url_prefix: http://test.hey-buyme.com/
+    mailer_app_url_prefix: http://test.hey-buyme.com
     admin_email: sebastian.bera@dantesoft.com

@@ -31,6 +31,10 @@ class User extends BaseUser
      * @ORM\Column(name="facebookID", type="string", nullable=true)
      */
     protected $facebookID;
+    /**
+     * @ORM\Column(type="decimal")
+     */
+    protected $rating;
     
     public function getFacebookID()
     {
@@ -432,5 +436,94 @@ class User extends BaseUser
     public function getInquiries()
     {
         return $this->inquiries;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param string $rating
+     *
+     * @return User
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return string
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * Add equipment
+     *
+     * @param \AppBundle\Entity\Equipment $equipment
+     *
+     * @return User
+     */
+    public function addEquipment(\AppBundle\Entity\Equipment $equipment)
+    {
+        $this->equipments[] = $equipment;
+
+        return $this;
+    }
+
+    /**
+     * Remove equipment
+     *
+     * @param \AppBundle\Entity\Equipment $equipment
+     */
+    public function removeEquipment(\AppBundle\Entity\Equipment $equipment)
+    {
+        $this->equipments->removeElement($equipment);
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="UserRating", mappedBy="user")
+     */
+    protected $ratings;
+
+    
+
+    /**
+     * Add rating
+     *
+     * @param \AppBundle\Entity\UserRating $rating
+     *
+     * @return User
+     */
+    public function addRating(\AppBundle\Entity\UserRating $rating)
+    {
+        $this->ratings[] = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Remove rating
+     *
+     * @param \AppBundle\Entity\UserRating $rating
+     */
+    public function removeRating(\AppBundle\Entity\UserRating $rating)
+    {
+        $this->ratings->removeElement($rating);
+    }
+
+    /**
+     * Get ratings
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRatings()
+    {
+        return $this->ratings;
     }
 }

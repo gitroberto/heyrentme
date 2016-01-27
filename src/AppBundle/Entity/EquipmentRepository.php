@@ -237,4 +237,27 @@ EOT;
         }
         return $fts;
     }
+
+    /* score */
+    public function addRating($equipmentRating) {
+        $em = $this->getEntityManager();
+        $em->persist($equipmentRating);
+        $em->flush();
+        $this->updateScore($equipmentRating->getEquipment()->getId());
+    }
+    public function updateScore($equipmentId) {
+        $sql = <<<EOT
+            update equipment
+            set rating = (
+                    select avg(rating)
+                    from equipment_rating
+                    where equipment_id = {$equipmentId}
+            )
+            where id = {$equipmentId}
+EOT;
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->exec($sql);
+        $conn->close();        
+    }
+    
 }

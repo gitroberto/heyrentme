@@ -23,7 +23,7 @@ class SchedulerService {
     protected $router;
     
     protected $from;
-    protected $imageUrlPrefix;
+    protected $appUrlPrefix;
     
     public function __construct(EntityManager $em, Swift_Mailer $mailer, TwigEngine $templating, Logger $logger, UrlGeneratorInterface $router, array $parameters) {
         $this->em = $em;
@@ -37,9 +37,10 @@ class SchedulerService {
     public function run() {
         // common params
         $this->from = array($this->parameters['mailer_fromemail'] => $this->parameters['mailer_fromname']);
-        $this->imageUrlPrefix = $this->parameters['mailer_image_url_prefix'];
+        $this->appUrlPrefix = $this->parameters['mailer_app_url_prefix'];
 
         $now = new DateTime();
+        $this->logger->debug("now: " . $now->format('Y-m-d H:i:s'));
         $this->sendRentReminders($now);
         $this->sendAllOkReminders($now);
         $this->sendReturnReminders($now);
@@ -64,7 +65,7 @@ class SchedulerService {
                     $email = $inq->getEmail();
                 }
                 $emailHtml = $this->templating->render('Emails\mail_to_user_reminder_start_booking.html.twig', array(
-                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
                     'discountCode' => $discountCode,
@@ -101,7 +102,7 @@ class SchedulerService {
 
                 $email = $provider->getEmail();
                 $emailHtml = $this->templating->render('Emails\mail_to_provider_reminder_start_booking.html.twig', array(
-                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
                     'discountCode' => $discountCode,
@@ -142,7 +143,7 @@ class SchedulerService {
                     $email = $inq->getEmail();
                 }
                 $emailHtml = $this->templating->render('Emails\mail_to_user_everything_ok.html.twig', array(
-                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'inquiry' => $inq
                 ));
                 $message = Swift_Message::newInstance()
@@ -175,7 +176,7 @@ class SchedulerService {
 
                 $email = $provider->getEmail();
                 $emailHtml = $this->templating->render('Emails\mail_to_provider_everything_ok.html.twig', array(
-                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider
                 ));
                 $message = Swift_Message::newInstance()
@@ -215,7 +216,7 @@ class SchedulerService {
                     $email = $inq->getEmail();
                 }
                 $emailHtml = $this->templating->render('Emails\mail_to_user_reminder_return_offer.html.twig', array(
-                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
                     'discountCode' => $discountCode,
@@ -252,7 +253,7 @@ class SchedulerService {
 
                 $email = $provider->getEmail();
                 $emailHtml = $this->templating->render('Emails\mail_to_provider_reminder_return_offer.html.twig', array(
-                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
                     'discountCode' => $discountCode,
@@ -294,12 +295,13 @@ class SchedulerService {
                 else {
                     $email = $inq->getEmail();
                 }
-                // TODO: build url with uuid
+                $url = $this->appUrlPrefix . $this->router->generate('rate-equipment', array('uuid' => $uuid));
                 $emailHtml = $this->templating->render('Emails\mail_to_user_rate_provider.html.twig', array(
-                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'inquiry' => $inq,
                     'provider' => $provider,
-                    'equipment' => $eq
+                    'equipment' => $eq,
+                    'url' => $url
                 ));
                 $message = Swift_Message::newInstance()
                     ->setSubject('Du hast soeben eine Anfrage erhalten')
@@ -309,7 +311,7 @@ class SchedulerService {
                 $this->mailer->send($message);
 
                 $bk->setNoticeRateUserAt(new DateTime());
-                $bk->setRateProviderUuid($uuid);
+                $bk->setRateEquipmentUuid($uuid);
                 $this->em->flush();
                 
                 $msg = sprintf("\t%s, from-date: %s", $email, $inq->getFromAt()->format("Y-m-d H:i:s"));
@@ -331,12 +333,13 @@ class SchedulerService {
                 $provider = $eq->getUser();
                 $uuid = Utils::getUuid();
 
-                // TODO: create url with uuid
+                $url = $this->appUrlPrefix . $this->router->generate('rate-user', array('uuid' => $uuid));
                 $email = $provider->getEmail();
                 $emailHtml = $this->templating->render('Emails\mail_to_provider_rate_user.html.twig', array(
-                    'mailer_image_url_prefix' => $this->imageUrlPrefix,
+                    'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
-                    'inquiry' => $inq
+                    'inquiry' => $inq,
+                    'url' => $url
                 ));
                 $message = Swift_Message::newInstance()
                     ->setSubject('Du hast soeben eine Anfrage erhalten')
