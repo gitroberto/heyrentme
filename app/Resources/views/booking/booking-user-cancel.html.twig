@@ -11,23 +11,17 @@
   <div class="container request-container">
     <div class="row">
         <div class="col-xs-12">
-            <h1>Cube Mountainbike / Angebot stornieren</h1>
+            <h1>{{ booking.inquiry.equipment.name }} / Angebot stornieren</h1>
             <div class="row summary">
                 <div class="ad col-md-4 col-sm-12">
-                    <img src="/img/placeholder/ad.jpg" alt="ad" class="img-responsive"/>
+                    <img src="{% if booking.inquiry.equipment.images|length > 0 %}{{ booking.inquiry.equipment.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" alt="{{ booking.inquiry.equipment.name }}" class="img-responsive"/>
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
-                                <ul>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="marked glyphicon glyphicon-star"></span></li>
-                                    <li><span class="glyphicon glyphicon-star"></span></li>
-                                    <li><span class="glyphicon glyphicon-star"></span></li>
-                                </ul>
-                                <p class="product-name">cannondale</p>
+                                {{ include('common/stars.html.twig', { rating: booking.inquiry.equipment.rating }) }}
+                                <p class="product-name">{{ booking.inquiry.equipment.name }}</p>
                             </div>
-                            <div class="col-xs-6"><p class="price">12.00 €</p>
+                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.equipment.price|number_format(0) }} €</p>
                                 <p class="tag">pro tag</p>
                             </div>
                         </div>
@@ -40,26 +34,29 @@
                     <p>ORT:</p><br />
                 </div>
                 <div class="col-sm-4 col-xs-6 summary-info">
-                    <p>18.07.2015 14:00</p>
-                    <p>18.07.2015 17:00</p>
-                    <p>30,- &euro;</p>
+                    <p>{{ booking.inquiry.fromAt|date('d.m.Y H:i') }}</p>
+                    <p>{{ booking.inquiry.toAt|date('d.m.Y H:i') }}</p>
+                    <p>{{ booking.inquiry.price|number_format(0) }},- €</p>
                     <p class="dont-transform">
-                      Grosse Neugasse, 1050<br />
-                              Wien
+                        {{ booking.inquiry.equipment.addressAsString }}
                     </p>
                 </div>
             </div>
         </div>
     </div>
+    {{ form_start(form) }}
     <div class="row legals stornieren">
+        <div class="err-msg">{{ form_widget(form.reason) }}</div>
+            {{ form_errors(form) }}
         <div class="col-xs-12">
             <h3>Ich möchte vom Angebot aus folgenden Gründen zurücktreten:</h3>
-            <input type="radio" id="es" name="radio-stornieren"><label for="es"><span></span> Es ist etwas dazwischengekommen. Keine Zeit</label>
-            <input type="radio" id="sonstiges" name="radio-stornieren"><label for="sonstiges"><span></span> Sonstiges:</label>
-            <input type="text" class="full-rwd"/>
+            <input type="radio" id="es" name="radio-stornieren" value="no-time" required="required"><label for="es"><span></span> Es ist etwas dazwischengekommen. Keine Zeit</label>
+            <input type="radio" id="sonstiges" name="radio-stornieren" value="other"><label for="sonstiges"><span></span> Sonstiges:</label>
+            {{ form_widget(form.description, { 'attr': { 'class': 'full-rwd', 'disabled': 'disabled' } }) }}
             <button class="btn-red full-rwd">Angebot stornieren</button>
         </div>
     </div>
+    {{ form_end(form) }}
     <span class="add-margin-bottom-300"></span>
   </div>
   </div>
@@ -82,4 +79,31 @@
           </div>
       </div>
   </div>
+{% endblock %}
+{% block script %}
+<script>
+    $(function() {
+        refreshCtrl();
+        $(":radio[name='radio-stornieren']").on('click change blur', radioChanged);
+    });
+    function radioChanged() {
+        var $radio = $(":radio[name='radio-stornieren']:checked");
+        var $text = $("#form_reason");
+        $text.val($radio.val());
+        refreshCtrl();
+    }
+    function refreshCtrl() {
+        var $radio = $(":radio[name='radio-stornieren']:checked");
+        var $text = $("#form_description");
+        if ($radio.attr('id') === 'sonstiges') {
+            $text.attr('required', 'required');
+            $text.removeAttr('disabled');
+        }
+        else {
+            $text.removeAttr('required');
+            $text.attr('disabled', 'disabled');
+            $text.val('');
+        }
+    }
+</script>    
 {% endblock %}

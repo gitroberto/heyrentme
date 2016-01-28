@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Booking;
+use AppBundle\Entity\BookingCancel;
 use AppBundle\Entity\DiscountCode;
 use AppBundle\Entity\EquipmentRating;
 use AppBundle\Entity\Inquiry;
@@ -535,11 +536,84 @@ class BookingController extends BaseController {
      */
     public function userCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
+        $user = $this->getUser();
+        // todo: check security
         
-        //todo: check security
+        $form = $this->createFormBuilder()
+            ->add('reason', 'hidden', array(
+                'required' => true,
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+            ->add('description', 'text', array(
+                'required' => false
+            ))
+            ->getForm();
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
+            $bc = new BookingCancel();
+            $bc->setBooking($bk);
+            $bc->setUser($user);
+            $bc->setProvider(0);
+            $bc->setReason($data['reason']);
+            $bc->setDescription($data['description']);
+            
+            $em->persist($bc);
+            $bk->setStatus(Booking::STATUS_USER_CANCELLED);
+            
+            $em->flush();
+            
+            // send email
+            //<editor-fold>
+            $inq = $bk->getInquiry();
+            $eq = $inq->getEquipment();
+            $provider = $eq->getUser();
+            // to user
+            if ($inq->getUser() !== null) {
+                $email = $inq->getUser()->getEmail();
+            }
+            else {
+                $email = $inq->getEmail();
+            }
+            $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+            $emailHtml = $this->renderView('Emails\mail_to_user_confirm_cancel.html.twig', array(
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
+                'provider' => $provider,
+                'inquiry' => $inq
+            ));
+            $message = Swift_Message::newInstance()
+                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setFrom($from)
+                ->setTo($email)
+                ->setBody($emailHtml, 'text/html');
+            $this->get('mailer')->send($message);
+            // to provider
+            $email = $provider->getEmail();
+            $emailHtml = $this->renderView('Emails\mail_to_provider_cancel.html.twig', array(
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
+                'provider' => $provider,
+                'inquiry' => $inq
+            ));
+            $message = Swift_Message::newInstance()
+                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setFrom($from)
+                ->setTo($email)
+                ->setBody($emailHtml, 'text/html');
+            $this->get('mailer')->send($message);
+
+            //</editor-fold>            
+            return $this->redirectToRoute("booking-list");
+        }
         
         return $this->render("booking/booking-user-cancel.html.twig", array(
-            
+            'booking' => $bk,
+            'form' => $form->createView()
         ));
     }
     /**
@@ -547,10 +621,85 @@ class BookingController extends BaseController {
      */
     public function providerCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
+        $user = $this->getUser();
         // todo: check security
         
+        $form = $this->createFormBuilder()
+            ->add('reason', 'hidden', array(
+                'required' => true,
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+            ->add('description', 'text', array(
+                'required' => false
+            ))
+            ->getForm();
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
+            $bc = new BookingCancel();
+            $bc->setBooking($bk);
+            $bc->setUser($user);
+            $bc->setProvider(1);
+            $bc->setReason($data['reason']);
+            $bc->setDescription($data['description']);
+            
+            $em->persist($bc);
+            $bk->setStatus(Booking::STATUS_PROVIDER_CANCELLED);
+            
+            $em->flush();
+            
+            // send email
+            //<editor-fold>
+            $inq = $bk->getInquiry();
+            $eq = $inq->getEquipment();
+            $provider = $eq->getUser();
+            // to user
+            if ($inq->getUser() !== null) {
+                $email = $inq->getUser()->getEmail();
+            }
+            else {
+                $email = $inq->getEmail();
+            }
+            $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+            $emailHtml = $this->renderView('Emails\mail_to_user_cancel.html.twig', array(
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
+                'provider' => $provider,
+                'inquiry' => $inq
+            ));
+            $message = Swift_Message::newInstance()
+                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setFrom($from)
+                ->setTo($email)
+                ->setBody($emailHtml, 'text/html');
+            $this->get('mailer')->send($message);
+            // to provider
+            $email = $provider->getEmail();
+            $emailHtml = $this->renderView('Emails\mail_to_provider_confirm_cancel.html.twig', array(
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
+                'provider' => $provider
+            ));
+            $message = Swift_Message::newInstance()
+                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setFrom($from)
+                ->setTo($email)
+                ->setBody($emailHtml, 'text/html');
+            $this->get('mailer')->send($message);
+
+            //</editor-fold>
+            
+            
+            return $this->redirectToRoute("booking-list");
+        }
+        
         return $this->render("booking/booking-provider-cancel.html.twig", array(
-            'booking' => $bk
+            'booking' => $bk,
+            'form' => $form->createView()
         ));
     }
     
