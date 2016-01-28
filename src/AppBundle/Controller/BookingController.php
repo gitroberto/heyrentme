@@ -501,4 +501,57 @@ class BookingController extends BaseController {
             'form' => $form->createView()
         ));
     }
+
+    /**
+     * @Route("/booking/list", name="booking-list")
+     */
+    public function listAction(Request $request) {
+        $user = $this->getUser();
+        $bookings = $this->getDoctrineRepo('AppBundle:Booking')->getAllForUser($user->getId());
+        $pBookings = $this->getDoctrineRepo('AppBundle:Booking')->getAllForProvider($user->getId());
+        return $this->render("booking/booking-list.html.twig", array(
+            'bookings' => $bookings,
+            'pBookings' => $pBookings
+        ));
+    }
+    
+    /**
+     * @Route("/booking/cancel/{id}", name="booking-cancel")
+     */
+    public function cancelAction(Request $request, $id) {
+        $user = $this->getUser();
+        $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
+        
+        if ($bk->getInquiry()->getEquipment()->getUser()->getId() == $user->getId()) {
+            return $this->redirectToRoute('booking-cancel-provider', array('id' => $id));
+        }
+        else {
+            return $this->redirectToRoute('booking-cancel-user', array('id' => $id));
+        }
+    }
+    
+    /**
+     * @Route("/booking/cancel/user/{id}", name="booking-cancel-user")
+     */
+    public function userCancelAction(Request $request, $id) {
+        $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
+        
+        //todo: check security
+        
+        return $this->render("booking/booking-user-cancel.html.twig", array(
+            
+        ));
+    }
+    /**
+     * @Route("/booking/cancel/provider/{id}", name="booking-cancel-provider")
+     */
+    public function providerCancelAction(Request $request, $id) {
+        $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
+        // todo: check security
+        
+        return $this->render("booking/booking-provider-cancel.html.twig", array(
+            'booking' => $bk
+        ));
+    }
+    
 }

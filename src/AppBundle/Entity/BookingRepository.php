@@ -8,6 +8,36 @@ use Doctrine\ORM\EntityRepository;
 
 class BookingRepository extends EntityRepository {
 
+    public function getAllForUser($userId) {
+        $dql = <<<EOT
+            select b, i, e
+            from AppBundle:Booking b
+                join b.inquiry i
+                join i.equipment e
+            where
+                i.user = :userId
+            order by i.fromAt asc
+EOT;
+        $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter('userId', $userId);
+        return $q->getResult();
+        
+    }
+    public function getAllForProvider($userId) {
+        $dql = <<<EOT
+            select b, i, e
+            from AppBundle:Booking b
+                join b.inquiry i
+                join i.equipment e
+            where
+                e.user = :userId
+            order by i.fromAt asc
+EOT;
+        $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter('userId', $userId);
+        return $q->getResult();
+    }
+    
     public function getAllForRentUserReminder(DateTime $datetime) {
         // 6 hrs before booking        
         // we assume scheduler will run every 5 minutes

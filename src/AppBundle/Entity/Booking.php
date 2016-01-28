@@ -100,6 +100,18 @@ class Booking {
      * @ORM\JoinColumn(name="discount_code_id", referencedColumnName="id")
      */    
     private $discountCode;
+    
+    
+    public function getStatusAsString() {
+        switch ($this->status) {
+            case Booking::STATUS_BOOKED: return "offen";
+            case Booking::STATUS_PROVIDER_CANCELLED: return "zurückgetreten";
+            case Booking::STATUS_USER_CANCELLED: return "storniert";
+            case Booking::STATUS_SUCCESS: return "erfolg";
+            default:
+                throw new Exception("invalid booking status", "", null);
+        }
+    }
 
     
     /**
