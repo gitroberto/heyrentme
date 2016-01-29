@@ -165,7 +165,7 @@ class EquipmentController extends BaseAdminController {
             'equipmentLink' => $eqLink
         ));
         
-        $subject = $eq->getStatus() == Equipment::STATUS_APPROVED ? "Equipment approved." : "Equipment rejected.";
+        $subject = $eq->getStatus() == Equipment::STATUS_APPROVED ? "Dein Angebot wurde akzeptiert" : "Dein Angebot nicht akzeptiert wurde";
         
         $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
         $message = Swift_Message::newInstance()

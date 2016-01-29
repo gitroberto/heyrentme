@@ -30,14 +30,15 @@
                 {% if equipment.reason %} 
                     , wegen def folgenden Grund:<br >
                     <br >                
-                    {{ equipment.reason }}
+                    <em>{{ equipment.reason }}</em>
                 {% endif %}                
             </p>    
             <p style="font-family: helvetica, arial;font-size: 15px;">
                 Hier kannst das Angebot bearbeiten, deinen Status ändern oder einen Discount hinzufügen!
             </p>
             <p>
-                <a href="{{ userLink }}"  style="background-color: #34b437;color: #fff;text-decoration: none;margin: 0 auto;display: block;width: 70%;max-width: 380px;padding: 9px 5px;text-align: center;font-size: 24px;border-radius: 6px;border-top-left-radius: 0px;margin-top: 35px;margin-bottom: 50px;font-family: helvetica, arial;">{{ userLink }}</a>
+                <a href="{{ userLink }}"  style="background-color: #34b437;color: #fff;text-decoration: none;margin: 0 auto;display: block;width: 70%;max-width: 380px;padding: 9px 5px;text-align: center;font-size: 24px;border-radius: 6px;border-top-left-radius: 0px;margin-top: 35px;margin-bottom: 50px;font-family: helvetica, arial;">
+                Angebot bearbeiten</a>
             </p>
         </td>
     </tr>    
