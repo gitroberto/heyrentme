@@ -537,7 +537,11 @@ class BookingController extends BaseController {
     public function userCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
         $user = $this->getUser();
-        // todo: check security
+        
+        // check security        
+        if ($user->getId() !== $bk->getInquiry()->getUser()->getId()) {
+            return new Response(Response::HTTP_FORBIDDEN);
+        }
         
         $form = $this->createFormBuilder()
             ->add('reason', 'hidden', array(
@@ -622,7 +626,11 @@ class BookingController extends BaseController {
     public function providerCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
         $user = $this->getUser();
+        
         // todo: check security
+        if ($user->getId() !== $bk->getInquiry()->getEquipment()->getUser()->getId()) {
+            return new Response(Response::HTTP_FORBIDDEN);
+        }
         
         $form = $this->createFormBuilder()
             ->add('reason', 'hidden', array(
