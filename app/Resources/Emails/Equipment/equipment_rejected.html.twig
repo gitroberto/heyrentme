@@ -25,27 +25,19 @@
         <td style="padding: 20px;padding-top: 0px;padding-bottom: 0px;">
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 0px;" class="page-title">Willkommen</h1>            
             <p style="font-family: helvetica, arial;font-size: 15px;">
-                One of your newly added or modified equipments ("{{equpment.name}}") was 
-                {% if (equpment.status == status_approved) %}
-                    approved
-                {% elseif (equpment.status == status_rejected) %}
-                    rejected
-                {% endif %}
-                by admin.<br >
-                {% if equpment.reason %}
-                Reason: {{ equpment.reason }}
+                 Dein Angebot (<strong>{{ equipment.name }}</strong>) nicht akzeptiert wurde
+
+                {% if equipment.reason %} 
+                    , wegen def folgenden Grund:<br >
+                    <br >                
+                    {{ equipment.reason }}
                 {% endif %}                
             </p>    
             <p style="font-family: helvetica, arial;font-size: 15px;">
-                You can 
-                {% if (equpment.status == status_rejected) %}
-                    modify
-                {% else %}
-                    see
-                {% endif %}
-                
-                your equipment under following link:<br>
-                <a href="{{ userLink }}" >{{ userLink }}</a>
+                Hier kannst das Angebot bearbeiten, deinen Status ändern oder einen Discount hinzufügen!
+            </p>
+            <p>
+                <a href="{{ userLink }}"  style="background-color: #34b437;color: #fff;text-decoration: none;margin: 0 auto;display: block;width: 70%;max-width: 380px;padding: 9px 5px;text-align: center;font-size: 24px;border-radius: 6px;border-top-left-radius: 0px;margin-top: 35px;margin-bottom: 50px;font-family: helvetica, arial;">{{ userLink }}</a>
             </p>
         </td>
     </tr>    

@@ -147,15 +147,17 @@ class EquipmentController extends BaseAdminController {
     
     public function sendApprovedRejectedInfoMessage(Request $request, Equipment $eq, $reason)
     {      
+        if ($eq->getStatus() === Equipment::STATUS_REJECTED) {
+            return; // todo: rejection email?
+        }
                         
-        $template = 'Emails/Equipment/equipment_approved_rejected.html.twig';       
-        if ($eq->getStatus() == Equipment::STATUS_APPROVED) {
-            $template = 'Emails/Equipment/equipment_approved.html.twig';
+        $template = 'Emails/Equipment/equipment_approved.html.twig';       
+        if ($eq->getStatus() == Equipment::STATUS_REJECTED) {
+            $template = 'Emails/Equipment/equipment_rejected.html.twig';
         }
         
         $userLink = $request->getSchemeAndHttpHost() . $this->generateUrl('dashboard');
-        $eqLink = $request->getSchemeAndHttpHost() . $this->generateUrl('catchall', array('content' => $eq->getUrlPath()));        
-                
+        $eqLink = $request->getSchemeAndHttpHost() . $this->generateUrl('catchall', array('content' => $eq->getUrlPath()));                        
         
         $emailHtml = $this->renderView($template, array(                                    
             'equipment' => $eq,
