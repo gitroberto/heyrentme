@@ -40,7 +40,7 @@ class HeyrentmeMailer implements MailerInterface {
             'confirmationUrl' =>  $url,
             'mailer_app_url_prefix' => $this->parameters['mailer_app_url_prefix']
         ));
-        $this->sendEmailMessage($rendered, $from, $to, "Heyrentme confirmation email.");
+        $this->sendEmailMessage($rendered, $from, $to, "hey! VIENNA confirmation email.");
         
     }
 
@@ -62,7 +62,7 @@ class HeyrentmeMailer implements MailerInterface {
             'mailer_app_url_prefix' => $this->parameters['mailer_app_url_prefix']
         ));
         
-        $this->sendEmailMessage($rendered, $from, $to, "Heyrentme password reset.");
+        $this->sendEmailMessage($rendered, $from, $to, "hey! VIENNA password reset.");
     }
 
     /**
