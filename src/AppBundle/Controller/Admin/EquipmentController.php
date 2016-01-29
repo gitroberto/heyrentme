@@ -147,10 +147,6 @@ class EquipmentController extends BaseAdminController {
     
     public function sendApprovedRejectedInfoMessage(Request $request, Equipment $eq, $reason)
     {      
-        if ($eq->getStatus() === Equipment::STATUS_REJECTED) {
-            return; // todo: rejection email?
-        }
-                        
         $template = 'Emails/Equipment/equipment_approved.html.twig';       
         if ($eq->getStatus() == Equipment::STATUS_REJECTED) {
             $template = 'Emails/Equipment/equipment_rejected.html.twig';
