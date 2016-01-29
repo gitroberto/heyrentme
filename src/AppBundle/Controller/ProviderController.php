@@ -1105,6 +1105,7 @@ class ProviderController extends BaseController {
     public function sendNewModifiedEquipmentInfoMessage(Request $request, Equipment $eq)
     {      
                         
+        $to = $this->getParameter('admin_email');
         $template = 'Emails/Equipment/new_modified_item.html.twig';        
         
         $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));        
@@ -1119,7 +1120,7 @@ class ProviderController extends BaseController {
         $message = Swift_Message::newInstance()
             ->setSubject('New/modified equipment notification.')
             ->setFrom($from)
-            ->setTo($eq->getUser()->getEmail())
+            ->setTo($to)
             ->setBody($emailHtml, 'text/html');
         $this->get('mailer')->send($message);
         
