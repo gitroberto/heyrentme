@@ -428,7 +428,7 @@ class ProviderController extends BaseController {
             // save to db
             $em = $this->getDoctrine()->getManager();
             if ($equipment->checkStatusOnSave()){
-                $this->sendNewModifiedEquipmentInfoMessage($request, $eq);
+                $this->sendNewModifiedEquipmentInfoMessage($request, $equipment);
             }
             $em->persist($equipment);
             $em->flush();
