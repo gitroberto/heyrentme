@@ -1,5 +1,5 @@
 <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
-    <option value="/heyrentme">HAUPKATEGORIE</option>
+    <option value="{{ path('start-page') }}">HAUPKATEGORIE</option>
     {% for cat in categories %}
         <option value="{{ path('catchall', { 'content': cat.slug }) }}">{{ cat.name }}</option>
     {% endfor %}
