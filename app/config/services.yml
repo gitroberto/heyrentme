@@ -19,7 +19,7 @@ services:
             
     app.custom_fos_user_mailer:
         class: AppBundle\Mailer\HeyrentmeMailer
-        arguments: [%mailer_fromEmail%, @router, @templating, @mailer,{ resetting.template: %fos_user.resetting.email.template%, mailer_image_url_prefix: %mailer_app_url_prefix%, admin_email: %admin_email% }]
+        arguments: [%mailer_fromEmail%, @router, @templating, @mailer,{ resetting.template: %fos_user.resetting.email.template%, mailer_app_url_prefix: %mailer_app_url_prefix%, admin_email: %admin_email% }]
         
     form_einstellungen:
         class: AppBundle\Form\EinstellungenType
