@@ -21,7 +21,7 @@
                                 {{ include('common/stars.html.twig', { rating: inquiry.equipment.rating }) }}
                                 <p class="product-name">{{ inquiry.equipment.name }}</p>
                             </div>
-                            <div class="col-xs-6"><p class="price">{{ inquiry.equipment.price|number_format(0) }} €</p>
+                            <div class="col-xs-6"><p class="price">{{ inquiry.equipment.activePrice|number_format(2) }} €</p>
                                 <p class="tag">pro tag</p>
                             </div>
                         </div>
@@ -38,12 +38,12 @@
                 <div class="col-sm-4 col-xs-6 summary-info">
                     <p>{{ inquiry.fromAt|date('d.m.Y H:i') }}</p>
                     <p>{{ inquiry.toAt|date('d.m.Y H:i') }}</p>
-                    <p>{{ inquiry.price|number_format(0) }},- &euro;</p>
+                    <p>{{ inquiry.price|number_format(2) }} &euro;</p>
                     <p class="dont-transform">
                       {{ inquiry.equipment.addressAsString }}
                     </p>
                     <p>0,- &euro; (Aktion!)</p>
-                    <p class="text-bold"><span id="price">{{ inquiry.price|number_format(0) }}</span>,- &euro; (Barzahlung)</p>
+                    <p class="text-bold"><span id="price">{{ inquiry.price|number_format(2) }}</span> &euro; (Barzahlung)</p>
                 </div>
                 <div class="col-sm-4">
                     {{ form_widget(form.uuid) }}

@@ -1063,10 +1063,18 @@ class ProviderController extends BaseController {
             
             if ($discountType != -1 && $discountType != 0 && $activeDiscount == null){
                  
+                $p = 0; // actual percentage
+                switch ($percent) {
+                    case 1: $p = 10; break;
+                    case 2: $p = 15; break;
+                    case 3: $p = 20; break;
+                    case 4: $p = 25; break;
+                    case 5: $p = 30; break;
+                }
             
                 $discount = new Discount();            
                 $discount->setType($discountType);
-                $discount->setPercent($percent);
+                $discount->setPercent($p);
                 $discount->setDuration($duration);
 
                 $discount->setEquipment($equipment);                

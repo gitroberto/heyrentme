@@ -194,6 +194,18 @@ class Equipment
                 return $dc;
             }
         }
+        return null;
+    }
+    
+    public function getActivePrice() {
+        $d = $this->getActiveDiscount();
+        if ($d != null) {
+            $p = $this->getPrice() * (100.0 - $d->getPercent()) / 100.0;
+        }
+        else {
+            $p = $this->getPrice();
+        }
+        return $p;
     }
     
     public function IsNewOfferDiscountPossible() {        
