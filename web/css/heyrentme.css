@@ -420,6 +420,10 @@ img.user-avatar-profile {
     width: 90%;
     max-width: 750px;
 }
+#inquiry-modal .modal-dialog {
+    width: 600px;
+}
+
 
 .modal-content {
     background-clip: padding-box;

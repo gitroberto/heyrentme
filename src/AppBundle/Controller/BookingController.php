@@ -35,7 +35,7 @@ class BookingController extends BaseController {
         $from = DateTime::createFromFormat('Y-m-d\TH:i+', $dateFrom);
         $to = DateTime::createFromFormat('Y-m-d\TH:i+', $dateTo);
         $days = $to->diff($from)->days;
-        $price = ($days + 1) * $eq->getPrice();
+        $price = ($days) * $eq->getPrice();
         $inquiry = array(
             'from' => $from,
             'to' => $to,
