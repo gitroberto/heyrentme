@@ -419,6 +419,11 @@
     </div>
   </div>
 </div>
+  </div>
+{% endblock %}
+
+
+{% block script %}
   <script>
     function addData(tag,data) {
         var tag  = tag;
@@ -579,12 +584,15 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
+                
         geocoder.geocode({ 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
                 var marker = new google.maps.Marker({
                     map: map,
-                    position: results[0].geometry.location
+                    position: results[0].geometry.location,
+                    title: '{{ equipment.addrPlace }}',
+                    icon: '{{ asset("img/marker.png") }}'
                 });
                 map.setZoom(13);
             }
@@ -592,5 +600,4 @@
     }
     google.maps.event.addDomListener(window, 'load', init);
   </script>
-  </div>
 {% endblock %}
