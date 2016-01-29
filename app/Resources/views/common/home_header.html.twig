@@ -12,7 +12,7 @@
                     <a data-toggle="modal" data-target="#login" class="button-black" href="#">Login</a>
                   {% else %}
                       <a href="{{ path('dashboard') }}" class="button-black profilebutton">
-                          <img src="{{ app.user.getProfilePicture(false, image_url_prefix) }}" style="max-width: 39px; max-width: 39px;"  alt=""/>
+                          <img src="{{ app.user.getProfilePicture(false, image_url_prefix) }}" class="headerProfileImage" style="max-width: 39px; max-width: 39px;"  alt=""/>
                           {{ app.user.name }}
                       </a>
                   {% endif %}

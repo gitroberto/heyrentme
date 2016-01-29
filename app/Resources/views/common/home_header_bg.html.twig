@@ -12,7 +12,10 @@
                     <a data-toggle="modal" data-target="#reg-modal" class="button-black" href="#">Anmelden / 5 &euro; Startrabatt</a>
                     <a data-toggle="modal" data-target="#login" class="button-black" href="#">Login</a>
                   {% else %}
-                      <a href="{{ path('profil') }}" class="button-black">Profil</a>
+                      <a href="{{ path('dashboard') }}" class="button-black profilebutton">
+                          <img src="{{ app.user.getProfilePicture(false, image_url_prefix) }}" class="headerProfileImage" style="max-width: 39px; max-width: 39px;"  alt=""/>
+                          {{ app.user.name }}
+                      </a>
                   {% endif %}
                   <a href="{{ path('hilfe_faq_euipment_mieten') }}" class="button-black">Hilfe & Faq</a>
                 </div>
