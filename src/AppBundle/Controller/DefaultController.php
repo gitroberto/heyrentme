@@ -3,10 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Utils\SearchParams;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends BaseController {
     
@@ -210,7 +210,10 @@ class DefaultController extends BaseController {
     /**
      * @Route("/test")
      */
-    public function testAction() {
-        return new Response('ok');
+    public function testAction(Request $request) {
+        $request->attributes->set('_locale', 'de');
+        $dt = new DateTime();
+        return $this->render('default/test.html.twig', array('dt' => $dt));
+        
     }
 }
