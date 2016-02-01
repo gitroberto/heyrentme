@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
+    const TYPE_EQUIPMENT = 1;
+    const TYPE_TALENT = 2;
+    
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -17,6 +20,10 @@ class Category
      */
     protected $id;
     
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $type;
     /**
      * @ORM\Column(type="string", length=256)
      */
@@ -228,5 +235,29 @@ class Category
     public function getBigImage()
     {
         return $this->bigImage;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return Category
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

@@ -2,13 +2,13 @@
 
 {% block body %}
       <div class="main-header">
-          <img src="/img/ski-heading.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
-          <img src="/img/ski-heading-rwd.png" alt="rent me heading." class="img-responsive min-320"/>
+          <img src="/img/allgemein-final/talente_buchen.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+          <img src="/img/allgemein-final/talente_buchen_small.jpg" alt="rent me heading." class="img-responsive min-320"/>
           <div class="main-search">
-            <h1 class="margin-bottom-40 text-white text-background mobile-hidden">Finde tolle Equipment-Angebote <span
+            <h1 class="margin-bottom-40 text-white text-background mobile-hidden">Finde tolle Talente <span
                     class="text-yellow text-bold">in deiner Nähe!</span></h1>
                     <div class="mobile-headers">
-                      <h1 class="text-white text-background desktop-hide-inline">Finde tolle Equipment</h1>
+                      <h1 class="text-white text-background desktop-hide-inline">Finde tolle Talente</h1>
                     </div>
                     <div class="mobile-headers">
                       <h1 class="margin-bottom-40 text-white text-background desktop-hide-inline">Angebote <span
@@ -42,7 +42,7 @@
             <nav class="crumbs">
                 <ul class="col-xs-8">
                     <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
-                    <li><a href="{{ path('rentme') }}" class="active-crumb">Equipment mieten</a></li>
+                    <li><a href="{{ path('bookme') }}" class="active-crumb">Talente buchen</a></li>
                 </ul>
             </nav>
             {{ render(controller('AppBundle:Common:categoryList', { 'mobile': true })) }}
@@ -51,7 +51,7 @@
         <div class="container new-header mobile-hidden">
           <div class="row">
             <div class="col-xs-12">
-              <h2>Beliebtes Equipment bei <b>hey! VIENNA</b></h2>
+              <h2>Beliebte Dienstleistungen bei <b>hey! VIENNA</b></h2>
             </div>
           </div>
         </div>
@@ -76,15 +76,16 @@
           <div class="container">
               <div class="row">
                   <div class="col-sm-6 pull-right">
-                      <h4 class="heading text-bold text-yellow">Equipment mieten - </h4>
+                      <h4 class="heading text-bold text-yellow">Talente buchen - </h4>
+                      <br/>
                       <h4 class="heading">wie geht das?</h4>
 
-                      <p><span class="text-bold">Finde die richtige Ausrüstung für unterschiedliche Anwendungsbereiche!</span>
+                      <p><span class="text-bold">Präsentiere dich und deine Dienstleistung! </span>
                           <br><br>
-                          Suchst du Camping-Ausrüstung für dein Outdoor-Wochenende, Sport-Geräte zum Testen, Werkzeug für die anstehende Renovierung, Equipment für deine Party, technische Geräte oder andere spezielle Gebrauchsgegenstände? hey! VIENNA bietet dir dein Wunsch-Equipment zur Miete anstelle einer teuren Anschaffung. 
+                          Suchst du einen privaten Trainer, um eine neue Sportart zu erlernen, eine Babysitterin für kommendes Wochenende, einen DJ für die Geburtstagsparty deines Partners, einen Fotografen für Bewerbungsfotos oder andere Dienstleister für eine spezifische Aufgabenstellung. hey! VIENNA bietet eine Auswahl an Dienstleistern aus den unterschiedlichsten Tätigkeitsfeldern die dich tatkräftig und professionell unterstützen!  
                           <br><br>
-                          Wie das genau geht,
-                          <a href="{{ path("hilfe_faq_euipment_mieten") }}"> findest du hier.</a></p>
+                          Mehr dazu,
+                          <a href="{{ path("hilfe_faq_talent_buchen") }}"> findest du hier.</a></p>
                   </div>
               </div>
           </div>
@@ -121,15 +122,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
-                    <h4 class="heading text-bold text-yellow">Equipment anbieten - </h4>
+                    <h4 class="heading text-bold text-yellow">Talente  anbieten - </h4>
+                    <br/>
                     <h4 class="heading">wie geht das?</h4>
 
                     <p>
-                        <span class="text-bold">Bei hey! VIENNA ist Equipment vermieten kinderleicht!</span>
+                        <span class="text-bold">Präsentiere dich und deine Dienstleistung!</span>
                         <br><br>
-                        Du hast Equipment daheim herum stehen, dass du nur selten benutzt - Du bist ein gewerblicher Verleih, wirst mit deinem Angebot online aber nur schwer gefunden - bei hey! VIENNA hast du jetzt die Möglichkeit mehr aus deinem Equipment zu machen und dabei auch etwas dazuzuverdienen. Als Privatperson ist dein Equipment durch Nutzung der hey! Garantie von bis zu 750 € sowie einer selbst festgelegten Kaution für den Verleih geschützt! 
+                        Du hast eine Dienstleistung anzubieten, der für andere interessant ist, bist Freelancer oder selbstständig als Einpersonenunternehmen (EPU) tätig? Bei hey! VIENNA hast du jetzt die Möglichkeit dich und deinen Service kostenlos anderen zu präsentieren und über die Plattform gebucht zu werden. Du bestimmst selbst wie viel du für den Service verlangen möchtest und erhälst auch die Möglichkeit dich kreativ mit einem Portrait Video und/oder Interview vorzustellen. 
                         <br><br>
-                        Mehr dazu <a href="{{ path("hilfe_faq_euipment_anbieten") }}" class="text-link"> findest du hier.</a>
+                        Mehr dazu <a href="{{ path("hilfe_faq_talent_anbieten") }}" class="text-link"> findest du hier.</a>
                     </p>
                 </div>
             </div>
@@ -140,7 +142,7 @@
             <div class="col-md-4">
                 <h4>Blog</h4>
                 <a href="{{ path("blog") }}">
-                    <img src="/img/allgemein-final/blog_equipment_small.jpg" alt="blog"/>
+                    <img src="/img/allgemein-final/blog_talente_small.jpg" alt="blog"/>
                 </a>
                 <p>Interessiert an spannenden Neuigkeiten zum Thema Equipment- und Talentsharing? Besuche unseren Blog!
                     <br>
@@ -149,12 +151,12 @@
 
             </div>
             <div class="col-md-4">
-                <h4>Talente buchen</h4>
+                <h4>Equipment mieten</h4>
                 <a href="#">
-                    <img src="/img/allgemein-final/talente_buchen_start_unten_small.jpg" alt="presse"/>
+                    <img src="/img/allgemein-final/equipment_mieten_small.jpg" alt="presse"/>
                 </a>
-                <p>Bist du auch an der Buchung von tollen Talenten aus Wien interessiert? Hier kannst du unseren Service ausprobieren.
-                    <a href="{{ path('bookme') }}">Talente buchen</a>
+                <p>Bist du auch an der Buchung von tollem Equipment aus Wien interessiert? Hier kannst du unseren Service ausprobieren.
+                    <a href="{{ path('rentme') }}">Equipment mieten</a>
                 </p>
             </div>
             <div class="col-md-4">

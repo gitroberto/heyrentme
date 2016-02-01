@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Category;
 use AppBundle\Utils\SearchParams;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -22,7 +23,7 @@ class DefaultController extends BaseController {
      * @Route("/rentme/{token}", name="rentme")
      */
     public function rentmeAction(Request $request, $token=null) {      
-        $cats = $this->getCategories($request);
+        $cats = $this->getCategoriesByType($request, Category::TYPE_EQUIPMENT);
         
         //if param = 0 then get all from db
         $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(3);
@@ -34,6 +35,28 @@ class DefaultController extends BaseController {
         }
         
         return $this->render('default/equipment_mieten.html.twig', array(
+            'categories' => $cats,
+            'token' => $token,
+            'confirmed' => $confirmed,
+            'testimonials' => $testimonials
+        ));
+    }
+    /**
+     * @Route("/bookme/{token}", name="bookme")
+     */
+    public function bookmeAction(Request $request, $token=null) {      
+        $cats = $this->getCategoriesByType($request, Category::TYPE_TALENT);
+        
+        //if param = 0 then get all from db
+        $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(3);
+        
+        $confirmed= null;
+        $confParam = $request->query->get('confirmed');
+        if ($confParam != null){
+            $confirmed = true;
+        }
+        
+        return $this->render('default/talent_buchen.html.twig', array(
             'categories' => $cats,
             'token' => $token,
             'confirmed' => $confirmed,
@@ -82,7 +105,13 @@ class DefaultController extends BaseController {
         if ($cat != null) {
             //$equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAll($cat['id']);
             
-            return $this->render('default/categorie.html.twig', array(
+            if ($cat['type'] === Category::TYPE_EQUIPMENT) {
+                $tmpl = 'default/categorie.html.twig';
+            } else {
+                $tmpl = 'default/talent-categorie.html.twig';
+            }
+
+            return $this->render($tmpl, array(
                 'category' => $cat,
                 'searchParams' => $sp
                 //'equipments' => $equipments

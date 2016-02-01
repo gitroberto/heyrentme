@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,8 +30,9 @@ class BaseController extends Controller
                 $categories[$cat->getSlug()] = array(
                     'id' => $cat->getId(),
                     'name' => $cat->getName(),
+                    'type' => $cat->getType(),
                     'slug' => $cat->getSlug(),
-                    'imageUrl' => $cat->getImage()->getUrlPath($this->getParameter('image_url_prefix')),
+                    'imageUrl' => $cat->getImage() !== null ? $cat->getImage()->getUrlPath($this->getParameter('image_url_prefix')) : null,
                     'bigImageUrl' => $cat->getBigImage() !== null ? $cat->getBigImage()->getUrlPath($this->getParameter('image_url_prefix')) : null
                 );
             }
@@ -41,6 +43,12 @@ class BaseController extends Controller
         $session = $request->getSession();
         $this->initCategories($session);
         return $session->get('CategoryList');
+    }
+    protected function getCategoriesByType(Request $request, $type) {
+        $session = $request->getSession();
+        $this->initCategories($session);
+        $arr = $session->get('CategoryList');
+        return array_filter($arr, function($c) use(&$type) { return $c['type'] === $type; });
     }
     protected function getCategoryBySlug(Request $request, $slug) {
         $session = $request->getSession();
