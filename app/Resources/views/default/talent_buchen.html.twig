@@ -27,7 +27,7 @@
                     </select>
                     <input type="submit" class="desktop-hide" value="los geht's!"></form>
                 <ul class="col-xs-6 pull-right text-right kaup-select">
-                    {{ render(controller('AppBundle:Common:categoryList')) }}
+                    {{ render(controller('AppBundle:Common:categoryList', { 'equipment': false })) }}
                 </ul>
             </div>
           </div>
@@ -45,7 +45,7 @@
                     <li><a href="{{ path('bookme') }}" class="active-crumb">Talente buchen</a></li>
                 </ul>
             </nav>
-            {{ render(controller('AppBundle:Common:categoryList', { 'mobile': true })) }}
+            {{ render(controller('AppBundle:Common:categoryList', { 'equipment': false, 'mobile': true })) }}
           </div>
         <!-- Categories -->
         <div class="container new-header mobile-hidden">

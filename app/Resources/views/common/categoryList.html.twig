@@ -1,8 +1,17 @@
 <li id="kaup-hidden">
-    <p class="display-block"><a class="haup-link">Equipment mieten</a></p>
+    <p class="display-block"><a class="haup-link">{% if equipment %}Equipment mieten{% else %}Talente buchen{% endif %}</a></p>
     <span id="close-haup" class="haup-close-icon"></span>
-    {% for cat in categories %}
-        
+    {% for cat in cats1 %}
+        <a href="{{ path('catchall', { 'content': cat.slug }) }}">
+            <p>
+                <img src="{{ cat.imageUrl }}" class="category-drop-down" alt=""/>
+                {{ cat.name }}
+            </p>
+        </a>
+    {% endfor %}
+    <span class="clearfix"></span>
+    <p class="display-block"><a class="haup-link">{% if not equipment %}Equipment mieten{% else %}Talente buchen{% endif %}</a></p>
+    {% for cat in cats2 %}
         <a href="{{ path('catchall', { 'content': cat.slug }) }}">
             <p>
                 <img src="{{ cat.imageUrl }}" class="category-drop-down" alt=""/>

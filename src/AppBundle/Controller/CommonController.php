@@ -27,20 +27,19 @@ class CommonController extends BaseController {
         ));
     }
 
-    public function categoryListAction(Request $request, $mobile = false) {       
-        $categories = $this->getCategories($request);
+    public function categoryListAction(Request $request, $equipment = true, $mobile = false) {
+        $cats1 = $this->getCategoriesByType($request, $equipment ? 1 : 2);
+        $cats2 = $this->getCategoriesByType($request, $equipment ? 2 : 1);
         
-        if ($mobile) {
-            $tmpl = 'common/categoryListMob.html.twig';
-        } else {
-            $tmpl = 'common/categoryList.html.twig';
-        }
-
-        return $this->render($tmpl, array(
-            'categories' => $categories
-        ));
+        return $this->render(
+            $mobile ? 'common/categoryListMob.html.twig' : 'common/categoryList.html.twig',
+            array (
+                'cats1' => $cats1,
+                'cats2' => $cats2,
+                'equipment' => $equipment
+            )
+        );
     }
-    
     
      /**
      * 
