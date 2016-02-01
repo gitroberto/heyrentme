@@ -70,7 +70,7 @@ class BaseController extends Controller
                     'id' => $s->getId(),
                     'name' => $s->getName(),
                     'slug' => $s->getSlug(),
-                    'imageUrl' => $s->getImage()->getUrlPath($this->getParameter('image_url_prefix'))
+                    'imageUrl' => $s->getImage() !== null ? $s->getImage()->getUrlPath($this->getParameter('image_url_prefix')) : null
                 );
 
                 $subcategories[$s->getSlug()] = $sa;

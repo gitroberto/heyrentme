@@ -152,7 +152,7 @@
             </div>
             <div class="col-md-4">
                 <h4>Equipment mieten</h4>
-                <a href="#">
+                <a href="{{ path('rentme') }}">
                     <img src="/img/allgemein-final/equipment_mieten_small.jpg" alt="presse"/>
                 </a>
                 <p>Bist du auch an der Buchung von tollem Equipment aus Wien interessiert? Hier kannst du unseren Service ausprobieren.
@@ -182,21 +182,22 @@
             </div>
         </a>
     -->
-  </div>
-    
+  </div>  
+{% endblock %}
+
+{% block script %}
     <script>
         $(function() {
            $("#suche-dropdown").change(function() {
                 if ($(this).val() === 'BIETE') {
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        anbieten();
+                        anbieten(2);
                     {% else %}
-                        var url = '{{ path("rental") }}';
+                        var url = '{{ path("offer") }}';
                         window.location = url;
                     {% endif %}
                 }
            });
         });
     </script>
-  
 {% endblock %}

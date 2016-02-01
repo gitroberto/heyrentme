@@ -229,6 +229,12 @@ class DefaultController extends BaseController {
         return $sp;
     }
     
+    /** 
+     * @Route("/cats/{type}", name="cat")
+     */
+    public function categoriesAction(Request $request, $type) {
+        return new JsonResponse($this->getCategoriesByType($request, intval($type)));
+    }
     /**
      * @Route("/subcats/{id}", name="subcat")
      */

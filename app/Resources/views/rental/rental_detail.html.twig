@@ -2,8 +2,8 @@
 
 {% block body %}
   <div class="main-header ">
-    <img src="/img/bike-heading.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
-    <img src="/img/bike-heading-rwd.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+    <img src="{% if category.bigImage %}{{ category.bigImage.urlPath(image_url_prefix) }}{% else %}/img/cat-final/e_sport.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive max-1600 max-320"/>
+    <img src="{% if category.image %}{{ category.image.urlPath(image_url_prefix) }}{% else %}/img/cat-final/e_sport_small.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive max-1600 min-320"/>
         <div class="container rent-heading ver-step0">
             <div class="row">
                 <div class="col-sm-8 full">

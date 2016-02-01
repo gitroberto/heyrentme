@@ -23,11 +23,15 @@
                     (Siehe <a href="/doc/checklist.pdf" target="_blank">Checklist</a>)
                 </p>
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <a href="#" data-toggle="modal" data-target="#choose-offer-detail" class="button-black backgound-yellow text-black">Equipment Anbieten</a>
+                    <a href="javascript:anbieten(1)" class="button-black backgound-yellow text-black">Equipment Anbieten</a>
                 {% else %}
                     <a href="{{ path('rental') }}" class="button-black backgound-yellow text-black">Equipment Anbieten</a>
                 {% endif %}
-                <a href="#" class="button-black backgound-yellow text-black">Talent Anbieten</a>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <a href="javascript:anbieten(2)" class="button-black backgound-yellow text-black">Talent Anbieten</a>
+                {% else %}
+                    <a href="{{ path('offer') }}" class="button-black backgound-yellow text-black">Talent Anbieten</a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -89,7 +93,8 @@
     </div>
   </div>
 </div>
-          
+
+{% block script %}
 {# TODO: possibly move script to external .js file (watch out for the twig-logic (if's)! #}
 <script>
     $(function() {
@@ -134,15 +139,40 @@
         else
             $butt.attr('disabled', 'disabled');
     }
-    function anbieten(categoryId) {
-        // preselect current category
-        if (typeof categoryId === 'number') {
-            var $sel = $('#category-dropdown');
-            $sel.val(categoryId.toString()).selectpicker('refresh');
-            $sel.change();
-            $('#weiter-button').attr('diabled', 'disabled');
-        }
-        $("#choose-offer-detail").modal();
+    function anbieten(type, categoryId) {
+        // load categories
+        var url = '{{ path('cat', { 'type': 'XXX' }) }}'.replace('XXX', type.toString());           
+        var $sel = $("#category-dropdown");
+        $.getJSON(url)
+            .done(function(json) {
+                $sel.empty();
+                $sel.attr('disabled', 'disabled').selectpicker('refresh');
+                $.each(json, function(index, item) {
+                    var opt = $("<option>").attr('value', item.id).text(item.name);                   
+                    $sel.append(opt);
+                });
+                $sel.removeAttr('disabled').selectpicker('refresh');
+
+                // preselect current category
+                if (typeof categoryId === 'number') {
+                    $sel.val(categoryId.toString()).selectpicker('refresh');
+                    $sel.change();
+                    $('#weiter-button').attr('diabled', 'disabled');
+                }
+                $("#choose-offer-detail").modal();
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
+                alert("Categories cannot be loaded, please try again.");
+                $sel.attr('disabled', 'disabled').selectpicker('refresh');
+            })
+            .always(function() {
+                refreshButtons();
+            });
+        
+        
+        
     }
     function weiterClick() {
         var id = $("#subcategory-dropdown").val();
@@ -164,3 +194,5 @@
         }
     }
 </script>
+{% endblock %}
+    

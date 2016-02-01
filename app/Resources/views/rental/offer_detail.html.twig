@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="main-header ">
+    <img src="{% if category.bigImage %}{{ category.bigImage.urlPath(image_url_prefix) }}{% else %}/img/cat-final/t_sport.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive max-1600 max-320"/>
+    <img src="{% if category.image %}{{ category.image.urlPath(image_url_prefix) }}{% else %}/img/cat-final/t_sport_small.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading ver-step0">
+            <div class="row">
+                <div class="col-sm-8 full">
+                    <h1 class="vermietung-mobile mobile-hidden">Talent anbieten</h1>
+                    <div class="text-align">
+                      <h1 class="vermietung-mobile desktop-hide-inline">Talent</h1>
+                    </div>
+                    <div class="text-align">
+                      <h1 class="vermietung-mobile desktop-hide-inline">anbieten</h1>
+                    </div>
+                    <ul class="heading-list mobile-hidden">
+                        <li>Erhöhe deine Reichweite</li>
+                        <li>Lerne neue Menschen kennen</li>
+                        <li>Nutze unseren Promotion- und <a href="{{ path('tutorial-video') }}"><span class="text-yellow">Videoservice</span></a></li>
+                        <li>Nutze unsere Direktbuchungsmöglichkeiten</li>
+                    </ul>
+                    <a class="button-black backgound-yellow text-black no-hover mobile-hidden">Jetzt kostenlos mitmachen!</a>
+                </div>
+                <div class="ad mobile-hidden col-sm-4"></div>
+            </div>
+        </div>
+    </div>
+  </header>
+  <section class="main-categories main-offers vermietung">
+    <div class="container  background-white rent-container bg-white">
+        <nav class="crumbs">
+            <ul class="col-xs-8">
+                <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
+                <li><a href="{{ path('bookme') }}">Talent anbieten</a></li>
+                <li><a class="active-crumb" href="{{ path("offer-detail", { 'categoryId': category.id }) }}">{{ category.name }}</a></li>
+            </ul>
+        </nav>
+            {# todo: mobile version #}
+        <div class="mobile-hidden"> <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+          <option value="/heyrentme">HAUPKATEGORIE</option>
+          <option value="/heyrentme">HAUS & GARTEN</option>
+          <option value="/heyrentme">FREIZEIT & EVENTS</option>
+          <option value="/heyrentme">LEBENSHILFE</option>
+          <option value="/heyrentme">OFFICE</option>
+          <option value="/heyrentme">WERKZEUG</option>
+          <option value="/heyrentme">SPORT-EQUIPMENT</option>
+          <option value="/heyrentme">KINDERARTIKEL</option>
+          <option value="/heyrentme">TECHNIK</option>
+        </select>
+  </div>
+        <span class="clearfix"></span>
+        <div id="rental-form">
+        {{ render(controller('AppBundle:Rental:offerForm', { 'categoryId': category.id })) }}
+        </div>
+    </div>
+    </div>
+  </section>
+  </div>
+  
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script>
+    $(function() {
+        $("#anleitung-form").ajaxForm({
+            target: $("#anleitung-form"),
+            success: makeAjaxForm
+        });
+    });
+    function makeAjaxForm(data, status, xhr) {
+        // check response
+        $("#anleitung-form").ajaxForm({
+            target: $("#anleitung-form"),
+            success: makeAjaxForm
+        });
+        $(".selectpicker").selectpicker({
+            style: 'btn-info',
+            size: 4
+        });
+        if ($("#form_success").val() === "1") { // form was submitted successfully
+            $("#danke").modal();
+        }
+    }
+</script>
+{% endblock %}

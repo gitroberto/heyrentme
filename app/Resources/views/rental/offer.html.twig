@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="main-header ">
+        <img src="/img/allgemein-final/anbieten.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+        <img src="/img/allgemein-final/anbieten_small.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+        <div class="container rent-heading ">
+            <div class="row">
+                <div class="col-sm-8 full">
+                  <div class="text-align">
+                    <h1 class="vermietung-mobile">Talent anbieten</h1>
+                  </div>
+
+                    <ul class="heading-list mobile-hidden">
+                        <li>Erhöhe deine Reichweite</li>
+                        <li>Lerne neue Menschen kennen</li>
+                        <li>Nutze unseren Promotion- und  <a href="{{ path('tutorial-video') }}"><span class="text-yellow">Videoservice</span></a> </li>
+                        <li>Nutze unsere Direktbuchungsmöglichkeiten</li>
+                    </ul>
+                    <a class="button-black backgound-yellow text-black no-hover mobile-hidden">Jetzt kostenlos mitmachen!</a>
+                </div>
+                <div class="ad col-sm-4 mobile-hidden">
+                    <img src="/img/allgemein-final/anbieten_inserat_t_small.jpg" alt="ad" class="img-responsive"/>
+                    <div class="product-info product-ad">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p class="product-name">
+                                    dein inserat bei hey! VIENNA
+                                </p>
+                            </div>
+                        </div>
+                        <img src="/img/allgemein-final/anbieten_face.jpg" alt="cart" class="product-user">
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+  <div class="container margin-bot">
+  {{ render(controller('AppBundle:Common:categoryList', { 'mobile': true })) }}
+</div>
+  <section class="main-categories main-offers">
+    <div class="container background-white rent-container">
+        <nav class="crumbs">
+            <ul class="col-xs-8">
+                <li><a href="{{ path("start-page") }}">hey! VIENNA</a></li>
+                <li><a href="{{ path('bookme') }}" class="active-crumb">Talent anbieten</a></li>
+            </ul>
+        </nav>
+        <span class="clearfix"></span>
+        <!-- Categories -->
+                  
+        {% for cat in categories %}
+            {% if loop.index0 % 3 == 0 %}
+                <div class="row">
+            {% endif %}
+            {% if loop.index0 == 0 %}
+                <div class="col-xs-12 mobile-hidden"><h2>Was möchtest du anbieten?</h2></div>
+            {% endif %}
+            
+            <div class="col-sm-4">
+                <a class="text-black" href="{{ path("offer-detail", { 'categoryId': cat.id }) }}">
+                    <div class="categories-names">
+                        <h3>{{ cat.name }}</h3>
+                    </div>
+                </a>
+                <a href="{{ path("offer-detail", { 'categoryId': cat.id }) }}">
+                    <img src="{{ cat.imageUrl }}" alt="{{ cat.name }}"/>
+                </a>
+            </div>
+            {% if loop.index0 % 3 == 2 %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <!-- Categories -->
+    </div>
+  </section>
+  </div>
+{% endblock %}

@@ -2,8 +2,8 @@
 
 {% block body %}
   <div class="main-header ">
-         <img src="{% if category.bigImageUrl %}{{ category.bigImageUrl }}{% else %}/img/cat-final/e_sport.jpg{% endif %}" alt="Sport & Freizeit" class="img-responsive max-1600 max-320"/>
-         <img src="{% if category.imageUrl %}{{ category.imageUrl }}{% else %}/img/cat-final/e_sport_small.jpg{% endif %}" alt="Sport & Freizeit" class="img-responsive min-320"/>
+         <img src="{% if category.bigImageUrl %}{{ category.bigImageUrl }}{% else %}/img/cat-final/e_sport.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive max-1600 max-320"/>
+         <img src="{% if category.imageUrl %}{{ category.imageUrl }}{% else %}/img/cat-final/e_sport_small.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive min-320"/>
         <div class="main-search kategorie-search">
             <h2 class="heading mobile-hidden">{{ category.name }} bei <span class="text-yellow text-bold"> hey! VIENNA</span></h2>
             <div class="mobile-headers">
@@ -57,7 +57,7 @@
             <ul class="col-xs-6 pull-right text-right kaup-select">
                 <li>
                     <a class="active-crumb" 
-                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten({{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
+                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(1, {{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
                        >In dieser Kategorie anbieten</a>                    
                 </li>
             </ul>
@@ -107,7 +107,7 @@
         $("#suche-dropdown").change(function() {
             if ($(this).val() === 'BIETE') {
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    anbieten({{ category.id }});
+                    anbieten(1, {{ category.id }});
                 {% else %}
                     var url = '{{ path("rental-detail", { 'categoryId': 'CAT-ID' }) }}'.replace('CAT-ID', '{{ category.id }}');
                     window.location = url;
