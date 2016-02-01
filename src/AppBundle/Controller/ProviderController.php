@@ -1003,9 +1003,9 @@ class ProviderController extends BaseController {
         $text = $request->get('text');             
         $errors = array();
         
-        $discountType = $this->IsParamValidInt($errors, $request->get('discountType'), "discount type");
-        $percent = $this->IsParamValidInt($errors, $request->get('percent'), "percent");
-        $duration = $this->IsParamValidInt($errors, $request->get('duration'), "duration");
+//        $discountType = $this->IsParamValidInt($errors, $request->get('discountType'), "discount type");
+//        $percent = $this->IsParamValidInt($errors, $request->get('percent'), "percent");
+//        $duration = $this->IsParamValidInt($errors, $request->get('duration'), "duration");
         //$discountType = (integer)$discountTypeStr;          
         //$percent = (integer)$request->get('percent');        
         //$duration = (integer)$request->get('duration');       
@@ -1018,30 +1018,30 @@ class ProviderController extends BaseController {
             $errors[count($errors)] = "Access denied.";
         }
         
-        if (count($errors) == 0 && $discountType != -1  && $discountType != 0 && $equipment->getActiveDiscount() != null) {
-            $errors[count($errors)] = "There already is active discount!";
-        } else if (count($errors) == 0 && $discountType != -1  && $discountType != 0){
-            if ($discountType != 1 && $discountType != 2){
-                $errors[count($errors)] = "Unknown discount selected.";
-            }
-            
-            if ($percent < -1 || $percent > 5 ) {
-                $errors[count($errors)] = "Unknown percent selected.";
-            }
-            
-            if ($duration < -1 || $duration > 24) {
-                $errors[count($errors)] = "Unknown duration selected.";
-            }
-            
-            
-            if ($percent == -1 || $percent == 0) {
-                $errors[count($errors)] = "Please select discount percent.";
-            }
-            
-            if ($duration == -1 || $duration == 0) {
-                $errors[count($errors)] = "Please select discount duration.";
-            }
-        }
+//        if (count($errors) == 0 && $discountType != -1  && $discountType != 0 && $equipment->getActiveDiscount() != null) {
+//            $errors[count($errors)] = "There already is active discount!";
+//        } else if (count($errors) == 0 && $discountType != -1  && $discountType != 0){
+//            if ($discountType != 1 && $discountType != 2){
+//                $errors[count($errors)] = "Unknown discount selected.";
+//            }
+//            
+//            if ($percent < -1 || $percent > 5 ) {
+//                $errors[count($errors)] = "Unknown percent selected.";
+//            }
+//            
+//            if ($duration < -1 || $duration > 24) {
+//                $errors[count($errors)] = "Unknown duration selected.";
+//            }
+//            
+//            
+//            if ($percent == -1 || $percent == 0) {
+//                $errors[count($errors)] = "Please select discount percent.";
+//            }
+//            
+//            if ($duration == -1 || $duration == 0) {
+//                $errors[count($errors)] = "Please select discount duration.";
+//            }
+//        }
         
         if (count($errors) > 0){
             $status = JsonResponse::HTTP_INTERNAL_SERVER_ERROR;                    
@@ -1059,6 +1059,7 @@ class ProviderController extends BaseController {
             $em->persist($equipment);
             $em->flush();            
             
+            /*
             $activeDiscount = $equipment->getActiveDiscount();
             
             if ($discountType != -1 && $discountType != 0 && $activeDiscount == null){
@@ -1100,7 +1101,7 @@ class ProviderController extends BaseController {
                 $em->flush();
             }
                 
-       
+            */
         } catch (Exception $ex) {
             $result = "Error.";
             $status = JsonResponse::HTTP_INTERNAL_SERVER_ERROR;

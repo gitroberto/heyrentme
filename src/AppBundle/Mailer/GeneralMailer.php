@@ -19,10 +19,10 @@ class GeneralMailer {
     public function SendWelcomeEmail(User $user, $withDiscountCode)
     {
         $code = null;
-        if ($withDiscountCode) {
-            $codeRepo = $this->doctrine->getRepository('AppBundle:DiscountCode');
-            $code = $codeRepo->assignToUser($user);
-        }
+//        if ($withDiscountCode) {
+//            $codeRepo = $this->doctrine->getRepository('AppBundle:DiscountCode');
+//            $code = $codeRepo->assignToUser($user);
+//        }
         
         $from = $this->parameters['mailer_fromEmail'];        
         #$username = 'seba';

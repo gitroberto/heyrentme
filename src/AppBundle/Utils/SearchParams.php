@@ -22,9 +22,9 @@ class SearchParams {
         if ($request->request->has('testBuy')) {
             $this->testBuy = intval($request->get('testBuy')) > 0;
         }
-        if ($request->request->has('discount')) {
-            $this->discount = intval($request->get('discount')) > 0;
-        }
+//        if ($request->request->has('discount')) {
+//            $this->discount = intval($request->get('discount')) > 0;
+//        }
     }
     
     public function getSort() {

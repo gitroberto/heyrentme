@@ -230,20 +230,22 @@ class BookingController extends BaseController {
         
         $data = array('uuid' => $uuid);
         
-        $form = $this->createFormBuilder($data, array(
-                    'constraints' => array(
-                        new Callback(array($this, 'validateDiscountCode'))
-                    )
-                ))
+        $form = $this->createFormBuilder($data
+//                , array(
+//                    'constraints' => array(
+//                        new Callback(array($this, 'validateDiscountCode'))
+//                    )
+//                )
+                )
                 ->add('agree', 'checkbox', array(
                     'required' => false,
                     'constraints' => array(
                         new NotBlank()
                     )
                 ))
-                ->add('discountCode', 'text', array(
-                    'required' => false
-                ))
+//                ->add('discountCode', 'text', array(
+//                    'required' => false
+//                ))
                 ->add('uuid', 'hidden')
                 ->getForm();
         
@@ -262,26 +264,26 @@ class BookingController extends BaseController {
             
             // validate discount
             $discountCode = null;
-            if (!empty($data['discountCode'])) {
-                $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($data['discountCode']);
-                if ($dcode !== null) {
-                    $user = $inq->getUser();
-                    if ($dcode->getStatus() === DiscountCode::STATUS_ASSIGNED && $dcode->getUser()->getId() === $user->getId()) {
-                        $discountCode = $dcode; // only here the discount is valid
-                    }
-                }
-            }
+//            if (!empty($data['discountCode'])) {
+//                $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($data['discountCode']);
+//                if ($dcode !== null) {
+//                    $user = $inq->getUser();
+//                    if ($dcode->getStatus() === DiscountCode::STATUS_ASSIGNED && $dcode->getUser()->getId() === $user->getId()) {
+//                        $discountCode = $dcode; // only here the discount is valid
+//                    }
+//                }
+//            }
             
             // calculate discount, total price
-            if ($discountCode !== null) {                
-                $discountCode->setStatus(DiscountCode::STATUS_USED);
-                $bk->setDiscountCode($discountCode);
-                $p = $bk->getPrice() - 5;
-                $bk->setTotalPrice($p);
-            }
-            else {
+//            if ($discountCode !== null) {                
+//                $discountCode->setStatus(DiscountCode::STATUS_USED);
+//                $bk->setDiscountCode($discountCode);
+//                $p = $bk->getPrice() - 5;
+//                $bk->setTotalPrice($p);
+//            }
+//            else {
                 $bk->setTotalPrice($bk->getPrice());
-            }
+//            }
             
             // save booking
             $em->persist($bk);

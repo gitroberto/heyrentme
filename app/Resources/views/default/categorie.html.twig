@@ -82,10 +82,13 @@
             <input type="checkbox" id="buy" {% if searchParams.testBuy %}checked="checked"{% endif %} />
             <label for="buy"><span></span>Test & Buy</label>
           </div>
-          <div class="chbox-holder" style="margin-left: 8px;">{# TODO: move style to class #}
+          {# TODO: move style to class #}
+          {#
+          <div class="chbox-holder" style="margin-left: 8px;">
             <input type="checkbox" id="discount" {% if searchParams.discount %}checked="checked"{% endif %} />
             <label for="discount"><span></span>Discount</label>
           </div>
+          #}
         </div>
         <span class="clearfix"></span>
         <div class="row" id="equipment-list">
@@ -151,8 +154,8 @@
         var url = '{{ path('equipment-list') }}';
         var data = {
             'sort': $("#sort").val(),
-            'testBuy': $("#buy").is(':checked') ? 1 : 0,
-            'discount': $("#discount").is(':checked') ? 1 : 0
+            'testBuy': $("#buy").is(':checked') ? 1 : 0
+            //, 'discount': $("#discount").is(':checked') ? 1 : 0
         };
         console.log(JSON.stringify(data));
         $("#pls-wait").modal();
