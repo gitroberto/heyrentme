@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Feedback;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
@@ -9,15 +10,10 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Constraints\Type;
-use Symfony\Component\Validator\ExecutionContextInterface;
 
 class CommonController extends BaseController {
     
@@ -27,16 +23,17 @@ class CommonController extends BaseController {
         ));
     }
 
-    public function categoryListAction(Request $request, $equipment = true, $mobile = false) {
-        $cats1 = $this->getCategoriesByType($request, $equipment ? 1 : 2);
-        $cats2 = $this->getCategoriesByType($request, $equipment ? 2 : 1);
+    public function categoryListAction(Request $request, $type, $mobile = false) {
+        $eq = $type === Category::TYPE_EQUIPMENT;
+        $cats1 = $this->getCategoriesByType($request, $eq ? 1 : 2);
+        $cats2 = $this->getCategoriesByType($request, $eq ? 2 : 1);
         
         return $this->render(
             $mobile ? 'common/categoryListMob.html.twig' : 'common/categoryList.html.twig',
             array (
                 'cats1' => $cats1,
                 'cats2' => $cats2,
-                'equipment' => $equipment
+                'equipment' => $eq
             )
         );
     }

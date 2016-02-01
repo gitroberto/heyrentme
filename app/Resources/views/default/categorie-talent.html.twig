@@ -32,7 +32,7 @@
                             <input type="submit" class="desktop-hide" value="los geht´s!">
                 </form>
                 <ul class="col-xs-6 pull-right text-right kaup-select">
-                    {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
+                    {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_TALENT') })) }}
                 </ul>
             </div>
 
@@ -43,13 +43,13 @@
     <span class="clearfix"></span>
   </div>
   <div class="container">
-  {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT'), 'mobile': true })) }}
+  {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_TALENT'), 'mobile': true })) }}
   <section class="main-categories main-offers">
     <div class="container  background-white background-light-grey">
         <nav class="crumbs">
             <ul class="col-xs-6">
                 <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
-                <li><a href="{{ path('rentme') }}" {% if not category %}class="active-crumb"{% endif %}>Equipment mieten</a></li>
+                <li><a href="{{ path('bookme') }}" {% if not category %}class="active-crumb"{% endif %}>Talente buchen</a></li>
                 {% if category %}
                     <li><a href=""{{ path('catchall', { 'content': category.slug }) }}" class="active-crumb">{{ category.name }}</a></li>
                 {% endif %}
@@ -57,7 +57,7 @@
             <ul class="col-xs-6 pull-right text-right kaup-select">
                 <li>
                     <a class="active-crumb" 
-                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(1, {{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
+                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(1, {{ category.id }}){% else %}{{ path("offer-detail", { 'categoryId': category.id }) }}{% endif %}"
                        >In dieser Kategorie anbieten</a>                    
                 </li>
             </ul>
@@ -78,17 +78,6 @@
             <option value="date">Neueste zuerst</option>
             <option value="price">Preis: niedrigster zuerst</option>
         </select>
-          <div class="chbox-holder">
-            <input type="checkbox" id="buy" {% if searchParams.testBuy %}checked="checked"{% endif %} />
-            <label for="buy"><span></span>Test & Buy</label>
-          </div>
-          {# TODO: move style to class #}
-          {#
-          <div class="chbox-holder" style="margin-left: 8px;">
-            <input type="checkbox" id="discount" {% if searchParams.discount %}checked="checked"{% endif %} />
-            <label for="discount"><span></span>Discount</label>
-          </div>
-          #}
         </div>
         <span class="clearfix"></span>
         <div class="row" id="equipment-list">

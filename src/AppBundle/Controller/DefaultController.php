@@ -108,7 +108,7 @@ class DefaultController extends BaseController {
             if ($cat['type'] === Category::TYPE_EQUIPMENT) {
                 $tmpl = 'default/categorie.html.twig';
             } else {
-                $tmpl = 'default/talent-categorie.html.twig';
+                $tmpl = 'default/categorie-talent.html.twig';
             }
 
             return $this->render($tmpl, array(
