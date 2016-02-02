@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+  <div class="request-container head-req">
+    <img src="/img/detail-bg.jpg" alt="image" class="img-responsive max-320"/></div>
+    <img src="/img/detail-bg-rwd.jpg" alt="image" class="img-responsive min-320"/></div>
+  </div>
+  <div class="container request-container">
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>{{ inquiry.equipment.name }} / Jetzt Buchen</h1>
+            <div class="row summary">
+                <div class="ad col-md-4 col-sm-12">
+                    <img src="{{ inquiry.equipment.images[0].urlPath(image_url_prefix) }}" alt="{{ inquiry.equipment.name }}" class="img-responsive"/>
+                    <div class="product-info product-ad">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ include('common/stars.html.twig', { rating: inquiry.equipment.rating }) }}
+                                <p class="product-name">{{ inquiry.equipment.name }}</p>
+                            </div>
+                            <div class="col-xs-6"><p class="price">{{ inquiry.equipment.activePrice|number_format(2) }} €</p>
+                                <p class="tag">pro tag</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xs-6 summary-info">
+                    <p>BEGINN:</p>
+                    <p>ENDE:</p>
+                    <p>Verleihgebühr:</p>
+                    <p>ORT:</p><br />
+                    <p>Servicegebühr:</p>
+                    <p class="text-bold">Gesamtsumme:</p>
+                </div>
+                <div class="col-sm-4 col-xs-6 summary-info">
+                    <p>{{ inquiry.fromAt|date('d.m.Y H:i') }}</p>
+                    <p>{{ inquiry.toAt|date('d.m.Y H:i') }}</p>
+                    <p>{{ inquiry.price|number_format(2) }} &euro;</p>
+                    <p class="dont-transform">
+                      {{ inquiry.equipment.addressAsString }}
+                    </p>
+                    <p>0,- &euro; (Aktion!)</p>
+                    <p class="text-bold"><span id="price">{{ inquiry.price|number_format(2) }}</span> &euro; (Barzahlung)</p>
+                </div>
+                <div class="col-sm-4">
+                    {{ form_widget(form.uuid) }}
+                    {#<input id="discount-code" name="discount-code" type="text" placeholder="rabattcode eingeben" class="rabat-input" />#}
+                    {#{{ form_widget(form.discountCode, { 'placeholder': 'rabattcode eingeben', 'class': 'rabat-input' }) }}
+                    <div class="err-msg">{{ form_errors(form.discountCode) }}</div>#}
+                    <div class="err-msg">{{ form_errors(form) }}</div>
+                </div>
+                <div class="col-sm-4">
+                    {#<button class="rabat-button" onclick="checkCode(); return false;">rabatt einlösen</button>#}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row bewertung-request-form legals">
+        <div class="col-xs-12">
+            <p>Bitte achte beim Verleih auf sorgsamen Umgang mit dem Equipment. Robert wird dafür sorgen, dass das Gerät funktionstüchtig und einsatzbereit ist. Ihr bekommt beide noch ein Übergabeprotokoll zur Kontrolle für bereits bestehender Schäden oder Kratzer. Bitte nimm zur Übergabe die Kaution sowie einen Personalausweis mit.</p>
+            <p>Sollte etwas vor dem Übergabetermin dazwischen kommen melde dich bitte direkt bei Robert. <br />
+                Für andere Rückfragen bitte Email an <a href="mailto:support@heysharing.com">support@heysharing.com</a> oder +43 664 180 80 21.</p>
+            <div class="checkbox">
+              <div class="chbox-holder">
+                  {{ form_widget(form.agree) }}<label for="form_agree" class="padding-0"><span></span>Ich habe die hey! VIENNA <a href="#" data-toggle="modal" data-target=".allgemeine">Nutzungsbedingungen</a> gelesen und stimme diesen zu.</label>
+                  <div class="err-msg">{{ form_errors(form.agree) }}</div>
+              </div>
+            </div>
+            <button onclick="submit();">Jetzt Buchen</button>
+        </div>
+    </div>
+    <span class="add-margin-bottom-300"></span>
+    {{ form_end(form) }}
+  </div>
+  </div>
+  <!-- Modal -->
+  <div id="allgemeine-modal" class="modal fade allgemeine register" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
+                  <h4 class="modal-title">Nutzungsbedingungen</h4>
+                  <h5>Headline 1</h5>
+                  <p>
+                    Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
+                  </p>
+                  <h5>Headline 2</h5>
+                  <p>
+                      Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
+                  </p>
+          </div>
+      </div>
+  </div>
+    <script>
+        function submit() {
+            $("form").submit();
+        }
+        function checkCode() {
+            var price = {{ inquiry.price|number_format(0) }};
+            var dcode = $.trim($("#form_discountCode").val());
+            var url = '{{ path('booking-check-code', { 'code': ':CODE', 'uuid': inquiry.uuid }) }}'
+                    .replace(':CODE', dcode);
+            $.get(url, function(data, status) {
+                if (status === 'success' && data.result === 'ok') {
+                    var newPrice = price - 5;                    
+                    var $price = $("#price");
+                    $price.text(newPrice);
+                    $price.parent().css({ 'background-color': '#f0c814' });                    
+                }
+            });
+        }
+    </script>
+{% endblock %}

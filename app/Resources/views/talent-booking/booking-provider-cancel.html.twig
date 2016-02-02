@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+  <div class="request-container head-req">
+  <div class="request-container head-req">
+    <img src="/img/detail-bg.jpg" alt="image" class="img-responsive max-320"/></div>
+    <img src="/img/detail-bg-rwd.jpg" alt="image" class="img-responsive min-320"/></div>
+  </div>
+  <div class="container request-container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>{{ booking.inquiry.equipment.name }} / Vom Angebot zurücktreten</h1>
+            <div class="row summary">
+                <div class="ad col-md-4 col-sm-12">
+                    <img src="{% if booking.inquiry.equipment.images|length > 0 %}{{ booking.inquiry.equipment.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}"
+                         alt="{{ booking.inquiry.equipment.name }}" 
+                         class="img-responsive"/>
+                    <div class="product-info product-ad">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ include('common/stars.html.twig', { rating: booking.inquiry.equipment.rating }) }}
+                                <p class="product-name">{{ booking.inquiry.equipment.name }}</p>
+                            </div>
+                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.equipment.activePrice|number_format(2) }} €</p>
+                                <p class="tag">pro tag</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xs-6 summary-info">
+                    <p>BEGINN:</p>
+                    <p>ENDE:</p>
+                    <p>Gesamtkosten:</p>
+                    <p>ORT:</p><br />
+                </div>
+                <div class="col-sm-4 col-xs-6 summary-info">
+                    <p>{{ booking.inquiry.fromAt|date('d.m.Y H:i') }}</p>
+                    <p>{{ booking.inquiry.toAt|date('d.m.Y H:i') }}</p>
+                    <p>{{ booking.inquiry.price|number_format(2) }} €</p>
+                    <p class="dont-transform">
+                        {{ booking.inquiry.equipment.addressAsString }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_start(form) }}
+    <div class="row legals stornieren">
+        
+            {{ form_widget(form.reason) }}
+        
+        <div class="col-xs-12">
+            <h3>Ich möchte vom Angebot aus folgenden Gründen zurücktreten:</h3>
+            <input type="radio" id="es" name="radio-stornieren" value="no-show"><label for="es"><span></span> Anbieter ist bis 15 min. nach Buchungsbeginn nicht erschienen</label>
+            <input type="radio" id="equipment" name="radio-stornieren" value="defect"><label for="equipment"><span></span> Das Equipment ist defekt</label>
+            <input type="radio" id="sonstiges" name="radio-stornieren" value="other"><label for="sonstiges"><span></span> Sonstiges:</label>
+            {{ form_widget(form.description, { 'attr': { 'class': 'full-rwd', 'disabled': 'disabled' } }) }}
+            <button class="btn-red full-rwd">Angebot stornieren</button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+        <span class="add-margin-bottom-300"></span>
+  </div>
+  </div>
+  <!-- Modal -->
+  <div id="allgemeine-modal" class="modal fade allgemeine register" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                  <h4 class="modal-title">Nutzungsbedingungen</h4>
+                  <h5>Headline 1</h5>
+                  <p>
+                    Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
+                  </p>
+                  <h5>Headline 2</h5>
+                  <p>
+                      Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
+                  </p>
+          </div>
+      </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(function() {
+        refreshCtrl();
+        $(":radio[name='radio-stornieren']").on('click change blur', radioChanged);
+    });
+    function radioChanged() {
+        var $radio = $(":radio[name='radio-stornieren']:checked");
+        var $text = $("#form_reason");
+        $text.val($radio.val());
+        refreshCtrl();
+    }
+    function refreshCtrl() {
+        var $radio = $(":radio[name='radio-stornieren']:checked");
+        var $text = $("#form_description");
+        if ($radio.attr('id') === 'sonstiges') {
+            $text.attr('required', 'required');
+            $text.removeAttr('disabled');
+        }
+        else {
+            $text.removeAttr('required');
+            $text.attr('disabled', 'disabled');
+            $text.val('');
+        }
+    }
+</script>    
+{% endblock %}

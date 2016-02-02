@@ -41,14 +41,6 @@ class TalentInquiry {
      */
     private $price;
     /**
-     * @ORM\Column(type="decimal")
-     */
-    private $deposit;
-    /**
-     * @ORM\Column(type="decimal")
-     */
-    private $priceBuy;
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;

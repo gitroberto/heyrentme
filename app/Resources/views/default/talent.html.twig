@@ -257,9 +257,6 @@
                       <div class="input-group date" id="datetimepicker1">
                           <input type="text" class="form-control" id="date-range" />
                       </div>
-                      <div class="input-group date display-none" id="datetimepicker2">
-                          <input type="text" class="form-control" id="date-range1" />
-                      </div>
                     </div>
                     <!-- Time -->
                     <div class="time-container">
@@ -300,14 +297,14 @@
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 08:00">08:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 09:00">09:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 10:00">10:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 11:00">11:00 Uhr</option>
+                            <option selected="selected" value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 11:00">11:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 12:00">12:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 13:00">13:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 14:00">14:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 15:00">15:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 16:00">16:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 17:00">17:00 Uhr</option>
-                            <option selected="selected" value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 18:00">18:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 18:00">18:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 19:00">19:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 20:00">20:00 Uhr</option>
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 21:00">21:00 Uhr</option>
@@ -450,27 +447,12 @@
   <script src="http://maps.googleapis.com/maps/api/js?language=de"></script>
   <script src="http://malsup.github.com/jquery.form.js"></script> 
   <script>
-    function addData(tag,data) {
-        var tag  = tag;
-        var data = data;
-        var date = data.replace('AB', '');
-        $(tag).html(date);
-    };
-    $(document).ready(function(){
-        var t1 = $('#date-range').val(moment().format('[AB] DD.MM.YYYY'));
-        var t2 = (moment().add(1, "days").format('[BIS] DD.MM.YYYY'));
-
-        $('#date-range').val(t1.val() + ' ' + t2);
-
-        $('#date-range').val().replace('AB', '');
-        $('#date-range1').val().replace('BIS', '');
-
-        addData('#from-data',$('#date-range').val());
-        addData('#to-data',$('#date-range1').val());
-
-        // Date range picker
-        var configObject = {
-            separator : 'Bis ',
+    $(function() {
+        
+        $('#date-range').val(moment().format('DD.MM.YYYY'));
+        updatePrice();
+        
+        var config = {
             language:'de',
             format:'DD.MM.YYYY',
             autoClose: true,
@@ -481,93 +463,65 @@
             singleMonth: true,
             showShortcuts: false,
             showTopbar: false,
-
-            getValue: function()
-            {
-                if ($('#date-range').val() && $('#date-range1').val() )
-                    //return $('#date-range').val() + ' Bis ' + $('#date-range1').val();
-                //else
-                    return '';
-            },
-            setValue: function(s,s1,s2)
-            {
-                $('#date-range').val('AB '+ s1);
-                $('#date-range1').val('BIS '+s2);
-
-                addData('#from-data',$('#date-range').val());
-                addData('#to-data',$('#date-range1').val());
-
-                var startData = $('#date-range').val().replace('AB', '');
-                var endData   = $('#date-range1').val().replace('BIS', '');
-
-                // split the date into days, months, years array
-                var x = startData.split('.');
-                var y = endData.split('.');
-
-                var a = new Date(x[2],x[1],x[0]);
-                var b = new Date(y[2],y[1],y[0]);
-
-                var c = ( b - a );
-                var d = c / (1000 * 60 * 60 * 24);
-
-                var p = Math.round(d) * {{ item.activePrice|number_format(2, '.', '') }};
-                $('.price-calc').html(p.toFixed(2));
-                $('#date-range').val('AB '+ s1 + ' BIS '+s2);
+            singleDate: true,
+            setValue: function(date) {
+                $('#date-range').val(date);
             }
         };
-        $('#datetimepicker1').dateRangePicker(configObject).bind('datepicker-open',function()  {
+        
+        
+        $("#datetimepicker1").dateRangePicker(config).bind('datepicker-open',function()  {
             $(this).children('input').css('background-color','#f0c814').css('color','white').addClass('calendar-icon-hover');
         }).bind('datepicker-closed',function()
         {
             $(this).children('input').css('background-color','white').css('color','black').removeClass('calendar-icon-hover');
         });
-
-        $('#datetimepicker2').dateRangePicker(configObject).bind('datepicker-open',function()  {
-            $(this).children('input').css('background-color','#f0c814').css('color','white').addClass('calendar-icon-hover');
-        }).bind('datepicker-closed',function()
-        {
-            $(this).children('input').css('background-color','white').css('color','black').removeClass('calendar-icon-hover');
+        
+        $("#tests, #tests2").change(function() {
+            updatePrice();
         });
-
-        $('#tests').change(function(){
-            var time1 = $(this).val();
-            $('#from-time').html(time1.replace('Uhrzeit ab ',''));
-            $(this).parent().find('.bootstrap-select').eq(0).find('.dropdown-toggle').text($(this).val()).prepend('<span class="caret"></span>');
-        });
-        $('#tests2').change(function(){
-            var time1 = $(this).val();
-            $('#to-time').html(time1.replace('Uhrzeit bis ',''));
-            $(this).parent().find('.bootstrap-select').eq(1).find('.dropdown-toggle').text($(this).val()).prepend('<span class="caret"></span>');
-        });
-        $('#myVideoPlay').on('click',function(){
-            $(this).hide();
-        })
-    });
-    $(window).load(function(){
-        $('#tests').parent().find('.bootstrap-select').eq(0).find('.dropdown-toggle').html('Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp;   10:00').prepend('<span class="caret"></span>');
-        $('#tests2').parent().find('.bootstrap-select').eq(1).find('.dropdown-toggle').html('Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp;  18:00').prepend('<span class="caret"></span>');
+        
     });
     
-    function inquiry() {
-        // parse datetimes
-        var range = $('#date-range').val();
-        var arr = range.split('BIS');
-        var f = $.trim(arr[0].replace('AB', '')).split('.');                        // from date
-        var t = $.trim(arr[1].replace('BIS', '')).split('.');                       // to date
+    function updatePrice() {
+        var span = calculateTimespan();
+        var total = {{ item.activePrice|number_format(2) }} * span.diff;
+        console.log(span);
+        $(".price-calc").text(total);
+    }
+    function calculateTimespan() {
         var fh = $.trim($("#tests").val().replace('Uhrzeit ab', '')).split(':');    // from hour
         var th = $.trim($("#tests2").val().replace('Uhrzeit bis', '')).split(':');  // to hour
-        
-        var from = new Date(f[2], f[1], f[0], fh[0], fh[1]);
-        var to = new Date(t[2], t[1], t[0], th[0], th[1]);
+        var h1 = parseInt(fh[0]);
+        var h2 = parseInt(th[0]);        
+        var d = $.trim($('#date-range').val()).split('.');                        // from date
+        var diff, total, date1, date2;
+        if (h2 > h1) {
+            date1 = new Date(d[2], d[1], d[0], h1, 0);
+            date2 = new Date(d[2], d[1], d[0], h2, 0);
+            diff = h2 - h1;
+        }
+        else {
+            date1 = new Date(d[2], d[1], d[0], h1, 0);
+            date2 = new Date(d[2], d[1], d[0], h2, 0);
+            date2.setDate(date2.getDate() + 1);
+            diff = 24 - h1 + h2;
+        }
         // update timezone offset, so toISOString yields local time
         var tzoffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
-        from = new Date(from.getTime() - tzoffset);
-        to = new Date(to.getTime() - tzoffset);
+        date1 = new Date(date1.getTime() - tzoffset);
+        date2 = new Date(date2.getTime() - tzoffset);
+
+        return { 'h1': h1, 'h2': h2, 'date1': date1, 'date2': date2, 'diff': diff };
+    }
+
+    function inquiry() {
+        var span = calculateTimespan();
         
         // assemble params
-        var url = '{{ path('booking-inquiry', { 'id': item.id, 'dateFrom': ':FROM', 'dateTo': ':TO' }) }}'
-                .replace(':FROM', from.toISOString())
-                .replace(':TO', to.toISOString());
+        var url = '{{ path('talent-inquiry', { 'id': item.id, 'dateFrom': ':FROM', 'dateTo': ':TO' }) }}'
+                .replace(':FROM', span.date1.toISOString())
+                .replace(':TO', span.date2.toISOString());
                 
         $("#inquiry-modal .modal-dialog").load(url, function(data) {
             $("#inquiry-modal").modal();
