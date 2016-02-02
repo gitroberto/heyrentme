@@ -125,7 +125,6 @@ class TalentController extends BaseController {
         
         // build form
         //<editor-fold>
-        $ageArr = $this->getDoctrineRepo('AppBundle:TalentAge')->getAllForDropdown();        
         $form = $this->createFormBuilder($data)
                 ->add('name', 'text', array(
                     'constraints' => array(
@@ -146,7 +145,6 @@ class TalentController extends BaseController {
         
         if ($form->isValid()) {
             $data = $form->getData();
-            $age = $this->getDoctrineRepo('AppBundle:TalentAge')->find($data['ageId']);            
 
             // map fields, TODO: consider moving to Talent's method
             //<editor-fold> map fields            
@@ -165,7 +163,7 @@ class TalentController extends BaseController {
             return $this->redirectToRoute('talent-edit-2', array('id' => $id));
         }
         
-        return $this->render('provider\talent_edit_step1.html.twig', array(
+        return $this->render('talent/talent_edit_step1.html.twig', array(
             'form' => $form->createView()
         ));
     }        

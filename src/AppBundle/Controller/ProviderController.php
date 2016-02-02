@@ -31,10 +31,12 @@ class ProviderController extends BaseController {
      */
     public function dashboardAction(Request $request) {
         $user = $this->getUser();        
-        $offers = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());        
+        $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());        
+        $talents = $this->getDoctrineRepo('AppBundle:Talent')->getAllByUserId($user->getId());        
         
         return $this->render('provider/dashboard.html.twig', array( 
-            'offers'=> $offers, 
+            'equipments'=> $equipments, 
+            'talents' => $talents,
             'image_url_prefix'=> $this->getParameter('image_url_prefix'),
             'user' => $user
         ));
@@ -993,11 +995,62 @@ class ProviderController extends BaseController {
         
         return $this->redirectToRoute("fos_user_security_logout");
     }
-    
-    /**
-     * @Route("/provider/saveStatus", name="equipment-saveStatus")
+    /** 
+     * @Route("/provider/save-status", name="save-status")
      */
     public function saveStatusAction(Request $request) {
+        $id = $request->get('id');
+        $type = $request->get('type');
+        $status = $request->get('status');
+        
+        if ($type === 'equipment') {
+            $obj = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        }
+        else {
+            $obj = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        }
+        
+        // security check
+        if ($this->getUser()->getId() !== $obj->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }
+        
+        // save
+        $em = $this->getDoctrine()->getManager();
+        $obj->setOfferStatus($status);
+        $em->persist($obj);
+        $em->flush();            
+        
+        return new JsonResponse(array("status" => "ok"));
+    }
+    
+    public function sendNewModifiedEquipmentInfoMessage(Request $request, Equipment $eq)
+    {      
+                        
+        $to = $this->getParameter('admin_email');
+        $template = 'Emails/Equipment/new_modified_item.html.twig';        
+        
+        $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));        
+        
+        $emailHtml = $this->renderView($template, array(                                    
+            'equipment' => $eq,
+            'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),            
+            'url' => $url
+        ));
+        
+        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+        $message = Swift_Message::newInstance()
+            ->setSubject('New/modified equipment notification.')
+            ->setFrom($from)
+            ->setTo($to)
+            ->setBody($emailHtml, 'text/html');
+        $this->get('mailer')->send($message);
+        
+    }
+
+    
+    /*
+    public function saveStatus2Action(Request $request) {
 
         $id = $request->get('id');
         $text = $request->get('text');             
@@ -1059,7 +1112,6 @@ class ProviderController extends BaseController {
             $em->persist($equipment);
             $em->flush();            
             
-            /*
             $activeDiscount = $equipment->getActiveDiscount();
             
             if ($discountType != -1 && $discountType != 0 && $activeDiscount == null){
@@ -1101,7 +1153,6 @@ class ProviderController extends BaseController {
                 $em->flush();
             }
                 
-            */
         } catch (Exception $ex) {
             $result = "Error.";
             $status = JsonResponse::HTTP_INTERNAL_SERVER_ERROR;
@@ -1109,29 +1160,8 @@ class ProviderController extends BaseController {
         
         $resp = new JsonResponse($result, $status);        
         return $resp;        
-    }    
+    }   
+    */
     
-    public function sendNewModifiedEquipmentInfoMessage(Request $request, Equipment $eq)
-    {      
-                        
-        $to = $this->getParameter('admin_email');
-        $template = 'Emails/Equipment/new_modified_item.html.twig';        
-        
-        $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));        
-        
-        $emailHtml = $this->renderView($template, array(                                    
-            'equipment' => $eq,
-            'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),            
-            'url' => $url
-        ));
-        
-        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-        $message = Swift_Message::newInstance()
-            ->setSubject('New/modified equipment notification.')
-            ->setFrom($from)
-            ->setTo($to)
-            ->setBody($emailHtml, 'text/html');
-        $this->get('mailer')->send($message);
-        
-    }
+    
 }

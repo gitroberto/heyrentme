@@ -23,15 +23,14 @@
     </div>
     <div class="row ">
         
-        {% if offers %}
-            <div class="col-md-9 col-xs-12">
-            {% for o in offers %}
+        <div class="col-md-9 col-xs-12">
+            {% for eq in equipments %}
                 <div class="col-xs-12">
                     <div class="xol-xs-12">
                         <div class="row user-offers">
                             <div class="col-md-4 offer-detail">
-                                {% if o.images|length > 0 %}
-                                    <img src="{{ o.images[0].urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
+                                {% if eq.images|length > 0 %}
+                                    <img src="{{ eq.images[0].urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
                                 {% else %}
                                     <img src="/img/equipment-default.jpg" alt="placeholder" class="img-responsive" />
                                 {% endif %}
@@ -41,11 +40,11 @@
 
                                     <div class="row">
                                         <div class="col-xs-8">
-                                            {{ include('common/stars.html.twig', { rating: o.rating }) }}
-                                            <p class="product-name">{{ o.name }}</p>
+                                            {{ include('common/stars.html.twig', { rating: eq.rating }) }}
+                                            <p class="product-name">{{ eq.name }}</p>
                                         </div>
                                         <div class="col-xs-4">
-                                            <p class="price">{{ o.price }} &#8364;</p>
+                                            <p class="price">{{ eq.price }} &#8364;</p>
                                             <p class="tag">pro tag</p>
                                         </div>
                                     </div>
@@ -53,54 +52,196 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="buttons">
-                                  <a class="button-black first-button col-xs-3" href="#" data-dismiss="modal" data-toggle="modal" data-target="#edit-offer_{{ o.id }}" >bearbeiten</a>
-                                  <div id="edit-offer_{{ o.id }}" class="modal fade delete-offer" role="dialog">
+                                  <a class="button-black first-button col-xs-3" href="#" data-dismiss="modal" data-toggle="modal" data-target="#edit-offer_{{ eq.id }}" >bearbeiten</a>
+                                  <div id="edit-offer_{{ eq.id }}" class="modal fade delete-offer" role="dialog">
                                         <div class="modal-dialog"> 
                                           <!-- Modal content-->
                                           <div class="modal-content">
                                             <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
                                             <div class="content-modal">
-                                              <p class="text-bold">Angebot “{{ o.name }}” bearbeiten?</p>
+                                              <p class="text-bold">Angebot “{{ eq.name }}” bearbeiten?</p>
                                               <p class="delate-info">Bitte beachte, dass dein Angebot erst von uns angesehen werden muss, bevor die Änderungen aktiv werden.</p>
-                                              <a class="button-black backgound-yellow text-black" href="{{ path("equipment-edit-1", { "id": o.id } ) }}">Angebot bearbeiten</a> </div>
+                                              <a class="button-black backgound-yellow text-black" href="{{ path("equipment-edit-1", { "id": eq.id } ) }}">Angebot bearbeiten</a> </div>
                                           </div>
                                         </div>
                                       </div>
-                                  
-                                  <a  data-toggle="modal" data-target="#confirmDelete_{{ o.id }}" class="button-black col-xs-3" href="#">entfernen</a>
-                                  
-                                    <div id="confirmDelete_{{ o.id }}" class="modal fade delete-offer" role="dialog" >
+
+                                  <a  data-toggle="modal" data-target="#confirmDelete_{{ eq.id }}" class="button-black col-xs-3" href="#">entfernen</a>
+
+                                    <div id="confirmDelete_{{ eq.id }}" class="modal fade delete-offer" role="dialog" >
                                         <div class="modal-dialog" role="document">
                                             <!-- Modal content-->
                                             <div class="modal-content">
-                                                
+
                                                 <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
-                                                
+
                                                 <div id="deleteOffer" class="content-modal">
-                                                    <p class="text-bold">Angebot "{{ o.name }}" entfernen?</p>
+                                                    <p class="text-bold">Angebot "{{ eq.name }}" entfernen?</p>
                                                     <p class="delate-info">
                                                         Mochest du dieses Angebot wirklich loschen?
                                                         Dieser Schritt ist nicht ruckgangig zu machen.
                                                     </p>
-                                                    <a class="delete-btn button btn-danger"  href="{{ path("equipment-delete", { "id": o.id } ) }}">angebot entfernen</a>
+                                                    <a class="delete-btn button btn-danger"  href="{{ path("equipment-delete", { "id": eq.id } ) }}">angebot entfernen</a>
                                                     <div class="clear"></div>
                                                 </div>
 
-                                                
-                                                
+
+
                                             </div>
                                         </div>
                                     </div>
-                                    
+
 
 
                                   <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
-                                  <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" id="BtnSave_{{ o.id }}" >speichern</a>
+                                  <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" data-type="equipment" data-id="{{ eq.id }}" id="BtnSave_{{ eq.id }}" >speichern</a>
+                                </div>
+                                <div class="clear" ></div>
+                                <div>                                    
+                                    <textarea data-type="equipment" data-id="{{ eq.id }}" class="place_black placeholderStatusDashboard">{{ eq.offerStatus }}</textarea>
+                                </div>
+                                <div>
+                                    <div class="row">
+                                        {#
+                                        <div class="col-xs-5">
+                                            <div class="search-form mobile-kategorie-form">
+                                                <div class="select-link">
+                                                    {% if o.activeDiscount %}
+                                                        <input id="HiddenDiscountType_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().type()}}" />
+                                                        <input id="HiddenPercent_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().percent()}}" />
+                                                        <input id="HiddenDuration_{{ o.id }}" type="hidden" value="{{o.ActiveDiscount().Duration()}}" />
+                                                    {% endif %}
+                                                        <select id="DiscountType_{{ o.id }}" title='diskont Wählen' name="gender2" class="selectpicker bs-select-hidden ">
+                                                            <option value="-1" >Diskont Wählen</option>
+                                                            {% if o.IsNewOfferDiscountPossible %}
+                                                            <option value="1" >Neues Angebot</option>
+                                                            {% endif %}
+                                                            {% if o.IsTemporaryDiscountPossible %}                                                        
+                                                            <option value="2" >Zeitlich begrenzt</option>
+                                                            {% endif %}
+                                                        </select>                                                                                                 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-1 infos">
+                                            <a data-target="#discount" data-toggle="modal" href="#">
+                                                <span class="info-icon"></span>
+                                            </a>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="search-form mobile-kategorie-form">
+                                                <div class="select-link">
+                                                    <select id="Percent_{{ o.id }}" title="0%" name="gender2" class="selectpicker bs-select-hidden " disabled="disabled" >
+                                                        <option value="-1" >0%</option>                                                                                                            
+                                                        <option value="1" >-10%</option>                                                    
+                                                        <option value="2" >-15%</option>                                                    
+                                                        <option value="3" >-20%</option>
+                                                        <option value="4" >-25%</option>                                                    
+                                                        <option value="5" >-30%</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="search-form mobile-kategorie-form">
+                                                <div class="select-link">
+                                                    <select id="Duration_{{ o.id }}" disabled="disabled" title='Dauer' name="gender2" class="selectpicker bs-select-hidden ">
+                                                        <option value = "-1">Dauer</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        #}
+                                        <div class="col-xs-6 id">
+                                            <p>Angebot-ID: E-{{ eq.id }} </p>
+                                        </div>
+                                        <div class="col-xs-6 id">
+                                            <div data-type="equipment" data-id="{{ eq.id }}" class="err-msg hidden" style="margin-top: 21px;"><ul></ul></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for tal in talents %}
+                <div class="col-xs-12">
+                    <div class="xol-xs-12">
+                        <div class="row user-offers">
+                            <div class="col-md-4 offer-detail">
+                                {% if tal.images|length > 0 %}
+                                    <img src="{{ tal.images[0].urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
+                                {% else %}
+                                    <img src="/img/equipment-default.jpg" alt="placeholder" class="img-responsive" />
+                                {% endif %}
+
+
+                                <div class="product-info">
+
+                                    <div class="row">
+                                        <div class="col-xs-8">
+                                            {{ include('common/stars.html.twig', { rating: tal.rating }) }}
+                                            <p class="product-name">{{ tal.name }}</p>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <p class="price">{{ tal.price }} &#8364;</p>
+                                            <p class="tag">pro tag</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="buttons">
+                                  <a class="button-black first-button col-xs-3" href="#" data-dismiss="modal" data-toggle="modal" data-target="#edit-offer_{{ tal.id }}" >bearbeiten</a>
+                                  <div id="edit-offer_{{ tal.id }}" class="modal fade delete-offer" role="dialog">
+                                        <div class="modal-dialog"> 
+                                          <!-- Modal content-->
+                                          <div class="modal-content">
+                                            <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                                            <div class="content-modal">
+                                              <p class="text-bold">Angebot “{{ tal.name }}” bearbeiten?</p>
+                                              <p class="delate-info">Bitte beachte, dass dein Angebot erst von uns angesehen werden muss, bevor die Änderungen aktiv werden.</p>
+                                              <a class="button-black backgound-yellow text-black" href="{{ path("talent-edit-1", { "id": tal.id } ) }}">Angebot bearbeiten</a> </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                  <a  data-toggle="modal" data-target="#confirmDelete_{{ tal.id }}" class="button-black col-xs-3" href="#">entfernen</a>
+
+                                    <div id="confirmDelete_{{ tal.id }}" class="modal fade delete-offer" role="dialog" >
+                                        <div class="modal-dialog" role="document">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+
+                                                <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+
+                                                <div id="deleteOffer" class="content-modal">
+                                                    <p class="text-bold">Angebot "{{ tal.name }}" entfernen?</p>
+                                                    <p class="delate-info">
+                                                        Mochest du dieses Angebot wirklich loschen?
+                                                        Dieser Schritt ist nicht ruckgangig zu machen.
+                                                    </p>
+                                                    <a class="delete-btn button btn-danger"  href="{{ path("talent-delete", { "id": tal.id } ) }}">angebot entfernen</a>
+                                                    <div class="clear"></div>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                  <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
+                                  <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" data-type="talent" data-id="{{ tal.id }}" id="BtnSave_{{ tal.id }}" >speichern</a>
                                 </div>
                                 <div class="clear" ></div>
                                 <div>
-                                    <ul id = "DivMessage_{{ o.id }}" style="display:none;"></ul>
-                                    <textarea id="TxtStatus_{{ o.id }}"  class="place_black placeholderStatusDashboard"  >{{ o.offerStatus }}</textarea>                                
+                                    <ul id = "DivMessage_{{ tal.id }}" style="display:none;"></ul>
+                                    
+                                    <textarea data-type="talent" data-id="{{ tal.id }}"  class="place_black placeholderStatusDashboard" id="TxtStatus_{{ tal.id }}">{{ tal.offerStatus }}</textarea>                                
 
                                 </div>
                                 <div>
@@ -155,8 +296,11 @@
                                             </div>
                                         </div>
                                         #}
-                                        <div class="col-xs-12 id">
-                                            <p>Angebot-ID: {{ o.id }} </p>
+                                        <div class="col-xs-6 id">
+                                            <p>Angebot-ID: T-{{ tal.id }} </p>
+                                        </div>
+                                        <div class="col-xs-6 id">
+                                            <div data-type="talent" data-id="{{ tal.id }}" class="err-msg hidden" style="margin-top: 21px;"><ul></ul></div>
                                         </div>
                                     </div>
                                 </div>
@@ -165,20 +309,18 @@
                     </div>
                 </div>
             {% endfor %}
-            
-            <div class="offer" style="clear: both;">
-                <a class="green-big-button" data-target="#choose-offer" data-toggle="modal" href="#">Angebot hinzufügen</a>                
-            </div>
-            </div>
-        {% else %}
+        </div>
+    
+        {{ include('provider/user_nav_small.html.twig', { 'page': 'dashboard', 'user': user }) }}
+    
             <div class="col-md-9 offer">
-                <p>Erstelle dein erstes Angebot!</p>
+                {% if equipments|length + talents|length == 0 %}
+                    <p>Erstelle dein erstes Angebot!</p>
+                {% endif %}
                 <a class="green-big-button" data-target="#choose-offer" data-toggle="modal" href="#">Angebot hinzufügen</a>                
             </div>
-        {% endif %}
         
         
-          {{ include('provider/user_nav_small.html.twig', { 'page': 'dashboard', 'user': user }) }}
         
     </div>
     
@@ -201,8 +343,46 @@
     
           
 </section>
-<script>
-    var url = "{{ path("equipment-saveStatus") }}";
-</script>
-<script src="/js/dashboard.js"></script>
 {% endblock %}
+
+{% block script %}
+<script>
+    $(function() {
+        $('a.btnSaveStatus').click(save);
+    });    
+    
+    function save() {
+        var $this = $(this);
+        var type = $this.data('type');
+        var id = $this.data('id');
+        var $ta = $("textarea[data-id=" + id + "][data-type=" + type + "]");
+        var $box = $("div.err-msg[data-id=" + id + "][data-type=" + type + "]");
+        var status = $.trim($ta.val());
+        
+        var toid = $box.data('toid');
+        if (toid)
+            window.clearTimeout(toid);
+        $box.addClass('hidden');
+        
+        var params = { type: type, id: id, status: status };
+        var url = "{{ path('save-status') }}";
+        var msg = null;
+        $.post(url, params)
+                .done(function() {
+                    msg = 'Status gespeichert';
+                })
+                .fail(function() {
+                    msg = 'Speichern fehlgeschlagen ist, versuchen Sie es erneut';
+                })
+                .always(function() {
+                    $box.children('ul').empty().append($('<li>').text(msg)).parent().removeClass('hidden');
+                    var toid = window.setTimeout(function() {
+                        $box.addClass('hidden');
+                    }, 5000);
+                    $box.data('toid', toid);
+                });
+    }
+</script>
+{#<script src="/js/dashboard.js"></script>#}
+{% endblock %}
+    
