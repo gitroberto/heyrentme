@@ -97,7 +97,7 @@ class RegistrationController extends BaseRegistrationController
         
         #$codeRepo = $this->getDoctrine()->getRepository('AppBundle:DiscountCode');
         #$code = $codeRepo->assignToUser($user);
-        $this->getDoctrine()->getRepository('AppBundle:Inquiry')->updateInquiries($user);
+        $this->getDoctrine()->getRepository('AppBundle:EquipmentInquiry')->updateInquiries($user);
 
         if (null === $response = $event->getResponse()) {
             $url = $this->generateUrl('rentme') . "?confirmed=1";

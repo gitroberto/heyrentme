@@ -5,11 +5,10 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="booking")
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="BookingRepository")
+ * @ORM\Table(name="equipment_booking")
+ * @ORM\Entity(repositoryClass="EquipmentBookingRepository")
  */
-class Booking {
+class EquipmentBooking {
     
     const STATUS_BOOKED = 1;
     const STATUS_USER_CANCELLED = 2;
@@ -90,7 +89,7 @@ class Booking {
     private $rateEquipmentUuid;
     
     /**
-     * @ORM\OneToOne(targetEntity="Inquiry", inversedBy="booking");
+     * @ORM\OneToOne(targetEntity="EquipmentInquiry", inversedBy="booking");
      * @ORM\JoinColumn(name="inquiry_id", referencedColumnName="id")
      */
     private $inquiry;
@@ -104,10 +103,10 @@ class Booking {
     
     public function getStatusAsString() {
         switch ($this->status) {
-            case Booking::STATUS_BOOKED: return "offen";
-            case Booking::STATUS_PROVIDER_CANCELLED: return "zurückgetreten";
-            case Booking::STATUS_USER_CANCELLED: return "storniert";
-            case Booking::STATUS_SUCCESS: return "erfolg";
+            case EquipmentBooking::STATUS_BOOKED: return "offen";
+            case EquipmentBooking::STATUS_PROVIDER_CANCELLED: return "zurückgetreten";
+            case EquipmentBooking::STATUS_USER_CANCELLED: return "storniert";
+            case EquipmentBooking::STATUS_SUCCESS: return "erfolg";
             default:
                 throw new Exception("invalid booking status", "", null);
         }
@@ -129,7 +128,7 @@ class Booking {
      *
      * @param integer $status
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setStatus($status)
     {
@@ -153,7 +152,7 @@ class Booking {
      *
      * @param \DateTime $createdAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setCreatedAt($createdAt)
     {
@@ -177,7 +176,7 @@ class Booking {
      *
      * @param \DateTime $modifiedAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setModifiedAt($modifiedAt)
     {
@@ -199,11 +198,11 @@ class Booking {
     /**
      * Set inquiry
      *
-     * @param \AppBundle\Entity\Inquiry $inquiry
+     * @param \AppBundle\Entity\EquipmentInquiry $inquiry
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
-    public function setInquiry(\AppBundle\Entity\Inquiry $inquiry = null)
+    public function setInquiry(\AppBundle\Entity\EquipmentInquiry $inquiry = null)
     {
         $this->inquiry = $inquiry;
 
@@ -213,7 +212,7 @@ class Booking {
     /**
      * Get inquiry
      *
-     * @return \AppBundle\Entity\Inquiry
+     * @return \AppBundle\Entity\EquipmentInquiry
      */
     public function getInquiry()
     {
@@ -225,7 +224,7 @@ class Booking {
      *
      * @param \AppBundle\Entity\DiscountCode $discountCode
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setDiscountCode(\AppBundle\Entity\DiscountCode $discountCode = null)
     {
@@ -249,7 +248,7 @@ class Booking {
      *
      * @param string $price
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setPrice($price)
     {
@@ -273,7 +272,7 @@ class Booking {
      *
      * @param string $deposit
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setDeposit($deposit)
     {
@@ -297,7 +296,7 @@ class Booking {
      *
      * @param string $totalPrice
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setTotalPrice($totalPrice)
     {
@@ -321,7 +320,7 @@ class Booking {
      *
      * @param \DateTime $noticeRentUserAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setNoticeRentUserAt($noticeRentUserAt)
     {
@@ -345,7 +344,7 @@ class Booking {
      *
      * @param \DateTime $noticeRentProviderAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setNoticeRentProviderAt($noticeRentProviderAt)
     {
@@ -369,7 +368,7 @@ class Booking {
      *
      * @param \DateTime $noticeReturnUserAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setNoticeReturnUserAt($noticeReturnUserAt)
     {
@@ -393,7 +392,7 @@ class Booking {
      *
      * @param \DateTime $noticeReturnProviderAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setNoticeReturnProviderAt($noticeReturnProviderAt)
     {
@@ -417,7 +416,7 @@ class Booking {
      *
      * @param \DateTime $noticeRateUserAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setNoticeRateUserAt($noticeRateUserAt)
     {
@@ -441,7 +440,7 @@ class Booking {
      *
      * @param \DateTime $noticeRateProviderAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setNoticeRateProviderAt($noticeRateProviderAt)
     {
@@ -465,7 +464,7 @@ class Booking {
      *
      * @param \DateTime $noticeAllOkUserAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setNoticeAllOkUserAt($noticeAllOkUserAt)
     {
@@ -489,7 +488,7 @@ class Booking {
      *
      * @param \DateTime $noticeAllOkProviderAt
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setNoticeAllOkProviderAt($noticeAllOkProviderAt)
     {
@@ -513,7 +512,7 @@ class Booking {
      *
      * @param string $rateUserUuid
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setRateUserUuid($rateUserUuid)
     {
@@ -537,7 +536,7 @@ class Booking {
      *
      * @param string $rateEquipmentUuid
      *
-     * @return Booking
+     * @return EquipmentBooking
      */
     public function setRateEquipmentUuid($rateEquipmentUuid)
     {

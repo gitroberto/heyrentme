@@ -50,7 +50,7 @@ class SchedulerService {
     protected function sendRentReminders(DateTime $datetime) {  
         // users
         $this->logger->debug('sending RENT reminders for USERS');
-        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForRentUserReminder($datetime);        
+        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRentUserReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
@@ -92,7 +92,7 @@ class SchedulerService {
         
         // providers
         $this->logger->debug('sending RENT reminders for PROVIDERS');
-        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForRentProviderReminder($datetime);        
+        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRentProviderReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
@@ -131,7 +131,7 @@ class SchedulerService {
     protected function sendAllOkReminders(DateTime $datetime) {        
         // users
         $this->logger->debug('sending ALL OK reminders for USERS');
-        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForAllOkUserReminder($datetime);        
+        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForAllOkUserReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
@@ -167,7 +167,7 @@ class SchedulerService {
         
         // providers
         $this->logger->debug('sending ALL OK reminders for PROVIDERS');
-        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForAllOkProviderReminder($datetime);        
+        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForAllOkProviderReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
@@ -201,7 +201,7 @@ class SchedulerService {
     protected function sendReturnReminders(DateTime $datetime) {        
         // users
         $this->logger->debug('sending RETURN reminders for USERS');
-        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForReturnUserReminder($datetime);        
+        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForReturnUserReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
@@ -243,7 +243,7 @@ class SchedulerService {
         
         // providers
         $this->logger->debug('sending RETURN reminders for PROVIDERS');
-        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForReturnProviderReminder($datetime);        
+        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForReturnProviderReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
@@ -281,7 +281,7 @@ class SchedulerService {
     protected function sendRateReminders(DateTime $datetime) {        
         // users
         $this->logger->debug('sending RATE reminders for USERS');
-        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForRateUserReminder($datetime);        
+        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRateUserReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
@@ -325,7 +325,7 @@ class SchedulerService {
         
         // providers
         $this->logger->debug('sending RATE reminders for PROVIDERS');
-        $bookings = $this->em->getRepository('AppBundle:Booking')->getAllForRateProviderReminder($datetime);        
+        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRateProviderReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();

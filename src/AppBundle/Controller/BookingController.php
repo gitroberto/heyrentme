@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Booking;
-use AppBundle\Entity\BookingCancel;
+use AppBundle\Entity\EquipmentBooking;
+use AppBundle\Entity\EquipmentBookingCancel;
 use AppBundle\Entity\DiscountCode;
 use AppBundle\Entity\EquipmentRating;
-use AppBundle\Entity\Inquiry;
+use AppBundle\Entity\EquipmentInquiry;
 use AppBundle\Entity\UserRating;
 use AppBundle\Utils\Utils;
 use DateTime;
@@ -88,7 +88,7 @@ class BookingController extends BaseController {
         
         if ($form->isValid()) {
             $data = $form->getData();
-            $inq = new Inquiry();
+            $inq = new EquipmentInquiry();
             // map fields & save
             //<editor-fold>
             $inq->setEquipment($eq);
@@ -150,7 +150,7 @@ class BookingController extends BaseController {
      * @Route("booking/response/{id}", name="booking-response")
      */
     public function responseAction(Request $request, $id) {
-        $inq = $this->getDoctrineRepo('AppBundle:Inquiry')->find($id);
+        $inq = $this->getDoctrineRepo('AppBundle:EquipmentInquiry')->find($id);
         $eq = $inq->getEquipment();
         
         // security check
@@ -218,7 +218,7 @@ class BookingController extends BaseController {
      * @Route("/booking/confirmation/{uuid}", name="booking-confirmation")
      */
     public function confirmationAction(Request $request, $uuid) {
-        $inq = $this->getDoctrineRepo('AppBundle:Inquiry')->findOneByUuid($uuid);
+        $inq = $this->getDoctrineRepo('AppBundle:EquipmentInquiry')->findOneByUuid($uuid);
 
         // sanity check
         if ($inq == null) {
@@ -256,9 +256,9 @@ class BookingController extends BaseController {
             $em = $this->getDoctrine()->getManager();
             
             // create booking object            
-            $bk = new Booking();
+            $bk = new EquipmentBooking();
             $bk->setInquiry($inq);
-            $bk->setStatus(Booking::STATUS_BOOKED);
+            $bk->setStatus(EquipmentBooking::STATUS_BOOKED);
             $bk->setPrice($inq->getPrice());
             $bk->setDeposit($inq->getDeposit());
             
@@ -351,7 +351,7 @@ class BookingController extends BaseController {
             return;
         }
         
-        $inq = $this->getDoctrineRepo('AppBundle:Inquiry')->findOneByUuid($data['uuid']);
+        $inq = $this->getDoctrineRepo('AppBundle:EquipmentInquiry')->findOneByUuid($data['uuid']);
         $user = $inq->getUser();
         if ($user === null || $user->getId() !== $dcode->getUser()->getId()) {
             $context->buildViolation('This is not a valid discount code')->atPath('discountCode')->addViolation();
@@ -370,7 +370,7 @@ class BookingController extends BaseController {
             return new Response('', Response::HTTP_FORBIDDEN);
         }
         
-        $inq = $this->getDoctrineRepo('AppBundle:Inquiry')->findOneByUuid($uuid);
+        $inq = $this->getDoctrineRepo('AppBundle:EquipmentInquiry')->findOneByUuid($uuid);
         $user = $inq->getUser();
         
         // security
@@ -384,7 +384,7 @@ class BookingController extends BaseController {
      * @Route("/booking/rate-user/{uuid}", name="rate-user")
      */
     public function rateUserAction(Request $request, $uuid) {
-        $bk = $this->getDoctrineRepo('AppBundle:Booking')->findOneByRateUserUuid($uuid);
+        $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->findOneByRateUserUuid($uuid);
         
         if ($bk === null) {
             return new Response($status = Response::HTTP_FORBIDDEN);
@@ -446,7 +446,7 @@ class BookingController extends BaseController {
      * @Route("/booking/rate-equipment/{uuid}", name="rate-equipment")
      */
     public function rateEquipmentAction(Request $request, $uuid) {
-        $bk = $this->getDoctrineRepo('AppBundle:Booking')->findOneByRateEquipmentUuid($uuid);
+        $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->findOneByRateEquipmentUuid($uuid);
         
         if ($bk === null) {
             return new Response($status = Response::HTTP_FORBIDDEN);
@@ -510,8 +510,8 @@ class BookingController extends BaseController {
      */
     public function listAction(Request $request) {
         $user = $this->getUser();
-        $bookings = $this->getDoctrineRepo('AppBundle:Booking')->getAllForUser($user->getId());
-        $pBookings = $this->getDoctrineRepo('AppBundle:Booking')->getAllForProvider($user->getId());
+        $bookings = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->getAllForUser($user->getId());
+        $pBookings = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->getAllForProvider($user->getId());
         return $this->render("booking/booking-list.html.twig", array(
             'bookings' => $bookings,
             'pBookings' => $pBookings
@@ -523,7 +523,7 @@ class BookingController extends BaseController {
      */
     public function cancelAction(Request $request, $id) {
         $user = $this->getUser();
-        $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
+        $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->find($id);
         
         if ($bk->getInquiry()->getEquipment()->getUser()->getId() == $user->getId()) {
             return $this->redirectToRoute('booking-cancel-provider', array('id' => $id));
@@ -537,7 +537,7 @@ class BookingController extends BaseController {
      * @Route("/booking/cancel/user/{id}", name="booking-cancel-user")
      */
     public function userCancelAction(Request $request, $id) {
-        $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
+        $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->find($id);
         $user = $this->getUser();
         
         // check security        
@@ -563,7 +563,7 @@ class BookingController extends BaseController {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
             
-            $bc = new BookingCancel();
+            $bc = new EquipmentBookingCancel();
             $bc->setBooking($bk);
             $bc->setUser($user);
             $bc->setProvider(0);
@@ -571,7 +571,7 @@ class BookingController extends BaseController {
             $bc->setDescription($data['description']);
             
             $em->persist($bc);
-            $bk->setStatus(Booking::STATUS_USER_CANCELLED);
+            $bk->setStatus(EquipmentBooking::STATUS_USER_CANCELLED);
             
             $em->flush();
             
@@ -626,7 +626,7 @@ class BookingController extends BaseController {
      * @Route("/booking/cancel/provider/{id}", name="booking-cancel-provider")
      */
     public function providerCancelAction(Request $request, $id) {
-        $bk = $this->getDoctrineRepo('AppBundle:Booking')->find($id);
+        $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->find($id);
         $user = $this->getUser();
         
         // todo: check security
@@ -652,7 +652,7 @@ class BookingController extends BaseController {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
             
-            $bc = new BookingCancel();
+            $bc = new EquipmentBookingCancel();
             $bc->setBooking($bk);
             $bc->setUser($user);
             $bc->setProvider(1);
@@ -660,7 +660,7 @@ class BookingController extends BaseController {
             $bc->setDescription($data['description']);
             
             $em->persist($bc);
-            $bk->setStatus(Booking::STATUS_PROVIDER_CANCELLED);
+            $bk->setStatus(EquipmentBooking::STATUS_PROVIDER_CANCELLED);
             
             $em->flush();
             

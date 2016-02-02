@@ -21,7 +21,7 @@ class EquipmentRating {
      */
     protected $equipment;
     /**
-     * @ORM\OneToOne(targetEntity="Booking")
+     * @ORM\OneToOne(targetEntity="EquipmentBooking")
      */
     protected $booking;
     /**
@@ -146,11 +146,11 @@ class EquipmentRating {
     /**
      * Set booking
      *
-     * @param \AppBundle\Entity\Booking $booking
+     * @param \AppBundle\Entity\EquipmentBooking $booking
      *
      * @return EquipmentRating
      */
-    public function setBooking(\AppBundle\Entity\Booking $booking = null)
+    public function setBooking(\AppBundle\Entity\EquipmentBooking $booking = null)
     {
         $this->booking = $booking;
 
@@ -160,7 +160,7 @@ class EquipmentRating {
     /**
      * Get booking
      *
-     * @return \AppBundle\Entity\Booking
+     * @return \AppBundle\Entity\EquipmentBooking
      */
     public function getBooking()
     {

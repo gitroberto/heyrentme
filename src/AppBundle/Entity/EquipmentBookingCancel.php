@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class BookingCancel {
+class EquipmentBookingCancel {
     
     /**
      * @ORM\Id
@@ -16,7 +16,7 @@ class BookingCancel {
      */
     protected $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Booking")
+     * @ORM\ManyToOne(targetEntity="EquipmentBooking")
      */
     protected $booking;
     /**
@@ -56,7 +56,7 @@ class BookingCancel {
      *
      * @param \bool $provider
      *
-     * @return BookingCancel
+     * @return EquipmentBookingCancel
      */
     public function setProvider($provider)
     {
@@ -80,7 +80,7 @@ class BookingCancel {
      *
      * @param string $reason
      *
-     * @return BookingCancel
+     * @return EquipmentBookingCancel
      */
     public function setReason($reason)
     {
@@ -104,7 +104,7 @@ class BookingCancel {
      *
      * @param \DateTime $createdAt
      *
-     * @return BookingCancel
+     * @return EquipmentBookingCancel
      */
     public function setCreatedAt($createdAt)
     {
@@ -126,11 +126,11 @@ class BookingCancel {
     /**
      * Set booking
      *
-     * @param \AppBundle\Entity\Booking $booking
+     * @param \AppBundle\Entity\EquipmentBooking $booking
      *
-     * @return BookingCancel
+     * @return EquipmentBookingCancel
      */
-    public function setBooking(\AppBundle\Entity\Booking $booking = null)
+    public function setBooking(\AppBundle\Entity\EquipmentBooking $booking = null)
     {
         $this->booking = $booking;
 
@@ -140,7 +140,7 @@ class BookingCancel {
     /**
      * Get booking
      *
-     * @return \AppBundle\Entity\Booking
+     * @return \AppBundle\Entity\EquipmentBooking
      */
     public function getBooking()
     {
@@ -152,7 +152,7 @@ class BookingCancel {
      *
      * @param \AppBundle\Entity\User $user
      *
-     * @return BookingCancel
+     * @return EquipmentBookingCancel
      */
     public function setUser(\AppBundle\Entity\User $user = null)
     {
@@ -176,7 +176,7 @@ class BookingCancel {
      *
      * @param string $description
      *
-     * @return BookingCancel
+     * @return EquipmentBookingCancel
      */
     public function setDescription($description)
     {

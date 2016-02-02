@@ -6,12 +6,12 @@ use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 
-class BookingRepository extends EntityRepository {
+class EquipmentBookingRepository extends EntityRepository {
 
     public function getAllForUser($userId) {
         $dql = <<<EOT
             select b, i, e
-            from AppBundle:Booking b
+            from AppBundle:EquipmentBooking b
                 join b.inquiry i
                 join i.equipment e
             where
@@ -26,7 +26,7 @@ EOT;
     public function getAllForProvider($userId) {
         $dql = <<<EOT
             select b, i, e
-            from AppBundle:Booking b
+            from AppBundle:EquipmentBooking b
                 join b.inquiry i
                 join i.equipment e
             where
@@ -49,7 +49,7 @@ EOT;
         
         $dql = <<<EOT
                 select b, i, e
-                from AppBundle:Booking b
+                from AppBundle:EquipmentBooking b
                     join b.inquiry i
                     join i.equipment e
                 where
@@ -70,7 +70,7 @@ EOT;
         
         $dql = <<<EOT
                 select b, i, e
-                from AppBundle:Booking b
+                from AppBundle:EquipmentBooking b
                     join b.inquiry i
                     join i.equipment e
                 where
@@ -91,7 +91,7 @@ EOT;
         
         $dql = <<<EOT
                 select b, i, e
-                from AppBundle:Booking b
+                from AppBundle:EquipmentBooking b
                     join b.inquiry i
                     join i.equipment e
                 where
@@ -112,7 +112,7 @@ EOT;
         
         $dql = <<<EOT
                 select b, i, e
-                from AppBundle:Booking b
+                from AppBundle:EquipmentBooking b
                     join b.inquiry i
                     join i.equipment e
                 where
@@ -133,7 +133,7 @@ EOT;
         
         $dql = <<<EOT
                 select b, i, e
-                from AppBundle:Booking b
+                from AppBundle:EquipmentBooking b
                     join b.inquiry i
                     join i.equipment e
                 where
@@ -154,7 +154,7 @@ EOT;
         
         $dql = <<<EOT
                 select b, i, e
-                from AppBundle:Booking b
+                from AppBundle:EquipmentBooking b
                     join b.inquiry i
                     join i.equipment e
                 where
@@ -175,7 +175,7 @@ EOT;
         
         $dql = <<<EOT
                 select b, i, e
-                from AppBundle:Booking b
+                from AppBundle:EquipmentBooking b
                     join b.inquiry i
                     join i.equipment e
                 where
@@ -196,7 +196,7 @@ EOT;
         
         $dql = <<<EOT
                 select b, i, e
-                from AppBundle:Booking b
+                from AppBundle:EquipmentBooking b
                     join b.inquiry i
                     join i.equipment e
                 where

@@ -375,7 +375,7 @@ class User extends BaseUser
     }
 
     /**
-     * @ORM\OneToMany(targetEntity="Inquiry", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="EquipmentInquiry", mappedBy="user")
      */
     protected $inquiries;
     
@@ -407,11 +407,11 @@ class User extends BaseUser
     /**
      * Add inquiry
      *
-     * @param \AppBundle\Entity\Inquiry $inquiry
+     * @param \AppBundle\Entity\EquipmentInquiry $inquiry
      *
      * @return User
      */
-    public function addInquiry(\AppBundle\Entity\Inquiry $inquiry)
+    public function addInquiry(\AppBundle\Entity\EquipmentInquiry $inquiry)
     {
         $this->inquiries[] = $inquiry;
 
@@ -421,9 +421,9 @@ class User extends BaseUser
     /**
      * Remove inquiry
      *
-     * @param \AppBundle\Entity\Inquiry $inquiry
+     * @param \AppBundle\Entity\EquipmentInquiry $inquiry
      */
-    public function removeInquiry(\AppBundle\Entity\Inquiry $inquiry)
+    public function removeInquiry(\AppBundle\Entity\EquipmentInquiry $inquiry)
     {
         $this->inquiries->removeElement($inquiry);
     }

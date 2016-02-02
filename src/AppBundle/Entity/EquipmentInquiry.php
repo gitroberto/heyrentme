@@ -5,10 +5,10 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Entity\InquiryRepository")
- * @ORM\Table(name="inquiry")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\EquipmentInquiryRepository")
+ * @ORM\Table(name="equipment_inquiry")
  */
-class Inquiry {
+class EquipmentInquiry {
     
     /**
      * @ORM\Column(type="integer")
@@ -83,7 +83,7 @@ class Inquiry {
     private $equipment;
     
     /**
-     * @ORM\OneToOne(targetEntity="Booking", mappedBy="inquiry")
+     * @ORM\OneToOne(targetEntity="EquipmentBooking", mappedBy="inquiry")
      */
     private $booking;    
 
@@ -102,7 +102,7 @@ class Inquiry {
      *
      * @param string $name
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setName($name)
     {
@@ -126,7 +126,7 @@ class Inquiry {
      *
      * @param string $email
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setEmail($email)
     {
@@ -150,7 +150,7 @@ class Inquiry {
      *
      * @param string $message
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setMessage($message)
     {
@@ -174,7 +174,7 @@ class Inquiry {
      *
      * @param \DateTime $fromAt
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setFromAt($fromAt)
     {
@@ -198,7 +198,7 @@ class Inquiry {
      *
      * @param \DateTime $toAt
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setToAt($toAt)
     {
@@ -222,7 +222,7 @@ class Inquiry {
      *
      * @param string $price
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setPrice($price)
     {
@@ -246,7 +246,7 @@ class Inquiry {
      *
      * @param string $deposit
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setDeposit($deposit)
     {
@@ -270,7 +270,7 @@ class Inquiry {
      *
      * @param string $priceBuy
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setPriceBuy($priceBuy)
     {
@@ -294,7 +294,7 @@ class Inquiry {
      *
      * @param \DateTime $createdAt
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setCreatedAt($createdAt)
     {
@@ -318,7 +318,7 @@ class Inquiry {
      *
      * @param \AppBundle\Entity\User $user
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setUser(\AppBundle\Entity\User $user = null)
     {
@@ -342,7 +342,7 @@ class Inquiry {
      *
      * @param \AppBundle\Entity\Equipment $equipment
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setEquipment(\AppBundle\Entity\Equipment $equipment = null)
     {
@@ -366,7 +366,7 @@ class Inquiry {
      *
      * @param integer $accepted
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setAccepted($accepted)
     {
@@ -390,7 +390,7 @@ class Inquiry {
      *
      * @param string $response
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setResponse($response)
     {
@@ -414,7 +414,7 @@ class Inquiry {
      *
      * @param \DateTime $modifiedAt
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setModifiedAt($modifiedAt)
     {
@@ -438,7 +438,7 @@ class Inquiry {
      *
      * @param string $uuid
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
     public function setUuid($uuid)
     {
@@ -460,11 +460,11 @@ class Inquiry {
     /**
      * Set inquiry
      *
-     * @param \AppBundle\Entity\Booking $inquiry
+     * @param \AppBundle\Entity\EquipmentBooking $inquiry
      *
-     * @return Inquiry
+     * @return EquipmentInquiry
      */
-    public function setBooking(\AppBundle\Entity\Booking $booking = null)
+    public function setBooking(\AppBundle\Entity\EquipmentBooking $booking = null)
     {
         $this->inquiry = $booking;
 
@@ -474,7 +474,7 @@ class Inquiry {
     /**
      * Get inquiry
      *
-     * @return \AppBundle\Entity\Booking
+     * @return \AppBundle\Entity\EquipmentBooking
      */
     public function getBooking()
     {
