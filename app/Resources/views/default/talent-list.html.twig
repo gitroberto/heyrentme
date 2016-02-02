@@ -1,0 +1,44 @@
+{% for tal in items %}
+    <a class="text-black" href="{{ path('catchall', { 'content': tal.urlPath }) }}">
+        <div class="col-md-4">
+            {% if tal.images|length > 0 %}
+                <img src="{{ tal.images[0].urlPath(image_url_prefix) }}" alt="placeholder"/>
+            {% else %}
+                <img src="/img/equipment-default.jpg" alt="placeholder"/>
+            {% endif %}
+            {#
+            {% if tal.activeDiscount %}
+                <div class="discount"><span>-{{ "%d"|format(tal.activeDiscount.percent) }}%</span></div>
+            {% endif %}
+            #}
+            <div class="product-info position-relative">
+                <div class="row">
+                    <img src="{{ tal.user.profilePicture(false, image_url_prefix) }}" alt="cart" class="product-user product-user2"/>
+                    <div class="col-xs-7">
+                        {{ include('common/stars.html.twig', { rating: tal.rating }) }}
+                        <p class="product-name">
+                            {{ tal.name }}
+                        </p>
+                    </div>
+                    <div class="col-xs-5">
+                        <p class="price">
+                            {{ "%.2f"|format(tal.activePrice) }} &#8364;
+                        </p>
+                        <p class="tag">
+                            pro tag
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% if tal.offerStatus %}
+                <p class="product-list-info">{{ tal.offerStatus }}</p>
+            {% endif %}
+            <p class="product-list-info">{{ tal.description }}</p>
+            <span class="list-desc-border"></span>
+        </div>
+    </a>
+{% else %}
+    <p>
+        Keine passenden Talente gefunden
+    </p>
+{% endfor %}

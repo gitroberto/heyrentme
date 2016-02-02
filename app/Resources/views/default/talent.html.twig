@@ -9,7 +9,7 @@
         <nav class="crumbs">
             <ul class="col-xs-7">
                 <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
-                <li><a href="{{ path('rentme') }}">Equipment mieten</a></li>
+                <li><a href="{{ path('bookme') }}">Talente buchen</a></li>
                 <li><a href="{{ path('catchall', { 'content': category.slug }) }}">{{ category.name }}</a></li>
                 <li><a href="{{ path('catchall', { 'content': item.urlPath }) }}" class="active-crumb">{{ item.name }}</a></li>
             </ul>
@@ -60,14 +60,13 @@
                 {% endif %}            
             </p>
             <div class="position-relative" id="media-container">
-              {% if item.priceBuy %}
-                <img src="/img/cart.svg" alt="cart" class="cart">
-              {% endif %}
+                {#
               {% if item.activeDiscount %}
                 <div class="discount discount-big">
                   <span>-{{ item.activeDiscount.percent }}%</span>
                 </div>
               {% endif %}
+                #}
               <div id="media-content">
                     {% if item.images|length > 0 %}
                         <img src="{{ item.images[0].urlPath(image_url_prefix) }}" alt=""/>
@@ -132,6 +131,7 @@
                     <div class="col-md-4 col-xs-12" id="googleMap"></div>
                 </div>
             </div>
+            {% if item.descReference or item.descScope or item.descTarget or item.descCondition %}         
             <div class="panel-group" id="panel-quote-group">
                 <div class="panel panel-default">
                     <div class="panel-heading" id="panel-heading">
@@ -146,16 +146,27 @@
                     </div>
                     <div id="collapseQuote" class="panel-collapse collapse2 collapse">
                         <div class="panel-body">
-                           <p class="panel-head">Das besondere an deinem Angebot?</p>
-                            <p>{{ item.descType }}</p>
-                            <p class="panel-head">Bester Einsatzbereich?</p>
-                            <p>{{ item.descSpecial }}</p>
-                            <p class="panel-head">Was sollte man noch darüber wissen?</p>
-                            <p>{{ item.descCondition }}</p>
+                            {% if item.descReference %}
+                                <p class="panel-head">Abgeschlossene Ausbildungen, Zertifikate oder Referenzen</p>
+                                <p>{{ item.descReference }}</p>
+                            {% endif %}
+                            {% if item.descScope %}
+                                <p class="panel-head">Angebotsumfang</p>
+                                <p>{{ item.descScope }}</p>
+                            {% endif %}
+                            {% if item.descTarget %}
+                                <p class="panel-head">Für wen ist dein Angebot besonders geeignet?</p>
+                                <p>{{ item.descTarget }}</p>
+                            {% endif %}
+                            {% if item.descCondition %}
+                                <p class="panel-head">Spezielle Angebotskonditionen</p>
+                                <p>{{ item.descCondition }}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
             <div class="panel-group desktop-hide" id="panel-quote-group2">
                 <div class="panel panel-default">
                     <div class="panel-heading" id="panel-heading1">
@@ -331,6 +342,16 @@
                     <div class="user-tab cal">
                         <p>{{ item.timeAsString }}</p>
                     </div>
+                    {% if item.optClient > 0 %}
+                        <div class="user-tab cal">
+                            <p>Treffpunkt beim Kunden</p>
+                        </div>
+                    {% endif %}
+                    {% if item.optGroup > 0 %}
+                        <div class="user-tab cal">
+                            <p>Gruppenstunden</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             

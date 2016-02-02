@@ -132,28 +132,51 @@ class DefaultController extends BaseController {
         }
         return null;
     }
+
+    const RE_EQUIPMENT = '^E-[[:digit:]]+/.+$';
+    const RE_TALENT = '^T-[[:digit:]]+/.+$';
+    
     private function processEquipment(Request $request, $content) {
         $eq = null;
-        $pat = '^[[:digit:]]+/.+$';
-        if (ereg($pat, $content)) {
-            $arr = split('/', $content);
+        $tal = null;
+        if (ereg(DefaultController::RE_EQUIPMENT, $content)) {
+            $arr = split('/', str_replace('E-', '', $content));
             $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find(intval($arr[0]));
         }
+        if (ereg(DefaultController::RE_TALENT, $content)) {
+            $arr = split('/', str_replace('T-', '', $content));
+            $tal = $this->getDoctrineRepo('AppBundle:Talent')->find(intval($arr[0]));
+        }
         
-        if ($eq == null) {
+        if ($eq === null && $tal === null) {
             throw $this->createNotFoundException();
         }
         
         // determine prev/next
         //<editor-fold>
+        if ($eq !== null) {
+            $repo = 'AppBundle:Equipment';
+            $ratRepo = 'AppBundle:EquipmentRating';
+            $tmpl = 'default/equipment.html.twig';
+            $subcat = $eq->getSubcategory();
+            $id = $eq->getId();
+        }
+        else {
+            $repo = 'AppBundle:Talent';
+            $ratRepo = 'AppBundle:TalentRating';
+            $tmpl = 'default/talent.html.twig';
+            $subcat = $tal->getSubcategory();
+            $id = $tal->getId();
+        }
+        
         $session = $request->getSession();
         $prev = null;
         $next = null;
         if ($session->has('SearchList')) {
             $ids = $session->get('SearchList');
-            $i = array_search($eq->getId(), $ids);
+            $i = array_search($id, $ids);
             if ($i !== null) {
-                $repo = $this->getDoctrineRepo('AppBundle:Equipment');
+                $repo = $this->getDoctrineRepo($repo);
                 if ($i > 0) {
                     $prev = $repo->find($ids[$i - 1]);
                 }
@@ -164,48 +187,51 @@ class DefaultController extends BaseController {
         }
         //</editor-fold>
         
-        $subcat = $eq->getSubcategory();
         
         //$featureSections = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentFeatures($eq->getId());
         $post = $this->getDoctrineRepo('AppBundle:Blog')->getPostForEquipmentPage();
                 
-        $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getSamplePreviewEquipmentsBySubcategory($eq->getSubcategory()->getId(), $eq->getId());
-        $opinions = $this->getDoctrineRepo('AppBundle:EquipmentRating')->getAllSorted($eq->getId());
+        //$equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getSamplePreviewEquipmentsBySubcategory($eq->getSubcategory()->getId(), $eq->getId());
+        $opinions = $this->getDoctrineRepo($ratRepo)->getAllSorted($id);
         
-        if ($eq != null) {
-            return $this->render('default/equipment.html.twig', array(
-                'equipment' => $eq,
-                'equipments' => $equipments,
-                'category' => $subcat->getCategory(),
-                'categories' => $this->getCategories($request),
-                //'featureSections' => $featureSections,
-                'next' => $next,
-                'prev' => $prev,
-                'post' => $post,
-                'opinions' => $opinions
-            ));
-        }
-        return null;
+        return $this->render($tmpl, array(
+            'item' => $eq !== null ? $eq : $tal,
+            /*'equipments' => $equipments,*/
+            'category' => $subcat->getCategory(),
+            'categories' => $this->getCategories($request),
+            //'featureSections' => $featureSections,
+            'next' => $next,
+            'prev' => $prev,
+            'post' => $post,
+            'opinions' => $opinions
+        ));
     }
 
     /**
      * @Route("/equipment-list", name="equipment-list")
      */ 
-    public function equipmentListAction(Request $request) {
+    public function itemListAction(Request $request, $type) {
         $sp = $this->getSearchParams($request);
         $sp->updateFromRequest($request);
         
-        $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAll($sp);
+        if ($type === Category::TYPE_EQUIPMENT) {
+            $items = $this->getDoctrineRepo('AppBundle:Equipment')->getAll($sp);
+            $tmpl = 'default/equipment-list.html.twig';
+        }
+        else {
+            $items = $this->getDoctrineRepo('AppBundle:Talent')->getAll($sp);
+            $tmpl = 'default/talent-list.html.twig';
+        }
         
         // store id list in session (for prev/next traversal)
         $ids = array();
-        foreach ($equipments as $eq) {
-            array_push($ids, $eq->getId());
+        foreach ($items as $item) {
+            array_push($ids, $item->getId());
         }
         $request->getSession()->set('SearchList', $ids);
         
-        return $this->render('default/equipment-list.html.twig', array(
-            'equipments' => $equipments
+        return $this->render($tmpl, array(
+            'items' => $items
         ));
     }
     

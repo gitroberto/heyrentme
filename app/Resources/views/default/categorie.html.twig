@@ -92,7 +92,7 @@
         </div>
         <span class="clearfix"></span>
         <div class="row" id="equipment-list">
-            {{ render(controller('AppBundle:Default:equipmentList')) }}
+            {{ render(controller('AppBundle:Default:itemList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
         </div>
     </div>
   </section>

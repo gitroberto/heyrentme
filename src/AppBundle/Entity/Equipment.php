@@ -179,9 +179,13 @@ class Equipment
 
     
     
+    public function getUfid() { // user friendly id
+        return "E-{$this->id}";
+    }
+    
     public function getUrlPath() {
-       $s = Utils::slugify($this->getName());
-       return "{$this->id}/{$s}";
+       $slug = Utils::slugify($this->getName());
+       return sprintf("%s/%s", $this->getUfid(), $slug);
     }
     
     public function getActiveDiscount() {

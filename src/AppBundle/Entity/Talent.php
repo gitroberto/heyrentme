@@ -149,21 +149,24 @@ class Talent {
     protected $ratings;
 
     
+    public function getUfid() { // user friendly id
+        return "T-{$this->id}";
+    }
     
     public function getUrlPath() {
-       $s = Utils::slugify($this->getName());
-       return "{$this->id}/{$s}";
+       $slug = Utils::slugify($this->getName());
+       return sprintf("%s/%s", $this->getUfid(), $slug);
     }
     
     
     public function getActivePrice() {
-        $d = $this->getActiveDiscount();
-        if ($d != null) {
-            $p = $this->getPrice() * (100.0 - $d->getPercent()) / 100.0;
-        }
-        else {
+//        $d = $this->getActiveDiscount();
+//        if ($d != null) {
+//            $p = $this->getPrice() * (100.0 - $d->getPercent()) / 100.0;
+//        }
+//        else {
             $p = $this->getPrice();
-        }
+//        }
         return $p;
     }
         

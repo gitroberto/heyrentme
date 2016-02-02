@@ -131,17 +131,18 @@ class TalentRepository extends EntityRepository
          * (instead of lazy loading them later).
          * Keep for optimum performance.
          */        
-        $qb->select('e', 'i', 'd') // this line forces fetch join
+        $qb->select('e', 'i'/*, 'd'*/) // this line forces fetch join
             ->from('AppBundle:Talent', 'e')
             ->join('e.subcategory', 's')
-            ->leftJoin('e.images', 'i')
-            ->leftJoin('e.discounts', 'd');
+            ->leftJoin('e.images', 'i')/*
+            ->leftJoin('e.discounts', 'd')*/;
         
         $qb->andWhere("e.status = ". Talent::STATUS_APPROVED);
         
         if ($params->getCategoryId() != null) {
             $qb->andWhere("s.category = {$params->getCategoryId()}");
         }
+        /*
         if ($params->getDiscount()) {
             $now = date('Y-m-d H:i:s');
             $qb->andWhere("d.createdAt <= '{$now}'")
@@ -150,6 +151,7 @@ class TalentRepository extends EntityRepository
         if ($params->getTestBuy()) {
             $qb->andWhere('e.priceBuy > 0');
         }
+         */
         if ($params->getSort() === 'date') {
             $qb->orderBy('e.createdAt', 'desc');
         }
