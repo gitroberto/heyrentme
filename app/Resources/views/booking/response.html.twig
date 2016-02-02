@@ -25,7 +25,7 @@
     </div>
     <div class="row answer">
         <div class="col-xs-12">
-            <h1>Nachrichten an Ilse</h1>
+            <h1>Nachrichten an {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %}</h1>
             <p class="text-bold">Telefonnummer für Rückfragen: +43 {{ equipment.user.fullPhone }} 
                 {# TODO: add modal to update phone number
                     <a href="" data-toggle="modal" data-target=".phone">editieren</a> #}
