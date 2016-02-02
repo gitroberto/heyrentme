@@ -27,6 +27,10 @@ class Talent {
      */
     protected $id;
     /**
+     * @ORM\Column(type="string", length=50)
+     */
+    protected $name;    
+    /**
      * @ORM\Column(type="string", length=256)
      */
     protected $description;
@@ -65,12 +69,12 @@ class Talent {
     protected $modifiedAt;
             
     /**
-     * @ORM\ManyToOne(targetEntity="Subcategory", inversedBy="equipments")
+     * @ORM\ManyToOne(targetEntity="Subcategory", inversedBy="talents")
      * @ORM\JoinColumn(name="subcategory_id", referencedColumnName="id")
      */
     protected $subcategory;
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="equipments")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="talents")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -78,8 +82,8 @@ class Talent {
     /**
      * 
      * @ORM\ManyToMany(targetEntity="Image")
-     * @ORM\JoinTable(name="equipment_image",
-     *      joinColumns={ @ORM\JoinColumn(name="equipment_id", referencedColumnName="id") },
+     * @ORM\JoinTable(name="talent_image",
+     *      joinColumns={ @ORM\JoinColumn(name="talent_id", referencedColumnName="id") },
      *      inverseJoinColumns={ @ORM\JoinColumn(name="image_id", referencedColumnName="id") }
      *  )
      */
@@ -180,6 +184,14 @@ class Talent {
             default:
                 throw new RuntimeException("Talent status corrupt!");
         }
+    }
+
+    public function checkStatusOnSave(){
+        if ($this->status == Talent::STATUS_APPROVED || $this->status == Talent::STATUS_REJECTED) {            
+            $this->changeStatus(Talent::STATUS_MODIFIED, null);
+            return true;
+        }
+        return false;
     }
 
 
@@ -861,5 +873,29 @@ class Talent {
     public function getRatings()
     {
         return $this->ratings;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Talent
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

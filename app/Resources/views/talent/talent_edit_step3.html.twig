@@ -1,0 +1,240 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+    {% include('provider/user_nav.html.twig') %}
+  <section class="users container background-light-grey">
+    <div class="row"> 
+      <!-- Left side -->
+      <div class="col-md-9"> <img src="/img/logo-small.svg" alt=""/>
+        <ul class="steps">
+          <a href="provider_upload_talente_buchen_step1.php"><li class="step-1 active-step"><span class="counters"><span class="n-one"></span>Tarif</span></li></a>
+           <a href="provider_upload_talente_buchen_step2.php"><li class="step-2 active-step"><span class="counters"><span class="n-two"></span>Beschreibung</span> </li></a>
+          <li class="step-3"><span class="counters text-bold"><span class="n-three"></span>Details</span></li>
+          <li class="step-4"><span class="counters greyed"><span class="nh-four"></span>Fertig</span></li>
+        </ul>
+      </div>
+      
+      <!-- Right side -->
+      <div class="col-md-3 margin-rwd">
+        <div class="support">
+          <p class="head">Anbieter Support</p>
+          <p class="mail"><a href="mailto:support@heysharing.com">support@heysharing.com</a></p>
+        </div>
+      </div>
+    </div>
+     <!-- Formular -->
+     
+     <!-- Formular Head -->
+    <div class="row user-forms">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-xs-12 border-bottom-white form-head">
+            <div class="form-container form-input-border">
+              <div class="row">
+                <div class="col-sm-12"> <span class="number-three number-rwd"></span>
+                  <p class="form-heading">Details</p>
+                 </div>
+              </div>
+            </div>
+          </div>
+                {{ form_start(form) }}
+                <div class="err-msg">{{ form_errors(form) }}</div>
+          
+            <!-- Telephone -->
+ <!--         <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Tel.-Nr. für Rückfragen*</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-container form-input-border">
+              <div class="row">
+                <div class="phone-inputs"> <span>+43</span>
+                  <input type="number" min="0" placeholder="000" required />
+                  <input type="number" min="0" placeholder="1234567" required />
+                </div>
+              </div>
+            </div>
+          </div>-->
+          
+           <!-- Formular 3 Checkboxes -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Wann wäre dir ein Treffen generell am liebsten?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-container form-input-border">
+              <div class="row">
+                <div class="col-xs-3">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.timeMorning) }}
+                    <label for="form_timeMorning"><span></span>Vormittags</label>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.timeAfternoon) }}
+                    <label for="form_timeAfternoon"><span></span>Nachmittags</label>
+                  </div>
+                </div>
+                 <div class="col-xs-3">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.timeEvening) }}
+                    <label for="form_timeEvening"><span></span>Abends</label>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.timeWeekend) }}
+                    <label for="form_timeWeekend"><span></span>Wochenende</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+           <!-- Formular 3 Checkboxes -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Ist ein Treffpunkt beim Kunden prinzipiell möglich?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-container form-input-border">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.optClient) }}
+                    <label for="form_optClient"><span></span>Ja, ein Treffpunkt beim Kunden ist möglich</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+           <!-- Formular 3 Checkboxes -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Bietest du auch Gruppenstunden an?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-container form-input-border">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="chbox-holder">
+                    {{ form_widget(form.optGroup) }}
+                    <label for="form_optGroup"><span></span>Ja, biete ich an</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+         
+          
+           <!-- Formular Input Text -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container border-bottom-white">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Abgeschlossene Ausbildungen, Zertifikate oder Referenzen</p>
+                </div>
+              </div>
+            </div>
+              <div class="form-container form-input-border padding-30">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{ form_widget(form.descReference, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+                    <div class="err-msg">{{ form_errors(form.descReference) }}</div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+		 <!-- Formular Input Text -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container border-bottom-white">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Angebotsumfang</p>
+                </div>
+              </div>
+            </div>
+              <div class="form-container form-input-border padding-30">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{ form_widget(form.descScope, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+                    <div class="err-msg">{{ form_errors(form.descScope) }}</div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+          		 <!-- Formular Input Text -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container border-bottom-white">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Für wen ist dein Angebot besonders geeignet?</p>
+                </div>
+              </div>
+            </div>
+              <div class="form-container form-input-border padding-30">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{ form_widget(form.descTarget, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+                    <div class="err-msg">{{ form_errors(form.descTarget) }}</div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+          <!-- Formular Input Text -->
+          <div class="col-xs-12 border-bottom-white form-head describe">
+            <div class="form-container border-bottom-white">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Spezielle Angebotskonditionen</p>
+                </div>
+              </div>
+            </div>
+              <div class="form-container form-input-border padding-30">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{ form_widget(form.descCondition, { 'attr': { 'placeholder': 'Schreib hier, falls du dein Angebot zu speziellen Geschäftsbedingungen anbieten möchtest. Maximal 1000 Zeichen verfügbar' } }) }}
+                    <div class="err-msg">{{ form_errors(form.descCondition) }}</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Submit -->
+          <input type="submit" class="green-big-button green-button" value="Einstellungen speichern und fertig"> 
+          {{ form_end(form) }}
+          </form>
+          </div>
+           
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

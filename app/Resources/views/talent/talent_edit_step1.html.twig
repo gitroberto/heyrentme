@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+    {% include('provider/user_nav.html.twig') %}
+  <section class="users container background-light-grey">
+    <div class="row">
+        <!-- Left side -->
+        <div class="col-xs-9">
+            <img src="/img/logo-small.png" alt=""/>
+            <ul class="steps">
+               <li class="step-1"><span class="counters text-bold"><span class="n-one"></span>Tarif</span></li>
+                  <li class="step-2"><span class="counters greyed"><span class="nh-two"></span>Beschreibung</span>
+                  </li>
+                  <li class="step-3"><span class="counters greyed"><span class="nh-three"></span>Details</span></li>
+                  <li class="step-4"><span class="counters greyed"><span class="nh-four"></span>Fertig</span></li>
+            </ul>
+        </div>
+        <!-- Right side -->
+         <div class="col-md-3 margin-rwd">
+        <div class="support">
+          <p class="head">Anbieter Support</p>
+          <p class="mail"><a href="mailto:support@heysharing.com">support@heysharing.com</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="row user-forms">
+        <div class="col-xs-9">
+            {{ form_start(form) }}
+                
+            <div class="row">
+                <div class="col-xs-12 border-bottom-white form-head">
+                    <div class="form-container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <span class="number-one"></span>
+
+                                <p class="form-heading">Tarif</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="form-info">Ab welchen Tarif möchtest du anbieten?</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-container form-input form-last-item">
+                        <div class="row">
+                             <div class="col-sm-7">
+                                  <label for="name2">Angebotsname:</label>
+                                  {#<input type="text" name="name2" placeholder="Maximal 32 Zeichen" class="normal-input " id="offer-name" maxlength="32" required>#}
+                                  {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 32 Zeichen', 'class': 'normal-input', 'maxlength': '32' } }) }}
+                                  <div class="err-msg">{{ form_errors(form.name) }}</div>
+                              </div>
+                               <div class="col-sm-5">
+                                  <label for="form[price]">Preis pro Stunde:</label>
+                                  {#<input type="number" name="name2" placeholder="0" class="small-input " id="preis_pro_tag" min="10" max="500" required>#}
+                                  {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '500' }}) }},- €
+                                  <div class="err-msg">{{ form_errors(form.price) }}</div>
+                              </div>
+                            <!--<div class="col-sm-6">
+                                <label for="name2">Preis pro Stunde:</label><input type="text" name="name2" style="width:110px" placeholder="z.B.: ab 20" class="small-input " id="name2">                                ,- €
+                            </div>-->
+                            <!--<div class="col-sm-6 text-right">
+                                <label class="chbox"><input type="checkbox"> <span> Keine Angabe</span></label>
+                            </div>-->
+                        </div>
+                         <p class="memo">Bitte gib hier deinen Stundentarif (Bist du Umsatzsteuerpflichtig inkl. USt.) an. Sollte es bei einer Buchung zu geringfügigen Mehrkosten kommen, kannst du das deinen Kunden separat mitteilen.</p>
+                        
+                    </div>
+                   
+
+                </div>
+            </div>
+            <input type="submit" class="yellow-button" value="Einstellungen speichern &gt;&gt;">
+            {{ form_end(form) }}
+          </form>
+        </div>
+        <!--<div class="col-xs-3">
+            <div class="support">
+                <p class="head">Dein Verdienst</p>
+                <div class="range"><input type="text" id="range_30" name="example_name" value="" /></div>
+                <p class="price">29,90 €</p>
+                <p class="price-info">pro Jahr bei 50 Stunden Vermietung</p>
+            </div>
+        </div>-->
+  </section>
+  </div>
+{% endblock %}

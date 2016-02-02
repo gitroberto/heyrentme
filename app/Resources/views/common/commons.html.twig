@@ -139,7 +139,9 @@
         else
             $butt.attr('disabled', 'disabled');
     }
+    var lastType = null;
     function anbieten(type, categoryId) {
+        window.lastType = type;
         // load categories
         var url = '{{ path('cat', { 'type': 'XXX' }) }}'.replace('XXX', type.toString());           
         var $sel = $("#category-dropdown");
@@ -176,8 +178,12 @@
     }
     function weiterClick() {
         var id = $("#subcategory-dropdown").val();
-        if (id != "") {
-            var url = '{{ path('equipment-add-1', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+        if (id !== "") {
+            var url;
+            if (window.lastType == 1)
+                url = '{{ path('equipment-add-1', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            else
+                url = '{{ path('talent-add-1', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
             window.location = url;
         }
     }

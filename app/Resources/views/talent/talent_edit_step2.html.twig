@@ -1,0 +1,192 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+    {% include('provider/user_nav.html.twig') %}
+    <section class="users container background-light-grey">
+      <div class="row">
+          <!-- Left side -->
+          <div class="col-xs-9">
+              <img src="/img/logo-small.svg" alt=""/>
+              <ul class="steps">
+                  <li class="step-1 active-step"><span class="counters"><span class="n-one"></span>Tarif</span></li>
+                  <li class="step-2"><span class="counters text-bold"><span class="n-two"></span>Beschreibung</span></li>
+                  <li class="step-3"><span class="counters greyed"><span class="nh-three"></span>Details</span></li>
+                  <li class="step-4"><span class="counters greyed"><span class="nh-four"></span>Fertig</span></li>
+              </ul>
+          </div>
+
+          <!-- Right side -->
+          <div class="col-xs-3">
+               <div class="support">
+              <p class="head">Anbieter Support</p>
+              <p class="mail"><a href="mailto:support@heysharing.com">support@heysharing.com</a></p>
+            </div>
+          </div>
+      </div>
+      <div class="row user-forms">
+          <div class="col-xs-8">
+              <div class="row">
+                  <div class="col-xs-12 border-bottom-white form-head">
+                      <div class="form-container form-input-border">
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <span class="number-two"></span>
+
+                                  <p class="form-heading">Gib deinem Angebot ein Gesicht!</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="upload-form">
+                  <form id="upload-once" method="post" action="{{ path('talent-image') }}" enctype="multipart/form-data">
+                      <span class="btn btn-default btn-file">
+                         bild hochladen <input type="file">
+                       </span>
+                  </form>
+                  <p class="text-center what-size">Bildgröße bitte mindestens 1024 x 768px im Querformat</p>
+                  <form id="upload" method="post" action="{{ path('talent-image') }}" enctype="multipart/form-data">
+                      <div  id="drop">
+                          <img class="display-block" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpDN0E2NUJEQjZCRjIxMUU1QjFFM0Q5QUE2OUM0Qzk0OCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpDN0E2NUJEQzZCRjIxMUU1QjFFM0Q5QUE2OUM0Qzk0OCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkM3QTY1QkQ5NkJGMjExRTVCMUUzRDlBQTY5QzRDOTQ4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkM3QTY1QkRBNkJGMjExRTVCMUUzRDlBQTY5QzRDOTQ4Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+iW8uSwAAA/ZJREFUeNrMmVtIVkEQgI9dtZtpJUGSVEZ2pSjLLqIkQkJE2E3QKIqwsofqIaIIJAgkkC5Q0EtKRCARYfYUFGkXq4cQTS2SLDOLErOLaab+zeKcOA6zp909//l14IP+4+7snGl2Z3ZOmOVNwoEkIBVYCMwBpgJjgeHAT+Az0ADUAhXID2sQZDVQhIsHNOkCbgIbgGGhMDYNeGRgqIw6IAsI88NY8V9eEkRjKeXAXFVjVN4wHbiChnPSDTzFhUXcNmIs92FsxwEJwBogGZ9x8gvIA4q9eng/0CPxzksgF5iooS8C2AZUuni90Eu4HJMobQFygrCJ0jGmuTUum+jfJ1F2DYgM4l4ZBRRgKNG1LuooSmZCQig95OOptBFjmhq+S2XyJKCZMXhHCI5T4awOsnaHyqlSxLzt0RAmLZFwesn6lW4bM5GJrRKDhVcCVcA7YIvB/FOM47bLBpeRga0YLjqyBGh36OhB7+nICKCG2PKKO03mMV7eq7lYPBZHASYukzR1pTB6NtNBp8mA93gcqcoU4LVLwmjHKlBHyomOMjqAnhjHNZSPAZ4o1BfCEbEaejPJfFEuRDtDgx5xcRrJ4ZZGYVStkZyE7jYyP1OW/V5oFFtXDSq6uxqhd53MPW/hjlxABj5UVJgPZDNhZv3n2Vp8WRV5QH7/s/UOeZsDCsqigD+SzUY9u1yySRMViyrnnGbb07RObjKoxbsx3mqYcZ+ADOALea5Sxb0lv2PsfzSSt0lRNPogGtvm3CCMR6fj82V4goiEc0HjxkT1jbYw3TofJmsW9SPJM5nRFt7QwzX0xzD6IkTK/EYGTtBQ2qmZMHoRVRnPzO8UcfWV/CHWGjoyjfxutTcDDfaEIWQ0raUbbKOrmUbMUJFV5Heds/4NkHJysoeF3DaijgiHfiC6cpw7us0gwfhtdBpTEw2I8UtkQI2H3kOwjL5B9FRwDcWArKIaBKPnM3fF3dxA2lh8o5kIbGkh+yPKQMc9pkEUwQ3MYLx01mDBrdjLEwXVEYP5uYwdh90m3GaC3yRMRL08zmDeCqZpU8+UCgNkBqZ156ROrIH9ltnMxbhHtRbKktyo1/tosGg9fGTWzddRUsgoEG99wgr+J4edTDtMUIo5RCsbFUvueM+wNvYqs5gGkc19vOVri0gu5yRK+9ATaQaeX2r195+7JbpLZcebjoiU3uVyu27CjJqNsRntyKaR2KLYBJyx+j9vBFwcUYBtsaDIYuC55d+HIlEer/NjhwsP5DHdKC+I4/WkafzqiLhY7gEeezC2HrNlpOlm8yLx2JtIBRYBM5nuUS9enmuxqSg6TFVeFg3zIYTExdj+TPfd6v8U/TuYi/wVYAA4ZEcE2lLOywAAAABJRU5ErkJggg=="/>
+                          <a>Bilder hochladen*</a>
+                          <input type="file" name="upl" multiple/>
+                      </div>
+                      <ul>
+                          <!-- The file uploads will be shown here -->
+                      </ul>
+                  </form>
+                  <p class="how-many">Du kannst 3 Bilder hochladen (maximal 10MB, mindestens 1024 x 768px). Unterstützte Bildformate: jpg, png</p>
+                  <span class="tutorial"><a href="{{ path('tutorial-photo') }}" target="_blank">tutorial</a></span>
+              </div>
+              {{ form_start(form) }}
+                  
+              <div class="row">
+                  <div class="col-xs-12 border-bottom-white form-head describe">
+                      <div class="form-container form-input-border">
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <p class="form-heading-small">Beschreibe dein Angebot* (Hier bitte keine persönlichen Kontaktdaten oder Web-Links)</p>
+                                  <div class="err-msg">{{ form_errors(form) }}</div>
+                                  {{ form_widget(form.description, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+                                 <div class="chbox-holder">
+                                      {{ form_widget(form.make_sure) }}
+                                      <label for="form_make_sure"><span></span>Ich verfüge über eine Gewerbeberechtigung für das beschriebene Angebot.*</label>
+                                  </div>
+                                    <div class="err-msg">{{ form_errors(form.make_sure) }}</div>
+                              </div>
+                          </div>
+                      </div>
+                      
+                     <!-- Adress -->
+                        <div class="form-container border-bottom-white margin-ort">
+                          <div class="row ort">
+                              <div class="col-sm-12">
+                                  <p class="form-heading-small margin-none">Angebotsort*</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="form-container form-input-border padding-30">
+                          <div class="row ort">
+                              <div class="col-sm-12">
+                                  <div class="row">
+                                    <div class="col-xs-8">
+                                      {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse*' } }) }}
+                                        <div class="err-msg">{{ form_errors(form.street, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                      {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.*', 'class': 'security' } }) }}
+                                        <div class="err-msg">{{ form_errors(form.number, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-xs-3">
+                                      {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ*' } }) }}
+                                        <div class="err-msg">{{ form_errors(form.postcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                                    </div>
+                                    <div class="col-xs-5">
+                                      {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort*' } }) }}
+                                        <div class="err-msg">{{ form_errors(form.place, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                                    </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      
+                       <!-- Telephone -->
+          <div class="form-container border-bottom-white margin-ort">
+              <div class="row">
+                <div class="col-sm-12">
+                  <p>Tel.-Nr. für Rückfragen*</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-container form-input-border">
+              <div class="row">
+                <div class="phone-inputs"> <span>+43</span>
+                  {{ form_widget(form.phonePrefix, { 'attr': { 'placeholder': '000' } }) }}
+                  {{ form_widget(form.phone, { 'attr': { 'placeholder': '1234567', 'class': 'security' } }) }}
+                  <div class="err-msg">{{ form_errors(form.phonePrefix, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                  <div class="err-msg">{{ form_errors(form.phone, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                </div>
+              </div>
+          </div>
+                      
+                          <div class="chbox-holder alone-chbox">
+                          {{ form_widget(form.accept) }}
+                          <label for="form_accept"><span></span>Ich habe die <a href="{{ path('kundeninfos_agb') }}" target="_blank">AGB</a> gelesen und stimme diesen zu.*</label>
+                      </div>
+                      <div class="err-msg">{{ form_errors(form.accept) }}</div>
+                      <input type="submit" class="yellow-button user-submit" value="Einstellungen speichern >>">
+                  </div>
+              </div>
+                {{ form_end(form) }}
+          </div>
+          <div class="col-xs-4">
+              <div class="support portfolios">
+                    <p class="head">Deine Angebotsfotos</p>
+                  <p class="text-bold">Ein tolles Foto zu deiner Anzeige ver-
+                      bessert die Chancen, dass dein Angebot
+                      gebucht wird um ein Vielfaches!</p>
+                  <p>Lies unser <a href="{{ path("tutorial-photo") }}" target="_blank">Foto-Tutorial</a>, falls du für deine Angebotsfotos noch ein paar Tipps dazu benötigst!</p>
+                  <div id="owl-demo" class="owl-carousel user-owl">
+                      <div class="item">
+                          <img src="/img/allgemein-final/form_t_1.jpg" alt=""/>                    </div>
+                      <div class="item">
+                          <img src="/img/allgemein-final/form_t_2.jpg" alt=""/>                    </div>
+                      <div class="item">
+                          <img src="/img/allgemein-final/form_t_3.jpg" alt=""/>                    </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="support portfolios videos">
+                  <p class="head">hey! Angebotsvideo</p>
+                  <p class="text-bold">Möchtest du für dein Angebot gerne
+                      ein einzigartiges Portraitvideo?</p>
+                  <p>Nutze unseren hey! Video-Service. Lies unser 
+                      <a href="{{ path("tutorial-video") }}" target="_blank">Video-Tutorial</a>, 
+                      um mehr darüber zu erfahren!</p>
+                  <div id="owl-demo1" class="owl-carousel user-owl">
+                      <div class="item">
+                         <a href="https://vimeo.com/150821780" target="_blank"> <img src="/img/video_service1.jpg" alt=""/></a>                    </div>
+                      <div class="item">
+                          <a href="https://vimeo.com/145892976" target="_blank"> <img src="/img/video_service2.jpg" alt=""/></a>                    </div>
+                      <div class="item">
+                          <a href="https://vimeo.com/148946960" target="_blank"> <img src="/img/video_service3.jpg" alt=""/></a>                     </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script src="/js/vendors/upload/jquery.knob.js"></script>
+  <script src="/js/vendors/upload/jquery.ui.widget.js"></script>
+  <script src="/js/vendors/upload/jquery.iframe-transport.js"></script>
+  <script src="/js/vendors/upload/jquery.fileupload.js"></script>
+  <script src="/js/vendors/upload/script.js"></script>
+{% endblock %}

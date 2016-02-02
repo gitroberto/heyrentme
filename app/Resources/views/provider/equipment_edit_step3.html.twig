@@ -41,42 +41,6 @@
                   </div>
                 {{ form_start(form) }}
                 <div class="err-msg">{{ form_errors(form) }}</div>
-                {#
-                  {% for section in subcategory.featureSections %}
-                        <div class="col-xs-12 border-bottom-white form-head describe">
-                            <div class="form-container">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <p>{{ section.name }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12">
-                            <div class="form-container form-input-border">
-                                <div class="row">
-                                {% for feature in featureSectionRepo.featuresSorted(section.id, 0) %}
-                                    <div class="col-xs-4">
-                                      <div class="chbox-holder">
-                                        <input type="{% if section.exclusive %}radio{% else %}checkbox{% endif %}" name="section_{{ section.id }}{% if not section.exclusive %}[]{% endif %}" id="feature_{{ feature.id }}" value="{{ feature.id }}" {%if features[feature.id] is defined %}checked="checked"{% endif %}>
-                                        <label for="feature_{{ feature.id }}"><span></span>{{ feature.name }}</label>
-                                      </div>
-                                    </div>
-                                {% endfor %}
-                                {% for feature in featureSectionRepo.featuresSorted(section.id, 1) %}
-                                    <div class="col-xs-12">
-                                      <div class="chbox-holder">
-                                        <input type="{% if section.exclusive %}radio{% else %}checkbox{% endif %}" name="section_{{ section.id }}{% if not section.exclusive %}[]{% endif %}" id="feature_{{ feature.id }}" value="{{ feature.id }}" {%if features[feature.id] is defined %}checked="checked"{% endif %}>
-                                        <label for="feature_{{ feature.id }}"><span></span>
-                                        <input type="text" name="text_{{ feature.id }}" placeholder="{{ feature.name }}"  {%if features[feature.id] is defined %}value="{{ features[feature.id] }}"{% endif %}/></label>
-                                      </div>
-                                    </div>
-                                {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                  {% endfor %}
-                #}
 <!-- Formular 3 Checkboxes -->
           <div class="col-xs-12 border-bottom-white form-head describe">
             <div class="form-container">

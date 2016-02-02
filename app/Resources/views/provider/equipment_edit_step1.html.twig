@@ -46,7 +46,7 @@
                        <div class="form-container form-input form-last-item">
                           <div class="row">
                               <div class="col-sm-7">
-                                  <label for="name">Angebotsname:</label>
+                                  <label for="form[name]">Angebotsname:</label>
                                   {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
                                   {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 22 Zeichen', 'class': 'normal-input' } }) }}
                                   <div class="err-msg">{{ form_errors(form.name) }}</div>

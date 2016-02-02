@@ -692,13 +692,13 @@ class ProviderController extends BaseController {
     private $imageCount = null; // num of existing images; necessary for image validation
     public function validateImages($data, ExecutionContextInterface $context) {
         $cnt = 0;
-        if ($this->fileCount != null) {
+        if ($this->fileCount !== null) {
             $cnt += $this->fileCount;
         }            
-        if ($this->imageCount != null) {
+        if ($this->imageCount !== null) {
             $cnt += $this->imageCount;
         }
-        if ($cnt = 0) {
+        if ($cnt == 0) {
             $context->buildViolation('Please upload at least one image')->addViolation();
         }
     }
