@@ -40,10 +40,6 @@ class TalentBooking {
     /** 
      * @ORM\Column(type="decimal")
      */
-    private $deposit;
-    /** 
-     * @ORM\Column(type="decimal")
-     */
     private $totalPrice;
 
     
@@ -216,30 +212,6 @@ class TalentBooking {
     public function getPrice()
     {
         return $this->price;
-    }
-
-    /**
-     * Set deposit
-     *
-     * @param string $deposit
-     *
-     * @return TalentBooking
-     */
-    public function setDeposit($deposit)
-    {
-        $this->deposit = $deposit;
-
-        return $this;
-    }
-
-    /**
-     * Get deposit
-     *
-     * @return string
-     */
-    public function getDeposit()
-    {
-        return $this->deposit;
     }
 
     /**

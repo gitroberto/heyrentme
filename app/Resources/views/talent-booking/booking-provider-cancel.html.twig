@@ -11,19 +11,19 @@
   <div class="container request-container">
     <div class="row">
         <div class="col-xs-12">
-            <h1>{{ booking.inquiry.equipment.name }} / Vom Angebot zurücktreten</h1>
+            <h1>{{ booking.inquiry.talent.name }} / Vom Angebot zurücktreten</h1>
             <div class="row summary">
                 <div class="ad col-md-4 col-sm-12">
-                    <img src="{% if booking.inquiry.equipment.images|length > 0 %}{{ booking.inquiry.equipment.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}"
-                         alt="{{ booking.inquiry.equipment.name }}" 
+                    <img src="{% if booking.inquiry.talent.images|length > 0 %}{{ booking.inquiry.talent.images[0].urlPath(image_url_prefix) }}{% else %}/img/talent-default.jpg{% endif %}"
+                         alt="{{ booking.inquiry.talent.name }}" 
                          class="img-responsive"/>
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
-                                {{ include('common/stars.html.twig', { rating: booking.inquiry.equipment.rating }) }}
-                                <p class="product-name">{{ booking.inquiry.equipment.name }}</p>
+                                {{ include('common/stars.html.twig', { rating: booking.inquiry.talent.rating }) }}
+                                <p class="product-name">{{ booking.inquiry.talent.name }}</p>
                             </div>
-                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.equipment.activePrice|number_format(2) }} €</p>
+                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.talent.activePrice|number_format(2) }} €</p>
                                 <p class="tag">pro tag</p>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                     <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                     <p>{{ booking.inquiry.price|number_format(2) }} €</p>
                     <p class="dont-transform">
-                        {{ booking.inquiry.equipment.addressAsString }}
+                        {{ booking.inquiry.talent.addressAsString }}
                     </p>
                 </div>
             </div>
@@ -54,7 +54,7 @@
         <div class="col-xs-12">
             <h3>Ich möchte vom Angebot aus folgenden Gründen zurücktreten:</h3>
             <input type="radio" id="es" name="radio-stornieren" value="no-show"><label for="es"><span></span> Anbieter ist bis 15 min. nach Buchungsbeginn nicht erschienen</label>
-            <input type="radio" id="equipment" name="radio-stornieren" value="defect"><label for="equipment"><span></span> Das Equipment ist defekt</label>
+            <input type="radio" id="talent" name="radio-stornieren" value="defect"><label for="talent"><span></span> Das Equipment ist defekt</label>
             <input type="radio" id="sonstiges" name="radio-stornieren" value="other"><label for="sonstiges"><span></span> Sonstiges:</label>
             {{ form_widget(form.description, { 'attr': { 'class': 'full-rwd', 'disabled': 'disabled' } }) }}
             <button class="btn-red full-rwd">Angebot stornieren</button>

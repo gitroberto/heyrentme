@@ -16,49 +16,54 @@
     </div>
       
     {% for booking in bookings %}
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="row summary">
-                <div class="ad col-md-4 col-sm-12">
-                    <img src="{% if booking.inquiry.equipment.images|length > 0 %}{{ booking.inquiry.equipment.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" 
-                         alt="{{ booking.inquiry.equipment.name }}"
-                         class="img-responsive"/>
-                    <div class="product-info product-ad">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                {{ include('common/stars.html.twig', { rating: booking.inquiry.equipment.rating }) }}
-                                <p class="product-name">{{ booking.inquiry.equipment.name }}</p>
-                            </div>
-                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.equipment.activePrice|number_format(2) }} €</p>
-                                <p class="tag">pro tag</p>
+        {% if booking.inquiry.equipment is defined %}
+            {% set item = booking.inquiry.equipment %}
+        {% else %}
+            {% set item = booking.inquiry.talent %}
+        {% endif %}
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row summary">
+                    <div class="ad col-md-4 col-sm-12">
+                        <img src="{% if item.images|length > 0 %}{{ item.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" 
+                             alt="{{ item.name }}"
+                             class="img-responsive"/>
+                        <div class="product-info product-ad">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    {{ include('common/stars.html.twig', { rating: item.rating }) }}
+                                    <p class="product-name">{{ item.name }}</p>
+                                </div>
+                                <div class="col-xs-6"><p class="price">{{ item.activePrice|number_format(2) }} €</p>
+                                    <p class="tag">pro tag</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-4 col-xs-6 summary-info">
-                    <p>BEGINN:</p>
-                    <p>ENDE:</p>
-                    <p>Gesamtkosten:</p>
-                    <p>ORT:</p><br />
-                </div>
-                <div class="col-sm-4 col-xs-6 summary-info">
-                    <p>{{ booking.inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    <p>{{ booking.inquiry.price|number_format(2) }} €</p>
-                    <p class="dont-transform">
-                        {{ booking.inquiry.equipment.addressAsString }}
-                    </p>
-                </div>
-                <div class="col-sm-4 col-sm-push-4 margin-ort">
-                    {% if booking.status == constant('STATUS_BOOKED', booking) %}
-                        <button data-id="{{ booking.id }}" class="rabat-button">Buchung bearbeiten</button>
-                    {% else %}
-                        Status: {{ booking.statusAsString }}
-                    {% endif %}
+                    <div class="col-sm-4 col-xs-6 summary-info">
+                        <p>BEGINN:</p>
+                        <p>ENDE:</p>
+                        <p>Gesamtkosten:</p>
+                        <p>ORT:</p><br />
+                    </div>
+                    <div class="col-sm-4 col-xs-6 summary-info">
+                        <p>{{ booking.inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
+                        <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
+                        <p>{{ booking.inquiry.price|number_format(2) }} €</p>
+                        <p class="dont-transform">
+                            {{ item.addressAsString }}
+                        </p>
+                    </div>
+                    <div class="col-sm-4 col-sm-push-4 margin-ort">
+                        {% if booking.status == constant('STATUS_BOOKED', booking) %}
+                            <button data-id="{{ booking.id }}" data-type="{% if booking.inquiry.equipment is defined %}equipment{% else %}talent{% endif %}" class="rabat-button">Buchung bearbeiten</button>
+                        {% else %}
+                            Status: {{ booking.statusAsString }}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     {% else %}
         <div class="row">
             <div class="col-xs-12">
@@ -74,49 +79,54 @@
     </div>
       
     {% for booking in pBookings %}
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="row summary">
-                <div class="ad col-md-4 col-sm-12">
-                    <img src="{% if booking.inquiry.equipment.images|length > 0 %}{{ booking.inquiry.equipment.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" 
-                         alt="{{ booking.inquiry.equipment.name }}"
-                         class="img-responsive"/>
-                    <div class="product-info product-ad">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                {{ include('common/stars.html.twig', { rating: booking.inquiry.equipment.rating }) }}
-                                <p class="product-name">{{ booking.inquiry.equipment.name }}</p>
-                            </div>
-                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.equipment.activePrice|number_format(2) }} €</p>
-                                <p class="tag">pro tag</p>
+        {% if booking.inquiry.equipment is defined %}
+            {% set item = booking.inquiry.equipment %}
+        {% else %}
+            {% set item = booking.inquiry.talent %}
+        {% endif %}
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row summary">
+                    <div class="ad col-md-4 col-sm-12">
+                        <img src="{% if item.images|length > 0 %}{{ item.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" 
+                             alt="{{ item.name }}"
+                             class="img-responsive"/>
+                        <div class="product-info product-ad">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    {{ include('common/stars.html.twig', { rating: item.rating }) }}
+                                    <p class="product-name">{{ item.name }}</p>
+                                </div>
+                                <div class="col-xs-6"><p class="price">{{ item.activePrice|number_format(2) }} €</p>
+                                    <p class="tag">pro tag</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-4 col-xs-6 summary-info">
-                    <p>BEGINN:</p>
-                    <p>ENDE:</p>
-                    <p>Gesamtkosten:</p>
-                    <p>ORT:</p><br />
-                </div>
-                <div class="col-sm-4 col-xs-6 summary-info">
-                    <p>{{ booking.inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    <p>{{ booking.inquiry.price|number_format(2) }} €</p>
-                    <p class="dont-transform">
-                        {{ booking.inquiry.equipment.addressAsString }}
-                    </p>
-                </div>
-                <div class="col-sm-4 col-sm-push-4 margin-ort">
-                    {% if booking.status == constant('STATUS_BOOKED', booking) %}
-                        <button data-id="{{ booking.id }}" class="rabat-button">Buchung bearbeiten</button>
-                    {% else %}
-                        Status: {{ booking.statusAsString }}
-                    {% endif %}
+                    <div class="col-sm-4 col-xs-6 summary-info">
+                        <p>BEGINN:</p>
+                        <p>ENDE:</p>
+                        <p>Gesamtkosten:</p>
+                        <p>ORT:</p><br />
+                    </div>
+                    <div class="col-sm-4 col-xs-6 summary-info">
+                        <p>{{ booking.inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
+                        <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
+                        <p>{{ booking.inquiry.price|number_format(2) }} €</p>
+                        <p class="dont-transform">
+                            {{ item.addressAsString }}
+                        </p>
+                    </div>
+                    <div class="col-sm-4 col-sm-push-4 margin-ort">
+                        {% if booking.status == constant('STATUS_BOOKED', booking) %}
+                            <button data-id="{{ booking.id }}" data-type="{% if booking.inquiry.equipment is defined %}equipment{% else %}talent{% endif %}" class="rabat-button">Buchung bearbeiten</button>
+                        {% else %}
+                            Status: {{ booking.statusAsString }}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     {% else %}
         <div class="row">
             <div class="col-xs-12">
@@ -154,8 +164,10 @@
     $(function() {
         $('button[data-id]').click(function() {
             var id = $(this).data('id');
+            var type = $(this).data('type');
+            var path = type === 'equipment' ? '{{ path("booking-cancel", { 'id': 'XIDX' }) }}' : '{{ path("talent-cancel", { 'id': 'XIDX' }) }}';
             if (typeof id !== "undefined" && id !== null && id !== "") {
-                var url = '{{ path("booking-cancel", { 'id': 'XIDX' }) }}'.replace('XIDX', id);
+                var url = path.replace('XIDX', id);
                 window.location = url;
             }
         });

@@ -316,12 +316,14 @@ class BookingController extends BaseController {
             else {
                 $email = $inq->getEmail();
             }
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('booking-list');
             $emailHtml = $this->renderView('Emails\mail_to_user_confirm_booking.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
                 'discountCode' => $discountCode,
-                'equipment' => $inq->getEquipment()
+                'equipment' => $inq->getEquipment(),
+                'url' => $url
             ));
             $message = Swift_Message::newInstance()
                 ->setSubject('Du hast soeben eine Anfrage erhalten')
@@ -512,9 +514,16 @@ class BookingController extends BaseController {
         $user = $this->getUser();
         $bookings = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->getAllForUser($user->getId());
         $pBookings = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->getAllForProvider($user->getId());
+        $tBookings = $this->getDoctrineRepo('AppBundle:TalentBooking')->getAllForUser($user->getId());
+        $ptBookings = $this->getDoctrineRepo('AppBundle:TalentBooking')->getAllForProvider($user->getId());
+        
+        $bookings = array_merge($bookings, $tBookings);
+        $pBookings = array_merge($pBookings, $ptBookings);
         return $this->render("booking/booking-list.html.twig", array(
             'bookings' => $bookings,
-            'pBookings' => $pBookings
+            'pBookings' => $pBookings,
+            'tBookings' => $tBookings,
+            'ptBookings' => $ptBookings
         ));
     }
     
