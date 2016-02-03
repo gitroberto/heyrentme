@@ -196,6 +196,27 @@ class Talent {
         }
         return false;
     }
+    public function changeStatus($newStatus, $reason){
+        
+        #TODO: Move status management code (emails etc) into one method
+        
+        $this->status = $newStatus;
+        switch($newStatus){
+            case Equipment::STATUS_APPROVED:
+            case Equipment::STATUS_REJECTED:
+                #$mailer = $this->get('fos_user.mailer');
+                #$mailer->sendNewModifiedEquipmentInfoMessage($this);                
+                break;            
+            case Equipment::STATUS_INCOMPLETE:
+                break;
+            case Equipment::STATUS_NEW:
+            case Equipment::STATUS_MODIFIED:
+                #$mailer = $this->get('fos_user.mailer');
+                #$mailer->sendNewModifiedEquipmentInfoMessage($this);                
+                break;
+        }
+        
+    }
 
 
     public function getTimeAsString() {

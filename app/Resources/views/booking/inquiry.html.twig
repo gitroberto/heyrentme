@@ -2,8 +2,8 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.svg" alt="close"/></button>
         <h4 class="modal-title">Anfrage</h4>
-        <p><span class="text-bold" >Abholung:</span>  <span id="from-date">{{ inquiry.from|date('d-M-Y') }}</span>, <span id="from-time">&nbsp; &nbsp; &nbsp; &nbsp; {{ inquiry.from|date('H:i') }}</span> </p>
-        <p><span class="text-bold">Rückgabe:</span> <span id="to-date">{{ inquiry.to|date('d-M-Y') }}</span>, <span id="to-time">&nbsp; &nbsp; &nbsp; &nbsp; {{ inquiry.to|date('H:i') }}</span></p>
+        <p><span class="text-bold" >Abholung:</span>  <span id="from-date">{{ inquiry.from|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</span>, <span id="from-time">&nbsp; &nbsp; &nbsp; &nbsp; {{ inquiry.from|date('H:i') }}</span> </p>
+        <p><span class="text-bold">Rückgabe:</span> <span id="to-date">{{ inquiry.to|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</span>, <span id="to-time">&nbsp; &nbsp; &nbsp; &nbsp; {{ inquiry.to|date('H:i') }}</span></p>
         <p><span class="text-bold">Gesamtkosten Miete: </span><span class="price-calc">{{ inquiry.price|number_format(2) }}</span> €</p>
         <p><span class="text-bold">Kaution:</span> {{ equipment.deposit|number_format(0) }},- €</p>
         {% if equipment.priceBuy %}

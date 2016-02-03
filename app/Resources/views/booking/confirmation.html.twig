@@ -36,8 +36,8 @@
                     <p class="text-bold">Gesamtsumme:</p>
                 </div>
                 <div class="col-sm-4 col-xs-6 summary-info">
-                    <p>{{ inquiry.fromAt|date('d.m.Y H:i') }}</p>
-                    <p>{{ inquiry.toAt|date('d.m.Y H:i') }}</p>
+                    <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
+                    <p>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                     <p>{{ inquiry.price|number_format(2) }} &euro;</p>
                     <p class="dont-transform">
                       {{ inquiry.equipment.addressAsString }}

@@ -63,8 +63,8 @@
                     <div class="question-data">
                         <p class="text-bold"><strong>Buchungsdaten:</strong></p>
                         <p class="text-bold"><strong>{{ talent.name }}</strong></p>
-                        <p class="no-margin-bottom"><strong>Beginn:</strong>{{ inquiry.fromAt|date('D d F Y H:i') }}</p>
-                        <p class="no-margin-bottom"><strong>Ende:</strong>{{ inquiry.toAt|date('D d F Y H:i') }}</p>
+                        <p class="no-margin-bottom"><strong>Beginn:</strong>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
+                        <p class="no-margin-bottom"><strong>Ende:</strong>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
                         <p class="no-margin-bottom"><strong>Dein Verdienst:</strong> {{ inquiry.price|number_format(0) }},- €</p>
                             {# TODO: add modal to update address 
                             (<a href="" data-toggle="modal" data-target=".anfrage">editieren</a>)</p> #}

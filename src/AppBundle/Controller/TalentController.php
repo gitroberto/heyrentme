@@ -61,6 +61,7 @@ class TalentController extends BaseController {
             $eq->setUser($user);
             $eq->setSubcategory($subcat);
             $eq->setPrice($data['price']);
+            $eq->setStatus(Talent::STATUS_INCOMPLETE);
             //</editor-fold>
             // save to db
             $em = $this->getDoctrine()->getManager();
@@ -729,7 +730,7 @@ class TalentController extends BaseController {
     {      
                         
         $to = $this->getParameter('admin_email');
-        $template = 'Emails/Talent/new_modified_item.html.twig';        
+        $template = 'Emails\talent\new_modified_item.html.twig';        
         
         $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));        
         
