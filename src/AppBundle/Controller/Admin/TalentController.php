@@ -120,9 +120,8 @@ class TalentController extends BaseAdminController {
         if ($form->isValid()) {
             $talent->changeStatus($form['status']->getData(), $form['reason']->getData());            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($talent);
-            $this->sendApprovedRejectedInfoMessage($request, $talent, $form['reason']->getData());
             $em->flush();
+            $this->sendApprovedRejectedInfoMessage($request, $talent, $form['reason']->getData());
             
             return $this->redirectToRoute("admin_talent_list");
         }
@@ -147,22 +146,22 @@ class TalentController extends BaseAdminController {
     
     public function sendApprovedRejectedInfoMessage(Request $request, Talent $eq, $reason)
     {      
-        $template = 'Emails/Talent/talent_approved.html.twig';       
+        $template = 'Emails/admin/item_approved.html.twig';       
         if ($eq->getStatus() == Talent::STATUS_REJECTED) {
-            $template = 'Emails/Talent/talent_rejected.html.twig';
+            $template = 'Emails/admin/item_rejected.html.twig';
         }
         
         $userLink = $request->getSchemeAndHttpHost() . $this->generateUrl('dashboard');
         $eqLink = $request->getSchemeAndHttpHost() . $this->generateUrl('catchall', array('content' => $eq->getUrlPath()));                        
         
         $emailHtml = $this->renderView($template, array(                                    
-            'talent' => $eq,
+            'item' => $eq,
             'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
             'reason' => $reason,
             'userLink' => $userLink,
             'status_approved' => Talent::STATUS_APPROVED,
             'status_rejected' => Talent::STATUS_REJECTED,
-            'talentLink' => $eqLink
+            'itemLink' => $eqLink
         ));
         
         $subject = $eq->getStatus() == Talent::STATUS_APPROVED ? "Dein Angebot wurde akzeptiert" : "Dein Angebot nicht akzeptiert wurde";

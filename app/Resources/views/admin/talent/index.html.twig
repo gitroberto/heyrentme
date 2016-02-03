@@ -1,0 +1,78 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_talent_list') }}" class="active-crumb">Talent</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Talent</h1>
+
+<br/>
+<br/>
+
+<div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover">
+                <tr>
+                        <td></td>
+                </tr>
+        </table>
+        <div id="jqgrid-pager"></div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+    {{ include('admin/common/admin.footer.html.twig') }}
+<script>    
+$(document).ready(function(){    
+//*******************************************
+/*	JQGRID INIT
+/********************************************/
+
+
+function rowActions(cellvalue, options, cellobject) {
+      return   "<a title='Moderate'             href='talent/moderate/"   +  options.rowId + "'><u>moderate</u></a>  ";
+  }
+
+var $grid = $('#jqgrid');
+
+if( $grid.length > 0 ) {
+        var optionsStr = ":All;1:New;2:Modified;3:Approved;4:Rejected;5:Incomplete";
+        $grid.jqGrid({
+                url: '{{ path('admin_talent_jsondata') }}',
+                mtype: 'GET',
+                datatype: 'jsonp',
+                colModel:[
+                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                        { name:'Id', index:'e.id', width:1, editable:false, sortable:false, hidden: true, search: false },
+                        { name:'Name', index:'e.name', width: 100, editable:false, sortable:true, search: false },
+                        { name:'Description', index:'e.description', width: 200, editable:false, sortable:true, search: false },
+                        { name:'Price', index:'e.price', width: 100, editable:false, sortable:true, search: false },
+                        { name:'User', index:'u.username',  width: 100, editable:false, sortable:true, search: false},
+                        { name:'Status', index:'e.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: false }},
+                ],
+                height: 300,
+                rowNum: 10,
+                rowList: [10, 50, 200],
+                pager: 'jqgrid-pager',
+                sortname: 'e.status',
+                viewrecords: false,
+                sortorder: "asc",
+                caption: "Posts",
+                multiselect: false,
+        });
+        $grid.jqGrid('filterToolbar', {
+            stringResult: false,
+            searchOnEnter: false,
+            defaultSearch: 'e',
+            clearSearch: false
+        });
+}
+
+}); // end ready function
+</script>    
+    
+{% endblock %}
+

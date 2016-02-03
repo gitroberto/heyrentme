@@ -254,6 +254,10 @@ class Talent {
     {
         return $this->id;
     }
+    public function setId($id)
+    {
+        // does nothing
+    }
 
     /**
      * Set description

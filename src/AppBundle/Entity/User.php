@@ -361,6 +361,10 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Equipment", mappedBy="user")
      */
     protected $equipments;
+    /**
+     * @ORM\OneToMany(targetEntity="Talent", mappedBy="user")
+     */
+    protected $talents;
     
     public function getEquipments()
     {
@@ -525,5 +529,40 @@ class User extends BaseUser
     public function getRatings()
     {
         return $this->ratings;
+    }
+
+
+    /**
+     * Add talent
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     *
+     * @return User
+     */
+    public function addTalent(\AppBundle\Entity\Talent $talent)
+    {
+        $this->talents[] = $talent;
+
+        return $this;
+    }
+
+    /**
+     * Remove talent
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     */
+    public function removeTalent(\AppBundle\Entity\Talent $talent)
+    {
+        $this->talents->removeElement($talent);
+    }
+
+    /**
+     * Get talents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTalents()
+    {
+        return $this->talents;
     }
 }

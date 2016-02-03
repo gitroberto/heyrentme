@@ -1,0 +1,162 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_talent_list') }}" class="active-crumb">Talent</a></li>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}      
+{% endblock %}
+
+{% block body %}
+<h1>Equipment moderation</h1>
+
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="form-horizontal">
+    <div class="err-msg">{{ form_errors(form) }}</div>    
+    {{ form_widget(form.id) }}
+    <div class="page">
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Name</label>
+              <div class="col-xs-10 control-readonly">
+                {{ talent.Name }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Preis pro Tag:</label>
+              <div class="col-xs-10 control-readonly">
+                {{ talent.Price }},- € 
+              </div>
+            </div>
+        </div>
+    </div>
+          
+    <div class="page" >
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Images</label>
+              <div class="col-xs-10 control-readonly">
+                {% for img in talent.images %}
+
+                    <a class="thmb-link" href ="{{ img.urlPath(image_url_prefix) }}" target="_blank">
+                        <img class="thmb" src="{{ img.urlPath(image_url_prefix) }}"  alt=""/>
+                    </a>
+                    
+                {% endfor %}
+              </div>
+              <div class="clear"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Beschreibung</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ talent.description }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">desc. #2</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ talent.descReference }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">desc. #3</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ talent.descScope }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">desc #4</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ talent.descTarget }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">desc #5</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ talent.descCondition }}
+              </div>
+            </div>
+        </div>
+              
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">pick-up time</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ talent.optClient }}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Gruppenstunden</label>
+              <div class="col-xs-10 control-readonly">
+                 {% if talent.optGroup > 0 %}Yes{% else %}No{% endif %}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Treffpunkt beim Kunden</label>
+              <div class="col-xs-10 control-readonly">
+                 {% if talent.optClient > 0 %}Yes{% else %}No{% endif %}
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+              <label for="form_name" class="control-label col-xs-2">Address</label>
+              <div class="col-xs-10 control-readonly">
+                 {{ talent.addressAsString }}
+              </div>
+            </div>
+        </div>
+    </div>
+          
+          
+    
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Status</label>
+          <div class="col-xs-10  control-readonly">
+              <div class="err-msg">{{ form_errors(form.status) }}</div>
+            {{ form_widget(form.status, { 'attr': { 'class': 'check-box single-line'}}) }}
+          </div>
+        </div>
+    </div>
+          
+          
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Reason</label>
+          <div class="col-xs-10  control-readonly">
+              <div class="err-msg">{{ form_errors(form.reason) }}</div>
+            {{ form_widget(form.reason, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'reason' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Save">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_talent_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{{ form_end(form) }}
+{% endblock %}

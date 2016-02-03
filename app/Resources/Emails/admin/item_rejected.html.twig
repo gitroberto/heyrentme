@@ -25,12 +25,12 @@
         <td style="padding: 20px;padding-top: 0px;padding-bottom: 0px;">
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 0px;" class="page-title">Willkommen</h1>            
             <p style="font-family: helvetica, arial;font-size: 15px;">
-                 Dein Angebot (<strong>{{ equipment.name }}</strong>) nicht akzeptiert wurde
+                 Dein Angebot (<strong>{{ item.name }}</strong>) nicht akzeptiert wurde
 
-                {% if equipment.reason %} 
+                {% if item.reason %} 
                     , wegen def folgenden Grund:<br >
                     <br >                
-                    <em>{{ equipment.reason }}</em>
+                    <em>{{ item.reason }}</em>
                 {% endif %}                
             </p>    
             <p style="font-family: helvetica, arial;font-size: 15px;">

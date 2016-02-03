@@ -120,9 +120,8 @@ class EquipmentController extends BaseAdminController {
         if ($form->isValid()) {
             $equipment->changeStatus($form['status']->getData(), $form['reason']->getData());            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($equipment);
-            $this->sendApprovedRejectedInfoMessage($request, $equipment, $form['reason']->getData());
             $em->flush();
+            $this->sendApprovedRejectedInfoMessage($request, $equipment, $form['reason']->getData());
             
             return $this->redirectToRoute("admin_equipment_list");
         }
@@ -147,22 +146,22 @@ class EquipmentController extends BaseAdminController {
     
     public function sendApprovedRejectedInfoMessage(Request $request, Equipment $eq, $reason)
     {      
-        $template = 'Emails/Equipment/equipment_approved.html.twig';       
+        $template = 'Emails/admin/item_approved.html.twig';       
         if ($eq->getStatus() == Equipment::STATUS_REJECTED) {
-            $template = 'Emails/Equipment/equipment_rejected.html.twig';
+            $template = 'Emails/admin/item_rejected.html.twig';
         }
         
         $userLink = $request->getSchemeAndHttpHost() . $this->generateUrl('dashboard');
         $eqLink = $request->getSchemeAndHttpHost() . $this->generateUrl('catchall', array('content' => $eq->getUrlPath()));                        
         
         $emailHtml = $this->renderView($template, array(                                    
-            'equipment' => $eq,
+            'item' => $eq,
             'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
             'reason' => $reason,
             'userLink' => $userLink,
             'status_approved' => Equipment::STATUS_APPROVED,
             'status_rejected' => Equipment::STATUS_REJECTED,
-            'equipmentLink' => $eqLink
+            'itemLink' => $eqLink
         ));
         
         $subject = $eq->getStatus() == Equipment::STATUS_APPROVED ? "Dein Angebot wurde akzeptiert" : "Dein Angebot nicht akzeptiert wurde";
