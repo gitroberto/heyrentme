@@ -11,17 +11,17 @@
       {{ form_start(form) }}
     <div class="row">
         <div class="col-xs-12">
-            <h1>{{ equipment.name }} / Jetzt Bewerten</h1>
+            <h1>{{ talent.name }} / Jetzt Bewerten</h1>
             <div class="row">
                 <div class="ad col-sm-4">
-                    <img src="{{ equipment.images[0].urlPath(image_url_prefix) }}" alt="{{ equipment.name }}" class="img-responsive"/>
+                    <img src="{{ talent.images[0].urlPath(image_url_prefix) }}" alt="{{ talent.name }}" class="img-responsive"/>
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
-                                {{ include('common/stars.html.twig', { rating: eq.rating }) }}
-                                <p class="product-name">{{ equipment.name }}</p>
+                                {{ include('common/stars.html.twig', { rating: talent.rating }) }}
+                                <p class="product-name">{{ talent.name }}</p>
                             </div>
-                                <div class="col-xs-6"><p class="price">{{ equipment.price|number_format(0) }} €</p>
+                                <div class="col-xs-6"><p class="price">{{ talent.price|number_format(0) }} €</p>
                                 <p class="tag">pro tag</p>
                             </div>
                         </div>

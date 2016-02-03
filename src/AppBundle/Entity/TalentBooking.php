@@ -62,14 +62,6 @@ class TalentBooking {
     /** 
      * @ORM\Column(type="datetime")
      */
-    private $noticeReturnUserAt;
-    /** 
-     * @ORM\Column(type="datetime")
-     */
-    private $noticeReturnProviderAt;
-    /** 
-     * @ORM\Column(type="datetime")
-     */
     private $noticeRateUserAt;
     /** 
      * @ORM\Column(type="datetime")

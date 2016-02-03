@@ -25,15 +25,7 @@
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 20px;" class="page-title">
                 Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
             </h1>
-            <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">
-                Was hälst du von dem Angebot 
-                <span style="font-weight: bold;">“{{ item.name }}”</span>? 
-                Teile bitte deine Meinung anderen Kunden bei hey! VIENNA mit.</p>
-        </td>
-    </tr>
-     <tr>
-        <td style="padding-bottom: 50px;">
-            <a href="{{ url }}"><img src="{{ mailer_app_url_prefix }}/img/mail/stars_temp.png" style="border-style: none;width:100%;" alt="hey! Vienna"/></a>
+            <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;margin-bottom: 50px;">Ist mit dem Angebot alles in Ordnung? Falls Gründe für eine Stornierung bestehen (z.B. Equipment nicht in Ordnung, Anbieter nicht anwesend), kannst du jetzt innerhalb 1 Std. einseitig von der <a style="color: black;" href="#">Buchung zurücktreten</a> - Ansonsten betrachten wir die Buchung als erfolgreich und wünschen viel Spaß damit!</p>
         </td>
     </tr>
     <tr>

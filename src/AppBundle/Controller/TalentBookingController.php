@@ -386,7 +386,7 @@ class TalentBookingController extends BaseController {
     }
  
     /** 
-     * @Route("/talent/rate-user/{uuid}", name="rate-user")
+     * @Route("/talent/rate-user/{uuid}", name="talent-rate-user")
      */
     public function rateUserAction(Request $request, $uuid) {
         $bk = $this->getDoctrineRepo('AppBundle:TalentBooking')->findOneByRateUserUuid($uuid);
@@ -428,7 +428,7 @@ class TalentBookingController extends BaseController {
             
             $ur = new UserRating();
             $ur->setUser($bkUser);
-            $ur->setBooking($bk);
+            $ur->setTalentBooking($bk);
             $ur->setOpinion($data['opinion']);
             $ur->setRating($data['rating']);
             
@@ -441,14 +441,14 @@ class TalentBookingController extends BaseController {
         }
         
         
-        return $this->render('booking/rate-user.html.twig', array(
+        return $this->render('talent-booking/rate-user.html.twig', array(
             'user' => $bkUser,
             'form' => $form->createView()
         ));
     }
  
     /** 
-     * @Route("/talent/rate-equipment/{uuid}", name="rate-equipment")
+     * @Route("/talent/rate-talent/{uuid}", name="talent-rate-talent")
      */
     public function rateTalentAction(Request $request, $uuid) {
         $bk = $this->getDoctrineRepo('AppBundle:TalentBooking')->findOneByRateTalentUuid($uuid);
@@ -504,8 +504,8 @@ class TalentBookingController extends BaseController {
         }
         
         
-        return $this->render('booking/rate-equipment.html.twig', array(
-            'equipment' => $eq,
+        return $this->render('talent-booking/rate-talent.html.twig', array(
+            'talent' => $eq,
             'form' => $form->createView()
         ));
     }

@@ -50,11 +50,20 @@ class SchedulerService {
     protected function sendRentReminders(DateTime $datetime) {  
         // users
         $this->logger->debug('sending RENT reminders for USERS');
-        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRentUserReminder($datetime);        
+        $es = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRentUserReminder($datetime);        
+        $ts = $this->em->getRepository('AppBundle:TalentBooking')->getAllForRentUserReminder($datetime);        
+        $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
-                $eq = $inq->getEquipment();
+                if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
+                    $tmpl = 'Emails\mail_to_user_reminder_start_booking.html.twig';
+                    $eq = $inq->getEquipment();
+                }
+                else {
+                    $tmpl = 'Emails\talent\mail_to_user_reminder_start_booking.html.twig';
+                    $eq = $inq->getTalent();
+                }
                 $provider = $eq->getUser();
                 $discountCode = $bk->getDiscountCode();
 
@@ -64,12 +73,12 @@ class SchedulerService {
                 else {
                     $email = $inq->getEmail();
                 }
-                $emailHtml = $this->templating->render('Emails\mail_to_user_reminder_start_booking.html.twig', array(
+                $emailHtml = $this->templating->render($tmpl, array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
                     'discountCode' => $discountCode,
-                    'equipment' => $eq
+                    'item' => $eq
                 ));
                 $message = Swift_Message::newInstance()
                     ->setSubject('Du hast soeben eine Anfrage erhalten')
@@ -92,21 +101,29 @@ class SchedulerService {
         
         // providers
         $this->logger->debug('sending RENT reminders for PROVIDERS');
-        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRentProviderReminder($datetime);        
+        $es = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRentProviderReminder($datetime);        
+        $ts = $this->em->getRepository('AppBundle:TalentBooking')->getAllForRentProviderReminder($datetime);        
+        $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
-                $eq = $inq->getEquipment();
+                if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
+                    $eq = $inq->getEquipment();
+                    $tmpl = 'Emails\mail_to_provider_reminder_start_booking.html.twig';
+                }
+                else {
+                    $eq = $inq->getTalent();
+                    $tmpl = 'Emails\talent\mail_to_provider_reminder_start_booking.html.twig';
+                }
                 $provider = $eq->getUser();
                 $discountCode = $bk->getDiscountCode();
-
                 $email = $provider->getEmail();
-                $emailHtml = $this->templating->render('Emails\mail_to_provider_reminder_start_booking.html.twig', array(
+                $emailHtml = $this->templating->render($tmpl, array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
                     'discountCode' => $discountCode,
-                    'equipment' => $eq
+                    'item' => $eq
                 ));
                 $message = Swift_Message::newInstance()
                     ->setSubject('Du hast soeben eine Anfrage erhalten')
@@ -131,7 +148,9 @@ class SchedulerService {
     protected function sendAllOkReminders(DateTime $datetime) {        
         // users
         $this->logger->debug('sending ALL OK reminders for USERS');
-        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForAllOkUserReminder($datetime);        
+        $es = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForAllOkUserReminder($datetime);        
+        $ts = $this->em->getRepository('AppBundle:TalentBooking')->getAllForAllOkUserReminder($datetime);        
+        $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
@@ -142,7 +161,13 @@ class SchedulerService {
                 else {
                     $email = $inq->getEmail();
                 }
-                $emailHtml = $this->templating->render('Emails\mail_to_user_everything_ok.html.twig', array(
+                if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
+                    $tmpl = 'Emails\mail_to_user_everything_ok.html.twig';
+                }
+                else {
+                    $tmpl = 'Emails\talent\mail_to_user_everything_ok.html.twig';
+                }
+                $emailHtml = $this->templating->render($tmpl, array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'inquiry' => $inq
                 ));
@@ -167,15 +192,24 @@ class SchedulerService {
         
         // providers
         $this->logger->debug('sending ALL OK reminders for PROVIDERS');
-        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForAllOkProviderReminder($datetime);        
+        $es = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForAllOkProviderReminder($datetime);        
+        $ts = $this->em->getRepository('AppBundle:TalentBooking')->getAllForAllOkProviderReminder($datetime);        
+        $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
-                $eq = $inq->getEquipment();
+                if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
+                    $eq = $inq->getEquipment();
+                    $tmpl = 'Emails\mail_to_provider_everything_ok.html.twig';
+                }
+                else {
+                    $eq = $inq->getTalent();
+                    $tmpl = 'Emails\talent\mail_to_provider_everything_ok.html.twig';
+                }
                 $provider = $eq->getUser();
 
                 $email = $provider->getEmail();
-                $emailHtml = $this->templating->render('Emails\mail_to_provider_everything_ok.html.twig', array(
+                $emailHtml = $this->templating->render($tmpl, array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider
                 ));
@@ -220,7 +254,7 @@ class SchedulerService {
                     'provider' => $provider,
                     'inquiry' => $inq,
                     'discountCode' => $discountCode,
-                    'equipment' => $eq
+                    'item' => $eq
                 ));
                 $message = Swift_Message::newInstance()
                     ->setSubject('Du hast soeben eine Anfrage erhalten')
@@ -257,7 +291,7 @@ class SchedulerService {
                     'provider' => $provider,
                     'inquiry' => $inq,
                     'discountCode' => $discountCode,
-                    'equipment' => $eq
+                    'item' => $eq
                 ));
                 $message = Swift_Message::newInstance()
                     ->setSubject('Du hast soeben eine Anfrage erhalten')
@@ -281,11 +315,22 @@ class SchedulerService {
     protected function sendRateReminders(DateTime $datetime) {        
         // users
         $this->logger->debug('sending RATE reminders for USERS');
-        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRateUserReminder($datetime);        
+        $es = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRateUserReminder($datetime);        
+        $ts = $this->em->getRepository('AppBundle:TalentBooking')->getAllForRateUserReminder($datetime);        
+        $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
-                $eq = $inq->getEquipment();
+                if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
+                    $eq = $inq->getEquipment();
+                    $tmpl = 'Emails\mail_to_user_rate_provider.html.twig';
+                    $route = 'rate-equipment';
+                }
+                else {
+                    $eq = $inq->getTalent();
+                    $tmpl = 'Emails\talent\mail_to_user_rate_provider.html.twig';
+                    $route = 'talent-rate-talent';
+                }
                 $provider = $eq->getUser();
                 $uuid = Utils::getUuid();
 
@@ -295,12 +340,12 @@ class SchedulerService {
                 else {
                     $email = $inq->getEmail();
                 }
-                $url = $this->appUrlPrefix . $this->router->generate('rate-equipment', array('uuid' => $uuid));
-                $emailHtml = $this->templating->render('Emails\mail_to_user_rate_provider.html.twig', array(
+                $url = $this->appUrlPrefix . $this->router->generate($route, array('uuid' => $uuid));
+                $emailHtml = $this->templating->render($tmpl, array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'inquiry' => $inq,
                     'provider' => $provider,
-                    'equipment' => $eq,
+                    'item' => $eq,
                     'url' => $url
                 ));
                 $message = Swift_Message::newInstance()
@@ -311,7 +356,12 @@ class SchedulerService {
                 $this->mailer->send($message);
 
                 $bk->setNoticeRateUserAt(new DateTime());
-                $bk->setRateEquipmentUuid($uuid);
+                if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
+                    $bk->setRateEquipmentUuid($uuid);
+                }
+                else {
+                     $bk->setRateTalentUuid($uuid);
+                }
                 $this->em->flush();
                 
                 $msg = sprintf("\t%s, from-date: %s", $email, $inq->getFromAt()->format("Y-m-d H:i:s"));
@@ -325,17 +375,28 @@ class SchedulerService {
         
         // providers
         $this->logger->debug('sending RATE reminders for PROVIDERS');
-        $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRateProviderReminder($datetime);        
+        $es = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRateProviderReminder($datetime);        
+        $ts = $this->em->getRepository('AppBundle:TalentBooking')->getAllForRateProviderReminder($datetime);        
+        $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
                 $inq = $bk->getInquiry();
-                $eq = $inq->getEquipment();
+                if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
+                    $eq = $inq->getEquipment();
+                    $tmpl = 'Emails\mail_to_provider_rate_user.html.twig';
+                    $route = 'rate-user';
+                }
+                else {
+                    $eq = $inq->getTalent();
+                    $tmpl = 'Emails\talent\mail_to_provider_rate_user.html.twig';
+                    $route = 'talent-rate-user';
+                }
                 $provider = $eq->getUser();
                 $uuid = Utils::getUuid();
 
-                $url = $this->appUrlPrefix . $this->router->generate('rate-user', array('uuid' => $uuid));
+                $url = $this->appUrlPrefix . $this->router->generate($route, array('uuid' => $uuid));
                 $email = $provider->getEmail();
-                $emailHtml = $this->templating->render('Emails\mail_to_provider_rate_user.html.twig', array(
+                $emailHtml = $this->templating->render($tmpl, array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,

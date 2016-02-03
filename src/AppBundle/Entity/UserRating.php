@@ -25,6 +25,10 @@ class UserRating {
      */
     protected $booking;
     /**
+     * @ORM\OneToOne(targetEntity="TalentBooking")
+     */
+    protected $talentBooking;
+    /**
      * @ORM\Column(type="integer")
      */
     protected $rating;
@@ -165,5 +169,29 @@ class UserRating {
     public function getBooking()
     {
         return $this->booking;
+    }
+
+    /**
+     * Set talentBooking
+     *
+     * @param \AppBundle\Entity\TalentBooking $talentBooking
+     *
+     * @return UserRating
+     */
+    public function setTalentBooking(\AppBundle\Entity\TalentBooking $talentBooking = null)
+    {
+        $this->talentBooking = $talentBooking;
+
+        return $this;
+    }
+
+    /**
+     * Get talentBooking
+     *
+     * @return \AppBundle\Entity\TalentBooking
+     */
+    public function getTalentBooking()
+    {
+        return $this->talentBooking;
     }
 }

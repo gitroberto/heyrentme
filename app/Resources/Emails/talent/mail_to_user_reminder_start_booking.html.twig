@@ -25,15 +25,26 @@
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 20px;" class="page-title">
                 Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
             </h1>
-            <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">
-                Was hälst du von dem Angebot 
-                <span style="font-weight: bold;">“{{ item.name }}”</span>? 
-                Teile bitte deine Meinung anderen Kunden bei hey! VIENNA mit.</p>
+            <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">Deine Buchung steht kurz bevor! Weiter unten findest du nochmals die Buchungsdaten und Kontaktdaten!</p>
         </td>
     </tr>
-     <tr>
-        <td style="padding-bottom: 50px;">
-            <a href="{{ url }}"><img src="{{ mailer_app_url_prefix }}/img/mail/stars_temp.png" style="border-style: none;width:100%;" alt="hey! Vienna"/></a>
+    <tr>
+        <td style="padding: 20px;padding-top: 10px;">
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;font-weight: bold;margin-top: 0px;margin-bottom: 0px">Buchungsdaten:</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;"> <span style="font-weight: bold;">Beginn:</span> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Ende:</span> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</span></p>
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Gesamtkosten:</span>  {{ inquiry.price|number_format(2) }} €</p>
+            {#
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Kauption:</span> {{ inquiry.deposit|number_format(0) }},- €</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> {{ equipment.addressAsString }}</p>
+            #}
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Anbieter Kontakt:</span> +43 {{ item.user.fullPhone }}</p>
+            {#
+            {% if discountCode %}
+                <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Rabatt:</span> 5,- € (wird dem Anbieter von hey! VIENNA nach Buchungstermin überwiesen)</p>
+            {% endif %}
+            #}
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 22px;font-size: 15px;line-height: 22px;margin-top: 25px;margin-bottom: 0px;">Buchungsnr.: {{ inquiry.id }}</p>         
         </td>
     </tr>
     <tr>
