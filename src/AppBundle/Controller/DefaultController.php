@@ -20,7 +20,7 @@ class DefaultController extends BaseController {
     
      
     /**
-     * @Route("/rentme/{token}", name="rentme")
+     * @Route("/equipment/{token}", name="rentme")
      */
     public function rentmeAction(Request $request, $token=null) {      
         $cats = $this->getCategoriesByType($request, Category::TYPE_EQUIPMENT);
@@ -42,7 +42,7 @@ class DefaultController extends BaseController {
         ));
     }
     /**
-     * @Route("/bookme/{token}", name="bookme")
+     * @Route("/talente/{token}", name="bookme")
      */
     public function bookmeAction(Request $request, $token=null) {      
         $cats = $this->getCategoriesByType($request, Category::TYPE_TALENT);
