@@ -38,7 +38,7 @@
                 <div class="col-sm-4 col-xs-6 summary-info">
                     <p>{{ booking.inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                     <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    <p>{{ booking.inquiry.price|number_format(2) }} €</p>
+                    <p>{{ booking.totalPrice|number_format(2) }} €</p>
                     <p class="dont-transform">
                         {{ booking.inquiry.equipment.addressAsString }}
                     </p>

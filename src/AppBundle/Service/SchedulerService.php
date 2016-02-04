@@ -77,6 +77,7 @@ class SchedulerService {
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
+                    'booking' => $bk,
                     'discountCode' => $discountCode,
                     'item' => $eq
                 ));
@@ -122,6 +123,7 @@ class SchedulerService {
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
+                    'booking' => $bk,
                     'discountCode' => $discountCode,
                     'item' => $eq
                 ));

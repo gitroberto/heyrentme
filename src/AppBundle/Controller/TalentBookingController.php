@@ -235,11 +235,11 @@ class TalentBookingController extends BaseController {
         $data = array('uuid' => $uuid);
         
         $form = $this->createFormBuilder($data
-//                , array(
-//                    'constraints' => array(
-//                        new Callback(array($this, 'validateDiscountCode'))
-//                    )
-//                )
+                , array(
+                    'constraints' => array(
+                        new Callback(array($this, 'validateDiscountCode'))
+                    )
+                )
                 )
                 ->add('agree', 'checkbox', array(
                     'required' => false,
@@ -247,9 +247,9 @@ class TalentBookingController extends BaseController {
                         new NotBlank()
                     )
                 ))
-//                ->add('discountCode', 'text', array(
-//                    'required' => false
-//                ))
+                ->add('discountCode', 'text', array(
+                    'required' => false
+                ))
                 ->add('uuid', 'hidden')
                 ->getForm();
         
@@ -267,26 +267,26 @@ class TalentBookingController extends BaseController {
             
             // validate discount
             $discountCode = null;
-//            if (!empty($data['discountCode'])) {
-//                $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($data['discountCode']);
-//                if ($dcode !== null) {
-//                    $user = $inq->getUser();
-//                    if ($dcode->getStatus() === DiscountCode::STATUS_ASSIGNED && $dcode->getUser()->getId() === $user->getId()) {
-//                        $discountCode = $dcode; // only here the discount is valid
-//                    }
-//                }
-//            }
+            if (!empty($data['discountCode'])) {
+                $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($data['discountCode']);
+                if ($dcode !== null) {
+                    $user = $inq->getUser();
+                    if ($dcode->getStatus() === DiscountCode::STATUS_ASSIGNED && $dcode->getUser()->getId() === $user->getId()) {
+                        $discountCode = $dcode; // only here the discount is valid
+                    }
+                }
+            }
             
             // calculate discount, total price
-//            if ($discountCode !== null) {                
-//                $discountCode->setStatus(DiscountCode::STATUS_USED);
-//                $bk->setDiscountCode($discountCode);
-//                $p = $bk->getPrice() - 5;
-//                $bk->setTotalPrice($p);
-//            }
-//            else {
+            if ($discountCode !== null) {                
+                $discountCode->setStatus(DiscountCode::STATUS_USED);
+                $bk->setDiscountCode($discountCode);
+                $p = $bk->getPrice() - 5;
+                $bk->setTotalPrice($p);
+            }
+            else {
                 $bk->setTotalPrice($bk->getPrice());
-//            }
+            }
             
             // save booking
             $em->persist($bk);
@@ -302,6 +302,7 @@ class TalentBookingController extends BaseController {
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
+                'booking' => $bk,
                 'talent' => $inq->getTalent(),
                 'discountCode' => $discountCode,
                 'url' => $url
@@ -324,6 +325,7 @@ class TalentBookingController extends BaseController {
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
+                'booking' => $bk,
                 'discountCode' => $discountCode,
                 'talent' => $inq->getTalent(),
                 'url' => $url

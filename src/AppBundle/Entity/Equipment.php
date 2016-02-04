@@ -189,26 +189,26 @@ class Equipment
     }
     
     public function getActiveDiscount() {
-//        $discounts = $this->getDiscounts();
-//        foreach ($discounts as $dc) {
-//            $now = (new DateTime())->getTimestamp();
-//            $start = $dc->getCreatedAt()->getTimestamp();
-//            $end = $dc->getExpiresAt()->getTimestamp();
-//            if ($start <= $now and $now <= $end) {
-//                return $dc;
-//            }
-//        }
+        $discounts = $this->getDiscounts();
+        foreach ($discounts as $dc) {
+            $now = (new DateTime())->getTimestamp();
+            $start = $dc->getCreatedAt()->getTimestamp();
+            $end = $dc->getExpiresAt()->getTimestamp();
+            if ($start <= $now and $now <= $end) {
+                return $dc;
+            }
+        }
         return null;
     }
     
     public function getActivePrice() {
-        $d = $this->getActiveDiscount();
-        if ($d != null) {
-            $p = $this->getPrice() * (100.0 - $d->getPercent()) / 100.0;
-        }
-        else {
+//        $d = $this->getActiveDiscount();
+//        if ($d != null) {
+//            $p = $this->getPrice() * (100.0 - $d->getPercent()) / 100.0;
+//        }
+//        else {
             $p = $this->getPrice();
-        }
+//        }
         return $p;
     }
     

@@ -231,11 +231,11 @@ class BookingController extends BaseController {
         $data = array('uuid' => $uuid);
         
         $form = $this->createFormBuilder($data
-//                , array(
-//                    'constraints' => array(
-//                        new Callback(array($this, 'validateDiscountCode'))
-//                    )
-//                )
+                , array(
+                    'constraints' => array(
+                        new Callback(array($this, 'validateDiscountCode'))
+                    )
+                )
                 )
                 ->add('agree', 'checkbox', array(
                     'required' => false,
@@ -243,9 +243,9 @@ class BookingController extends BaseController {
                         new NotBlank()
                     )
                 ))
-//                ->add('discountCode', 'text', array(
-//                    'required' => false
-//                ))
+                ->add('discountCode', 'text', array(
+                    'required' => false
+                ))
                 ->add('uuid', 'hidden')
                 ->getForm();
         
@@ -264,26 +264,26 @@ class BookingController extends BaseController {
             
             // validate discount
             $discountCode = null;
-//            if (!empty($data['discountCode'])) {
-//                $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($data['discountCode']);
-//                if ($dcode !== null) {
-//                    $user = $inq->getUser();
-//                    if ($dcode->getStatus() === DiscountCode::STATUS_ASSIGNED && $dcode->getUser()->getId() === $user->getId()) {
-//                        $discountCode = $dcode; // only here the discount is valid
-//                    }
-//                }
-//            }
+            if (!empty($data['discountCode'])) {
+                $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($data['discountCode']);
+                if ($dcode !== null) {
+                    $user = $inq->getUser();
+                    if ($dcode->getStatus() === DiscountCode::STATUS_ASSIGNED && $dcode->getUser()->getId() === $user->getId()) {
+                        $discountCode = $dcode; // only here the discount is valid
+                    }
+                }
+            }
             
             // calculate discount, total price
-//            if ($discountCode !== null) {                
-//                $discountCode->setStatus(DiscountCode::STATUS_USED);
-//                $bk->setDiscountCode($discountCode);
-//                $p = $bk->getPrice() - 5;
-//                $bk->setTotalPrice($p);
-//            }
-//            else {
+            if ($discountCode !== null) {                
+                $discountCode->setStatus(DiscountCode::STATUS_USED);
+                $bk->setDiscountCode($discountCode);
+                $p = $bk->getPrice() - 5;
+                $bk->setTotalPrice($p);
+            }
+            else {
                 $bk->setTotalPrice($bk->getPrice());
-//            }
+            }
             
             // save booking
             $em->persist($bk);
@@ -299,6 +299,7 @@ class BookingController extends BaseController {
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
+                'booking' => $bk,
                 'equipment' => $inq->getEquipment(),
                 'discountCode' => $discountCode,
                 'url' => $url
@@ -320,6 +321,7 @@ class BookingController extends BaseController {
             $emailHtml = $this->renderView('Emails\mail_to_user_confirm_booking.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
+                'booking' => $bk,
                 'inquiry' => $inq,
                 'discountCode' => $discountCode,
                 'equipment' => $inq->getEquipment(),
