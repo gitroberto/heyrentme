@@ -2,13 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Discount;
-use AppBundle\Entity\Talent;
 use AppBundle\Entity\Image;
-use AppBundle\Entity\User;
+use AppBundle\Entity\Talent;
+use AppBundle\Entity\Video;
 use AppBundle\Utils\Utils;
-use DateInterval;
-use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -168,6 +165,9 @@ class TalentController extends BaseController {
             'form' => $form->createView()
         ));
     }        
+
+    private $currentVideo;
+    
     /**
      * @Route("/provider/talent-edit-2/{id}", name="talent-edit-2")
      */
@@ -188,6 +188,7 @@ class TalentController extends BaseController {
         $user = $this->getUser();
         $data = array( 
             'description' => $eq->getDescription(),
+            'videoUrl' => $eq->getVideo() !== null ? $eq->getVideo()->getOriginalUrl() : null,
             'street' => $eq->getAddrStreet(),
             'number' => $eq->getAddrNumber(),
             'postcode' => $eq->getAddrPostcode(),
@@ -218,6 +219,14 @@ class TalentController extends BaseController {
                 'constraints' => array(
                     new NotBlank(),
                     new Length(array('max' => 500))
+                )
+            ))
+            ->add('videoUrl', 'text', array(
+                'required' => false,
+                'attr' => array('maxlength' => 100),
+                'constraints' => array(
+                    new Length(array('max' => 100)),
+                    new Callback(array($this, 'validateVideoUrl'))
                 )
             ))
             ->add('make_sure', 'checkbox', array(
@@ -299,6 +308,33 @@ class TalentController extends BaseController {
             $eqFiles = $session->get('TalentAddFileArray');
             $this->handleImages($eqFiles, $eq, $em);
             
+            // handle video url
+            if ($this->currentVideo !== null) {
+                if ($eq->getVideo() !== null) {
+                    $v = $eq->getVideo();
+                    $em->remove($v);
+                    $em->persist($this->currentVideo);
+                    $eq->setVideo($this->currentVideo);
+                    $em->flush();
+                }
+                else {
+                    $em->persist($this->currentVideo);
+                    $eq->setVideo($this->currentVideo);
+                    $em->flush();
+                }                
+            }
+            else {
+                if ($eq->getVideo() !== null) {
+                    $v = $eq->getVideo();
+                    $em->remove($v);
+                    $eq->setVideo(null);
+                    $em->flush();                    
+                }
+                else {
+                    // do nothing
+                }
+            }
+            
             // update user
             $user->setPhonePrefix($data['phonePrefix']);
             $user->setPhone($data['phone']);
@@ -325,7 +361,44 @@ class TalentController extends BaseController {
             $context->buildViolation('You must check this box')->atPath('make_sure')->addViolation();
         }            
     }
-
+    public function validateVideoUrl($value, ExecutionContextInterface $context) {
+        $this->currentVideo = null;
+        // vimeo
+        preg_match(Video::RE_VIMEO, $value, $m);
+        if (sizeof($m) !== 0) {
+            $v = new Video();
+            $v->setType(Video::TYPE_VIMEO);
+            $v->setOriginalUrl($value);
+            $v->setVideoId($m[1]);
+            $v->setEmbedUrl("http://player.vimeo.com/video/{$m[1]}?api=1&player_id=player");            
+            // try obtain thumbnail url
+            try {
+                $json = file_get_contents("http://vimeo.com/api/v2/video/{$m[1]}.json");
+                $desc = json_decode($json, true);                        
+                $v->setThumbnailUrl($desc[0]['thumbnail_small']);
+            } catch (Exception $e) {
+                $msg = sprintf("FAIL fetching thumbnail for '%s'", $value);
+                $this->logger->error($msg);
+                $this->logger->error($e->getTraceAsString());
+            }            
+            $this->currentVideo = $v;
+            return;
+        }        
+        // youtube
+        preg_match(Video::RE_YOUTUBE, $value, $m);
+        if (sizeof($m) > 1) {
+            $v = new Video();
+            $v->setType(Video::TYPE_YOUTUBE);
+            $v->setOriginalUrl($value);
+            $v->setVideoId($m[1]);
+            $v->setEmbedUrl("https://www.youtube.com/embed/{$m[1]}");
+            $v->setThumbnailUrl("https://i.ytimg.com/vi/{$m[1]}/default.jpg");
+            $this->currentVideo = $v;
+            return;
+        }
+        $context->buildViolation('This is not a valid Youtube or Vimeo url.')->atPath('videoUrl')->addViolation();        
+    }
+    
     private $fileCount = null; // num of uploaded images; necessary for image validation
     private $imageCount = null; // num of existing images; necessary for image validation
     public function validateImages($data, ExecutionContextInterface $context) {

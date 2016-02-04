@@ -147,6 +147,12 @@ class Talent {
      * @ORM\OneToMany(targetEntity="TalentRating", mappedBy="talent")
      */
     protected $ratings;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Video")
+     * @ORM\JoinColumn(name="video_id", referencedColumnName="id")
+     */
+    protected $video;
 
     
     public function getUfid() { // user friendly id
@@ -925,5 +931,29 @@ class Talent {
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set video
+     *
+     * @param \AppBundle\Entity\Video $video
+     *
+     * @return Talent
+     */
+    public function setVideo(\AppBundle\Entity\Video $video = null)
+    {
+        $this->video = $video;
+
+        return $this;
+    }
+
+    /**
+     * Get video
+     *
+     * @return \AppBundle\Entity\Video
+     */
+    public function getVideo()
+    {
+        return $this->video;
     }
 }

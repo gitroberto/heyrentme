@@ -75,14 +75,17 @@
                     {% endif %}
               </div>
 
-              {#<iframe id="player"></iframe>#}
+              <iframe id="player"></iframe>
               <div class="media-list" id="media-list">
                     {% for img in item.images %}
                         <span class="media-img"><img src="{{ img.urlPath(image_url_prefix) }}" alt=""/></span>
                     {% endfor %}
-                    {#
-                        <span><a class="videos-ico" id="3"></a><img src="/img/placeholder/video2.jpg" id="3" alt=""/>   </span>
-                    #}
+                    {% if item.video %}
+                        <span class="media-img">
+                            <a class="videos-ico" data-url="{{ item.video.embedUrl }}"></a>
+                            <img src="{{ item.video.thumbnailUrl }}" />
+                        </span>
+                    {% endif %}
               </div>
             </div>
         <script src="/js/vendors/vimeo.js"></script>
@@ -109,13 +112,15 @@
                   $(mediaContainer).html(vals);
                   console.log (vals);
                   $(".product-detail .left-side .cart, .discount.discount-big").show();
+                    var h = $('#media-content').height();
+                    $("#player").css('height', h);
               });
 
 
-              $("#3").click(function() {
-                  $('#videos-ico').remove();
-                  $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
-                  $("#player").attr("src",$iframeSRC);
+              $("a.videos-ico").click(function() {
+                  //$('#videos-ico').remove();
+                  var url = $(this).data('url');
+                  $("#player").attr("src", url);
                   $(".product-detail .left-side .cart, .discount.discount-big").hide();
               });
           });

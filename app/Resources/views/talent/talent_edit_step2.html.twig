@@ -78,7 +78,16 @@
                               </div>
                           </div>
                       </div>
-                      
+                              
+                      <div class="form-container form-input-border">
+                          <div class="row">
+                              <div class="col-sm-12">
+                                    <p class="form-heading-small">Video URL (Vimeo or Youtube)</p>
+                                    {{ form_widget(form.videoUrl, { 'attr': { 'placeholder': 'Paste Vimeo or Youtube url here', 'style': 'width: 100%' } }) }}
+                                    <div class="err-msg">{{ form_errors(form.videoUrl) }}</div>
+                              </div>
+                          </div>
+                      </div>
                      <!-- Adress -->
                         <div class="form-container border-bottom-white margin-ort">
                           <div class="row ort">
