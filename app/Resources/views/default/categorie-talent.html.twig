@@ -57,7 +57,7 @@
             <ul class="col-xs-6 pull-right text-right kaup-select">
                 <li>
                     <a class="active-crumb" 
-                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(1, {{ category.id }}){% else %}{{ path("offer-detail", { 'categoryId': category.id }) }}{% endif %}"
+                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(2, {{ category.id }}){% else %}{{ path("offer-detail", { 'categoryId': category.id }) }}{% endif %}"
                        >In dieser Kategorie anbieten</a>                    
                 </li>
             </ul>
@@ -100,7 +100,7 @@
         $("#suche-dropdown").change(function() {
             if ($(this).val() === 'BIETE') {
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    anbieten(1, {{ category.id }});
+                    anbieten(2, {{ category.id }});
                 {% else %}
                     var url = '{{ path("rental-detail", { 'categoryId': 'CAT-ID' }) }}'.replace('CAT-ID', '{{ category.id }}');
                     window.location = url;

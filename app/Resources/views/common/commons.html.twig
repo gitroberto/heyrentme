@@ -101,6 +101,8 @@
         
         $("#category-dropdown").change(function() {
             var id = $("#category-dropdown").val();
+            if (id == null || id == "")
+                return;
             var url = '{{ path('subcat', { 'id': 'CAT_ID' }) }}'.replace('CAT_ID', id.toString());           
             var subsel = $("#subcategory-dropdown");
             $.getJSON(url)
