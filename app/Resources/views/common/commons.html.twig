@@ -134,10 +134,14 @@
     function refreshButtons() {
         var $butt = $("#weiter-button, #anleitung-button");
         var $subSel = $("#subcategory-dropdown");
-        if ($subSel.val() != '')
+        if ($subSel.val() != '') {
             $butt.removeAttr('disabled');
-        else
+            $butt.removeClass('disabled2');
+        }
+        else {
             $butt.attr('disabled', 'disabled');
+            $butt.addClass('disabled2');
+        }
     }
     var lastType = null;
     function anbieten(type, categoryId) {
@@ -163,7 +167,7 @@
                 if (typeof categoryId === 'number') {
                     $sel.val(categoryId.toString()).selectpicker('refresh');
                     $sel.change();
-                    $('#weiter-button').attr('diabled', 'disabled');
+                    $('#weiter-button').attr('diabled', 'disabled').addClass('disabled2');                    
                 }
                 $("#choose-offer-detail").modal();
             })

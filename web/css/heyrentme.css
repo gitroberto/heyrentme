@@ -475,3 +475,14 @@ html body .dashboard .user-offers .buttons .col-xs-3 {
 img.profileImage {
     cursor: default;
 }
+
+.disabled2 {
+    background-color: grey;
+    cursor: not-allowed;
+    color: black;
+}
+.button-black.backgound-yellow.text-black.disabled2:hover, .disabled2:hover {
+    background-color: grey !important;
+    cursor: not-allowed;
+    color: black;
+}
