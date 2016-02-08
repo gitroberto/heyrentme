@@ -75,21 +75,25 @@
                     {% endif %}
               </div>
 
-              <iframe id="player"></iframe>
+              <iframe id="player" src="{{ item.video.embedUrl }}"></iframe>
               <div class="media-list" id="media-list">
-                    {% for img in item.images %}
-                        <span class="media-img"><img src="{{ img.urlPath(image_url_prefix) }}" alt=""/></span>
-                    {% endfor %}
                     {% if item.video %}
                         <span class="media-img">
                             <a class="videos-ico" data-url="{{ item.video.embedUrl }}"></a>
                             <img src="{{ item.video.thumbnailUrl }}" />
                         </span>
                     {% endif %}
+                    {% for img in item.images %}
+                        <span class="media-img"><img src="{{ img.urlPath(image_url_prefix) }}" alt=""/></span>
+                    {% endfor %}
               </div>
             </div>
         <script src="/js/vendors/vimeo.js"></script>
         <script>
+          $(document).load(function() {
+              var containerHieght = $('#media-content').height();
+              $("#player").css('height',containerHieght);
+          });
           $(document).ready(function(){
 
               $(document).on('click', "#videos-ico", function (evt) {
