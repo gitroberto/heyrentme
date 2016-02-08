@@ -486,3 +486,8 @@ img.profileImage {
     cursor: not-allowed;
     color: black;
 }
+
+.dropdown-menu-span li a {
+    color: #f5f5f5;
+    background: #333;
+}
