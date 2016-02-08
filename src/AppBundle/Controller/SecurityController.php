@@ -74,21 +74,21 @@ class SecurityController extends BaseSecurityController
      */
     public function userIsLoggedAction(){
         $user = $this->getUser();
-        if ($user && $user->getStatus() != User::STATUS_OK){
-            $message = "Something went wrong";
-            if ($user->getStatus() == User::STATUS_BLOCKED){
-                $message = "Your user is blocked.";
-            } else {
-                $message = "Your user was deleted.";
-            }
-            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
-            $this->get('security.context')->setToken($anonToken);
-            
-            $targetUrl = $this->getTargetUrlFromSession();
-            $response = new Response(json_encode("User_Is_Not_Logged;".$mesage));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
+//        if ($user && $user->getStatus() != User::STATUS_OK){
+//            $message = "Something went wrong";
+//            if ($user->getStatus() == User::STATUS_BLOCKED){
+//                $message = "Your user is blocked.";
+//            } else {
+//                $message = "Your user was deleted.";
+//            }
+//            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+//            $this->get('security.context')->setToken($anonToken);
+//            
+//            $targetUrl = $this->getTargetUrlFromSession();
+//            $response = new Response(json_encode("User_Is_Not_Logged;".$mesage));
+//            $response->headers->set('Content-Type', 'application/json');
+//            return $response;
+//        }
         
         $targetUrl = $this->getTargetUrlFromSession();
         $response = new Response(json_encode("User_Is_Logged;".$targetUrl));
