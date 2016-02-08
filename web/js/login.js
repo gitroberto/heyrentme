@@ -1,8 +1,8 @@
 
-$(function(){
+$(function(){    
         var ajaxFormSubmit = function () {
             var $form = $(this);
-
+            $("#DivLoginMessage").hide();
             var options = {
                 url: $form.attr("action"),
                 type: $form.attr("method"),
@@ -13,8 +13,14 @@ $(function(){
                 var $target = $("#formLogin");
                                 
                 if (data.indexOf("User_Is_Logged") == -1){
-                    var $newHtml = $(data);                
-                    $target.replaceWith($newHtml);
+                    if (data.indexOf("User_Is_Not_Logged") == -1){
+                        var $newHtml = $(data);                
+                        $target.replaceWith($newHtml);
+                    } else {
+                        var message = data.split(";")[1];
+                        $("#DivLoginMessage").html(message);
+                        $("#DivLoginMessage").show();
+                    }                    
                 } else {              
                     var url = data.split(";")[1];
                     if (url != undefined && url != ""){
@@ -29,6 +35,9 @@ $(function(){
 
             return false;
         };
+        $("input[type='submit']").click(function(){
+            $("#DivLoginMessage").show();
+        })
         
         $("#formLogin").submit(ajaxFormSubmit);
     });
