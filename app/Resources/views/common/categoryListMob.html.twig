@@ -1,13 +1,6 @@
 <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
-    {% if equipment %}
-        <option value="{{ path('rentme') }}">EQUIPMENT KATEGORIEN</option>
-        {% for cat in cats1 %}
-            <option value="{{ path('catchall', { 'content': cat.slug }) }}">{{ cat.name }}</option>
-        {% endfor %}
-    {% else %}
-        <option value="{{ path('bookme') }}">TALENT KATEGORIEN</option>
-        {% for cat in cats2 %}
-            <option value="{{ path('catchall', { 'content': cat.slug }) }}">{{ cat.name }}</option>
-        {% endfor %}
-    {% endif %}
+    <option value="{{ path('start-page') }}">HAUPKATEGORIE</option>
+    {% for cat in categories %}
+        <option value="{{ path('catchall', { 'content': cat.slug }) }}">{{ cat.name }}</option>
+    {% endfor %}
 </select>
