@@ -3,8 +3,7 @@
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
             <div class="content-modal">
-                <p class="text-bold">Processing ....</p>
-                <p class="text-bold">Please wait</p>
+                <p class="text-bold">Bitte warten</p>
             </div>
         </div>
     </div>
@@ -17,10 +16,9 @@
             <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
 
             <div class="content-modal">
-                <p class="text-bold">Was möchtest du anbieten?</p>
-                <p class="delate-info">Hier kannst du entweder ein Equipment oder dein
-                    Talent bzw. eine Dienstleistung anbieten! 
-                    (Siehe <a href="/doc/checklist.pdf" target="_blank">Checklist</a>)
+                <p class="text-bold">Willkommen bei hey! VIENNA</p>
+                <p class="delate-info">
+                    Was möchtest du in der Sharing Community anbieten?<br>Wähle zwischen Equipment und deinem Talent / Dienstleistung (siehe <a href="/doc/checklist.pdf" target="_blank">Checkliste</a>)
                 </p>
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <a href="javascript:anbieten(1)" class="button-black backgound-yellow text-black">Equipment Anbieten</a>
@@ -68,15 +66,15 @@
     <div class="modal-content">
       <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
       <div class="content-modal">
-        <p class="text-bold">Nutze die hey! Garantie</p>
-        <p class="modal-long-text">Beim Einstellen deines Equipments fragen wir dich nach dem Wert des Equipments oder du kannst angeben, dass du über eine Original-Rechnung verfügst. Wurde dein Equipment beschädigt und der Fall übersteigt den Wert der von dir festgelegten Kaution (z.B. Die Kaution beträgt 200,- der Schaden liegt aber bei 1.000,- €), so wende dich bitte an uns. Wir überprüfen den Fall und erstatten dir den Schadenswert bis zu 750,- € unkompliziert und schnell zurück.<br>
-          <br>
-          Wichtig sind dabei die saubere Dokumentation und Übermittlung des Übergabeprotokolls, Ausleihvereinbarung und entsprechenden Angaben zum Fall wie Bilder, Beschreibung des Hergang. Wir empfehlen auch die vorherige Konsultation der Haushaltsversicherung zwecks Deckung des Schadens. <br>
-          <br>
-          Wir bieten diesen Service nach einem Fair-Use Prinzip an. Sollte sich bei Überprüfung herausstellen, dass ein Mißbrauch vorliegt, können wir das Service nicht anbieten. Mehr dazu findest du auch in unseren 
-          <a href="{{ path("kundeninfos_agb") }}" target="_blank">AGB</a>. 
-          Falls noch weitere Fragen zur Garantie bestehen schreibe uns bitte eine Mail an <a href="mailto:support@heysharing.com">support@heysharing.com</a>.</p>
-      </div>
+         <p class="text-bold">Nutze die hey! Garantie</p>
+         <p class="modal-long-text">Beim Einstellen deines Equipments fragen wir dich nach dem Wert des Equipments oder du kannst angeben, dass du über eine Original-Rechnung verfügst.<br><br> Wurde dein Equipment beschädigt und der Fall übersteigt den Wert der von dir festgelegten Kaution (z.B. Die Kaution beträgt 200,- der Schaden liegt aber bei 1.000,- €), so wende dich bitte an uns. Wir überprüfen den Fall und erstatten dir den Schadenswert bis zu 750,- € unkompliziert und schnell zurück.<br>
+           <br>
+           Wichtig sind dabei die saubere Dokumentation und Übermittlung des Übergabeprotokolls, Ausleihvereinbarung und entsprechenden Angaben zum Fall wie Bilder, Beschreibung des Hergangs. Wir empfehlen auch die vorherige Konsultation der Haushaltsversicherung zwecks Deckung des Schadens. <br>
+           <br>
+           Wir bieten diesen Service nach einem Fair-Use Prinzip an. Sollte sich bei Überprüfung herausstellen, dass ein Mißbrauch vorliegt, können wir das Service nicht anbieten. Mehr dazu findest du auch in unseren 
+           <a href="{{ path("kundeninfos_agb") }}" target="_blank">AGB</a>. 
+           Falls noch weitere Fragen zur Garantie bestehen schreibe uns bitte eine Mail an <a href="mailto:support@heysharing.com">support@heysharing.com</a>.</p>
+       </div>
     </div>
   </div>
 </div>

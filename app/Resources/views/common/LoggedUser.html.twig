@@ -1,7 +1,6 @@
 {% if app.user != null %}
     <div class="header-loged-user">
-        You are logged as {{ app.user.username }}
-        |
-        <a href="path('fos_user_security_logout')" >logout</a>
+        Du bist eingeloggt als  {{ app.user.username }}
+        | <a href="path('fos_user_security_logout')" >ausloggen</a>
     </div>
 {% endif %}
