@@ -304,7 +304,7 @@ class User extends BaseUser
         } else if ($this->facebookID != null){
             $imageUrl = 'http://graph.facebook.com/'. $this->facebookID .'/picture';
             if ($large){
-                $imageUrl .= "?type=square";
+                $imageUrl .= "?type=large";
             }
         }         
 
