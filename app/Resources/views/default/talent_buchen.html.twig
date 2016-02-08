@@ -59,14 +59,12 @@
           <div class="row">
                 {% for cat in categories %}
                     <div class="col-sm-4">
-                        <div class="categories-names">
-                            <a href="{{ path('catchall', { 'content': cat.slug }) }}">
-                                <h3>{{ cat.name }}</h3>
-                            </a>
-                        </div>
                         <a href="{{ path('catchall', { 'content': cat.slug }) }}">
-                            <img src="{{ cat.imageUrl }}" alt="{{ cat.name }}"/>
+                            <div class="categories-names">
+                                <h3>{{ cat.name }}</h3>
+                            </div>
                         </a>
+                        <img src="{{ cat.imageUrl }}" alt="{{ cat.name }}"/>
                     </div>
                 {% endfor %}
                   </div>

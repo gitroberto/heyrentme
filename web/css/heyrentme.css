@@ -477,17 +477,23 @@ img.profileImage {
 }
 
 .disabled2 {
-    background-color: grey;
+    opacity: 0.3;
     cursor: not-allowed;
-    color: black;
 }
 .button-black.backgound-yellow.text-black.disabled2:hover, .disabled2:hover {
-    background-color: grey !important;
+    opacity: 0.3;
     cursor: not-allowed;
-    color: black;
+}
+.button-black.backgound-yellow.text-black.disabled2:hover {
+    background-color: #f0c814 !important;
+    color: black !important;
 }
 
 .dropdown-menu-span li a {
     color: #f5f5f5;
     background: #333;
+}
+
+.product-detail .product-info {
+    clear: both;
 }

@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-xs-5">
                         <p class="price">
-                            {{ "%.2f"|format(tal.activePrice) }} &#8364;
+                            {{ tal.activePrice|number_format(2, ',') }} &#8364;
                         </p>
                         <p class="tag">
                             pro Stunde

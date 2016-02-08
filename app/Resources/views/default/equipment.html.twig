@@ -328,9 +328,11 @@
                         </div>
                     {% endfor %}
                     #}
-                    <div class="user-tab cal">
-                        <p>{{ item.timeAsString }}</p>
-                    </div>
+                    {% if item.timeAsString %}
+                        <div class="user-tab cal">
+                            <p>{{ item.timeAsString }}</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             
