@@ -164,6 +164,18 @@ class Talent {
        return sprintf("%s/%s", $this->getUfid(), $slug);
     }
     
+    public function getActiveDiscount() {
+        $discounts = $this->getDiscounts();
+        foreach ($discounts as $dc) {
+            $now = (new DateTime())->getTimestamp();
+            $start = $dc->getCreatedAt()->getTimestamp();
+            $end = $dc->getExpiresAt()->getTimestamp();
+            if ($start <= $now and $now <= $end) {
+                return $dc;
+            }
+        }
+        return null;
+    }
     
     public function getActivePrice() {
 //        $d = $this->getActiveDiscount();

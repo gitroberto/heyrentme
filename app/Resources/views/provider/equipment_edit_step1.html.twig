@@ -210,7 +210,7 @@
                   <p class="head">Dein Verdienst</p>
                   <div class="range"><input type="text" id="range_30" name="example_name" value=""/></div>
                   <p class="price">
-                      {{ form.vars.value.price|default('0')|number_format(0) }} €
+                      {{ form.vars.value.price|default('0')|number_format(2, ',') }} €
                   </p>
                   <p class="price-info">pro Jahr bei 1 Tag Vermietung</p>
               </div>

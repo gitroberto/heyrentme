@@ -4,10 +4,10 @@
         <h4 class="modal-title">Anfrage</h4>
         <p><span class="text-bold" >Abholung:</span>  <span id="from-date">{{ inquiry.from|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</span>, <span id="from-time">&nbsp; &nbsp; &nbsp; &nbsp; {{ inquiry.from|date('H:i') }}</span> </p>
         <p><span class="text-bold">Rückgabe:</span> <span id="to-date">{{ inquiry.to|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</span>, <span id="to-time">&nbsp; &nbsp; &nbsp; &nbsp; {{ inquiry.to|date('H:i') }}</span></p>
-        <p><span class="text-bold">Gesamtkosten Miete: </span><span class="price-calc">{{ inquiry.price|number_format(2) }}</span> €</p>
-        <p><span class="text-bold">Kaution:</span> {{ equipment.deposit|number_format(0) }},- €</p>
+        <p><span class="text-bold">Gesamtkosten Miete: </span><span class="price-calc">{{ inquiry.price|number_format(2, ',') }}</span> €</p>
+        <p><span class="text-bold">Kaution:</span> {{ equipment.deposit|number_format(2, ',') }} €</p>
         {% if equipment.priceBuy %}
-            <p><span class="text-bold">Preis bei Kauf:</span> {{ equipment.priceBuy|number_format(0) }},- €</p>
+            <p><span class="text-bold">Preis bei Kauf:</span> {{ equipment.priceBuy|number_format(2, ',') }} €</p>
         {% endif %}
         <p>
             <span class="text-bold">Ort:</span>

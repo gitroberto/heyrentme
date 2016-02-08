@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Testimonial
 {
+    
+    const TYPE_EQUIPMENT = 1;
+    const TYPE_TALENT = 2;
+    
     /**
      * @ORM\Column(type="integer")
      * @ORM\id
@@ -18,6 +22,10 @@ class Testimonial
      */
     protected $id;
     
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $type = Testimonial::TYPE_EQUIPMENT;  // default
     /**
      * @ORM\Column(type="integer")
      */
@@ -134,5 +142,29 @@ class Testimonial
     public function __construct()
     {
         
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return Testimonial
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

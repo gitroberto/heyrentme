@@ -39,8 +39,8 @@ security:
             #<added by Seba>
             pattern: ^/
             oauth:
-                failure_path: /rentme?login
-                login_path: /rentme?login
+                failure_path: /equipment?login
+                login_path: /equipment?login
                 check_path: /connect_check
                 provider: fos_userbundle                                                
                 resource_owners:

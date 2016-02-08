@@ -304,8 +304,8 @@
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
                         </select>
                     </div>
-                    <p>Gesamtpreis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
-                    <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2) }}</b>,-<span class="euro-sign">&#8364;</span></p>
+                    <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
+                    <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
                     <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
                 </div>
             </div>
@@ -316,7 +316,7 @@
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
                     <p>
-                        {{ item.activePrice|number_format(2) }} € pro Tag
+                        {{ item.activePrice|number_format(2, ',') }} € pro Tag
                     </p>
                   </div>
                     {#
@@ -436,8 +436,8 @@
         $(tag).html(date);
     };
     $(document).ready(function(){
-        var t1 = $('#date-range').val(moment().format('[AB] DD.MM.YYYY'));
-        var t2 = (moment().add(1, "days").format('[BIS] DD.MM.YYYY'));
+        var t1 = $('#date-range').val(moment().add(1, "days").format('[AB] DD.MM.YYYY'));
+        var t2 = (moment().add(2, "days").format('[BIS] DD.MM.YYYY'));
 
         $('#date-range').val(t1.val() + ' ' + t2);
 
@@ -490,7 +490,7 @@
                 var d = c / (1000 * 60 * 60 * 24);
 
                 var p = Math.round(d) * {{ item.activePrice|number_format(2, '.', '') }};
-                $('.price-calc').html(p.toFixed(2));
+                $('.price-calc').html(p.toFixed(2).replace('.', ','));
                 $('#date-range').val('AB '+ s1 + ' BIS '+s2);
             }
         };
@@ -536,8 +536,8 @@
         var fh = $.trim($("#tests").val().replace('Uhrzeit ab', '')).split(':');    // from hour
         var th = $.trim($("#tests2").val().replace('Uhrzeit bis', '')).split(':');  // to hour
         
-        var from = new Date(f[2], f[1], f[0], fh[0], fh[1]);
-        var to = new Date(t[2], t[1], t[0], th[0], th[1]);
+        var from = new Date(f[2], f[1] - 1, f[0], fh[0], fh[1]);
+        var to = new Date(t[2], t[1] - 1, t[0], th[0], th[1]);
         // update timezone offset, so toISOString yields local time
         var tzoffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
         from = new Date(from.getTime() - tzoffset);

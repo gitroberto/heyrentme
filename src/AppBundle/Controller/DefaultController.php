@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Testimonial;
 use AppBundle\Utils\SearchParams;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,7 +27,7 @@ class DefaultController extends BaseController {
         $cats = $this->getCategoriesByType($request, Category::TYPE_EQUIPMENT);
         
         //if param = 0 then get all from db
-        $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(3);
+        $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(Testimonial::TYPE_EQUIPMENT);
         
         $confirmed= null;
         $confParam = $request->query->get('confirmed');
@@ -48,7 +49,7 @@ class DefaultController extends BaseController {
         $cats = $this->getCategoriesByType($request, Category::TYPE_TALENT);
         
         //if param = 0 then get all from db
-        $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(3);
+        $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(Testimonial::TYPE_TALENT);
         
         $confirmed= null;
         $confParam = $request->query->get('confirmed');

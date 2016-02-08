@@ -18,7 +18,7 @@
                 <li id="kategorie-select"><a class="active-crumb haup-ico" href="#">Hauptkategorien &nbsp;&nbsp;&nbsp;</a></li>
                 <li>                    
                     <a class="active-crumb" 
-                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(1, {{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
+                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(2, {{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
                        >In dieser Kategorie anbieten</a>
                 </li>
             </ul>
@@ -75,21 +75,25 @@
                     {% endif %}
               </div>
 
-              <iframe id="player"></iframe>
+              <iframe id="player" {% if item.video %}src="{{ item.video.embedUrl }}"{% endif %}></iframe>
               <div class="media-list" id="media-list">
-                    {% for img in item.images %}
-                        <span class="media-img"><img src="{{ img.urlPath(image_url_prefix) }}" alt=""/></span>
-                    {% endfor %}
                     {% if item.video %}
                         <span class="media-img">
                             <a class="videos-ico" data-url="{{ item.video.embedUrl }}"></a>
                             <img src="{{ item.video.thumbnailUrl }}" />
                         </span>
                     {% endif %}
+                    {% for img in item.images %}
+                        <span class="media-img"><img src="{{ img.urlPath(image_url_prefix) }}" alt=""/></span>
+                    {% endfor %}
               </div>
             </div>
         <script src="/js/vendors/vimeo.js"></script>
         <script>
+          $(document).load(function() {
+              var containerHieght = $('#media-content').height();
+              $("#player").css('height',containerHieght);
+          });
           $(document).ready(function(){
 
               $(document).on('click', "#videos-ico", function (evt) {
@@ -317,8 +321,8 @@
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
                         </select>
                     </div>
-                    <p>Gesamtpreis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
-                    <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2) }}</b>,-<span class="euro-sign">&#8364;</span></p>
+                    <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
+                    <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
                     <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
                 </div>
             </div>
@@ -329,7 +333,7 @@
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
                     <p>
-                        {{ item.activePrice|number_format(2) }} € pro Tag
+                        {{ item.activePrice|number_format(2, ',') }} € pro Tag
                     </p>
                   </div>
                     {#
@@ -345,12 +349,12 @@
                         <p>{{ item.timeAsString }}</p>
                     </div>
                     {% if item.optClient > 0 %}
-                        <div class="user-tab cal">
+                        <div class="user-tab">
                             <p>Treffpunkt beim Kunden</p>
                         </div>
                     {% endif %}
                     {% if item.optGroup > 0 %}
-                        <div class="user-tab cal">
+                        <div class="user-tab">
                             <p>Gruppenstunden</p>
                         </div>
                     {% endif %}
@@ -454,7 +458,7 @@
   <script>
     $(function() {
         
-        $('#date-range').val(moment().format('DD.MM.YYYY'));
+        $('#date-range').val(moment().add(1, 'days').format('DD.MM.YYYY'));
         updatePrice();
         
         var config = {
@@ -492,7 +496,7 @@
         var span = calculateTimespan();
         var total = {{ item.activePrice|number_format(2) }} * span.diff;
         console.log(span);
-        $(".price-calc").text(total);
+        $(".price-calc").text(total.toFixed(2).replace('.', ','));
     }
     function calculateTimespan() {
         var fh = $.trim($("#tests").val().replace('Uhrzeit ab', '')).split(':');    // from hour
@@ -502,13 +506,13 @@
         var d = $.trim($('#date-range').val()).split('.');                        // from date
         var diff, total, date1, date2;
         if (h2 > h1) {
-            date1 = new Date(d[2], d[1], d[0], h1, 0);
-            date2 = new Date(d[2], d[1], d[0], h2, 0);
+            date1 = new Date(d[2], d[1] - 1, d[0], h1, 0);
+            date2 = new Date(d[2], d[1] - 1, d[0], h2, 0);
             diff = h2 - h1;
         }
         else {
-            date1 = new Date(d[2], d[1], d[0], h1, 0);
-            date2 = new Date(d[2], d[1], d[0], h2, 0);
+            date1 = new Date(d[2], d[1] - 1, d[0], h1, 0);
+            date2 = new Date(d[2], d[1] - 1, d[0], h2, 0);
             date2.setDate(date2.getDate() + 1);
             diff = 24 - h1 + h2;
         }

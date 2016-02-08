@@ -40,7 +40,7 @@
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;font-weight: bold;margin-top: 0px;margin-bottom: 0px">Buchungsdaten:</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;"> <span style="font-weight: bold;">Beginn:</span> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Ende:</span> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</span></p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Dein Verdienst:</span>  {{ inquiry.price|number_format(2) }} €</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Dein Verdienst:</span>  {{ booking.totalPrice|number_format(2, ',') }} €</p>
             {#<p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> {{ talent.addressAsString }}</p>#}
             {#
             {% if discountCode %}
