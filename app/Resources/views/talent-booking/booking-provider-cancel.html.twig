@@ -23,7 +23,7 @@
                                 {{ include('common/stars.html.twig', { rating: booking.inquiry.talent.rating }) }}
                                 <p class="product-name">{{ booking.inquiry.talent.name }}</p>
                             </div>
-                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.talent.activePrice|number_format(2) }} €</p>
+                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.talent.activePrice|number_format(2, ',') }} €</p>
                                 <p class="tag">pro tag</p>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                 <div class="col-sm-4 col-xs-6 summary-info">
                     <p>{{ booking.inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                     <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    <p>{{ booking.totalPrice|number_format(2) }} €</p>
+                    <p>{{ booking.totalPrice|number_format(2, ',') }} €</p>
                     <p class="dont-transform">
                         {{ booking.inquiry.talent.addressAsString }}
                     </p>

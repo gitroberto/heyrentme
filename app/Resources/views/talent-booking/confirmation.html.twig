@@ -21,7 +21,7 @@
                                 {{ include('common/stars.html.twig', { rating: inquiry.talent.rating }) }}
                                 <p class="product-name">{{ inquiry.talent.name }}</p>
                             </div>
-                            <div class="col-xs-6"><p class="price">{{ inquiry.talent.activePrice|number_format(2) }} €</p>
+                            <div class="col-xs-6"><p class="price">{{ inquiry.talent.activePrice|number_format(2, ',') }} €</p>
                                 <p class="tag">pro tag</p>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                       {{ inquiry.talent.addressAsString }}
                     </p>#}
                     <p>0,- &euro; (Aktion!)</p>
-                    <p class="text-bold"><span id="price">{{ inquiry.price|number_format(2) }}</span> &euro; (Barzahlung)</p>
+                    <p class="text-bold"><span id="price">{{ inquiry.price|number_format(2, ',') }}</span> &euro; (Barzahlung)</p>
                 </div>
                 <div class="col-sm-4">
                     {{ form_widget(form.uuid) }}
@@ -100,7 +100,7 @@
             $("form").submit();
         }
         function checkCode() {
-            var price = {{ inquiry.price|number_format(0) }};
+            var price = {{ inquiry.price|number_format(2) }};
             var dcode = $.trim($("#form_discountCode").val());
             var url = '{{ path('talent-check-code', { 'code': ':CODE', 'uuid': inquiry.uuid }) }}'
                     .replace(':CODE', dcode);
