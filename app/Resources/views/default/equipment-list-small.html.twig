@@ -28,7 +28,7 @@
                             {{ "%.2f"|format(eq.activePrice) }} &#8364;
                         </p>
                         <p class="tag">
-                            pro tag
+                            pro {% if eq.subcategory.category.type == constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') %}Tag{% else %}Stunde{% endif %}
                         </p>
                     </div>
                 </div>
