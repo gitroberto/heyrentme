@@ -3,8 +3,14 @@
 
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': { 'id':'formRegister', 'class': 'fos_user_registration_register'}}) }}    
 
+    <a id="facebookRegistration" class="fb-button" href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"><img src="/img/facebook-reg.svg" alt=""/></a>
+    
+    <span class="oder">- oder -</span>             
 
-
+    <div id="facebookValidation" style="color:#ff0000;display:none;">
+        Please accept our AGBs first.
+    </div>
+    
     {{ form_errors(form) }}
     
     
@@ -22,7 +28,7 @@
     
     
     <input type="submit" value="mit E-mail anmelden">
-    <label class="agb">{{ form_widget(form.accept) }}
+    <label class="agb">{{ form_widget(form.accept, { 'attr': { 'id' : 'acceptCheckBox' } }) }}
         <span>Ich akzeptiere die <a href="#">AGBs</a> von hey! sharing community</span>
     </label>
 {{ form_end(form) }}

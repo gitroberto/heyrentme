@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use FOS\UserBundle\Controller\SecurityController as BaseSecurityController;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,6 +73,23 @@ class SecurityController extends BaseSecurityController
      * @Route("/loggedIn", name="loggedin")
      */
     public function userIsLoggedAction(){
+        $user = $this->getUser();
+//        if ($user && $user->getStatus() != User::STATUS_OK){
+//            $message = "Something went wrong";
+//            if ($user->getStatus() == User::STATUS_BLOCKED){
+//                $message = "Your user is blocked.";
+//            } else {
+//                $message = "Your user was deleted.";
+//            }
+//            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+//            $this->get('security.context')->setToken($anonToken);
+//            
+//            $targetUrl = $this->getTargetUrlFromSession();
+//            $response = new Response(json_encode("User_Is_Not_Logged;".$mesage));
+//            $response->headers->set('Content-Type', 'application/json');
+//            return $response;
+//        }
+        
         $targetUrl = $this->getTargetUrlFromSession();
         $response = new Response(json_encode("User_Is_Logged;".$targetUrl));
         $response->headers->set('Content-Type', 'application/json');
