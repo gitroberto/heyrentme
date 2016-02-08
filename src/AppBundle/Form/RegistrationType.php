@@ -19,7 +19,11 @@ class RegistrationType extends AbstractType
         $builder->remove('username');
         $builder->add('accept', 'checkbox', array(                
                 'required' => true,
-));
+        ));
+        
+//        $builder->add('facebook', 'submit', array( 
+//                "validation_groups" => array('FacebookRegistration')
+//        ));
                 
     }
 
@@ -34,6 +38,7 @@ class RegistrationType extends AbstractType
         //$this->setUsername($this->getName() . $this->GetSurname());
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\User',
+            //'validation_group' => array('Registration','FacebookRegistration')
         ));
     }
     

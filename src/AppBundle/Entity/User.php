@@ -110,7 +110,7 @@ class User extends BaseUser
      *
      * @ORM\Column(name="Surname", type="string", nullable=true)
      * 
-     *  *  * @Assert\NotBlank(message="Please enter your surname.", groups={"Registration", "Profile"})
+     * @Assert\NotBlank(message="Please enter your surname.", groups={"Registration", "Profile"})
      * @Assert\Length(
      *     min=3,
      *     max=128,
@@ -136,7 +136,7 @@ class User extends BaseUser
      * @var bit
      *     
      * 
-     *  *  * @Assert\NotBlank(message="Please accept your surname.", groups={"Registration"})    
+     * @Assert\NotBlank(message="Please accept your surname.", groups={"Registration", "FacebookRegistration"})         
      * 
      */
     protected $accept;

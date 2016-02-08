@@ -41,7 +41,7 @@ class RegistrationController extends BaseRegistrationController
             return $event->getResponse();
         }
 
-        $form = $formFactory->createForm();
+        $form = $formFactory->createForm();        
         $form->setData($user);
 
         $form->handleRequest($request);
