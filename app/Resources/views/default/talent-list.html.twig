@@ -2,9 +2,13 @@
     <a class="text-black" href="{{ path('catchall', { 'content': tal.urlPath }) }}">
         <div class="col-md-4">
             {% if tal.images|length > 0 %}
+                <div style="height: 268px; overflow: hidden;">
                 <img src="{{ tal.images[0].urlPath(image_url_prefix) }}" alt="placeholder"/>
+                </div>
             {% else %}
+                <div style="height: 268px; overflow: hidden;">
                 <img src="/img/equipment-default.jpg" alt="placeholder"/>
+                </div>
             {% endif %}
             {#
             {% if tal.activeDiscount %}
@@ -14,7 +18,7 @@
             <div class="product-info position-relative">
                 <div class="row">
                     <div class="col-xs-7">
-                        {{ include('common/stars.html.twig', { rating: tal.rating }) }}
+                        {#{{ include('common/stars.html.twig', { rating: tal.rating }) }}#}
                         <p class="product-name">
                             {{ tal.name }}
                         </p>
@@ -24,7 +28,7 @@
                             {{ "%.2f"|format(tal.activePrice) }} &#8364;
                         </p>
                         <p class="tag">
-                            pro tag
+                            pro stunde
                         </p>
                     </div>
                 </div>
