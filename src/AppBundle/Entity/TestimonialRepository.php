@@ -47,14 +47,16 @@ class TestimonialRepository extends EntityRepository
         return $q->getResult();        
     }
     
-    public function getForMainPage($maxResults) {
+    public function getForMainPage($type, $maxResults = 0) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
         $qb->select('t')
             ->from('AppBundle:Testimonial', 't')
+            ->where('t.type = :type')
             ->orderBy("t.position");
        
-        $q = $qb->getQuery();
+        $q = $qb->getQuery()
+                ->setParameter(':type', $type);
         // page and page size
         
         if ($maxResults != 0)
