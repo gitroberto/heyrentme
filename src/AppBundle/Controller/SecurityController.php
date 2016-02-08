@@ -62,33 +62,76 @@ class SecurityController extends BaseSecurityController
         if ($user != "anon." ){           
             return $this->userIsLoggedAction();
         }
-
+        
+        $message = null;
+        if ($session->has('logged_out_message')) {
+            $message = $session->get('logged_out_message');            
+            $session->set('logged_out_message', null);            
+        }
+        
         return $this->renderLogin(array(
             'last_username' => $lastUsername,
             'error' => $error,
             'csrf_token' => $csrfToken,
+            'message' => $message
         ));
     }
+    
+     /**
+     * @Route("/loggedInFace", name="loggedInFace")
+     */
+    public function loggedInFaceAction(Request $request){
+        $user = $this->getUser();
+        $session = $request->getSession();
+        if ($session->has('logged_out_message')) {
+            $session->set('logged_out_message', null);
+        }
+        
+        if ($user && $user->getStatus() != User::STATUS_OK){        
+            $message = $this->getMessage($user);            
+            $session->set('logged_out_message', $message);            
+            $this->removeAuthenticationToken();
+            $url = $this->generateUrl('rentme');
+            return $this->redirect( $url.'?login');
+        }                    
+        return $this->redirectToRoute("profil");
+        
+    }
+    
+    public function getMessage($user) {
+        $message = "Something went wrong";
+        if ($user->getStatus() == User::STATUS_BLOCKED){
+            $message = "Your user was blocked.";
+        } else {
+            $message = "Your user was deleted.";
+        }
+        return $message;
+    }
+    
+    
+    public function removeAuthenticationToken() {
+        $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());            
+        if (interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
+            $tokenStorage = $this->get('security.token_storage');
+        } else {
+            $tokenStorage = $this->get('security.context');
+        }            
+        $tokenStorage->setToken($anonToken);
+    }
+    
      /**
      * @Route("/loggedIn", name="loggedin")
      */
     public function userIsLoggedAction(){
         $user = $this->getUser();
-//        if ($user && $user->getStatus() != User::STATUS_OK){
-//            $message = "Something went wrong";
-//            if ($user->getStatus() == User::STATUS_BLOCKED){
-//                $message = "Your user is blocked.";
-//            } else {
-//                $message = "Your user was deleted.";
-//            }
-//            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
-//            $this->get('security.context')->setToken($anonToken);
-//            
-//            $targetUrl = $this->getTargetUrlFromSession();
-//            $response = new Response(json_encode("User_Is_Not_Logged;".$mesage));
-//            $response->headers->set('Content-Type', 'application/json');
-//            return $response;
-//        }
+        if ($user && $user->getStatus() != User::STATUS_OK){
+            $message = $this->getMessage($user);            
+            $this->removeAuthenticationToken();
+                        
+            $response = new Response(json_encode("User_Is_Not_Logged;".$message));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
         
         $targetUrl = $this->getTargetUrlFromSession();
         $response = new Response(json_encode("User_Is_Logged;".$targetUrl));
@@ -104,11 +147,14 @@ class SecurityController extends BaseSecurityController
         } else {
             $tokenStorage = $this->get('security.context');
         }
-
-        $key = sprintf('_security.%s.target_path', $tokenStorage->getToken()->getProviderKey());
-
-        if ($this->get('session')->has($key)) {
-            return $this->get('session')->get($key);
+        
+        $token = $tokenStorage->getToken();
+        
+        if ($token){
+            $key = sprintf('_security.%s.target_path', $token->getProviderKey());
+            if ($this->get('session')->has($key)) {
+                return $this->get('session')->get($key);
+            }
         }
     }
 }
