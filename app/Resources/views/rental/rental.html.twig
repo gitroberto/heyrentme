@@ -46,7 +46,7 @@
     </div>
   </header>
   <div class="container margin-bot">
-  {{ render(controller('AppBundle:Common:categoryList', { 'mobile': true })) }}
+  {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT'), 'mobile': true })) }}
 </div>
   <section class="main-categories main-offers">
     <div class="container background-white rent-container">
