@@ -75,7 +75,7 @@
                     {% endif %}
               </div>
 
-              <iframe id="player" src="{{ item.video.embedUrl }}"></iframe>
+              <iframe id="player" {% if item.video %}src="{{ item.video.embedUrl }}"{% endif %}></iframe>
               <div class="media-list" id="media-list">
                     {% if item.video %}
                         <span class="media-img">
@@ -349,12 +349,12 @@
                         <p>{{ item.timeAsString }}</p>
                     </div>
                     {% if item.optClient > 0 %}
-                        <div class="user-tab cal">
+                        <div class="user-tab">
                             <p>Treffpunkt beim Kunden</p>
                         </div>
                     {% endif %}
                     {% if item.optGroup > 0 %}
-                        <div class="user-tab cal">
+                        <div class="user-tab">
                             <p>Gruppenstunden</p>
                         </div>
                     {% endif %}

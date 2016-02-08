@@ -147,10 +147,14 @@
         // load categories
         var url = '{{ path('cat', { 'type': 'XXX' }) }}'.replace('XXX', type.toString());           
         var $sel = $("#category-dropdown");
+        var $subsel = $("#subcategory-dropdown");
         $.getJSON(url)
             .done(function(json) {
                 $sel.empty();
                 $sel.attr('disabled', 'disabled').selectpicker('refresh');
+                $subsel.empty();
+                $subsel.attr('disabled', 'disabled').selectpicker('refresh');
+        
                 $.each(json, function(index, item) {
                     var opt = $("<option>").attr('value', item.id).text(item.name);                   
                     $sel.append(opt);

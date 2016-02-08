@@ -114,14 +114,9 @@ class RentalController extends BaseController {
      */
     public function guidelinesAction(Request $request, $subcategoryId) {
         $user = $this->getUser();
-        $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+        $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);        
         
-        if ($subcat->getCategory()->getType() === Category::TYPE_EQUIPMENT) {
-            $this->sendEquipmentGuideEmail($request, $user->getEmail());
-        }
-        else {
-            $this->sendTalentGuideEmail($request, $user->getEmail());
-        }
+        $this->sendGuidelinesEmail($request, $user->getEmail(), $subcat->getCategory()->getType());
                 
         return new JsonResponse(array('status' => 'ok'));
     }
