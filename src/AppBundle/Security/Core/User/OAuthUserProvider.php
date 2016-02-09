@@ -21,6 +21,11 @@ class OAuthUserProvider extends BaseClass
         $socialID = $response->getUsername();
         $user = $this->userManager->findUserBy(array($this->getProperty($response)=>$socialID));
         $email = $response->getEmail();
+        
+        $data = $response->getResponse();
+        $user->setName($data['first_name']);
+        $user->setSurname($data['last_name']);
+        
         //check if the user already has the corresponding social account
         if (null === $user) {
             //check if the user has a normal account
@@ -56,6 +61,7 @@ class OAuthUserProvider extends BaseClass
             //and then login the user
             $checker = new UserChecker();
             $checker->checkPreAuth($user);
+            // update name
         }
 
         return $user;

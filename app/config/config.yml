@@ -120,12 +120,16 @@ hwi_oauth:
             type:                facebook
             client_id:           %facebook_client_id%
             client_secret:       %facebook_client_secret%
-            scope:               "email, public_profile"
-            infos_url:           "https://graph.facebook.com/me?fields=id,name,email,picture.type(large)"
+            scope:               "email, public_profile, basic_info"
+            infos_url:           "https://graph.facebook.com/me?fields=id,name,first_name,last_name,email,picture.type(large)"
             paths:
                 email: email
+                firstname: first_name
+                lastname: last_name
             options:
                 display: page
+    http_client:
+        verify_peer: false
         #google:
         #    type:                google
         #    client_id:           %google_client_id%
