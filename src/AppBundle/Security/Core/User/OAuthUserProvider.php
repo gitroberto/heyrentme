@@ -23,8 +23,6 @@ class OAuthUserProvider extends BaseClass
         $email = $response->getEmail();
         
         $data = $response->getResponse();
-        $user->setName($data['first_name']);
-        $user->setSurname($data['last_name']);
         
         //check if the user already has the corresponding social account
         if (null === $user) {
@@ -39,6 +37,8 @@ class OAuthUserProvider extends BaseClass
                 #facebook don't provide username param, email used;
                 $user->setUsername($email);
                 $user->setEnabled(true);
+                $user->setName($data['first_name']);
+                $user->setSurname($data['last_name']);
                 $isNewUser = true;                
 
             }
@@ -62,6 +62,8 @@ class OAuthUserProvider extends BaseClass
             $checker = new UserChecker();
             $checker->checkPreAuth($user);
             // update name
+            $user->setName($data['first_name']);
+            $user->setSurname($data['last_name']);
         }
 
         return $user;
