@@ -6,7 +6,7 @@
         {% endfor %}
     {% else %}
         <option value="{{ path('bookme') }}">TALENT KATEGORIEN</option>
-        {% for cat in cats2 %}
+        {% for cat in cats1 %}
             <option value="{{ path('catchall', { 'content': cat.slug }) }}">{{ cat.name }}</option>
         {% endfor %}
     {% endif %}
