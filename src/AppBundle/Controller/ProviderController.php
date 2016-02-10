@@ -780,11 +780,8 @@ class ProviderController extends BaseController {
     public function equipmentImageAction(Request $request) {  
         // todo: check security
         // todo: validate jpg/png
-        $log = $this->get('monolog.logger.artur');
-        $log->info('ei');
         $file = $request->files->get('upl');
         if ($file->isValid()) {
-            $log->info('is valid');
             $uuid = Utils::getUuid();
             $path = 
                 $this->getParameter('image_storage_dir') .
@@ -796,16 +793,13 @@ class ProviderController extends BaseController {
             $filename = $path . DIRECTORY_SEPARATOR . $name;
 
             $file->move($path, $name);
-            $log->info($filename);
 
             $msg = null;
 
             $size = getimagesize($filename);
-            $log->info("{$size[0]} x {$size[1]}");
             if ($size[0] < 1024 || $size[1] < 768) {
                 $msg = "The uploaded image ({$size[0]} x {$size[1]}) is smaller than required 1024 x 768";
             }
-            $log->info($file->getClientSize());
             if ($file->getClientSize() > 10 * 1024 * 1024) {
                 $msg = 'The uploaded image is larger than allowed 10 MB';
             }
