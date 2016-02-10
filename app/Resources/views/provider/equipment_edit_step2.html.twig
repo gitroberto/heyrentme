@@ -245,7 +245,8 @@
                 <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
               </div>
               <div class="modal-body">
-                
+                  <div class="image" style="width: 600px; height: 400px; overflow: hidden;">
+                  </div>
               </div>
               <div class="modal-footer">
                   <button class="save button-black backgound-yellow text-black">save</button>
@@ -299,7 +300,7 @@
             }
         }
         function delayJcrop() {
-            window.setTimeout(setupJcrop, 2000);
+            window.setTimeout(setupJcrop, 0);
         }
         function setupJcrop() {
                         $("#cropper-modal .modal-body img").Jcrop({ 
@@ -436,9 +437,9 @@
                     
                     var ih = Math.round(h * 600.0 / w);
                     
-                    var $img = $("<img>").one('load', delayJcrop).css({ 'max-width': '600px', 'max-height': ih + 'px' }).attr('src', url).data('name', name);
-                    $("#cropper-modal .modal-body").empty();
-                    $("#cropper-modal .modal-body").append($img);
+                    var $img = $("<img>").one('load', delayJcrop).attr('src', url).data('name', name);
+                    $("#cropper-modal .image").empty();
+                    $("#cropper-modal .image").append($img);
                     $("#cropper-modal").modal();
                     
                     
