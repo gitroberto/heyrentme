@@ -14,7 +14,7 @@
                 <li><a href="{{ path('catchall', { 'content': item.urlPath }) }}" class="active-crumb">{{ item.name }}</a></li>
             </ul>
             <ul class="col-xs-5 pull-right text-right kaup-select">
-                {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
+                {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_TALENT') })) }}
                 <li id="kategorie-select"><a class="active-crumb haup-ico" href="#">Hauptkategorien &nbsp;&nbsp;&nbsp;</a></li>
                 <li>                    
                     <a class="active-crumb" 

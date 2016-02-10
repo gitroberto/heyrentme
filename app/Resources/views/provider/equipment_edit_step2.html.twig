@@ -245,7 +245,8 @@
                 <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
               </div>
               <div class="modal-body">
-                
+                  <div class="image" style="width: 600px; height: 400px; overflow: hidden;">
+                  </div>
               </div>
               <div class="modal-footer">
                   <button class="save button-black backgound-yellow text-black">save</button>
@@ -268,6 +269,10 @@
 
     <script>
         var jcropApi = null;
+        
+        function showCoords(c) {
+            console.log(Math.round(c.x) + ', ' + Math.round(c.y) + ', ' + Math.round(c.x2) + ', ' + Math.round(c.y2) + ', ' + Math.round(c.w) + ', ' + Math.round(c.h));
+        }
         
         function deleteImage(e) {
             e.preventDefault();
@@ -293,6 +298,23 @@
             else {
                 $("#drop").removeClass('disabled');
             }
+        }
+        function delayJcrop() {
+            window.setTimeout(setupJcrop, 0);
+        }
+        function setupJcrop() {
+                        $("#cropper-modal .modal-body img").Jcrop({ 
+                            aspectRatio: 4.0 / 3.0,
+                            //minSize: [1024, 768],
+                            boxWidth: 600,
+                            boxHeight: 400,
+                            keySupport: false,
+                            setSelect: [0, 0, 1024, 768],
+                            onSelect: showCoords,
+                            onChange: showCoords
+                        }, function() {
+                            jcropApi = this;
+                        });
         }
         
         $(function() {
@@ -395,6 +417,7 @@
 
                     // Calculate the completion percentage of the upload
                     var progress = parseInt(data.loaded / data.total * 100, 10);
+                    console.log(progress);
 
                     // Update the hidden input field and trigger a change
                     // so that the jQuery knob plugin knows to update the dial
@@ -407,25 +430,18 @@
 
                 done: function(e, data) {
                     var url = data.result.url;
-                    var name = data.result.name;                    
+                    var name = data.result.name;
+                    var w = data.result.width;
+                    var h = data.result.height;
                     
-                    $("#cropper-modal .modal-body").empty();
-                    $("#cropper-modal .modal-body").append(
-                        $("<img>").css({ 'max-width': '600px' }).attr('src', url).data('name', name)
-                    );
+                    
+                    var ih = Math.round(h * 600.0 / w);
+                    
+                    var $img = $("<img>").one('load', delayJcrop).attr('src', url).data('name', name);
+                    $("#cropper-modal .image").empty();
+                    $("#cropper-modal .image").append($img);
                     $("#cropper-modal").modal();
                     
-                    
-                    $("#cropper-modal .modal-body img").Jcrop({ 
-                        aspectRatio: 4.0 / 3.0,
-                        minSize: [1024, 768],
-                        boxWidth: 600,
-                        boxHeight: 400,
-                        keySupport: false,
-                        setSelect: [0, 0, 1024, 768]
-                    }, function() {
-                        jcropApi = this;
-                    });
                     
                     // remove progress li
                     $("#upload li.working").remove();                    
