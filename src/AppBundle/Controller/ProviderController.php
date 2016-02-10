@@ -1064,11 +1064,93 @@ class ProviderController extends BaseController {
             throw $this->createNotFoundException();
         }  
         
+        $sql = "
+    delete ebc
+    from equipment_booking_cancel ebc
+        inner join equipment_booking eb on ebc.booking_id = eb.id
+        inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+        inner join equipment e
+    where e.user_id = ". $user->getId() .";
+
+    delete er
+    from equipment_rating er
+        inner join equipment_booking eb on er.booking_id = eb.id
+        inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+        inner join equipment e
+    where e.user_id = ". $user->getId() ." or ei.user_id;
+
+    delete eb
+    from equipment_booking eb
+        inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+        inner join equipment e on ei.equipment_id = e.id
+    where e.user_id = ". $user->getId() ." or ei.user_id =" . $user->getId() .";
+    
+    delete ei
+    from equipment_inquiry ei
+        inner join equipment e on ei.equipment_id = e.id
+    where e.user_id = ". $user->getId() ." or ei.user_id = ". $user->getId() .";
+    
+    delete ei
+    from equipment_image ei
+        inner join equipment e on ei.equipment_id = e.id
+    where e.user_id = ". $user->getId() .";
+    
+    delete er
+    from equipment_rating er
+        inner join equipment e on er.equipment_id = e.id
+    where e.user_id = ". $user->getId() .";
+    
+    delete from equipment where user_id = ". $user->getId() .";
+    
+    delete ebc
+    from talent_booking_cancel ebc
+        inner join talent_booking eb on ebc.talent_booking_id = eb.id
+        inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+        inner join talent e
+    where e.user_id = ". $user->getId() ." or ei.user_id = ". $user->getId() .";
+    
+    delete er
+    from talent_rating er
+        inner join talent_booking eb on er.booking_id = eb.id
+        inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+        inner join talent e
+    where e.user_id = ". $user->getId() ." or ei.user_id = ". $user->getId() .";
+    
+    delete eb
+    from talent_booking eb
+        inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+        inner join talent e on ei.talent_id = e.id
+    where e.user_id = ". $user->getId() ." or ei.user_id = ". $user->getId() .";
+    
+    delete ei
+    from talent_inquiry ei
+        inner join talent e on ei.talent_id = e.id
+    where e.user_id = ". $user->getId() ." or ei.user_id = ". $user->getId() .";
+    
+    delete ei
+    from talent_image ei
+        inner join talent e on ei.talent_id = e.id
+    where e.user_id = ". $user->getId() .";
+    
+    delete er
+    from talent_rating er
+        inner join talent e on er.talent_id = e.id
+    where e.user_id = ". $user->getId() .";
+    
+    delete from talent where user_id = ". $user->getId() .";
+    
+    delete from equipment_booking_cancel where user_id = ". $user->getId() .";
+    delete from talent_booking_cancel where user_id = ". $user->getId() .";
+    delete from equipment_inquiry where user_id = ". $user->getId() .";
+    delete from talent_inquiry where user_id = ". $user->getId() .";
+    delete from discount_code where user_id = ". $user->getId() .";
+    delete from user_rating where user_id = ". $user->getId() .";
+    delete from fos_user where id = ". $user->getId() .";";
+        
         $em = $this->getDoctrine()->getEntityManager();
         $conn = $em->getConnection();
-        $sp = $connection->prepare(sprintf("CALL wipeUser(%s)", $user->getId()));
-        $sp->execute();                
-        $em->flush();
+        $conn->executeUpdate($sql);        
+        
         
         return $this->redirectToRoute("fos_user_security_logout");
     }

@@ -19,6 +19,46 @@ class DefaultController extends BaseController {
         return $this->render('default/index.html.twig');
     }
     
+    
+    /**
+     * 
+     * @Route("equipment/report/{equipmentId}", name="reportEquipment")
+     */
+    public function reportEquipmentAction(Request $request, $equipmentId) {
+        $equipmentReport = new EquipmentReport();
+        
+        $form = $this->createFormBuilder($equipmentReport)
+                ->add('report', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 100))
+                    )
+                ))
+                ->add('message', 'textarea', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 500))
+                    )
+                ))->getForm();
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $equipment = $this->getDoctrineRepo('AppBundle:Equipment')->find($equipmentId);
+            $equipmentReport->setEquipment($equipment);
+                    
+            $em->persist($equipmentReport);
+            $em->flush();
+            
+            return $this->render('default/equipment_report.html.twig');
+        }
+        
+        return $this->render('default/equipment_report.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
      
     /**
      * @Route("/equipment/{token}", name="rentme")
