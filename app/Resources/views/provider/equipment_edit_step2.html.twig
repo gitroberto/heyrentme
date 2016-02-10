@@ -407,20 +407,25 @@
 
                 done: function(e, data) {
                     var url = data.result.url;
-                    var name = data.result.name;                    
+                    var name = data.result.name;
+                    var w = data.result.width;
+                    var h = data.result.height;
+                    
+                    
+                    var ih = Math.round(h * 600.0 / w);
                     
                     var $img = $("<img>").one('load', function() {
                         $("#cropper-modal .modal-body img").Jcrop({ 
                             aspectRatio: 4.0 / 3.0,
                             minSize: [1024, 768],
                             boxWidth: 600,
-                            boxHeight: 400,
+                            boxHeight: ih,
                             keySupport: false,
                             setSelect: [0, 0, 1024, 768]
                         }, function() {
                             jcropApi = this;
                         });
-                    }).css({ 'max-width': '600px' }).attr('src', url).data('name', name);
+                    }).css({ 'width': '600px', 'height': ih + 'px' }).attr('src', url).data('name', name);
                     $("#cropper-modal .modal-body").empty();
                     $("#cropper-modal .modal-body").append($img);
                     $("#cropper-modal").modal();

@@ -808,12 +808,14 @@ class ProviderController extends BaseController {
                 unlink($filename);
                 $resp = array('message' => $msg);
                 return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
-            }
+            }            
 
             $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
             $resp = array(
                 'url' => $url,
-                'name' => $name
+                'name' => $name,
+                'width' => $size[0],
+                'height' => $size[1]
             );
             return new JsonResponse($resp);
         }
