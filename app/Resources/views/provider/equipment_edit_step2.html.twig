@@ -269,6 +269,10 @@
     <script>
         var jcropApi = null;
         
+        function showCoords(c) {
+            console.log(Math.round(c.x) + ', ' + Math.round(c.y) + ', ' + Math.round(c.x2) + ', ' + Math.round(c.y2) + ', ' + Math.round(c.w) + ', ' + Math.round(c.h));
+        }
+        
         function deleteImage(e) {
             e.preventDefault();
             
@@ -395,6 +399,7 @@
 
                     // Calculate the completion percentage of the upload
                     var progress = parseInt(data.loaded / data.total * 100, 10);
+                    console.log(progress);
 
                     // Update the hidden input field and trigger a change
                     // so that the jQuery knob plugin knows to update the dial
@@ -417,15 +422,17 @@
                     var $img = $("<img>").one('load', function() {
                         $("#cropper-modal .modal-body img").Jcrop({ 
                             aspectRatio: 4.0 / 3.0,
-                            minSize: [1024, 768],
+                            //minSize: [1024, 768],
                             boxWidth: 600,
                             boxHeight: ih,
                             keySupport: false,
-                            setSelect: [0, 0, 1024, 768]
+                            setSelect: [0, 0, 1024, 768],
+                            onSelect: showCoords,
+                            onChange: showCoords
                         }, function() {
                             jcropApi = this;
                         });
-                    }).css({ 'width': '600px', 'height': ih + 'px' }).attr('src', url).data('name', name);
+                    }).css({ 'max-width': '600px', 'max-height': ih + 'px' }).attr('src', url).data('name', name);
                     $("#cropper-modal .modal-body").empty();
                     $("#cropper-modal .modal-body").append($img);
                     $("#cropper-modal").modal();
