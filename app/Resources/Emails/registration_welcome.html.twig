@@ -1,82 +1,64 @@
-
-{% block body_html %}
 <!doctype html>
 <html style="overflow-x: hidden;max-width: 600px;margin: 0 auto;">
 <head>
     <meta charset="utf-8">
-    <title>Dokument bez tytułu</title>
+    <title>Willkommen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/rentme/mail.css"/>
 </head>
+<body style="background-color:#f9f9f9;margin: 0;overflow-x: hidden;max-width: 600px;margin: 0 auto;" >
 
-<body style="background-color:#f9f9f9;margin: 0;overflow-x: hidden;max-width: 600px;margin: 0 auto;" class="mail1">
-
-<table style="background-color: #000000;width: 100%;">
+<table  style="background-color: #000000;width: 100%;">
     <tr style="height: 30px;width: 100%;max-width: 600px;">
         <td>
-            <p class="paddin" style="color: white;color: white;width: 100%;max-width: 640px;margin: 0 auto;padding-left: 36px;font-size: 13px;font-family: helvetica, arial;padding-left: 92px;">Du hast eine Buchungsanfrage erhalten</p>
+            <p style="color: white;color: white;width: 100%;max-width: 640px;margin: 0 auto;padding-left: 36px;font-size: 13px;font-family: helvetica, arial;padding-left: 15px;">Neuigkeiten von hey! Vienna - <a style="color:white" href="#">Email im Browser öffnen</a></p>
         </td>
     </tr>
 </table>
 
-<table border="0" style="margin:0 auto;background-color:#fdfdfd;border:1px solid #f2f2f2;border-top: none;width: 100%;max-width: 600px;">
-    <tr style="height:200px">
-        <td class="td-img"><img style="width:100%;margin-top: -5px;" src="{{ mailer_app_url_prefix }}/img/mail/mail.jpg" class="img-header" alt="rent me !"/></td>
+<table border="0" style="border-spacing:0;width: 100%;max-width: 600px;background-color:#fdfdfd;">
+<tr>
+        <td><img style="width:100%;margin-top: -1px;" src="{{ mailer_app_url_prefix }}/img/mail/mail.jpg" alt="hey! Vienna"/></td>
     </tr>
     <tr>
         <td style="padding: 20px;padding-top: 0px;padding-bottom: 0px;">
-            <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 0px;" class="page-title">Willkommen bei</h1>
-            <p style="font-family: helvetica, arial;font-weight: 400;font-size: 24px;margin-top: 10px;">bei hey! - The Sharing Community</p>
-            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 24px;margin-top: 10px;font-weight: bold;font-size: 15px;">Angebote buchen leicht gemacht!</p>
-            <p style="font-family: helvetica, arial;font-size: 15px;">Bei uns gibt es ein paar Dinge die du beachten solltest. Heute erhältst du die erste von drei E-Mails, die dich Schritt für Schritt in die hey! The Sharing Community Welt einführen werden.</p>
-            {% if discountCode %}
-                <p style="margin: 0px;margin-bottom: 3px;line-height: 22px; font-size: 15px;">
-                    Startrabatt Code: <span style="font-weight: bold; font-size: 15px;">{{ discountCode.code }}</span>
-                </p>
-            {% endif %}
-            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 24px;font-weight: bold;font-size: 15px;margin-top: 50px;margin-bottom: 40px;">Los geht´s!</p>
+            <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 0px;" class="page-title">Willkommen bei hey! VIENNA</h1>
+            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 24px;margin-top: 25px;font-weight: bold;font-size: 15px;">Angebote buchen leicht gemacht!</p>
+            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;margin-top:-10px;">Bei uns gibt es ein paar Dinge die du beachten solltest. Heute erhältst du die erste von drei E-Mails, die dich Schritt für Schritt bei hey! VIENNA einführen werden.</p>    
         </td>
     </tr>
 
 
 
-
-    <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 36px;">
+    {% if discountCode %}
+    <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 20px;">
         <td style="vertical-align: top;">
-            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon1.png" alt="rent me !"/>
+            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon5.png" alt="hey! Vienna"/>
         </td>
-        <td style="font-family: helvetica, arial;">
-            <p style="font-weight: bold;margin-bottom: 13px;font-size: 20px;">Frage dein gewünschtes Service oder <br>Equipment früh genug an </p>
-            <p style="margin: 0px;margin-bottom: 3px;line-height: 22px;">Sichere dir das Angebot, indem du die Anbieter frühzeitig kontaktierst. Denke immer daran, dass auch sie ihren Alltag planen müssen.</p>
+        <td style="font-family: helvetica, arial;padding-right:20px">
+            <p style="font-weight: bold;margin-bottom: 13px;font-size: 18px;">Nutze deine 5,-€ Startrabatt!</p>
+            <p style="margin: 0px;margin-bottom: 3px;font-weight: 100;font-size: 15px;line-height: 22px;">Für deine erste Buchung gibt es 5,-€ Startrabatt. Füge dazu einfach diesen Code in dem Feld Rabattcode ein: <span style="font-weight: bold;">{{ discountCode.code }}</span></p>
         </td>
     </tr>
+    {% endif %}
 
-
-
-
-
-    <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 36px;">
+ <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 20px;">
         <td style="vertical-align: top;">
-            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon2.png" alt="rent me !"/>
+            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon1.png" alt="hey! Vienna"/>
         </td>
-        <td style="font-family: helvetica, arial;">
-            <p style="font-weight: bold;margin-bottom:13px;font-size: 20px;">Schick mehrere Anfragen</p>
-            <p style="margin: 0px;margin-bottom: 3px;line-height: 22px;">Frage mehrere Vermieter parallel an. Bei 3 angefragten Angeboten der selben Kategorie erhöht sich deine Zusagewahrscheinlichkeit auf 90%! Hast du eines deiner angefragten Angebote in einer bestimmten Kategorie gebucht, werden alle offenen Anfragen automatisch abgesagt.</p>
+        <td style="font-family: helvetica, arial;padding-right:20px">
+            <p style="font-weight: bold;margin-bottom: 13px;font-size: 18px;">Frage deinen Wunsch-Service oder <br>- Equipment früh genug an</p>
+            <p style="margin: 0px;margin-bottom: 3px;font-weight: 100;font-size: 15px;line-height: 22px;">Sichere dir das Angebot, indem du die Anbieter frühzeitig kontaktierst. Denke immer daran, dass auch sie ihren Alltag planen müssen.</p>
         </td>
     </tr>
 
 
-
-
-
-    <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 36px;">
+    <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 20px;">
         <td style="vertical-align: top;">
-            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon2.png" alt="rent me !"/>
+            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon2.png" alt="hey! Vienna"/>
         </td>
-        <td style="font-family: helvetica, arial;">
-            <p style="font-weight: bold;margin-bottom: 13px;font-size: 20px;">Bewirb dich um dein Wunschangebot</p>
-            <p style="margin: 0px;margin-bottom: 3px;line-height: 22px;">Möchtest du etwas ganz bestimmtes damit erleben? Oder brauchst du das das Angebot für einen bestimmten Anlass? Schicke dem Anbeiter ein paar nette Worte zu deiner Anfrage. Reagiere schnell auf Zusagen, denn erst mit der Bezahlung ist das Angebot für
-                dich reserviert.</p>
+        <td style="font-family: helvetica, arial;padding-right:20px">
+            <p style="font-weight: bold;margin-bottom:13px;font-size: 18px;">Schick mehrere Anfragen</p>
+            <p style="margin: 0px;margin-bottom: 3px;font-weight: 100;font-size: 15px;line-height: 22px;">Frage mehrere Vermieter parallel an. Bei 3 angefragten Angeboten der selben Kategorie erhöht sich deine Zusagewahrscheinlichkeit auf 90%!</p>
         </td>
     </tr>
 
@@ -84,73 +66,63 @@
 
 
 
-    <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 36px;">
+    <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 20px;">
         <td style="vertical-align: top;">
-            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon3.png" alt="rent me !"/>
+            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon6.png" alt="hey! Vienna"/>
         </td>
-        <td style="font-family: helvetica, arial;">
-            <p style="font-weight: bold;margin-bottom: 13px;font-size: 20px;">Ein Bild sagt mehr als tausend Worte</p>
-            <p style="margin: 0px;margin-bottom: 3px;line-height: 22px;">Zeige den Vermietern ein Gesicht hinter den Nachrichten. Denn was schafft mehr Vertrauen als ein nettes Lächeln? Prüfe bitte auch deine Daten, denn nur bei korrekten Angaben kann die <a style="color: black;" href="#">hey! The Sharing Community Garantie</a> gewährleistet werden.</p>
+        <td style="font-family: helvetica, arial;padding-right:20px">
+            <p style="font-weight: bold;margin-bottom: 13px;font-size: 18px;">Bewirb dich um dein Wunschangebot</p>
+            <p style="margin: 0px;margin-bottom: 3px;font-weight: 100;font-size: 15px;line-height: 22px;">Möchtest du etwas ganz bestimmtes damit erleben? Oder brauchst du das das Angebot für einen bestimmten Anlass? Schicke dem Anbeiter ein paar nette Worte zu deiner Anfrage. Reagiere schnell auf Zusagen, denn erst mit der Bezahlung ist das Angebot für dich reserviert.</p>
         </td>
     </tr>
-
-
-
 
 
 
     <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;">
         <td style="vertical-align: top;">
-            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon4.png" alt="rent me !"/>
+            <img style="margin-left: 25px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/icon4.png" alt="hey! Vienna"/>
         </td>
-        <td style="font-family: helvetica, arial;">
-            <p style="font-weight: bold;margin-bottom: 7px;font-size: 20px;">Sage ab, wenn du das Angebot doch nicht buchen möchtest</p>
-            <p style="margin: 0px;margin-bottom: 3px;line-height: 22px;">Wenn du weißt, dass du das angefragte Angebot doch nicht  brauchst, kannst du deine Zusage in deinem hey! The Sharing Community Profil ablehnen. Hast du die Buchung schon bezahlt, kannst du die Buchung in “Mein Bereich” stornieren. Bitte beachte hierzu die <a style="color: black;" href="#">Stornierungsinfos.</a> </p>
+        <td style="font-family: helvetica, arial;padding-right:20px">
+            <p style="font-weight: bold;margin-bottom: 7px;font-size: 18px;">Sage rechtzeitig ab, wenn du das Angebot doch nicht buchen möchtest</p>
+            <p style="margin: 0px;margin-bottom: 3px;font-weight: 100;font-size: 15px;line-height: 22px;">Hast du die Buchung bereits durchgeführt, kannst du 24 Stunden vor Buchungsbeginn stornieren.
         </td>
     </tr>
 
     <tr>
         <td>
-            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 24px;margin-top: 50px;font-weight: bold;font-size: 15px;margin-left: 20px;">Das waren unsere Tipps für heute!</p>
-            <p style="font-family: helvetica, arial;font-size: 24px;margin-top: 10px;font-size: 15px;margin-left: 20px;">Morgen verraten wir dir die wichtigsten Infos zur Handhabung bei gemieteten Equipment.</p>
+           <p style="font-family: helvetica, arial;font-weight: 100;margin-top: 30px;font-weight: bold;font-size: 15px;margin-left: 20px;">Das waren unsere Tipps für heute!</p>
+            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;margin-left: 20px;margin-top:-10px;">Morgen verraten wir dir die wichtigsten Infos zur Handhabung bei gemieteten Equipment.</p>
+            
         </td>
 
     </tr>
 
     <tr>
-        <td style="text-align: center;padding-bottom: 15px;">
-            <p style="text-align: center;"><img src="{{ mailer_app_url_prefix }}/img/mail/greetings.png" alt="rent me !"/></p>
-            <a style="margin-right: 10px;margin-top: 13px;display: inline-block;" href="#" class="links"><img src="{{ mailer_app_url_prefix }}/img/mail/app.png" alt="rent me !"/></a>
-            <a style="margin-left: 10px;margin-top: 13px;display: inline-block;" href="#" class="links"><img src="{{ mailer_app_url_prefix }}/img/mail/google.png" alt="rent me !"/></a>
+        <td style="text-align: center;padding-bottom: 15px;"> <p style="text-align: center;"><img src="{{ mailer_app_url_prefix }}/img/mail/greetings.png" alt="hey! Vienna"/></p>
         </td>
     </tr>
 </table>
 
-<table width="100%" style="margin-bottom: 35px;">
+<table width="100%" style="margin-bottom: 20px;">
     <tr>
         <td>
             <p style="text-align: center;font-size: 13px;font-family: helvetica, arial;">**Antworten auf diese automatische System-E-Mail werden nicht gelesen.**</p>
         </td>
     </tr>
 </table>
-
-<table style="background-color: #0e0e0e;width: 100%;margin: 0 auto;padding-top: 10px;padding-bottom: 60px;">
-    <tr style="width: 100%;max-width: 600px;display: block;margin: 0 auto;">
-        <td style="vertical-align: top;">
-            <img style="margin-left: 45px;margin-right: 27px;margin-top: 15px;" src="{{ mailer_app_url_prefix }}/img/mail/logo.png" alt="rent me !"/>
-        </td>
-        <td style="color: #9b9b9b;font-size: 14px;font-family: helvetica, arial;">
-            <p style="font-weight: bold;margin-bottom: 7px;">hey! VIENNA</p>
+<table style="background-color: #0e0e0e;width: 100%;margin: 0 auto;padding-top: 10px;padding-bottom: 20px; text-align:center">
+    <tr>
+         <td style="color: #9b9b9b;font-size: 14px;font-family: helvetica, arial;">
+           <p style="font-weight: bold;margin-bottom: 7px;">hey! VIENNA</p>
             <p style="margin: 0px;margin-bottom: 3px;">ist ein Service der hey! The Sharing Community GmbH</p>
             <p style="margin: 0px;margin-bottom: 3px">Zentagasse 40-42/1/17 - 1050 Wien</p>
-            <p style="margin: 0px;margin-bottom: 22px">0043 664 180 80 21  &nbsp; -  &nbsp; <a style="color: inherit;" href="www.heysharing.com">www.heysharing.com</a></p>
-            <p  style="margin-bottom: 0px;">Geschäftsführer: Robert Ladkani   -   Registergericht: Wien</p>
-            <p  style="margin-top: 0px;">Sitz der Gesellschaft: Wien   -   UID: AT123456789</p>
+            <p style="margin: 0px;margin-bottom: 22px"><a style="color: inherit;" href="http://www.heysharing.com">www.heysharing.com</a></p>
+            <p  style="margin-bottom: 0px; margin-top:0px">Geschäftsführer: Robert Ladkani   -   Registergericht: Wien</p>
+            <p  style="margin-bottom: 0px; margin-top:0px">Sitz der Gesellschaft: Wien   -   UID: ATU 69841139</p>
+            <p  style="margin-bottom: 0px; margin-top:0px">Firmenbuchnummer: 438861i</p>
         </td>
     </tr>
 </table>
 
 </body>
 </html>
-
-{% endblock %}
