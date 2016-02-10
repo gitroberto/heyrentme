@@ -1154,7 +1154,6 @@ class ProviderController extends BaseController {
     delete from fos_user where id = {$id};
 EOT;
         
-        $this->get('monolog.logger.artur')->debug($sql);
         $em = $this->getDoctrine()->getEntityManager();
         $conn = $em->getConnection();
         $conn->executeUpdate($sql);        
