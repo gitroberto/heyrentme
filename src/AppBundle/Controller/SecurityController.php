@@ -103,7 +103,7 @@ class SecurityController extends BaseSecurityController
         if ($user->getStatus() == User::STATUS_BLOCKED){
             $message = "Your user was blocked.";
         } else {
-            $message = "Your user was deleted.";
+            $message = "Invalid credentials";
         }
         return $message;
     }

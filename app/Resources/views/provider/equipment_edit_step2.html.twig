@@ -40,26 +40,37 @@
                   </div>
               </div>
               <div class="upload-form">
+                  {#
                   <form id="upload-once" method="post" action="{{ path('equipment-image') }}" enctype="multipart/form-data">
                       <span class="btn btn-default btn-file">
                          bild hochladen <input type="file">
                        </span>
                   </form>
                   <p class="text-center what-size">Bildgröße bitte mindestens 1024 x 768px im Querformat</p>
+                  #}
                   <form id="upload" method="post" action="{{ path('equipment-image') }}" enctype="multipart/form-data">
                       <div  id="drop">
                           <img class="display-block" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpDN0E2NUJEQjZCRjIxMUU1QjFFM0Q5QUE2OUM0Qzk0OCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpDN0E2NUJEQzZCRjIxMUU1QjFFM0Q5QUE2OUM0Qzk0OCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkM3QTY1QkQ5NkJGMjExRTVCMUUzRDlBQTY5QzRDOTQ4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkM3QTY1QkRBNkJGMjExRTVCMUUzRDlBQTY5QzRDOTQ4Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+iW8uSwAAA/ZJREFUeNrMmVtIVkEQgI9dtZtpJUGSVEZ2pSjLLqIkQkJE2E3QKIqwsofqIaIIJAgkkC5Q0EtKRCARYfYUFGkXq4cQTS2SLDOLErOLaab+zeKcOA6zp909//l14IP+4+7snGl2Z3ZOmOVNwoEkIBVYCMwBpgJjgeHAT+Az0ADUAhXID2sQZDVQhIsHNOkCbgIbgGGhMDYNeGRgqIw6IAsI88NY8V9eEkRjKeXAXFVjVN4wHbiChnPSDTzFhUXcNmIs92FsxwEJwBogGZ9x8gvIA4q9eng/0CPxzksgF5iooS8C2AZUuni90Eu4HJMobQFygrCJ0jGmuTUum+jfJ1F2DYgM4l4ZBRRgKNG1LuooSmZCQig95OOptBFjmhq+S2XyJKCZMXhHCI5T4awOsnaHyqlSxLzt0RAmLZFwesn6lW4bM5GJrRKDhVcCVcA7YIvB/FOM47bLBpeRga0YLjqyBGh36OhB7+nICKCG2PKKO03mMV7eq7lYPBZHASYukzR1pTB6NtNBp8mA93gcqcoU4LVLwmjHKlBHyomOMjqAnhjHNZSPAZ4o1BfCEbEaejPJfFEuRDtDgx5xcRrJ4ZZGYVStkZyE7jYyP1OW/V5oFFtXDSq6uxqhd53MPW/hjlxABj5UVJgPZDNhZv3n2Vp8WRV5QH7/s/UOeZsDCsqigD+SzUY9u1yySRMViyrnnGbb07RObjKoxbsx3mqYcZ+ADOALea5Sxb0lv2PsfzSSt0lRNPogGtvm3CCMR6fj82V4goiEc0HjxkT1jbYw3TofJmsW9SPJM5nRFt7QwzX0xzD6IkTK/EYGTtBQ2qmZMHoRVRnPzO8UcfWV/CHWGjoyjfxutTcDDfaEIWQ0raUbbKOrmUbMUJFV5Heds/4NkHJysoeF3DaijgiHfiC6cpw7us0gwfhtdBpTEw2I8UtkQI2H3kOwjL5B9FRwDcWArKIaBKPnM3fF3dxA2lh8o5kIbGkh+yPKQMc9pkEUwQ3MYLx01mDBrdjLEwXVEYP5uYwdh90m3GaC3yRMRL08zmDeCqZpU8+UCgNkBqZ156ROrIH9ltnMxbhHtRbKktyo1/tosGg9fGTWzddRUsgoEG99wgr+J4edTDtMUIo5RCsbFUvueM+wNvYqs5gGkc19vOVri0gu5yRK+9ATaQaeX2r195+7JbpLZcebjoiU3uVyu27CjJqNsRntyKaR2KLYBJyx+j9vBFwcUYBtsaDIYuC55d+HIlEer/NjhwsP5DHdKC+I4/WkafzqiLhY7gEeezC2HrNlpOlm8yLx2JtIBRYBM5nuUS9enmuxqSg6TFVeFg3zIYTExdj+TPfd6v8U/TuYi/wVYAA4ZEcE2lLOywAAAABJRU5ErkJggg=="/>
                           <a>Bilder hochladen*</a>
-                          <input type="file" name="upl" multiple/>
+                          <input type="file" name="upl"/>
                       </div>
                       <ul>
-                          <!-- The file uploads will be shown here -->
+                            {% for img in equipment.images %}
+                                <li class="thumb">
+                                    <a href="{{ img.urlPath(image_url_prefix) }}" title="öffnen" target="_blank"><img src="{{ img.urlPath(image_url_prefix) }}" alt="öffnen"/></a>
+                                    <br/>
+                                    <a class="remove" href="#" data-id="{{ img.id }}" title="löschen"><img src="/img/icons/delete.png" alt="löschen"/></a>
+                                </li>
+                            {% endfor %}
                       </ul>
                   </form>
                   <p class="how-many">Du kannst 3 Bilder hochladen (maximal 10MB, mindestens 1024 x 768px). Unterstützte Bildformate: jpg, png</p>
-                  <span class="tutorial">tutorial</span>
+                  <a href="{{ path('tutorial-photo') }}" target="_blank"><span class="tutorial">tutorial</span></a>
+                  
+                  
               </div>
-              {{ form_start(form) }}
+
+            {{ form_start(form) }}
               <div class="row">
                   <div class="col-xs-12 border-bottom-white form-head describe">
                       <div class="form-container border-bottom-white">
@@ -178,24 +189,6 @@
               </div>
           </div>
           <div class="col-xs-4">
-              {#
-              <div class="support portfolios videos">
-                  <p class="head">hey! Angebotsvideo</p>
-                  <p class="text-bold">Möchtest du für dein Angebot gerne
-                      ein einzigartiges Portraitvideo?</p>
-                  <p>Nutze unseren hey! Video-Service. Lies unser 
-                      <a href="{{ path("tutorial-video") }}" target="_blank">Video-Tutorial</a>, 
-                      um mehr darüber zu erfahren!</p>
-                  <div id="owl-demo1" class="owl-carousel user-owl">
-                      <div class="item">
-                         <a href="https://vimeo.com/150821780" target="_blank"> <img src="/img/video_service1.jpg" alt=""/></a>                    </div>
-                      <div class="item">
-                          <a href="https://vimeo.com/145892976" target="_blank"> <img src="/img/video_service2.jpg" alt=""/></a>                    </div>
-                      <div class="item">
-                          <a href="https://vimeo.com/148946960" target="_blank"> <img src="/img/video_service3.jpg" alt=""/></a>                     </div>
-                  </div>
-              </div>
-              #}
           </div>
       </div>
   </section>
@@ -245,9 +238,230 @@
           </div>
       </div>
   </div>
+  <div id="cropper-modal" class="modal fade">
+      <div class="modal-dialog">
+          <div class="modal-content" >
+              <div class="modal-header" style="height: 50px;">
+                <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+              </div>
+              <div class="modal-body">
+                
+              </div>
+              <div class="modal-footer">
+                  <button class="save button-black backgound-yellow text-black">save</button>
+              </div>
+            </div>
+      </div>
+  </div>
+{% endblock %}
+
+{% block script %}
   <script src="/js/vendors/upload/jquery.knob.js"></script>
   <script src="/js/vendors/upload/jquery.ui.widget.js"></script>
   <script src="/js/vendors/upload/jquery.iframe-transport.js"></script>
   <script src="/js/vendors/upload/jquery.fileupload.js"></script>
-  <script src="/js/vendors/upload/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.color.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
+  
+  {#<script src="/js/vendors/upload/script.js"></script>#}
+
+    <script>
+        var jcropApi = null;
+        
+        function deleteImage(e) {
+            e.preventDefault();
+            
+            var $this = $(this);
+            var iid = $this.data('id');
+            var url = '{{ path('equipment-image-delete', { 'eid': 'EID', 'iid': 'IID' }) }}'.replace('EID', '{{ equipment.id }}').replace('IID', iid);
+            $.getJSON(url)
+                    .done(function() {
+                        $this.parents('li.thumb').remove();
+                    })
+                    .fail(function() {
+                        alert('Error while remove the image. Please try again.')
+                    })
+                    .always(function() {
+                        refreshCtrl();
+                    });
+        }
+        function refreshCtrl() {
+            if ($("#upload ul li").length >= 3) {
+                $("#drop").addClass('disabled');
+            }
+            else {
+                $("#drop").removeClass('disabled');
+            }
+        }
+        
+        $(function() {
+            var ul = $('#upload ul');
+            refreshCtrl();
+        
+            $("li.thumb a.remove").click(deleteImage);
+            
+            $('#drop a').click(function(){
+                if ($("#upload ul li").length >= 3)
+                    return;
+                // Simulate a click on the file input button
+                // to show the file browser dialog
+                $(this).parent().find('input').click();
+            });
+            
+            $("#cropper-modal .save").click(function() {
+                var rect = jcropApi.tellSelect();
+                var name = $("#cropper-modal .modal-body img").data('name');
+                var url = '{{ path('equipment-image-save') }}';
+                var params = {
+                    'name': name,
+                    'x': Math.round(rect.x),
+                    'x2': Math.round(rect.x2),
+                    'y': Math.round(rect.y),
+                    'y2': Math.round(rect.y2),
+                    'id': {{ equipment.id }}
+                };
+                $.getJSON(url, params)
+                    .done(function(data) {
+                        $("#cropper-modal").modal('hide');
+                        
+                        var url = data.url;
+                        var imgId = data.imgId;
+                        var tmpl = '<li class="thumb">' + 
+                                    '<a href="' + url + '" target="_blank" title="öffnen"><img src="' + url + '" alt="öffnen"/></a>' +
+                                    '<br/>' +
+                                    '<a href="#" class="remove" data-id="' + imgId + '" title="löschen"><img src="/img/icons/delete.png" alt="löschen"/></a>' +
+                                '</li>';
+                        
+                        var $html = $(tmpl);
+                        $("#upload ul").append($html);
+                        $html.find("a.remove").click(deleteImage);
+                    })
+                    .fail(function(data) {
+                        alert('Image processing failed. Please try again.');
+                    })
+                    .always(function() {
+                        refreshCtrl();
+                    });
+            });
+
+            $('#upload').fileupload({
+
+                // This element will accept file drag/drop uploading
+                dropZone: $('#drop'),
+
+                // This function is called when a file is added to the queue;
+                // either via the browse button, or via drag/drop:
+                add: function (e, data) {
+                    var tmpl = '<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
+                        ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /></li>';
+                    var $html = $(tmpl);
+                    $("#upload ul").append($html);
+                    data.context = $html;
+                    $html.find('input').knob();
+                    
+                    /*
+                    var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
+                        ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
+
+                    // Append the file name and file size
+                    tpl.find('p').text(data.files[0].name)
+                                 .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
+
+                    // Add the HTML to the UL element
+                    data.context = tpl.appendTo(ul);
+
+                    // Initialize the knob plugin
+                    tpl.find('input').knob();
+
+                    // Listen for clicks on the cancel icon
+                    tpl.find('span').click(function(){
+
+                        if(tpl.hasClass('working')){
+                            jqXHR.abort();
+                        }
+
+                        tpl.fadeOut(function(){
+                            tpl.remove();
+                        });
+
+                    });
+                    */
+                    // Automatically upload the file once it is added to the queue
+                    var jqXHR = data.submit();
+                },
+
+                progress: function(e, data){
+
+                    // Calculate the completion percentage of the upload
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+
+                    // Update the hidden input field and trigger a change
+                    // so that the jQuery knob plugin knows to update the dial
+                    data.context.find('input').val(progress).change();
+
+                    //if(progress == 100){
+                    //    data.context.removeClass('working');
+                    //}
+                },
+
+                done: function(e, data) {
+                    var url = data.result.url;
+                    var name = data.result.name;                    
+                    
+                    $("#cropper-modal .modal-body").empty();
+                    $("#cropper-modal .modal-body").append(
+                        $("<img>").css({ 'max-width': '600px' }).attr('src', url).data('name', name)
+                    );
+                    $("#cropper-modal").modal();
+                    
+                    
+                    $("#cropper-modal .modal-body img").Jcrop({ 
+                        aspectRatio: 4.0 / 3.0,
+                        minSize: [1024, 768],
+                        boxWidth: 600,
+                        boxHeight: 400,
+                        keySupport: false,
+                        setSelect: [0, 0, 1024, 768]
+                    }, function() {
+                        jcropApi = this;
+                    });
+                    
+                    // remove progress li
+                    $("#upload li.working").remove();                    
+                },
+
+                fail:function(e, data){
+                    // Something has gone wrong!
+                    alert(data.jqXHR.responseJSON.message);
+                    // remove progress li
+                    $("#upload li.working").remove();                    
+                }
+
+            });
+
+
+            // Prevent the default action when a file is dropped on the window
+            $(document).on('drop dragover', function (e) {
+                e.preventDefault();
+            });
+
+            // Helper function that formats the file sizes
+            function formatFileSize(bytes) {
+                if (typeof bytes !== 'number') {
+                    return '';
+                }
+
+                if (bytes >= 1000000000) {
+                    return (bytes / 1000000000).toFixed(2) + ' GB';
+                }
+
+                if (bytes >= 1000000) {
+                    return (bytes / 1000000).toFixed(2) + ' MB';
+                }
+
+                return (bytes / 1000).toFixed(2) + ' KB';
+            }
+        });
+    </script>
 {% endblock %}

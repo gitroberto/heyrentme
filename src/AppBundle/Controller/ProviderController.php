@@ -539,7 +539,6 @@ class ProviderController extends BaseController {
         $session = $request->getSession();
         
         $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
-        //$eq = $this->getDoctrineRepo('AppBundle:Equipment')->find(117); //TODO: dev only! remove
         if (!$eq) {
             throw $this->createNotFoundException();
         }        
@@ -560,13 +559,7 @@ class ProviderController extends BaseController {
             'phone' => $user->getPhone()
         );
         
-        if ($request->getMethod() == "GET") {
-            $session->set('EquipmentAddFileArray', array()); //initialize array of currently uploaded images
-        }
-        else {
-            $this->fileCount = count($session->get('EquipmentAddFileArray'));
-            $this->imageCount = count($eq->getImages());
-        }
+        $this->imageCount = count($eq->getImages());
         
         
         // validation form
@@ -659,9 +652,6 @@ class ProviderController extends BaseController {
             }
             $em->flush();
             
-            // store images
-            $eqFiles = $session->get('EquipmentAddFileArray');
-            $this->handleImages($eqFiles, $eq, $em);
             
             // update user
             $user->setPhonePrefix($data['phonePrefix']);
@@ -669,14 +659,17 @@ class ProviderController extends BaseController {
             $em->flush();
             
             // clean up
-            $session->remove('EquipmentAddFileArray');            
             $this->fileCount = null;
             
             return $this->redirectToRoute('equipment-edit-3', array('eqid' => $id));
         }
         
+        // clean up
+        $this->fileCount = null;
+        
         return $this->render('provider\equipment_edit_step2.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'equipment' => $eq
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -690,18 +683,13 @@ class ProviderController extends BaseController {
         }            
     }
 
-    private $fileCount = null; // num of uploaded images; necessary for image validation
     private $imageCount = null; // num of existing images; necessary for image validation
     public function validateImages($data, ExecutionContextInterface $context) {
-        $cnt = 0;
-        if ($this->fileCount !== null) {
-            $cnt += $this->fileCount;
-        }            
-        if ($this->imageCount !== null) {
-            $cnt += $this->imageCount;
-        }
-        if ($cnt == 0) {
+        if ($this->imageCount < 1) {
             $context->buildViolation('Please upload at least one image')->addViolation();
+        }
+        else if ($this->imageCount > 3) {
+            $context->buildViolation('Please upload max. 3 images')->addViolation();
         }
     }
     private function handleImages($eqFiles, $eq, $em) {
@@ -789,35 +777,123 @@ class ProviderController extends BaseController {
     /**
      * @Route("equipment-image", name="equipment-image")
      */
-    public function equipmentImage(Request $request) {        
+    public function equipmentImageAction(Request $request) {  
+        // todo: check security
+        // todo: validate jpg/png
         $file = $request->files->get('upl');
         if ($file->isValid()) {
-            $session = $request->getSession();
-            $eqFiles = $session->get('EquipmentAddFileArray');
-            if (count($eqFiles) < 3) {
-                $uuid = Utils::getUuid();
-                $path = 
-                    $this->getParameter('image_storage_dir') .
-                    DIRECTORY_SEPARATOR .
-                    'temp' .
-                    DIRECTORY_SEPARATOR;
-                $name = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
-                $fullPath = $path . $name;
-                
-                $f = $file->move($path, $name);
-                
-                $ef = array(
-                    $uuid,
-                    $file->getClientOriginalName(),
-                    strtolower($file->getClientOriginalExtension()),
-                    $fullPath
-                );
-                
-                array_push($eqFiles, $ef);
-                $session->set('EquipmentAddFileArray', $eqFiles);
+            $uuid = Utils::getUuid();
+            $path = 
+                $this->getParameter('image_storage_dir') .
+                DIRECTORY_SEPARATOR .
+                'temp' .
+                DIRECTORY_SEPARATOR;
+            $ext = strtolower($file->getClientOriginalExtension());
+            $name = sprintf("%s.%s", $uuid, $ext);
+            $filename = $path . DIRECTORY_SEPARATOR . $name;
+
+            $file->move($path, $name);
+
+            $msg = null;
+
+            $size = getimagesize($filename);
+            if ($size[0] < 1024 || $size[1] < 768) {
+                $msg = "The uploaded image ({$size[0]} x {$size[1]}) is smaller than required 1024 x 768";
             }
+            if ($file->getClientSize() > 10 * 1024 * 1024) {
+                $msg = 'The uploaded image is larger than allowed 10 MB';
+            }
+
+            if ($msg !== null) {
+                unlink($filename);
+                $resp = array('message' => $msg);
+                return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+            }
+
+            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
+            $resp = array(
+                'url' => $url,
+                'name' => $name
+            );
+            return new JsonResponse($resp);
         }
-        return new Response($status = Response::HTTP_OK);
+                
+        return new JsonResponse(array('message' => 'Error while uploading image to server...'), Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+    /**
+     * @Route("equipment-image-save", name="equipment-image-save")
+     */
+    public function equipmentImageSaveAction(Request $request) { 
+        // todo: check security
+        $name = $request->get('name');
+        $id = $request->get('id');
+        $x = $request->get('x');
+        $x2 = $request->get('x2');
+        $y = $request->get('y');
+        $y2 = $request->get('y2');
+        $w = round($x2 - $x);
+        $h = round($y2 - $y);
+        
+        $sep = DIRECTORY_SEPARATOR;
+        $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
+        $arr = explode('.', $name);
+        $uuid = $arr[0];
+        $ext = $arr[1];
+        
+        $img = imagecreatefromstring(file_get_contents($path));
+        $dst = imagecreatetruecolor($w, $h);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, $w, $h, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . $uuid . '.' . $ext;
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, 95);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        else if ($ext === 'gif') {
+            imagegif($dst, $path1);
+        }        
+        
+        rename($path, $path2);
+
+        // store entry in database
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($uuid);
+        $img->setExtension($ext);
+        $img->setPath('equipment');
+        $img->setOriginalPath('equipment' . $sep . 'original');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($img);
+        $em->flush();
+
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        $eq->addImage($img);
+        $em->flush();
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
+            'imgId' => $img->getId()
+        );
+        return new JsonResponse($resp);
+    }
+    /**
+     * @Route("equipment-image-delete/{eid}/{iid}", name="equipment-image-delete")
+     */
+    public function equipmentImageDeleteAction(Request $request, $eid, $iid) {
+        // todo: check security
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
+        $img = $this->getDoctrineRepo('AppBundle:Image')->find($iid);
+        $eq->removeImage($img);
+        $this->getDoctrineRepo('AppBundle:Image')->removeImage($img, $this->getParameter('image_storage_dir'));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        
+        return new JsonResponse(Response::HTTP_OK);
     }
     
     /**
