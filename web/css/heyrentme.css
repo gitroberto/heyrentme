@@ -497,3 +497,22 @@ img.profileImage {
 .product-detail .product-info {
     clear: both;
 }
+
+ul li.thumb, ul li.working {
+    display: inline-block;
+    margin-left: 10px;
+}
+ul li.thumb img {
+    max-width: 100px;
+}
+
+#drop.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+#drop.disabled a {
+    cursor: not-allowed;
+}
+#drop.disabled a:hover {
+    text-decoration: none;
+}
