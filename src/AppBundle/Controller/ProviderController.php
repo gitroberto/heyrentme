@@ -983,14 +983,15 @@ class ProviderController extends BaseController {
      */
     public function deleteUserAction(Request $request) {    
         $user = $this->getUser();
-        
-        //$eqid = 118; // TODO: remove this; dev only!        
+                
         if (!$user) {
             throw $this->createNotFoundException();
         }  
         
         $em = $this->getDoctrine()->getEntityManager();
-        $user->setStatus(User::STATUS_DELETED);        
+        $conn = $em->getConnection();
+        $sp = $connection->prepare(sprintf("CALL wipeUser(%s)", $user->getId()));
+        $sp->execute();                
         $em->flush();
         
         return $this->redirectToRoute("fos_user_security_logout");
