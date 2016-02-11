@@ -54,14 +54,12 @@
                           <a>Bilder hochladen*</a>
                           <input type="file" name="upl"/>
                       </div>
-                      <ul>
-                            {% for img in equipment.images %}
-                                <li class="thumb">
+                      <ul id="img-list">
+                            {% for img in equipment.images %}<li class="thumb">
                                     <a href="{{ img.urlPath(image_url_prefix) }}" title="öffnen" target="_blank"><img src="{{ img.urlPath(image_url_prefix) }}" alt="öffnen"/></a>
                                     <br/>
                                     <a class="remove" href="#" data-id="{{ img.id }}" title="löschen"><img src="/img/icons/delete.png" alt="löschen"/></a>
-                                </li>
-                            {% endfor %}
+                                </li>{% endfor %}
                       </ul>
                   </form>
                   <p class="how-many">Du kannst 3 Bilder hochladen (maximal 10MB, mindestens 1024 x 768px). Unterstützte Bildformate: jpg, png</p>
@@ -285,7 +283,7 @@
                         $this.parents('li.thumb').remove();
                     })
                     .fail(function() {
-                        alert('Error while remove the image. Please try again.')
+                        alert('Fehler beim Entfernen des Bildes. Bitte versuche es erneut.');
                     })
                     .always(function() {
                         refreshCtrl();
@@ -299,25 +297,25 @@
                 $("#drop").removeClass('disabled');
             }
         }
-        function delayJcrop() {
-            window.setTimeout(setupJcrop, 0);
-        }
         function setupJcrop() {
-                        $("#cropper-modal .modal-body img").Jcrop({ 
-                            aspectRatio: 4.0 / 3.0,
-                            //minSize: [1024, 768],
-                            boxWidth: 600,
-                            boxHeight: 400,
-                            keySupport: false,
-                            setSelect: [0, 0, 1024, 768],
-                            onSelect: showCoords,
-                            onChange: showCoords
-                        }, function() {
-                            jcropApi = this;
-                        });
+            $("#cropper-modal .modal-body img").Jcrop({ 
+                aspectRatio: 4.0 / 3.0,
+                //minSize: [1024, 768],
+                boxWidth: 600,
+                boxHeight: 400,
+                keySupport: false,
+                setSelect: [0, 0, 1024, 768]/*,
+                onSelect: showCoords,
+                onChange: showCoords*/
+            }, function() {
+                jcropApi = this;
+            });
+            $("#img-list li.process").remove();
+            $("#cropper-modal").modal();
         }
         
         $(function() {
+            
             var ul = $('#upload ul');
             refreshCtrl();
         
@@ -360,7 +358,7 @@
                         $html.find("a.remove").click(deleteImage);
                     })
                     .fail(function(data) {
-                        alert('Image processing failed. Please try again.');
+                        alert('Bildverarbeitung fehlgeschlagen. Bitte versuche es erneut.');
                     })
                     .always(function() {
                         refreshCtrl();
@@ -375,40 +373,20 @@
                 // This function is called when a file is added to the queue;
                 // either via the browse button, or via drag/drop:
                 add: function (e, data) {
-                    var tmpl = '<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
-                        ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /></li>';
+                    var tmpl = '<li class="thumb process"><div class="gauge"><input class="knob" type="text" value=""/></div><div class="status">0%</div></li>';
                     var $html = $(tmpl);
                     $("#upload ul").append($html);
                     data.context = $html;
-                    $html.find('input').knob();
-                    
-                    /*
-                    var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
-                        ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
-
-                    // Append the file name and file size
-                    tpl.find('p').text(data.files[0].name)
-                                 .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
-
-                    // Add the HTML to the UL element
-                    data.context = tpl.appendTo(ul);
-
-                    // Initialize the knob plugin
-                    tpl.find('input').knob();
-
-                    // Listen for clicks on the cancel icon
-                    tpl.find('span').click(function(){
-
-                        if(tpl.hasClass('working')){
-                            jqXHR.abort();
-                        }
-
-                        tpl.fadeOut(function(){
-                            tpl.remove();
-                        });
-
+                    $html.find('input').knob({
+                        width: 48,
+                        height: 48,
+                        inputColor: '#000',
+                        displayInput: false,
+                        min: 0,
+                        max: 100,
+                        readOnly: true
                     });
-                    */
+                    
                     // Automatically upload the file once it is added to the queue
                     var jqXHR = data.submit();
                 },
@@ -422,10 +400,10 @@
                     // Update the hidden input field and trigger a change
                     // so that the jQuery knob plugin knows to update the dial
                     data.context.find('input').val(progress).change();
+                    data.context.find('.status').text(progress + '%');
 
-                    //if(progress == 100){
-                    //    data.context.removeClass('working');
-                    //}
+                    if (progress == 100)
+                        data.context.find('.status').text('Verarbeitung...');
                 },
 
                 done: function(e, data) {
@@ -437,21 +415,19 @@
                     
                     var ih = Math.round(h * 600.0 / w);
                     
-                    var $img = $("<img>").one('load', delayJcrop).attr('src', url).data('name', name);
+                    var $img = $("<img>").one('load', setupJcrop).attr('src', url).data('name', name);
                     $("#cropper-modal .image").empty();
                     $("#cropper-modal .image").append($img);
-                    $("#cropper-modal").modal();
-                    
-                    
-                    // remove progress li
-                    $("#upload li.working").remove();                    
+                    //$("#cropper-modal").modal();
+                                        
+                    data.context.find('.status').text('Verarbeitung...');
                 },
 
                 fail:function(e, data){
                     // Something has gone wrong!
                     alert(data.jqXHR.responseJSON.message);
                     // remove progress li
-                    $("#upload li.working").remove();                    
+                    $("#img-list li.process").remove();
                 }
 
             });
