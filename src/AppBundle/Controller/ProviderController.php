@@ -692,87 +692,6 @@ class ProviderController extends BaseController {
             $context->buildViolation('Please upload max. 3 images')->addViolation();
         }
     }
-    private function handleImages($eqFiles, $eq, $em) {
-        foreach ($eqFiles as $file) {
-            // store the original, and image itself            
-            $origFullPath = 
-                $this->getParameter('image_storage_dir') .
-                DIRECTORY_SEPARATOR .
-                'equipment' .
-                DIRECTORY_SEPARATOR .
-                'original' .
-                DIRECTORY_SEPARATOR .
-                $file[0] . '.' . $file[2];
-            $imgFullPath =
-                $this->getParameter('image_storage_dir') .
-                DIRECTORY_SEPARATOR .
-                'equipment' .
-                DIRECTORY_SEPARATOR .
-                $file[0] . '.' . $file[2];
-            rename($file[3], $origFullPath);
-                
-            
-            // check image size
-            $imgInfo = getimagesize($origFullPath);
-            $ow = $imgInfo[0]; // original width
-            $oh = $imgInfo[1]; // original height
-            $r = $ow / $oh; // ratio
-            $nw = $ow; // new width
-            $nh = $oh; // new height
-            $scale = False;
-            
-            if ($r > 1) {
-                if ($ow > 1024) {
-                    $nw = 1024;
-                    $m = $nw / $ow; // multiplier
-                    $nh = $oh * $m;
-                    $scale = True;
-                }
-            }
-            else {
-                if ($oh > 768) {
-                    $nh = 768;
-                    $m = $nh / $oh; // multiplier
-                    $nw = $ow * $m;
-                    $scale = True;
-                }
-            }
-            
-            // scale the image
-            if ($scale) {
-                if ($file[2] == 'png') {
-                    $img = imagecreatefrompng($origFullPath);
-                }
-                else {
-                    $img = imagecreatefromjpeg($origFullPath);
-                }
-                $sc = imagescale($img, intval(round($nw)), intval(round($nh)), IMG_BICUBIC_FIXED);
-                if ($file[2] == 'png') {
-                    imagepng($sc, $imgFullPath);
-                }
-                else {
-                    imagejpeg($sc, $imgFullPath);
-                }
-            }
-            else {
-                copy($origFullPath, $imgFullPath);
-            }        
-
-            // store entry in database
-            $img = new Image();
-            $img->setUuid($file[0]);
-            $img->setName($file[1]);
-            $img->setExtension($file[2]);
-            $img->setPath('equipment');
-            $img->setOriginalPath('equipment' . DIRECTORY_SEPARATOR . 'original');
-
-            $em->persist($img);
-            $em->flush();
-
-            $eq->addImage($img);
-            $em->flush();
-        }
-    }
     
     /**
      * @Route("equipment-image", name="equipment-image")
@@ -798,10 +717,12 @@ class ProviderController extends BaseController {
 
             $size = getimagesize($filename);
             if ($size[0] < 1024 || $size[1] < 768) {
-                $msg = "The uploaded image ({$size[0]} x {$size[1]}) is smaller than required 1024 x 768";
+                $msg = "Die hochgeladene Bild ({$size[0]} x {$size[1]}) kleiner ist als erforderlich 1024 x 768";
             }
-            if ($file->getClientSize() > 10 * 1024 * 1024) {
-                $msg = 'The uploaded image is larger than allowed 10 MB';
+            
+            $w = $file->getClientSize();
+            if ($w > 10 * 1024 * 1024) { // 10 MB
+                $msg = sprintf('Die hochgeladene Bild (%.2f MB) größer ist als erlaubt  10 MB', $w / 1024 / 1024);
             }
 
             if ($msg !== null) {
@@ -820,7 +741,7 @@ class ProviderController extends BaseController {
             return new JsonResponse($resp);
         }
                 
-        return new JsonResponse(array('message' => 'Error while uploading image to server...'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        return new JsonResponse(array('message' => 'Fehler beim Hochladen von Bild zu Server ...'), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
     /**
      * @Route("equipment-image-save", name="equipment-image-save")

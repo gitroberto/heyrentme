@@ -498,12 +498,31 @@ img.profileImage {
     clear: both;
 }
 
-ul li.thumb, ul li.working {
+#img-list li.thumb {
     display: inline-block;
     margin-left: 10px;
+    height: auto;
 }
-ul li.thumb img {
+#img-list li.thumb img {
     max-width: 100px;
+}
+#img-list li.thumb span {
+    background-image: none;
+    display: inline-block;
+}
+#img-list .gauge canvas {
+    display: block;
+    top: 13px;
+    left: 25px;
+}
+#img-list li.thumb .status {
+    text-align: center;
+    font-family: sans-serif;
+}
+#img-list li.thumb .gauge {
+    display: block; 
+    width: 100px; 
+    height: 75px;
 }
 
 #drop.disabled {
