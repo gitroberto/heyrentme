@@ -3,12 +3,16 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
+use AppBundle\Entity\ReportOffert;
 use AppBundle\Entity\Testimonial;
 use AppBundle\Utils\SearchParams;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DefaultController extends BaseController {
     
@@ -22,12 +26,12 @@ class DefaultController extends BaseController {
     
     /**
      * 
-     * @Route("equipment/report/{equipmentId}", name="reportEquipment")
+     * @Route("equipment/report/{offertType}/{offertId}", name="report-offert")
      */
-    public function reportEquipmentAction(Request $request, $equipmentId) {
-        $equipmentReport = new EquipmentReport();
+    public function reportOffertAction(Request $request, $offertType, $offertId) {
+        $reportOffert = new ReportOffert();
         
-        $form = $this->createFormBuilder($equipmentReport)
+        $form = $this->createFormBuilder($reportOffert)
                 ->add('report', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
@@ -46,18 +50,26 @@ class DefaultController extends BaseController {
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             
-            $equipment = $this->getDoctrineRepo('AppBundle:Equipment')->find($equipmentId);
-            $equipmentReport->setEquipment($equipment);
+            $reportOffert->setOffertType($offertType);
+            $reportOffert->setOffertId($offertId);
                     
-            $em->persist($equipmentReport);
+            $em->persist($reportOffert);
             $em->flush();
             
-            return $this->render('default/equipment_report.html.twig');
+            return $this->ReportOffertSavedAction();      
         }
         
-        return $this->render('default/equipment_report.html.twig', array(
-            'form' => $form->createView()
+        return $this->render('default/report_offert.html.twig', array(
+            'form' => $form->createView(),
+            'offertType' => $offertType,
+            'offertId' => $offertId
         ));
+    }
+    
+    public function ReportOffertSavedAction(){        
+        $response = new Response(json_encode("Report_Offert_Saved"));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
      
     /**
@@ -201,6 +213,7 @@ class DefaultController extends BaseController {
             $tmpl = 'default/equipment.html.twig';
             $subcat = $eq->getSubcategory();
             $id = $eq->getId();
+            $offertType = ReportOffert::OFFERT_TYPE_EQUIPMENT;
         }
         else {
             $repo = 'AppBundle:Talent';
@@ -208,6 +221,7 @@ class DefaultController extends BaseController {
             $tmpl = 'default/talent.html.twig';
             $subcat = $tal->getSubcategory();
             $id = $tal->getId();
+            $offertType = ReportOffert::OFFERT_TYPE_TALENT;
         }
         
         $session = $request->getSession();
@@ -244,7 +258,8 @@ class DefaultController extends BaseController {
             'next' => $next,
             'prev' => $prev,
             'post' => $post,
-            'opinions' => $opinions
+            'opinions' => $opinions,
+            'offertType' => $offertType
         ));
     }
 

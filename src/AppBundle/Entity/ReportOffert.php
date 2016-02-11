@@ -6,11 +6,14 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="EquipmentReportRepository")
- * @ORM\Table(name="equipment_report")
+ * @ORM\Entity(repositoryClass="ReportOffertRepository")
+ * @ORM\Table(name="report_offert")
  */
-class EquipmentReport
+class ReportOffert
 {
+    const OFFERT_TYPE_EQUIPMENT = 1;
+    const OFFERT_TYPE_TALENT = 2;
+    
     /**
      * @ORM\Column(type="integer")
      * @ORM\id
@@ -33,10 +36,14 @@ class EquipmentReport
     protected $createdAt;   
     
     /**
-     * @ORM\OneToOne(targetEntity="Equipment")
-     * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id")
+     * @ORM\Column(type="integer")
      */
-    protected $equipment;
+    protected $offertId;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $offertType;
 
     public function setId($id)
     {
@@ -85,16 +92,28 @@ class EquipmentReport
         return $this->createdAt;
     }
     
-    public function setEquipment($equipment)
+    public function setOffertId($offertId)
     {
-        $this->equipment = $equipment;
+        $this->offertId = $offertId;
 
         return $this;
     }
 
-    public function getEquipment()
+    public function getOffertId()
     {
-        return $this->equipment;
+        return $this->offertId;
+    }
+    
+    public function setOffertType($offertType)
+    {
+        $this->offertType = $offertType;
+
+        return $this;
+    }
+
+    public function getOffertType()
+    {
+        return $this->offertType;
     }
     
     public function __construct()
