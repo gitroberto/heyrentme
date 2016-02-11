@@ -2,7 +2,8 @@
     <div class="support">
         <p class="head">{{ user.Name }}</p>
         <a href="{{ path('profil') }}">            
-            <img alt ="" src="{{ user.ProfilePicture(true, image_url_prefix) }}" class="user-avatar-profile" style="max-width: 140px;" />
+            {#<img alt ="" src="{{ user.ProfilePicture(true, image_url_prefix) }}" class="user-avatar-profile" style="max-width: 140px;" />#}
+            <div style="width: 140px; height: 140px; display: block; margin: 10px auto 15px auto; background: url({{ app.user.getProfilePicture(true, image_url_prefix) }}) no-repeat; background-size: cover; border-radius: 50%;"></div>
         </a>                
         <a href="{{ path('einstellungen') }}" class="button-black" >Einstellungen</a>                    
     </div>
