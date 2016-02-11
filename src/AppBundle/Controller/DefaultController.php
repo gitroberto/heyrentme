@@ -251,9 +251,10 @@ class DefaultController extends BaseController {
     /**
      * @Route("/equipment-list", name="equipment-list")
      */ 
-    public function itemListAction(Request $request, $type) {
+    public function itemListAction(Request $request) {
         $sp = $this->getSearchParams($request);
         $sp->updateFromRequest($request);
+        $type = intval($request->get('type'));
         
         if ($type === Category::TYPE_EQUIPMENT) {
             $items = $this->getDoctrineRepo('AppBundle:Equipment')->getAll($sp);
