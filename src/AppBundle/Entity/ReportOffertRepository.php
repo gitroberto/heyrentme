@@ -6,12 +6,12 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Filesystem\Filesystem;
 
 
-class EquipmentReportRepository extends EntityRepository
+class ReportOffertRepository extends EntityRepository
 {    
     
     public function countAll() {
-        return $this->createQueryBuilder('er')
-            ->select('count(er.id)')
+        return $this->createQueryBuilder('ro')
+            ->select('count(ro.id)')
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -20,7 +20,7 @@ class EquipmentReportRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
         $qb->select('b')
-            ->from('AppBundle:EquipmentReport', 'er');
+            ->from('AppBundle:ReportOffert', 'ro');
         // sort by
         if (!empty($sortColumn)) {
             if (!empty($sortDirection)) {

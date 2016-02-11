@@ -1,0 +1,15 @@
+<script src="/js/report_offert.js"></script>
+
+{{ form_start(form, {'method': 'post', 'action': path("report-offert", { "offertType" : offertType , "offertId":offertId }) ,
+            'attr': { 'id':'formReportOffert', 'class': 'report'}}) }}    
+
+    {{ form_errors(form) }}
+    
+    {{ form_errors(form.report) }}    
+    {{ form_widget(form.report, {'attr': {'placeholder': 'ANGEBOT MELDEN'}}) }}  
+    
+    {{ form_errors(form.message) }}
+    {{ form_widget(form.message, {'attr': {'placeholder': 'DEIN FEEDBACK'}}) }}
+    
+    <input type="submit" value="abschicken">
+{{ form_end(form) }}

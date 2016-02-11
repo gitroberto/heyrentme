@@ -414,10 +414,11 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
                 <h4 class="modal-title">Angebot melden</h4>
-                <form method="post" accept-charset="utf-8">
-                  <input type="text" name="mail" placeholder="ANGEBOT MELDEN">
-                  <textarea placeholder="DEINE NACHRICHT..." class="place_black"></textarea>
-                  <input type="submit" value="Abschicken"></form>
+                {{ render(controller('AppBundle:Default:ReportOffert', { "offertId": item.id, "offertType": offertType } )) }}
+                
+                <div id ="ReportOffertConfirmationDiv" style="display:none;" >
+                    Thank you for your report!
+                </div>
             </div>
         </div>
     </div>
