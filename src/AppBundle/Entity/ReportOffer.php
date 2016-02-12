@@ -6,13 +6,13 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="ReportOffertRepository")
- * @ORM\Table(name="report_offert")
+ * @ORM\Entity(repositoryClass="ReportOfferRepository")
+ * @ORM\Table(name="report_offer")
  */
-class ReportOffert
+class ReportOffer
 {
-    const OFFERT_TYPE_EQUIPMENT = 1;
-    const OFFERT_TYPE_TALENT = 2;
+    const OFFER_TYPE_EQUIPMENT = 1;
+    const OFFER_TYPE_TALENT = 2;
     
     /**
      * @ORM\Column(type="integer")
@@ -36,14 +36,24 @@ class ReportOffert
     protected $createdAt;   
     
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="Equipment")
+     * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id")
+     
      */
-    protected $offertId;
+    protected $equipment;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Talent")
+     * @ORM\JoinColumn(name="talent_id", referencedColumnName="id")
+     
+     */
+    protected $talent;
+    
     
     /**
      * @ORM\Column(type="integer")
      */
-    protected $offertType;
+    protected $offerType;
 
     public function setId($id)
     {
@@ -92,28 +102,40 @@ class ReportOffert
         return $this->createdAt;
     }
     
-    public function setOffertId($offertId)
+    public function setEquipment($equipment)
     {
-        $this->offertId = $offertId;
+        $this->equipment = $equipment;
 
         return $this;
     }
 
-    public function getOffertId()
+    public function getEquipment()
     {
-        return $this->offertId;
+        return $this->equipment;
     }
     
-    public function setOffertType($offertType)
+    public function setTalent($talent)
     {
-        $this->offertType = $offertType;
+        $this->talent = $talent;
 
         return $this;
     }
 
-    public function getOffertType()
+    public function getTalent()
     {
-        return $this->offertType;
+        return $this->talent;
+    }
+    
+    public function setOfferType($offerType)
+    {
+        $this->offerType = $offerType;
+
+        return $this;
+    }
+
+    public function getOfferType()
+    {
+        return $this->offerType;
     }
     
     public function __construct()

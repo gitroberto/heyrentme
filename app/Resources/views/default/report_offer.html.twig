@@ -1,7 +1,10 @@
-<script src="/js/report_offert.js"></script>
-
-{{ form_start(form, {'method': 'post', 'action': path("report-offert", { "offertType" : offertType , "offertId":offertId }) ,
-            'attr': { 'id':'formReportOffert', 'class': 'report'}}) }}    
+<script>
+    $(function() {
+        $("#formReportOffer").submit(ajaxFormReportOfferSubmit);
+    });
+</script>
+{{ form_start(form, {'method': 'post', 'action': path("report", { "type" : type , "id":id }) ,
+            'attr': { 'id':'formReportOffer', 'class': 'report'}}) }}    
 
     {{ form_errors(form) }}
     

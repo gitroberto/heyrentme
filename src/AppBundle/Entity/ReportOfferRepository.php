@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Filesystem\Filesystem;
 
 
-class ReportOffertRepository extends EntityRepository
+class ReportOfferRepository extends EntityRepository
 {    
     
     public function countAll() {
@@ -20,7 +20,7 @@ class ReportOffertRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
         $qb->select('b')
-            ->from('AppBundle:ReportOffert', 'ro');
+            ->from('AppBundle:ReportOffer', 'ro');
         // sort by
         if (!empty($sortColumn)) {
             if (!empty($sortDirection)) {

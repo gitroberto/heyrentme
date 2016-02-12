@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Feedback;
+use AppBundle\Entity\ReportOffer;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
@@ -105,6 +106,67 @@ class CommonController extends BaseController {
         return $response;
     }
     
+    /**
+     * 
+     * @Route("equipment/report/{type}/{id}", name="report")
+     */
+    public function reportOfferAction(Request $request, $type, $id) {
+        $reportOffer = new ReportOffer();
+        
+        $form = $this->createFormBuilder($reportOffer)
+                ->add('report', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 100))
+                    )
+                ))
+                ->add('message', 'textarea', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 500))
+                    )
+                ))->getForm();
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $reportOffer->setOfferType($type);
+            
+            if ($type == ReportOffer::OFFER_TYPE_EQUIPMENT){
+                $equipment = $this->getDoctrineRepo("AppBundle:Equipment")->find($id);
+                if (!$equipment) {
+                    throw $this->createNotFoundException('No equipment found for id '.$id);
+                }
+                $reportOffer->setEquipment($equipment);
+            } else {
+                $talent = $this->getDoctrineRepo("AppBundle:Talent")->find($id);
+                if (!$talent) {
+                    throw $this->createNotFoundException('No talent found for id '.$id);
+                }
+                $reportOffer->setTalent($talent);
+            }
+            
+                    
+            $em->persist($reportOffer);
+            $em->flush();
+            
+            return $this->ReportOfferSavedAction();      
+        }
+        
+        return $this->render('default/report_offer.html.twig', array(
+            'form' => $form->createView(),
+            'type' => $type,
+            'id' => $id
+        ));
+    }
+    
+    public function ReportOfferSavedAction(){        
+        $response = new Response(json_encode("Report_Offer_Saved"));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
     
     public function registerAction(Request $request) {     
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */

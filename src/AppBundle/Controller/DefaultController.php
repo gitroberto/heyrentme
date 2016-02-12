@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
-use AppBundle\Entity\ReportOffert;
+use AppBundle\Entity\ReportOffer;
 use AppBundle\Entity\Testimonial;
 use AppBundle\Utils\SearchParams;
 use DateTime;
@@ -11,8 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 class DefaultController extends BaseController {
     
@@ -23,55 +22,6 @@ class DefaultController extends BaseController {
         return $this->render('default/index.html.twig');
     }
     
-    
-    /**
-     * 
-     * @Route("equipment/report/{offertType}/{offertId}", name="report-offert")
-     */
-    public function reportOffertAction(Request $request, $offertType, $offertId) {
-        $reportOffert = new ReportOffert();
-        
-        $form = $this->createFormBuilder($reportOffert)
-                ->add('report', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 100))
-                    )
-                ))
-                ->add('message', 'textarea', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 500))
-                    )
-                ))->getForm();
-        
-        $form->handleRequest($request);
-        
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            
-            $reportOffert->setOffertType($offertType);
-            $reportOffert->setOffertId($offertId);
-                    
-            $em->persist($reportOffert);
-            $em->flush();
-            
-            return $this->ReportOffertSavedAction();      
-        }
-        
-        return $this->render('default/report_offert.html.twig', array(
-            'form' => $form->createView(),
-            'offertType' => $offertType,
-            'offertId' => $offertId
-        ));
-    }
-    
-    public function ReportOffertSavedAction(){        
-        $response = new Response(json_encode("Report_Offert_Saved"));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-     
     /**
      * @Route("/equipment/{token}", name="rentme")
      */
@@ -213,7 +163,7 @@ class DefaultController extends BaseController {
             $tmpl = 'default/equipment.html.twig';
             $subcat = $eq->getSubcategory();
             $id = $eq->getId();
-            $offertType = ReportOffert::OFFERT_TYPE_EQUIPMENT;
+            $type = ReportOffer::OFFER_TYPE_EQUIPMENT;
         }
         else {
             $repo = 'AppBundle:Talent';
@@ -221,7 +171,7 @@ class DefaultController extends BaseController {
             $tmpl = 'default/talent.html.twig';
             $subcat = $tal->getSubcategory();
             $id = $tal->getId();
-            $offertType = ReportOffert::OFFERT_TYPE_TALENT;
+            $type = ReportOffer::OFFER_TYPE_TALENT;
         }
         
         $session = $request->getSession();
@@ -259,7 +209,7 @@ class DefaultController extends BaseController {
             'prev' => $prev,
             'post' => $post,
             'opinions' => $opinions,
-            'offertType' => $offertType
+            'type' => $type
         ));
     }
 
