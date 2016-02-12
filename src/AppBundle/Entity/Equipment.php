@@ -1119,13 +1119,5 @@ class Equipment
     }
     public function setEquipmentImages($equipmentImages) {
         $this->equipmentImages = $equipmentImages;
-    }
-    protected $mainEquipmentImage;
-    public function getMainEquipmentImage() {
-        return $this->mainEquipmentImage;
-    }
-    public function setMainEquipmentImage($mainEquipmentImage) {
-        $this->mainEquipmentImage = $mainEquipmentImage;
-    }
-    
+    }    
 }

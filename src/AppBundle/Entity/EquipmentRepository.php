@@ -241,10 +241,39 @@ EOT;
         $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
         
         foreach ($eqs as $eq) {
-            $eq->setMainEquipmentImage($repo->getMainEquipmentImage($eq->getId()));
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
         }
         
         return $eqs;
+    }
+    public function getOne($equipmentId) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        /*
+         * Please not this query uses "fetch join".
+         * It fetches images and discounts (associated with equipments) immediately 
+         * (instead of lazy loading them later).
+         * Keep for optimum performance.
+         */        
+        $qb->select('e') // this line forces fetch join
+            ->from('AppBundle:Equipment', 'e')
+            ->join('e.user', 'u');
+        
+        $qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
+        $qb->andWhere('u.status = '. User::STATUS_OK);
+        $qb->andWhere("e.id = {$equipmentId}");
+        
+        $eq = null;
+        try {
+            $eq = $qb->getQuery()->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        if ($eq !== null) {
+            $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
+        }
+        
+        return $eq;
     }
     
     public function clearFeatures($equipmentId) {
