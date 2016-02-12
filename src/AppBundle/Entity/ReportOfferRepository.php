@@ -19,7 +19,7 @@ class ReportOfferRepository extends EntityRepository
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
-        $qb->select('b')
+        $qb->select('ro')
             ->from('AppBundle:ReportOffer', 'ro');
         // sort by
         if (!empty($sortColumn)) {

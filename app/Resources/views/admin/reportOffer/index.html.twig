@@ -1,0 +1,87 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_report_offer_list') }}" class="active-crumb">Report offer</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Report offer</h1>
+
+<br/>
+<br/>
+
+<div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover">
+                <tr>
+                        <td></td>
+                </tr>
+        </table>
+        <div id="jqgrid-pager"></div>
+</div>
+
+
+<style type="text/css">
+    
+    #jqgrid tr.jqgrow td{
+        word-wrap: break-word; /* IE 5.5+ and CSS3 */
+        white-space: pre-wrap; /* CSS3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        overflow: hidden;
+        height: auto;
+        vertical-align: middle;
+        padding-top: 3px;
+        padding-bottom: 3px
+    }
+</style>
+
+{% endblock %}
+
+{% block footer %}
+    {{ include('admin/common/admin.footer.html.twig') }}
+<script>    
+$(document).ready(function(){    
+//*******************************************
+/*	JQGRID INIT
+/********************************************/
+
+
+function rowActions(cellvalue, options, cellobject) {
+    
+      return "<a title='Moderate' target='_blank' href='" + cellobject[7] + "'><u>Moderate</u></a>  "+
+             "<a title='Details'  target='_blank' href='"+cellobject[6]+ "'><u>Details</u></a>  ";
+  }
+
+var grid = $('#jqgrid');
+
+if( $('#jqgrid').length > 0 ) {
+        grid.jqGrid({
+                url: '{{ path('admin_report_offer_jsondata') }}',
+                mtype: 'GET',
+                datatype: 'jsonp',
+                colModel:[
+                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions },
+                        { name:'Id', index:'ro.id', width:1, editable:false, sortable:false, hidden: true },
+                        { name:'Report', index:'ro.report', width: 200, editable:false, sortable:true },
+                        { name:'Message', index:'ro.message', width: 300, editable:false, sortable:true },
+                        { name:'CreationDate', index:'ro.createdAt', width: 100, editable:false, sortable:true },                        
+                ],
+                height: 300,
+                rowNum: 10,
+                rowList: [10, 50, 200],
+                pager: 'jqgrid-pager',
+                sortname: 'ro.createdAt',
+                viewrecords: false,
+                sortorder: "desc",
+                caption: "Posts",
+                multiselect: false,
+        });
+}
+
+}); // end ready function
+</script>    
+    
+{% endblock %}
+

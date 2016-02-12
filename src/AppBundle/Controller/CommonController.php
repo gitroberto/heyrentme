@@ -10,6 +10,7 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use \Swift_Message;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -134,23 +135,28 @@ class CommonController extends BaseController {
             
             $reportOffer->setOfferType($type);
             
+            $item=null;
+            $actionName="";
             if ($type == ReportOffer::OFFER_TYPE_EQUIPMENT){
-                $equipment = $this->getDoctrineRepo("AppBundle:Equipment")->find($id);
-                if (!$equipment) {
+                $item = $this->getDoctrineRepo("AppBundle:Equipment")->find($id);
+                if (!$item) {
                     throw $this->createNotFoundException('No equipment found for id '.$id);
                 }
-                $reportOffer->setEquipment($equipment);
+                $actionName = "admin_equipment_moderate";
+                $reportOffer->setEquipment($item);
             } else {
-                $talent = $this->getDoctrineRepo("AppBundle:Talent")->find($id);
-                if (!$talent) {
+                $item = $this->getDoctrineRepo("AppBundle:Talent")->find($id);
+                if (!$item) {
                     throw $this->createNotFoundException('No talent found for id '.$id);
                 }
-                $reportOffer->setTalent($talent);
+                $actionName="admin_talent_moderate";
+                $reportOffer->setTalent($item);
             }
-            
                     
             $em->persist($reportOffer);
             $em->flush();
+            
+            $this->sendNewReportOfferMessage($request, $item, $actionName);
             
             return $this->ReportOfferSavedAction();      
         }
@@ -167,6 +173,34 @@ class CommonController extends BaseController {
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+    
+    public function sendNewReportOfferMessage(Request $request, $item, $actionName)
+    {      
+        $template = 'Emails/admin/new_report_offer.html.twig';       
+        
+        $userLink = $request->getSchemeAndHttpHost() . $this->generateUrl('catchall', array('content' => $item->getUrlPath()));
+        $adminLink = $request->getSchemeAndHttpHost() . $this->generateUrl($actionName, array('id'=> $item->getId()));
+        
+        
+        $emailHtml = $this->renderView($template, array(
+            'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
+            'itemName' => $item->getName(),
+            'userLink' => $userLink,
+            'adminLink' => $adminLink
+        ));
+        
+        $subject = "Report offer.";
+        
+        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+        $message = Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($this->getParameter('admin_email'))
+            ->setBody($emailHtml, 'text/html');
+        $this->get('mailer')->send($message);
+        
+    }
+    
     
     public function registerAction(Request $request) {     
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */

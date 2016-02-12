@@ -138,6 +138,16 @@ class ReportOffer
         return $this->offerType;
     }
     
+    public function getOfferTypeStr()
+    {
+        if ($this->offerType == ReportOffer::OFFER_TYPE_EQUIPMENT){
+            return "equipment";
+        } else {
+            return "talent";
+        }
+        
+    }
+    
     public function __construct()
     {
         
