@@ -2,19 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Discount;
 use AppBundle\Entity\Equipment;
+use AppBundle\Entity\EquipmentImage;
 use AppBundle\Entity\Image;
-use AppBundle\Entity\User;
 use AppBundle\Utils\Utils;
-use DateInterval;
-use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Exception\Exception;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -559,7 +555,8 @@ class ProviderController extends BaseController {
             'phone' => $user->getPhone()
         );
         
-        $this->imageCount = count($eq->getImages());
+        $images = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentImages($eq->getId());
+        $this->imageCount = count($images);
         
         
         // validation form
@@ -669,7 +666,8 @@ class ProviderController extends BaseController {
         
         return $this->render('provider\equipment_edit_step2.html.twig', array(
             'form' => $form->createView(),
-            'equipment' => $eq
+            'equipment' => $eq,
+            'images' => $images
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -688,8 +686,9 @@ class ProviderController extends BaseController {
         if ($this->imageCount < 1) {
             $context->buildViolation('Please upload at least one image')->addViolation();
         }
-        else if ($this->imageCount > 3) {
-            $context->buildViolation('Please upload max. 3 images')->addViolation();
+        else if ($this->imageCount > Equipment::MAX_NUM_IMAGES) {
+            $num = Equipment::MAX_NUM_IMAGES;
+            $context->buildViolation('Please upload max. {$num} images')->addViolation();
         }
     }
     
@@ -716,14 +715,19 @@ class ProviderController extends BaseController {
             $msg = null;
 
             $size = getimagesize($filename);
-            if ($size[0] < 1024 || $size[1] < 768) {
-                $msg = "Die hochgeladene Bild ({$size[0]} x {$size[1]}) kleiner ist als erforderlich 1024 x 768";
+            if ($size[0] < 750 || $size[1] < 563) {
+                $msg = "Die hochgeladene Bild ({$size[0]} x {$size[1]}) kleiner ist als erforderlich 750 x 563";
             }
             
             $w = $file->getClientSize();
-            if ($w > 10 * 1024 * 1024) { // 10 MB
-                $msg = sprintf('Die hochgeladene Bild (%.2f MB) größer ist als erlaubt  10 MB', $w / 1024 / 1024);
+            if ($w > 5 * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Die hochgeladene Bild (%.2f MB) größer ist als erlaubt  5 MB', $w / 1024 / 1024);
             }
+            $exif = exif_imagetype($filename);
+            if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+                $msg = 'Die hochgeladene Bild ist weder JPG noch PNG';
+            }
+            
 
             if ($msg !== null) {
                 unlink($filename);
@@ -764,8 +768,8 @@ class ProviderController extends BaseController {
         $ext = $arr[1];
         
         $img = imagecreatefromstring(file_get_contents($path));
-        $dst = imagecreatetruecolor($w, $h);
-        imagecopyresampled($dst, $img, 0, 0, $x, $y, $w, $h, $w, $h);
+        $dst = imagecreatetruecolor(750, 563);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, 750, 563, $w, $h);
 
         $path1 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . $uuid . '.' . $ext;
         $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
@@ -783,24 +787,30 @@ class ProviderController extends BaseController {
         rename($path, $path2);
 
         // store entry in database
+        $em = $this->getDoctrine()->getManager();
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        $cnt = $this->getDoctrineRepo('AppBundle:Equipment')->getImageCount($id);        
+        
         $img = new Image();
         $img->setUuid($uuid);
         $img->setName($uuid);
         $img->setExtension($ext);
         $img->setPath('equipment');
         $img->setOriginalPath('equipment' . $sep . 'original');
-
-        $em = $this->getDoctrine()->getManager();
         $em->persist($img);
         $em->flush();
-
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
-        $eq->addImage($img);
-        $em->flush();
+        
+        $eimg = new EquipmentImage();
+        $eimg->setImage($img);
+        $eimg->setEquipment($eq);
+        $eimg->setMain($cnt == 0 ? 1 : 0);
+        $em->persist($eimg);
+        $em->flush();        
         
         $resp = array(
             'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
-            'imgId' => $img->getId()
+            'imgId' => $img->getId(),
+            'main' => $eimg->getMain()
         );
         return new JsonResponse($resp);
     }
@@ -809,12 +819,18 @@ class ProviderController extends BaseController {
      */
     public function equipmentImageDeleteAction(Request $request, $eid, $iid) {
         // todo: check security
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
-        $img = $this->getDoctrineRepo('AppBundle:Image')->find($iid);
-        $eq->removeImage($img);
-        $this->getDoctrineRepo('AppBundle:Image')->removeImage($img, $this->getParameter('image_storage_dir'));
-        $em = $this->getDoctrine()->getManager();
-        $em->flush();
+        $eimg = $this->getDoctrineRepo('AppBundle:Equipment')->removeImage($eid, $iid, $this->getParameter('image_storage_dir'));
+        
+        $id = $eimg === null ? null : $eimg->getImage()->getId();
+        $resp = array('mainId' => $id);
+        return new JsonResponse($resp);
+    }
+    /**
+     * @Route("equipment-image-main/{eid}/{iid}", name="equipment-image-main")
+     */
+    public function equipmentImageMainAction(Request $request, $eid, $iid) {
+        // todo: check security
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->setMainImage($eid, $iid);
         
         return new JsonResponse(Response::HTTP_OK);
     }

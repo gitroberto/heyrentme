@@ -502,9 +502,19 @@ img.profileImage {
     display: inline-block;
     margin-left: 10px;
     height: auto;
+    position: relative;
 }
 #img-list li.thumb img {
     max-width: 100px;
+}
+
+#img-list li.thumb img.main {
+    position: absolute; 
+    top: -4px; 
+    left: -4px;
+}
+#img-list li.thumb img.make-main {
+    margin-left: 5px;
 }
 #img-list li.thumb span {
     background-image: none;
@@ -534,4 +544,7 @@ img.profileImage {
 }
 #drop.disabled a:hover {
     text-decoration: none;
+}
+p.how-many {
+    text-align: center;
 }

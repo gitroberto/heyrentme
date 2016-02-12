@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use AppBundle\Utils\SearchParams;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 /**
  * EquipmentRepository
@@ -105,6 +106,78 @@ class EquipmentRepository extends EntityRepository
             ->select('count(e.id)')
             ->getQuery()
             ->getSingleScalarResult();
+    }
+    
+    public function getImageCount($equipmentId) {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(ei.image)')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->getQuery()
+            ->getSingleScalarResult();            
+    }
+ 
+    public function getEquipmentImages($equipmentId) {
+        // main first
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->orderBy('ei.main', 'desc')
+            ->orderBy('i.id');
+
+        $q = $qb->getQuery();
+        
+        return $q->getResult();        
+    }
+    public function setMainImage($equipmentId, $imageId) {
+        $sql = <<<EOT
+update equipment_image
+set main = case when image_id = {$imageId} then 1 else 0 end
+where equipment_id = {$equipmentId}
+EOT;
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->executeUpdate($sql);        
+    }
+    public function removeImage($equipmentId, $imageId, $imageStorageDir) {
+        $em = $this->getEntityManager();
+        $eq = $em->getRepository('AppBundle:Equipment')->find($equipmentId);        
+        $eimg = $em->getRepository('AppBundle:EquipmentImage')->findOneByImage($imageId);
+        $img = $em->getRepository('AppBundle:Image')->find($imageId);
+        $eq->removeImage($eimg);
+        $em->remove($eimg);
+        $em->getRepository('AppBundle:Image')->removeImage($img, $imageStorageDir);
+        $em->remove($img);
+        $em->flush();
+        // set main image (if not exists)
+        $sql = <<<EOT
+update equipment_image
+set main = 1
+where equipment_id = {$equipmentId}
+order by main desc, image_id asc
+limit 1;
+EOT;
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->executeUpdate($sql);        
+        
+        return $em->getRepository('AppBundle:Equipment')->getMainEquipmentImage($equipmentId);
+    }
+    public function getMainEquipmentImage($equipmentId) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->andWhere("ei.main = 1");
+        $q = $qb->getQuery();
+
+        $eimg = null;
+        try {
+            $eimg = $q->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        return $eimg;
     }
     
     /*
