@@ -219,6 +219,7 @@ class BookingController extends BaseController {
      */
     public function confirmationAction(Request $request, $uuid) {
         $inq = $this->getDoctrineRepo('AppBundle:EquipmentInquiry')->findOneByUuid($uuid);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($inq->getEquipment()->getId());
 
         // sanity check
         if ($inq == null) {
@@ -340,6 +341,7 @@ class BookingController extends BaseController {
         
         return $this->render('booking/confirmation.html.twig', array(
             'inquiry' => $inq,
+            'equipment' => $eq,
             'form' => $form->createView()
         ));
     }
@@ -451,6 +453,7 @@ class BookingController extends BaseController {
      */
     public function rateEquipmentAction(Request $request, $uuid) {
         $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->findOneByRateEquipmentUuid($uuid);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($bk->getInquiry()->getEquipment()->getId());
         
         if ($bk === null) {
             return new Response($status = Response::HTTP_FORBIDDEN);
@@ -458,7 +461,6 @@ class BookingController extends BaseController {
         }
         
         $inq = $bk->getInquiry();
-        $eq = $inq->getEquipment();
         
         // build form
         //<editor-fold>

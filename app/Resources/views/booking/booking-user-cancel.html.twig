@@ -14,7 +14,7 @@
             <h1>{{ equipment.name }} / Angebot stornieren</h1>
             <div class="row summary">
                 <div class="ad col-md-4 col-sm-12">
-                    <img src="{% if equipment.images|length > 0 %}{{ equipment.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" alt="{{ equipment.name }}" class="img-responsive"/>
+                    <img src="{% if equipment.equipmentImages|length > 0 %}{{ equipment.equipmentImages[0].image.urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" alt="{{ equipment.name }}" class="img-responsive"/>
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
