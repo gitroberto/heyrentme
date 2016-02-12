@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Equipment;
+use AppBundle\Entity\Talent;
+use AppBundle\Entity\User;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\ReportOffer;
 use AppBundle\Entity\Testimonial;
@@ -155,9 +158,15 @@ class DefaultController extends BaseController {
             throw $this->createNotFoundException();
         }
         
+        
+        
         // determine prev/next
         //<editor-fold>
         if ($eq !== null) {
+            if ($eq->getStatus() !== Equipment::STATUS_APPROVED || $eq->getUser()->getStatus() !== User::STATUS_OK){
+                throw $this->createNotFoundException();
+            }
+            
             $repo = 'AppBundle:Equipment';
             $ratRepo = 'AppBundle:EquipmentRating';
             $tmpl = 'default/equipment.html.twig';
@@ -166,6 +175,9 @@ class DefaultController extends BaseController {
             $type = ReportOffer::OFFER_TYPE_EQUIPMENT;
         }
         else {
+            if ($tal->getStatus() !== Talent::STATUS_APPROVED || $tal->getUser()->getStatus() !== User::STATUS_OK){
+                throw $this->createNotFoundException();
+            }
             $repo = 'AppBundle:Talent';
             $ratRepo = 'AppBundle:TalentRating';
             $tmpl = 'default/talent.html.twig';

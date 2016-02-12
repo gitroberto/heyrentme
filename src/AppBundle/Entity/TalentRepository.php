@@ -32,6 +32,7 @@ class TalentRepository extends EntityRepository
     public function getSamplePreviewTalentsBySubcategory($subcategoryId, $eqId) {
         #TODO: Correct query, remove hardcoded number of items
         // TODO: refactor: write query with proper "order by" and take first four items
+        //TODO: add user status = ok 
         $sql = "select e from AppBundle:Talent e where e.subcategory = :subcategoryId and e.id != :id and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
@@ -134,6 +135,7 @@ class TalentRepository extends EntityRepository
         $qb->select('e', 'i'/*, 'd'*/) // this line forces fetch join
             ->from('AppBundle:Talent', 'e')
             ->join('e.subcategory', 's')
+            ->join('e.user', 'u')
             ->leftJoin('e.images', 'i')/*
             ->leftJoin('e.discounts', 'd')*/;
         
@@ -152,12 +154,16 @@ class TalentRepository extends EntityRepository
             $qb->andWhere('e.priceBuy > 0');
         }
          */
+        $qb->andWhere('u.status = '. User::STATUS_OK);
+        
         if ($params->getSort() === 'date') {
             $qb->orderBy('e.createdAt', 'desc');
         }
         elseif ($params->getSort() === 'price') {
             $qb->orderBy ('e.price', 'asc');
         }
+        
+        
         
         $q = $qb->getQuery();
         return $q->getResult();

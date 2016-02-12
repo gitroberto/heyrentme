@@ -55,8 +55,7 @@ class UserController extends BaseAdminController {
         $form = $this->createFormBuilder($user)->add('status', 'choice', array(
                     'choices' => array(                        
                         'Ok' => User::STATUS_OK,
-                        'Blocked' => User::STATUS_BLOCKED,
-                        'Deleted' => User::STATUS_DELETED
+                        'Blocked' => User::STATUS_BLOCKED
                     ),
                     'choices_as_values' => true,
                     'required' => true,
