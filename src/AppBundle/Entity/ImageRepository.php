@@ -32,9 +32,21 @@ class ImageRepository extends \Doctrine\ORM\EntityRepository
                     DIRECTORY_SEPARATOR .
                     $image->getUuid() . '.' . $image->getExtension();
             
+            $originalPath = $image_storage_dir .
+                    DIRECTORY_SEPARATOR .
+                    $image->getPath() .
+                    DIRECTORY_SEPARATOR .
+                    "original" .
+                    DIRECTORY_SEPARATOR .
+                    $image->getUuid() . '.' . $image->getExtension();
+            
+            
             $fs = new Filesystem();
             if (file_exists($fullPath)){
                 $fs->remove($fullPath);
+            }
+            if (file_exists($originalPath)){
+                $fs->remove($originalPath);
             }
             $em = $this->getEntityManager();
 

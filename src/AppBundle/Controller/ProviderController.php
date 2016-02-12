@@ -999,6 +999,13 @@ class ProviderController extends BaseController {
         return $result;
     }
     
+    public function RemoveAndDeleteRelatedImage($image, $folder){
+        if ($image){
+            $this->getDoctrineRepo('AppBundle:Image')->removeImage($image, $folder);
+            $this->getDoctrineRepo('AppBundle:Image')->deleteById($image->getId());
+        }    
+    }
+    
     /**
      * @Route("/provider/delete", name="delete-user")
      */
@@ -1010,6 +1017,28 @@ class ProviderController extends BaseController {
         if (!$user) {
             throw $this->createNotFoundException();
         }  
+        
+        $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());
+        $talents = $this->getDoctrineRepo('AppBundle:Talent')->getAllByUserId($user->getId());
+        
+        $image = $user->getImage();
+        $folder = $this->getParameter('image_storage_dir');
+        $user->setImage(null);        
+        $this->RemoveAndDeleteRelatedImage($image, $folder);
+        
+        foreach ($equipments as $eq) {
+            foreach ($eq->getImages() as $i) {
+                $eq->removeImage($i);
+                $this->RemoveAndDeleteRelatedImage($i, $folder);
+            }
+        }
+        
+        foreach ($talents as $tal) {
+            foreach ($tal->getImages() as $i) {
+                $tal->removeImage($i);
+                $this->RemoveAndDeleteRelatedImage($i, $folder);
+            }
+        }
         
         $sql = <<<EOT
     delete from user_rating where user_id= {$id};

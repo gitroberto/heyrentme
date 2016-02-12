@@ -76,7 +76,6 @@
    
     <div class="row">
         
-        
         <div class="form-group">
           <label for="form_upl" class="control-label col-xs-2">Change post image</label>
           <div class="col-xs-10">
@@ -93,6 +92,16 @@
         </div>
     </div>
           
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Type</label>
+          <div class="err-msg">{{ form_errors(form.type) }}</div>
+          <div class="col-xs-10 control-readonly">              
+                {{ form_widget(form.type) }}                
+          </div>
+        </div>
+    </div>
+            
     <div class="row">          
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
