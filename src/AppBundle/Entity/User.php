@@ -16,8 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User extends BaseUser
 {
     const STATUS_OK = 1;
-    const STATUS_BLOCKED = 2;
-    const STATUS_DELETED = 3;
+    const STATUS_BLOCKED = 2;    
     
     /**
      * @ORM\Id
@@ -98,8 +97,7 @@ class User extends BaseUser
     public function getStatusStr() {
         switch ($this->status) {
             case self::STATUS_OK: return "ok";
-            case self::STATUS_BLOCKED: return "blocked";
-            case self::STATUS_DELETED: return "deleted";
+            case self::STATUS_BLOCKED: return "blocked";            
             default:
                 throw new RuntimeException("User status corrupt!");
         }

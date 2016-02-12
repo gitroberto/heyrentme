@@ -23,6 +23,7 @@ class EquipmentRepository extends EntityRepository
     }   
     
     public function getAllForOtherCategories($subcategoryId) {
+        //TODO: add user status = ok 
         $sql = "select e from AppBundle:Equipment e where e.subcategory != :subcategoryId and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
@@ -33,6 +34,7 @@ class EquipmentRepository extends EntityRepository
     public function getSamplePreviewEquipmentsBySubcategory($subcategoryId, $eqId) {
         #TODO: Correct query, remove hardcoded number of items
         // TODO: refactor: write query with proper "order by" and take first four items
+        //TODO: add user status = ok 
         $sql = "select e from AppBundle:Equipment e where e.subcategory = :subcategoryId and e.id != :id and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
@@ -207,6 +209,7 @@ EOT;
         $qb->select('e', 'i', 'd') // this line forces fetch join
             ->from('AppBundle:Equipment', 'e')
             ->join('e.subcategory', 's')
+            ->join('e.user', 'u')
             ->leftJoin('e.images', 'i')
             ->leftJoin('e.discounts', 'd');
         
@@ -223,6 +226,9 @@ EOT;
         if ($params->getTestBuy()) {
             $qb->andWhere('e.priceBuy > 0');
         }
+        
+        $qb->andWhere('u.status = '. User::STATUS_OK);
+        
         if ($params->getSort() === 'date') {
             $qb->orderBy('e.createdAt', 'desc');
         }

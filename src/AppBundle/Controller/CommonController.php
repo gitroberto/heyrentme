@@ -4,11 +4,13 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Feedback;
+use AppBundle\Entity\ReportOffer;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use \Swift_Message;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,6 +105,100 @@ class CommonController extends BaseController {
         $response = new Response(json_encode("User_Feedback_Saved"));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+    
+    /**
+     * 
+     * @Route("equipment/report/{type}/{id}", name="report")
+     */
+    public function reportOfferAction(Request $request, $type, $id) {
+        $reportOffer = new ReportOffer();
+        
+        $form = $this->createFormBuilder($reportOffer)
+                ->add('report', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 100))
+                    )
+                ))
+                ->add('message', 'textarea', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 500))
+                    )
+                ))->getForm();
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $reportOffer->setOfferType($type);
+            
+            $item=null;
+            $actionName="";
+            if ($type == ReportOffer::OFFER_TYPE_EQUIPMENT){
+                $item = $this->getDoctrineRepo("AppBundle:Equipment")->find($id);
+                if (!$item) {
+                    throw $this->createNotFoundException('No equipment found for id '.$id);
+                }
+                $actionName = "admin_equipment_moderate";
+                $reportOffer->setEquipment($item);
+            } else {
+                $item = $this->getDoctrineRepo("AppBundle:Talent")->find($id);
+                if (!$item) {
+                    throw $this->createNotFoundException('No talent found for id '.$id);
+                }
+                $actionName="admin_talent_moderate";
+                $reportOffer->setTalent($item);
+            }
+                    
+            $em->persist($reportOffer);
+            $em->flush();
+            
+            $this->sendNewReportOfferMessage($request, $item, $actionName);
+            
+            return $this->ReportOfferSavedAction();      
+        }
+        
+        return $this->render('default/report_offer.html.twig', array(
+            'form' => $form->createView(),
+            'type' => $type,
+            'id' => $id
+        ));
+    }
+    
+    public function ReportOfferSavedAction(){        
+        $response = new Response(json_encode("Report_Offer_Saved"));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
+    public function sendNewReportOfferMessage(Request $request, $item, $actionName)
+    {      
+        $template = 'Emails/admin/new_report_offer.html.twig';       
+        
+        $userLink = $request->getSchemeAndHttpHost() . $this->generateUrl('catchall', array('content' => $item->getUrlPath()));
+        $adminLink = $request->getSchemeAndHttpHost() . $this->generateUrl($actionName, array('id'=> $item->getId()));
+        
+        
+        $emailHtml = $this->renderView($template, array(
+            'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
+            'itemName' => $item->getName(),
+            'userLink' => $userLink,
+            'adminLink' => $adminLink
+        ));
+        
+        $subject = "Report offer.";
+        
+        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+        $message = Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($this->getParameter('admin_email'))
+            ->setBody($emailHtml, 'text/html');
+        $this->get('mailer')->send($message);
+        
     }
     
     

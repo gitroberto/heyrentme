@@ -863,7 +863,10 @@ class ProviderController extends BaseController {
         );
         
         // TODO: add server-side validation for features
-        $form = $this->createFormBuilder($data)
+        $form = $this->createFormBuilder($data, array('constraints' => array(
+                            new Callback(array($this, 'validateTime'))
+                        ) )
+            )
             ->add('timeMorning', 'checkbox', array('required' => false))
             ->add('timeAfternoon', 'checkbox', array('required' => false))
             ->add('timeEvening', 'checkbox', array('required' => false))
@@ -884,9 +887,9 @@ class ProviderController extends BaseController {
                 'constraints' => array(new Length(array('max' => 1000)))
             ))                
             ->getForm();
-      
+        $this->formHelper = $form;
         $form->handleRequest($request);
-                        
+            
         // TODO: add server-side validation
         if ($form->isValid()) {
             $data = $form->getData();
@@ -960,6 +963,13 @@ class ProviderController extends BaseController {
             'features' => $features,
             'featureSectionRepo' => $this->getDoctrineRepo('AppBundle:FeatureSection')*/
         ));
+    }
+    
+    
+    public function validateTime($data, ExecutionContextInterface $context) {
+        if (!$data['timeMorning'] && !$data['timeAfternoon'] && !$data['timeEvening'] && !$data['timeWeekend'] ) {
+            $context->buildViolation('Please select at least one time')->addViolation();
+        }
     }
     
     public function validatePhone($data, ExecutionContextInterface $context) {
