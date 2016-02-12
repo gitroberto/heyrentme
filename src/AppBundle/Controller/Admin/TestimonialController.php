@@ -54,6 +54,7 @@ class TestimonialController extends BaseAdminController {
             $cell[$i++] = $dataRow->getName();
             $cell[$i++] = $dataRow->getAge();
             $cell[$i++] = $dataRow->getPlace();            
+            $cell[$i++] = $dataRow->getTypeStr();            
             $cell[$i++] = $dataRow->getPosition(); 
             
             $row['cell'] = $cell;
@@ -109,6 +110,17 @@ class TestimonialController extends BaseAdminController {
                     'required' => false,
                     'constraints' => array(
                         new Type(array('type' => 'integer'))
+                    )
+                ))
+                ->add('type', 'choice', array(
+                    'choices' => array(                        
+                        'Equipment' => Testimonial::TYPE_EQUIPMENT,
+                        'Talent' => Testimonial::TYPE_TALENT
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
                     )
                 ))
                 ->getForm();
@@ -200,6 +212,17 @@ class TestimonialController extends BaseAdminController {
                     'required' => false,
                     'constraints' => array(
                         new Type(array('type' => 'integer'))
+                    )
+                ))
+                ->add('type', 'choice', array(
+                    'choices' => array(                        
+                        'Equipment' => Testimonial::TYPE_EQUIPMENT,
+                        'Talent' => Testimonial::TYPE_TALENT
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
                     )
                 ))
                 ->getForm();
