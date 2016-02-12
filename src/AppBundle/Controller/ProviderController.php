@@ -696,8 +696,6 @@ class ProviderController extends BaseController {
      * @Route("equipment-image", name="equipment-image")
      */
     public function equipmentImageAction(Request $request) {  
-        // todo: check security
-        // todo: validate jpg/png
         $file = $request->files->get('upl');
         if ($file->isValid()) {
             $uuid = Utils::getUuid();

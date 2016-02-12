@@ -126,8 +126,8 @@ class EquipmentRepository extends EntityRepository
             ->from('AppBundle:EquipmentImage', 'ei')
             ->join('ei.image', 'i')
             ->andWhere("ei.equipment = {$equipmentId}")
-            ->orderBy('ei.main', 'desc')
-            ->orderBy('i.id');
+            ->addOrderBy('ei.main', 'desc')
+            ->addOrderBy('i.id');
 
         $q = $qb->getQuery();
         
@@ -214,6 +214,7 @@ EOT;
             ->leftJoin('e.discounts', 'd');
         
         $qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
+        $qb->andWhere('u.status = '. User::STATUS_OK);
         
         if ($params->getCategoryId() != null) {
             $qb->andWhere("s.category = {$params->getCategoryId()}");
@@ -227,7 +228,6 @@ EOT;
             $qb->andWhere('e.priceBuy > 0');
         }
         
-        $qb->andWhere('u.status = '. User::STATUS_OK);
         
         if ($params->getSort() === 'date') {
             $qb->orderBy('e.createdAt', 'desc');
@@ -235,9 +235,16 @@ EOT;
         elseif ($params->getSort() === 'price') {
             $qb->orderBy ('e.price', 'asc');
         }
+                
+        $eqs = $qb->getQuery()->getResult();
         
-        $q = $qb->getQuery();
-        return $q->getResult();
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+        
+        foreach ($eqs as $eq) {
+            $eq->setMainEquipmentImage($repo->getMainEquipmentImage($eq->getId()));
+        }
+        
+        return $eqs;
     }
     
     public function clearFeatures($equipmentId) {
