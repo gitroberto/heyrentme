@@ -147,7 +147,7 @@
         var url = '{{ path('equipment-list') }}';
         var data = {
             'sort': $("#sort").val(),
-            'testBuy': $("#buy").is(':checked') ? 1 : 0
+            'type': {{ constant('AppBundle\\Entity\\Category::TYPE_TALENT') }}
             //, 'discount': $("#discount").is(':checked') ? 1 : 0
         };
         console.log(JSON.stringify(data));
