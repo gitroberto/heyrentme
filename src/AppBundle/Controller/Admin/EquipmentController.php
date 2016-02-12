@@ -78,7 +78,7 @@ class EquipmentController extends BaseAdminController {
      * @Route("/admin/equipment/moderate/{id}", name="admin_equipment_moderate")
      */
     public function moderateAction(Request $request, $id) {
-        $equipment = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        $equipment = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($id);
 
         if (!$equipment) {
             throw $this->createNotFoundException('No equipment found for id '.$id);

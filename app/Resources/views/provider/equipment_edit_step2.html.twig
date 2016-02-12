@@ -55,7 +55,7 @@
                           <input type="file" name="upl"/>
                       </div>
                       <ul id="img-list">
-                            {% for eimg in images %}<li class="thumb">
+                            {% for eimg in equipment.equipmentImages %}<li class="thumb">
                                     <a href="{{ eimg.image.urlPath(image_url_prefix) }}" title="öffnen" target="_blank"><img src="{{ eimg.image.urlPath(image_url_prefix) }}" alt="öffnen"/></a>
                                     <br/>
                                     <a class="remove" href="#" data-id="{{ eimg.image.id }}" title="löschen"><img src="/img/icons/delete.png" alt="löschen" /></a>

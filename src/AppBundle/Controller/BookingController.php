@@ -549,6 +549,7 @@ class BookingController extends BaseController {
      */
     public function userCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->find($id);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($bk->getInquiry()->getEquipment()->getId());
         $user = $this->getUser();
         
         // check security        
@@ -630,6 +631,7 @@ class BookingController extends BaseController {
         
         return $this->render("booking/booking-user-cancel.html.twig", array(
             'booking' => $bk,
+            'equipment' => $eq,
             'form' => $form->createView()
         ));
     }
@@ -638,6 +640,7 @@ class BookingController extends BaseController {
      */
     public function providerCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->find($id);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($bk->getInquiry()->getEquipment()->getId());
         $user = $this->getUser();
         
         // todo: check security
@@ -720,6 +723,7 @@ class BookingController extends BaseController {
         
         return $this->render("booking/booking-provider-cancel.html.twig", array(
             'booking' => $bk,
+            'equipment' => $eq,
             'form' => $form->createView()
         ));
     }

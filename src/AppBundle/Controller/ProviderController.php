@@ -534,7 +534,7 @@ class ProviderController extends BaseController {
     public function equipmentEdit2Action(Request $request, $id) {
         $session = $request->getSession();
         
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($id);
         if (!$eq) {
             throw $this->createNotFoundException();
         }        
@@ -555,8 +555,7 @@ class ProviderController extends BaseController {
             'phone' => $user->getPhone()
         );
         
-        $images = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentImages($eq->getId());
-        $this->imageCount = count($images);
+        $this->imageCount = count($eq->getEquipmentImages());
         
         
         // validation form
@@ -666,8 +665,7 @@ class ProviderController extends BaseController {
         
         return $this->render('provider\equipment_edit_step2.html.twig', array(
             'form' => $form->createView(),
-            'equipment' => $eq,
-            'images' => $images
+            'equipment' => $eq
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {

@@ -1,9 +1,9 @@
 {% for eq in items %}
     <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
         <div class="col-md-4">
-            {% if eq.images|length > 0 %}
+            {% if eq.equipmentImages|length > 0 %}
                 <div style="height: 268px; overflow: hidden;">
-                <img src="{{ eq.mainEquipmentImage.image.urlPath(image_url_prefix) }}" alt="placeholder"/>
+                <img src="{{ eq.equipmentImages[0].image.urlPath(image_url_prefix) }}" alt="placeholder"/>
                 </div>
             {% else %}
                 <div style="height: 268px; overflow: hidden;">

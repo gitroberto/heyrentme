@@ -62,9 +62,15 @@ class EquipmentRepository extends EntityRepository
             ->join('e.user', 'u');
         $qb->andWhere("u.id = {$userId}");
 
-        $q = $qb->getQuery();
+        $eqs = $qb->getQuery()->getResult();
         
-        return $q->getResult();        
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+        
+        foreach ($eqs as $eq) {
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
+        }
+        
+        return $eqs;
     }
     
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus) {
