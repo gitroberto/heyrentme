@@ -265,8 +265,8 @@ EOT;
             ->from('AppBundle:Equipment', 'e')
             ->join('e.user', 'u');
         
-        $qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
-        $qb->andWhere('u.status = '. User::STATUS_OK);
+        //$qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
+        //$qb->andWhere('u.status = '. User::STATUS_OK);
         $qb->andWhere("e.id = {$equipmentId}");
         
         $eq = null;

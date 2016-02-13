@@ -747,7 +747,6 @@ class ProviderController extends BaseController {
      * @Route("equipment-image-save", name="equipment-image-save")
      */
     public function equipmentImageSaveAction(Request $request) { 
-        // todo: check security
         $name = $request->get('name');
         $id = $request->get('id');
         $x = $request->get('x');
@@ -756,6 +755,12 @@ class ProviderController extends BaseController {
         $y2 = $request->get('y2');
         $w = round($x2 - $x);
         $h = round($y2 - $y);
+        
+        // check security
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
         
         $sep = DIRECTORY_SEPARATOR;
         $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
@@ -784,7 +789,6 @@ class ProviderController extends BaseController {
 
         // store entry in database
         $em = $this->getDoctrine()->getManager();
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
         $cnt = $this->getDoctrineRepo('AppBundle:Equipment')->getImageCount($id);        
         
         $img = new Image();
@@ -814,7 +818,12 @@ class ProviderController extends BaseController {
      * @Route("equipment-image-delete/{eid}/{iid}", name="equipment-image-delete")
      */
     public function equipmentImageDeleteAction(Request $request, $eid, $iid) {
-        // todo: check security
+        // check security
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
+
         $eimg = $this->getDoctrineRepo('AppBundle:Equipment')->removeImage($eid, $iid, $this->getParameter('image_storage_dir'));
         
         $id = $eimg === null ? null : $eimg->getImage()->getId();
@@ -825,9 +834,13 @@ class ProviderController extends BaseController {
      * @Route("equipment-image-main/{eid}/{iid}", name="equipment-image-main")
      */
     public function equipmentImageMainAction(Request $request, $eid, $iid) {
-        // todo: check security
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->setMainImage($eid, $iid);
-        
+        // check security
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
+
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->setMainImage($eid, $iid);        
         return new JsonResponse(Response::HTTP_OK);
     }
     
@@ -964,7 +977,11 @@ class ProviderController extends BaseController {
     
     public function validateTime($data, ExecutionContextInterface $context) {
         if (!$data['timeMorning'] && !$data['timeAfternoon'] && !$data['timeEvening'] && !$data['timeWeekend'] ) {
+<<<<<<< HEAD
             $context->buildViolation('Bitte wähle zumindest einen Zeitpunkt an dem du verfügbar sein kannst')->addViolation();
+=======
+            $context->buildViolation('Bitte wählen Sie mindestens ein Treffpunkt')->addViolation();
+>>>>>>> origin/main
         }
     }
     

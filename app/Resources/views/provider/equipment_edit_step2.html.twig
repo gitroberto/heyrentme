@@ -343,11 +343,11 @@
         function setupJcrop() {
             $("#cropper-modal .modal-body img").Jcrop({ 
                 aspectRatio: 4.0 / 3.0,
-                //minSize: [1024, 768],
+                minSize: [750, 563],
                 boxWidth: 600,
                 boxHeight: 400,
                 keySupport: false,
-                setSelect: [0, 0, 1024, 768]/*,
+                setSelect: [0, 0, 750, 563]/*,
                 onSelect: showCoords,
                 onChange: showCoords*/
             }, function() {
@@ -480,28 +480,10 @@
 
             });
 
-
             // Prevent the default action when a file is dropped on the window
             $(document).on('drop dragover', function (e) {
                 e.preventDefault();
             });
-
-            // Helper function that formats the file sizes
-            function formatFileSize(bytes) {
-                if (typeof bytes !== 'number') {
-                    return '';
-                }
-
-                if (bytes >= 1000000000) {
-                    return (bytes / 1000000000).toFixed(2) + ' GB';
-                }
-
-                if (bytes >= 1000000) {
-                    return (bytes / 1000000).toFixed(2) + ' MB';
-                }
-
-                return (bytes / 1000).toFixed(2) + ' KB';
-            }
         });
     </script>
 {% endblock %}
