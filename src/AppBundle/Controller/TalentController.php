@@ -251,7 +251,7 @@ class TalentController extends BaseController {
                 'constraints' => array(
                     new NotBlank(),
                     new Length(array('max' => 4)),
-                    new Regex(array('pattern' => '/^\d{4}$/', 'message' => 'Please fill in a valid postal code'))
+                    new Regex(array('pattern' => '/^\d{4}$/', 'message' => 'Bitte gib hier eine gültige PLZ ein'))
                 )
             ))
             ->add('place', 'text', array(
@@ -272,14 +272,14 @@ class TalentController extends BaseController {
                     'maxlength' => 10, 
                     'pattern' => '^[0-9]{1,10}$'),
                 'constraints' => array(
-                    new Regex(array('pattern' => '/^\d{1,10}$/', 'message' => 'Please fill in a valid phone number'))
+                    new Regex(array('pattern' => '/^\d{1,10}$/', 'message' => 'Bitte gib hier eine gültige Telefonnummer ein'))
                 )
             ))
             ->add('phonePrefix', 'text', array(
                 'required' => false, 
                 'attr' => array('maxlength' => 3, 'pattern' => '^[0-9]{1,3}$'),
                 'constraints' => array(
-                    new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Please fill in a valid phone number'))
+                    new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Bitte gib hier eine gültige Vorwahl ein'))
                 )
             ))
             ->getForm();
@@ -353,12 +353,12 @@ class TalentController extends BaseController {
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
         if (!$value) {
-            $context->buildViolation('You must check this box')->atPath('accept')->addViolation();
+            $context->buildViolation('Bitte Checkbox bestätigen')->atPath('accept')->addViolation();
         }            
     }
     public function validateMakeSure($value, ExecutionContextInterface $context) {
         if (!$value) {
-            $context->buildViolation('You must check this box')->atPath('make_sure')->addViolation();
+            $context->buildViolation('Bitte Checkbox bestätigen')->atPath('make_sure')->addViolation();
         }            
     }
     public function validateVideoUrl($value, ExecutionContextInterface $context) {
@@ -396,7 +396,7 @@ class TalentController extends BaseController {
             $this->currentVideo = $v;
             return;
         }
-        $context->buildViolation('This is not a valid Youtube or Vimeo url.')->atPath('videoUrl')->addViolation();        
+        $context->buildViolation('Bitte gib hier eine gültige Youtube- oder Vimeo-URL ein')->atPath('videoUrl')->addViolation();        
     }
     
     private $fileCount = null; // num of uploaded images; necessary for image validation
@@ -410,7 +410,7 @@ class TalentController extends BaseController {
             $cnt += $this->imageCount;
         }
         if ($cnt == 0) {
-            $context->buildViolation('Please upload at least one image')->addViolation();
+            $context->buildViolation('Bitte lade zumindest ein Bild hoch')->addViolation();
         }
     }
     private function handleImages($eqFiles, $eq, $em) {
@@ -674,13 +674,13 @@ class TalentController extends BaseController {
     
     public function validateTime($data, ExecutionContextInterface $context) {
         if (!$data['timeMorning'] && !$data['timeAfternoon'] && !$data['timeEvening'] && !$data['timeWeekend'] ) {
-            $context->buildViolation('Please select at least one time')->addViolation();
+            $context->buildViolation('Bitte wähle zumindest einen Zeitpunkt, an dem du verfügbar sein kannst')->addViolation();
         }
     }
     
     public function validatePhone($data, ExecutionContextInterface $context) {
         if (!empty($data['phone']) xor !empty($data['phonePrefix'])) {
-            $context->buildViolation('Please provide phone number (both prefix and number)')->addViolation();
+            $context->buildViolation('Bitte gib deine Telefonnummer vollständig an')->addViolation();
         }
     }
 

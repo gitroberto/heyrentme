@@ -128,7 +128,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Du hast soeben eine Anfrage erhalten!')
                 ->setFrom($from)
                 ->setTo($provider->getEmail())
                 ->setBody($emailHtml, 'text/html');
@@ -198,7 +198,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Deine Anfrage wurde angenommen!')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -305,7 +305,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Deine Buchung war erfolgreich!')
                 ->setFrom($from)
                 ->setTo($provider->getEmail())
                 ->setBody($emailHtml, 'text/html');
@@ -328,7 +328,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Deine Buchung war erfolgreich!')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -606,7 +606,7 @@ class BookingController extends BaseController {
                 'inquiry' => $inq
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Eine Buchung wurde storniert')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -619,7 +619,7 @@ class BookingController extends BaseController {
                 'inquiry' => $inq
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Eine Buchung wurde storniert')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -697,7 +697,7 @@ class BookingController extends BaseController {
                 'inquiry' => $inq
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Eine Buchung wurde storniert')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -709,7 +709,7 @@ class BookingController extends BaseController {
                 'provider' => $provider
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Eine Buchung wurde storniert')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
