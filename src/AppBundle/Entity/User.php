@@ -318,6 +318,15 @@ class User extends BaseUser
      */
     protected $modifiedAt;    
     
+     /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $secondDayEmailSentAt;  
+               
+     /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $thirdDayEmailSentAt;  
     
     
     public function setCreatedAt($createdAt)
@@ -344,6 +353,29 @@ class User extends BaseUser
         return $this->modifiedAt;
     }
     
+    public function setSecondDayEmailSentAt($secondDayEmailSentAt)
+    {
+        $this->secondDayEmailSentAt = $secondDayEmailSentAt;
+
+        return $this;
+    }
+
+    public function getSecondDayEmailSentAt()
+    {
+        return $this->secondDayEmailSentAt;
+    }
+    
+    public function setThirdDayEmailSentAt($thirdDayEmailSentAt)
+    {
+        $this->thirdDayEmailSentAt = $thirdDayEmailSentAt;
+
+        return $this;
+    }
+
+    public function getThirdDayEmailSentAt()
+    {
+        return $this->thirdDayEmailSentAt;
+    }
     
     /**
      * @ORM\OneToMany(targetEntity="DiscountCode", mappedBy="user")

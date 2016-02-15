@@ -1153,7 +1153,6 @@ class ProviderController extends BaseController {
         $talents = $this->getDoctrineRepo('AppBundle:Talent')->getAllByUserId($user->getId());
         
         $m = $this->getDoctrine()->getManager();
-            
         $image = $user->getImage();
         $folder = $this->getParameter('image_storage_dir');
         $user->setImage(null);        

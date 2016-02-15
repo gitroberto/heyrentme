@@ -112,4 +112,15 @@ EOT;
         $conn->close();        
     }
     
+    public function getAllForWelcomeEmails() {
+        $qb = $this->getEntityManager()->createQueryBuilder();        
+        $qb->select('u')
+            ->from('AppBundle:User', 'u');   
+        
+        $qb->orWhere('u.secondDayEmailSentAt is null');
+        $qb->orWhere('u.thirdDayEmailSentAt is null');
+                
+        return $qb->getQuery()->getResult();        
+    }
+    
 }
