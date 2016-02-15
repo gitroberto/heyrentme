@@ -176,6 +176,9 @@ div.err-msg  ul  li {
     margin-left:20px
 }
 
+.rent-dialog p:last-child {
+margin-bottom:10px;
+}
 
 #upload.imageUpload {
     width: 220px;
@@ -421,7 +424,7 @@ img.user-avatar-profile {
     max-width: 750px;
 }
 #inquiry-modal .modal-dialog {
-    width: 600px;
+    max-width: 600px;
 }
 
 

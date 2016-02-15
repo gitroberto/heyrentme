@@ -325,29 +325,6 @@ color:black;
     width: 97.5%;
 }
 
-
-/*.info {
-    background-image:none;
-	background-size: none;
-    padding-top: 0;
-}
-
-.lower-info {
-     background-image:none;
-}
-
-.info-img {
-  position: absolute;
-  z-index: -1;
-  width:100%;
-}
-
-.info .container {
-padding-top:4.5%;
-}
-*/
-
-
 .info {
     background-image: url('../img/allgemein-final/hilfe.jpg');
 	padding-top: 2.5%;
@@ -369,6 +346,10 @@ padding-top:4.5%;
   and (orientation: portrait) { 
 .welcome {
     top: 45%;
+}
+
+.date-picker-wrapper.single-date {
+    width: 100%;
 }
 }
 
@@ -496,6 +477,15 @@ font-size: 11px;
 }
 }
 
+/* Small Web-Screen */
+
+@media (max-width: 1200px) {
+img.down-icon {
+display:none;
+}
+}
+
+
 /* Mobile Nav */
 
 .sb-left {
@@ -517,3 +507,16 @@ font-size: 11px;
 .sb-style-overlay {
 	z-index: 999;
 }
+
+/* 02-15-2016 FIXES */
+
+.product-info .no-stars {
+margin-left:0;
+margin-top:10px;
+}
+
+.product-detail .left-side .product-description p {
+min-height:200px;
+}
+
+
