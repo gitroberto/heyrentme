@@ -47,6 +47,7 @@ class SchedulerService {
         $this->sendReturnReminders($now);
         $this->sendRateReminders($now);
         $this->deleteTempImages($now);
+        $this->sendWelcomeEmails($now);
     }
     
     protected function sendRentReminders(DateTime $datetime) {  
@@ -457,6 +458,67 @@ class SchedulerService {
             closedir($handle);
         }        
     }
+    
+    public function isOlderThanOneDay($createdAt, $now){
+        $interval = date_diff($now, $createdAt);        
+        return $interval->format('%y') > 0 || $interval->format('%m') > 0 || $interval->format('%d') >= 1;
+               
+    }
+    
+    
+    public function sendWelcomeEmails($now){
+        $users = $this->em->getRepository('AppBundle:User')->getAllForWelcomeEmails();
+        foreach ($users as $u) {
+            if(!$u->getSecondDayEmailSentAt() && $this->isOlderThanOneDay($u->getCreatedAt(), $now)){                
+                $this->sendSecondDayWelcomeEmail($u->getEmail());
+                $u->setSecondDayEmailSentAt($now);
+            }
+            
+            if(!$u->getThirdDayEmailSentAt() && $this->isOlderThanOneDay($u->getSecondDayEmailSentAt(), $now)){                
+                $this->sendThirdDayWelcomeEmail($u->getEmail());
+                $u->setThirdDayEmailSentAt($now);
+            }
+        }
+        $this->em->flush();
+    }
+    
+    public function sendSecondDayWelcomeEmail($emailTo ){
+        $tmpl = 'Emails\User\\welcome_second_day.html.twig';
+        $emailHtml = $this->templating->render($tmpl, array(
+            'mailer_app_url_prefix' => $this->appUrlPrefix            
+        ));
+        $message = Swift_Message::newInstance()
+            ->setSubject('Welcom second day')
+            ->setFrom($this->from)
+            ->setTo($emailTo)
+            ->setBody($emailHtml, 'text/html');
+        $this->mailer->send($message);
+    }
+    
+    public function sendThirdDayWelcomeEmail($emailTo ){
+        $tmpl = 'Emails\User\welcome_third_day.html.twig';
+        
+        $talentUrl = $this->appUrlPrefix . $this->router->generate('bookme');
+        $equipmentUrl = $this->appUrlPrefix . $this->router->generate('rentme');
+                
+        $emailHtml = $this->templating->render($tmpl, array(
+            'mailer_app_url_prefix' => $this->appUrlPrefix,
+            'talentUrl' => $talentUrl,
+            'equipmentUrl' => $equipmentUrl
+        ));
+        $message = Swift_Message::newInstance()
+            ->setSubject('Welcom third day')
+            ->setFrom($this->from)
+            ->setTo($emailTo)
+            ->setBody($emailHtml, 'text/html');
+        $this->mailer->send($message);
+        
+    }
+    
+    
+    
+    
+    
     
     public function test() {
         $s = 'service and command test ' . (new DateTime())->format('r');

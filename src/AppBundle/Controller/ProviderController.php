@@ -1164,22 +1164,38 @@ class ProviderController extends BaseController {
         $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());
         $talents = $this->getDoctrineRepo('AppBundle:Talent')->getAllByUserId($user->getId());
         
+        $m = $this->getDoctrine()->getManager();
         $image = $user->getImage();
         $folder = $this->getParameter('image_storage_dir');
         $user->setImage(null);        
         $this->RemoveAndDeleteRelatedImage($image, $folder);
+        $m->flush();
         
         foreach ($equipments as $eq) {
-            foreach ($eq->getImages() as $i) {
-                $eq->removeImage($i);
+            foreach ($eq->getImages() as $ei) {
+                $i = $ei->getImage();                
+                $eq->removeImage($ei);                
+                $m->remove($ei);
+                $m->flush();
                 $this->RemoveAndDeleteRelatedImage($i, $folder);
             }
         }
         
         foreach ($talents as $tal) {
-            foreach ($tal->getImages() as $i) {
-                $tal->removeImage($i);
+            foreach ($tal->getImages() as $ti) {
+                /* uncoment after talent changes.
+                $i = $ti->getImage();
+                $tal->removeImage($ti);
+                $m->remove($ti);
+                $m->flush();
                 $this->RemoveAndDeleteRelatedImage($i, $folder);
+                */
+                
+                //Delete those rows after talent chnages                
+                $tal->removeImage($ti);
+                $m->remove($ti);
+                $m->flush();
+                $this->RemoveAndDeleteRelatedImage($ti, $folder);
             }
         }
         
@@ -1269,7 +1285,7 @@ class ProviderController extends BaseController {
     delete from fos_user where id = {$id};
 EOT;
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getEntityManager();        
         $conn = $em->getConnection();
         $conn->executeUpdate($sql);        
         
