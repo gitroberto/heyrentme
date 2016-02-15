@@ -9,6 +9,7 @@ use Swift_Mailer;
 use Swift_Message;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Exception\Exception;
 
@@ -45,6 +46,7 @@ class SchedulerService {
         $this->sendAllOkReminders($now);
         $this->sendReturnReminders($now);
         $this->sendRateReminders($now);
+        $this->deleteTempImages($now);
     }
     
     protected function sendRentReminders(DateTime $datetime) {  
@@ -423,6 +425,29 @@ class SchedulerService {
                 $this->logger->error($e->getTraceAsString());
             }
         }
+    }
+    
+    public function deleteTempImages($now){
+        $tempUrl = $this->parameters['image_storage_dir'] . '\temp\\';
+        
+        if ($handle = opendir($tempUrl)) {            
+            $fs = new Filesystem();
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != '.' && $entry != '..') {
+                    $fullpath = $tempUrl . $entry;
+                    if (file_exists($fullpath)){
+                        $date = date_create();
+                        date_timestamp_set($date, filemtime($fullpath));
+                        $interval = date_diff($now, $date);
+                        if ($interval->format('%y') > 0 || $interval->format('%m') > 0 || 
+                            $interval->format('%d') > 0 || $interval->format('%h') > 0){
+                            $fs->remove($fullpath);
+                        }
+                    }
+                }
+            }
+            closedir($handle);
+        }        
     }
     
     public function test() {
