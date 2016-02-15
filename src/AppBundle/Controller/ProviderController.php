@@ -125,7 +125,125 @@ class ProviderController extends BaseController {
          */       
         return $this->render('provider/profil.html.twig');
     }
-   
+
+    /**
+     * @Route("/provider-image", name="provider-image")
+     */
+    public function providerImageAction(Request $request) {  
+        $file = $request->files->get('upl');
+        if ($file->isValid()) {
+            $uuid = Utils::getUuid();
+            $path = 
+                $this->getParameter('image_storage_dir') .
+                DIRECTORY_SEPARATOR .
+                'temp' .
+                DIRECTORY_SEPARATOR;
+            $ext = strtolower($file->getClientOriginalExtension());
+            $name = sprintf("%s.%s", $uuid, $ext);
+            $filename = $path . DIRECTORY_SEPARATOR . $name;
+
+            $file->move($path, $name);
+
+            $msg = null;
+
+            $size = getimagesize($filename);
+            if ($size[0] < 250 || $size[1] < 250) {
+                $msg = "Die hochgeladene Bild ({$size[0]} x {$size[1]}) kleiner ist als erforderlich 250 x 250";
+            }
+            
+            $w = $file->getClientSize();
+            if ($w > 5 * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Die hochgeladene Bild (%.2f MB) größer ist als erlaubt  5 MB', $w / 1024 / 1024);
+            }
+            $exif = exif_imagetype($filename);
+            if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+                $msg = 'Die hochgeladene Bild ist weder JPG noch PNG';
+            }
+            
+
+            if ($msg !== null) {
+                unlink($filename);
+                $resp = array('message' => $msg);
+                return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+            }            
+
+            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
+            $resp = array(
+                'url' => $url,
+                'name' => $name,
+                'width' => $size[0],
+                'height' => $size[1]
+            );
+            return new JsonResponse($resp);
+        }
+                
+        return new JsonResponse(array('message' => 'Fehler beim Hochladen von Bild zu Server ...'), Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+    /**
+     * @Route("provider-image-save", name="provider-image-save")
+     */
+    public function providerImageSaveAction(Request $request) { 
+        $name = $request->get('name');
+        $id = $request->get('id');
+        $x = $request->get('x');
+        $x2 = $request->get('x2');
+        $y = $request->get('y');
+        $y2 = $request->get('y2');
+        $w = round($x2 - $x);
+        $h = round($y2 - $y);
+        
+        $user = $this->getUser();
+        
+        $sep = DIRECTORY_SEPARATOR;
+        $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
+        $arr = explode('.', $name);
+        $uuid = $arr[0];
+        $ext = $arr[1];
+        
+        $img = imagecreatefromstring(file_get_contents($path));
+        $dst = imagecreatetruecolor(250, 250);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, 250, 250, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . $uuid . '.' . $ext;
+        //$path2 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, 95);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        //rename($path, $path2);
+
+        // store entry in database
+        $em = $this->getDoctrine()->getManager();
+        
+        $oldImg = $user->getImage();
+        if ($oldImg != null) {
+            $user->setImage(null);
+            $this->getDoctrineRepo('AppBundle:Image')->removeImage($oldImg, $this->getParameter('image_storage_dir'));
+        }
+
+        
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($uuid);
+        $img->setExtension($ext);
+        $img->setPath('user');
+        $img->setOriginalPath('user' . $sep . 'original');
+        $em->persist($img);
+        $em->flush();
+        
+        $user->setImage($img);        
+        $em->flush();        
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix'))
+        );
+        return new JsonResponse($resp);
+    }
+    
     /**
      * @Route("user-image", name="user-image")
      */

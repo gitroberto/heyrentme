@@ -38,12 +38,12 @@
 
                                 <div class="offer user-upload">
                                     <p>Profilbild</p>
-                                    <span class="user-upload-note">Schaffe Vertrauen und lade ein Profilbild hoch (max. 10MB, min. 250x250px)</span>
-                                    <span style="width: 206px; height: 206px; display: inline-block; vertical-align: middle; background: url({{ app.user.getProfilePicture(true, image_url_prefix) }}) no-repeat; background-size: cover; border-radius: 50%;"></span>
+                                    <span class="user-upload-note">Schaffe Vertrauen und lade ein Profilbild hoch (max. 5MB, min. 250x250px)</span>
+                                    <span id="profile-image" style="width: 206px; height: 206px; display: inline-block; vertical-align: middle; background: url({{ app.user.getProfilePicture(true, image_url_prefix) }}) no-repeat; background-size: cover; border-radius: 50%;"></span>
                                     {#<img src="" class="profileImage" alt=""/>                #}
                                     
                                     <div id="userImageUpload" class="btn btn-default btn-file" >
-                                        <form id="upload" class='imageUpload' method="post" action="{{ path('user-image') }}" enctype="multipart/form-data">                                                                                
+                                        <form id="upload" class='imageUpload' method="post" action="{{ path('provider-image') }}" enctype="multipart/form-data">                                                                                
                                             <img src="/img/placeholder/user-upload.png" alt=""/>                                   
                                             <input type="file" name='upl'>        
                                             <ul>
@@ -75,17 +75,139 @@
         </div>
     </div>
   </section>
+  </div>
+  <div id="cropper-modal" class="modal fade">
+      <div class="modal-dialog">
+          <div class="modal-content" >
+              <div class="modal-header" style="height: 50px;">
+                <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+              </div>
+              <div class="modal-body">
+                  <div class="image" style="width: 600px; height: 400px; overflow: hidden;">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="save button-black backgound-yellow text-black">save</button>
+              </div>
+            </div>
+      </div>
+  </div>
+{% endblock %}
+
+{% block script %}
     <script src="/js/vendors/upload/jquery.knob.js"></script>
     <script src="/js/vendors/upload/jquery.ui.widget.js"></script>
     <script src="/js/vendors/upload/jquery.iframe-transport.js"></script>
     <script src="/js/vendors/upload/jquery.fileupload.js"></script>
-    <script src="/js/vendors/upload/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.color.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
+    
     <script>
-        $("#upload").fileupload({
-           success: function(e, data) {
-               window.location = '{{ path('profil') }}';
-           }
+        var jcropApi = null;
+        
+        function showCoords(c) {
+            console.log(Math.round(c.x) + ', ' + Math.round(c.y) + ', ' + Math.round(c.x2) + ', ' + Math.round(c.y2) + ', ' + Math.round(c.w) + ', ' + Math.round(c.h));
+        }
+        
+        function setupJcrop() {
+            $("#cropper-modal .modal-body img").Jcrop({ 
+                aspectRatio: 1.0,
+                minSize: [250, 250],
+                boxWidth: 600,
+                boxHeight: 400,
+                keySupport: false,
+                setSelect: [0, 0, 250, 250]/*,
+                onSelect: showCoords,
+                onChange: showCoords*/
+            }, function() {
+                jcropApi = this;
+            });
+            $("#img-list li.process").remove();
+            $("#cropper-modal").modal();
+        }
+        
+        $(function() {
+            
+            var ul = $('#upload ul');
+        
+            $('#drop a').click(function(){
+                // Simulate a click on the file input button
+                // to show the file browser dialog
+                $(this).parent().find('input').click();
+            });
+            
+            $("#cropper-modal .save").click(function() {
+                var rect = jcropApi.tellSelect();
+                var name = $("#cropper-modal .modal-body img").data('name');
+                var url = '{{ path('provider-image-save') }}';
+                var params = {
+                    'name': name,
+                    'x': Math.round(rect.x),
+                    'x2': Math.round(rect.x2),
+                    'y': Math.round(rect.y),
+                    'y2': Math.round(rect.y2)
+                };
+                $.getJSON(url, params)
+                    .done(function(data) {
+                        window.location = '{{ path('profil') }}';
+                    })
+                    .fail(function(data) {
+                        alert('Bildverarbeitung fehlgeschlagen. Bitte versuche es erneut.');
+                    })
+                    .always(function() {
+                        
+                    });
+            });
+
+            $('#upload').fileupload({
+
+                // This element will accept file drag/drop uploading
+                dropZone: $('#drop'),
+
+                // This function is called when a file is added to the queue;
+                // either via the browse button, or via drag/drop:
+                add: function (e, data) {                    
+                    // Automatically upload the file once it is added to the queue
+                    var jqXHR = data.submit();
+                },
+/*
+                progress: function(e, data){
+
+                    // Calculate the completion percentage of the upload
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+
+                    // Update the hidden input field and trigger a change
+                    // so that the jQuery knob plugin knows to update the dial
+
+                    if (progress == 100)
+                        data.context.find('.status').text('Verarbeitung...');
+                },
+*/
+                done: function(e, data) {
+                    var url = data.result.url;
+                    var name = data.result.name;
+                    
+                    var $img = $("<img>").one('load', setupJcrop).attr('src', url).data('name', name);
+                    $("#cropper-modal .image").empty();
+                    $("#cropper-modal .image").append($img);
+                    //$("#cropper-modal").modal();
+                                        
+                    //data.context.find('.status').text('Verarbeitung...');
+                },
+
+                fail:function(e, data){
+                    // Something has gone wrong!
+                    alert(data.jqXHR.responseJSON.message);
+                }
+
+            });
+
+            // Prevent the default action when a file is dropped on the window
+            $(document).on('drop dragover', function (e) {
+                e.preventDefault();
+            });
         });
     </script>
-  </div>
+    
 {% endblock %}
