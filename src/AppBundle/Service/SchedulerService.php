@@ -459,26 +459,22 @@ class SchedulerService {
         }        
     }
     
-    public function CreatedLaterThanOneDay($createdAt, $now){
+    public function isOlderThanOneDay($createdAt, $now){
         $interval = date_diff($now, $createdAt);        
         return $interval->format('%y') > 0 || $interval->format('%m') > 0 || $interval->format('%d') >= 1;
                
     }
-    public function CreatedLaterThanTwoDays($createdAt, $now){
-        $interval = date_diff($now, $createdAt);        
-        return $interval->format('%y') > 0 || $interval->format('%m') > 0 || $interval->format('%d') >= 2;
-    }
+    
     
     public function sendWelcomeEmails($now){
         $users = $this->em->getRepository('AppBundle:User')->getAllForWelcomeEmails();
         foreach ($users as $u) {
-            if(!$u->getSecondDayEmailSentAt() && $this->CreatedLaterThanOneDay($u->getCreatedAt(), $now)){                
+            if(!$u->getSecondDayEmailSentAt() && $this->isOlderThanOneDay($u->getCreatedAt(), $now)){                
                 $this->sendSecondDayWelcomeEmail($u->getEmail());
                 $u->setSecondDayEmailSentAt($now);
             }
             
-            
-            if(!$u->getThirdDayEmailSentAt() && $this->CreatedLaterThanTwoDays($u->getCreatedAt(), $now)){                
+            if(!$u->getThirdDayEmailSentAt() && $this->isOlderThanOneDay($u->getSecondDayEmailSentAt(), $now)){                
                 $this->sendThirdDayWelcomeEmail($u->getEmail());
                 $u->setThirdDayEmailSentAt($now);
             }
