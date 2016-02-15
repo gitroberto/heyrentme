@@ -437,7 +437,7 @@ class SchedulerService {
     }
     
     public function deleteTempImages($now){
-        $tempUrl = $this->parameters['image_storage_dir'] . '\temp\\';
+        $tempUrl = $this->parameters['image_storage_dir'] . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
         
         if ($handle = opendir($tempUrl)) {            
             $fs = new Filesystem();
