@@ -84,7 +84,8 @@ class SchedulerService {
                     'item' => $eq
                 ));
                 $message = Swift_Message::newInstance()
-                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+
+                    ->setSubject('Reminder')
                     ->setFrom($this->from)
                     ->setTo($email)
                     ->setBody($emailHtml, 'text/html');
@@ -130,7 +131,8 @@ class SchedulerService {
                     'item' => $eq
                 ));
                 $message = Swift_Message::newInstance()
-                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+
+                    ->setSubject('Reminder')
                     ->setFrom($this->from)
                     ->setTo($email)
                     ->setBody($emailHtml, 'text/html');
@@ -176,7 +178,8 @@ class SchedulerService {
                     'inquiry' => $inq
                 ));
                 $message = Swift_Message::newInstance()
-                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+
+                    ->setSubject('Alles in Ordnung?')
                     ->setFrom($this->from)
                     ->setTo($email)
                     ->setBody($emailHtml, 'text/html');
@@ -218,7 +221,8 @@ class SchedulerService {
                     'provider' => $provider
                 ));
                 $message = Swift_Message::newInstance()
-                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+
+                    ->setSubject('Alles in Ordnung?')
                     ->setFrom($this->from)
                     ->setTo($email)
                     ->setBody($emailHtml, 'text/html');
@@ -261,7 +265,8 @@ class SchedulerService {
                     'item' => $eq
                 ));
                 $message = Swift_Message::newInstance()
-                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+
+                    ->setSubject('Reminder')
                     ->setFrom($this->from)
                     ->setTo($email)
                     ->setBody($emailHtml, 'text/html');
@@ -298,7 +303,8 @@ class SchedulerService {
                     'item' => $eq
                 ));
                 $message = Swift_Message::newInstance()
-                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+
+                    ->setSubject('Reminder')
                     ->setFrom($this->from)
                     ->setTo($email)
                     ->setBody($emailHtml, 'text/html');
@@ -353,7 +359,8 @@ class SchedulerService {
                     'url' => $url
                 ));
                 $message = Swift_Message::newInstance()
-                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+
+                    ->setSubject('Bitte bewerte den Anbieter')
                     ->setFrom($this->from)
                     ->setTo($email)
                     ->setBody($emailHtml, 'text/html');
@@ -407,7 +414,8 @@ class SchedulerService {
                     'url' => $url
                 ));
                 $message = Swift_Message::newInstance()
-                    ->setSubject('Du hast soeben eine Anfrage erhalten')
+
+                    ->setSubject('Bitte bewerte den Kunden')
                     ->setFrom($this->from)
                     ->setTo($email)
                     ->setBody($emailHtml, 'text/html');

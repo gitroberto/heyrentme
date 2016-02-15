@@ -164,7 +164,7 @@ class TalentController extends BaseAdminController {
             'itemLink' => $eqLink
         ));
         
-        $subject = $eq->getStatus() == Talent::STATUS_APPROVED ? "Dein Angebot wurde akzeptiert" : "Dein Angebot nicht akzeptiert wurde";
+        $subject = $eq->getStatus() == Talent::STATUS_APPROVED ? "Dein Angebot wurde bestätigt!" : "Dein Angebot wurde noch nicht bestätigt";
         
         $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
         $message = Swift_Message::newInstance()

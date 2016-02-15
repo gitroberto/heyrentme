@@ -55,14 +55,20 @@
                           <input type="file" name="upl"/>
                       </div>
                       <ul id="img-list">
-                            {% for img in equipment.images %}<li class="thumb">
-                                    <a href="{{ img.urlPath(image_url_prefix) }}" title="öffnen" target="_blank"><img src="{{ img.urlPath(image_url_prefix) }}" alt="öffnen"/></a>
+                            {% for eimg in equipment.equipmentImages %}<li class="thumb">
+                                    <a href="{{ eimg.image.urlPath(image_url_prefix) }}" title="öffnen" target="_blank"><img src="{{ eimg.image.urlPath(image_url_prefix) }}" alt="öffnen"/></a>
                                     <br/>
-                                    <a class="remove" href="#" data-id="{{ img.id }}" title="löschen"><img src="/img/icons/delete.png" alt="löschen"/></a>
+                                    <a class="remove" href="#" data-id="{{ eimg.image.id }}" title="löschen"><img src="/img/icons/delete.png" alt="löschen" /></a>
+                                    {% if eimg.main == 0 %}
+                                        <a class="main" href="#" data-id="{{ eimg.image.id }}" title="Hauptbild machen"><img src="/img/icons/default.png" class="make-main" alt="Hauptbild machen"/></a>
+                                    {% endif %}
+                                    {% if eimg.main == 1 %}
+                                        <img src="/img/icons/tag.png" class="main" title="Hauptbild" alt="Hauptbild"/>
+                                    {% endif %}
                                 </li>{% endfor %}
                       </ul>
                   </form>
-                  <p class="how-many">Du kannst 3 Bilder hochladen (maximal 10MB, mindestens 1024 x 768px). Unterstützte Bildformate: jpg, png</p>
+                  <p class="how-many">max. {{ constant('AppBundle\\Entity\\Equipment::MAX_NUM_IMAGES') }} Bilder / Querformat / min. 750 px Breite / max. 5 MB / JPG oder PNG</p>
                   <a href="{{ path('tutorial-photo') }}" target="_blank"><span class="tutorial">tutorial</span></a>
                   
                   
@@ -279,8 +285,9 @@
             var iid = $this.data('id');
             var url = '{{ path('equipment-image-delete', { 'eid': 'EID', 'iid': 'IID' }) }}'.replace('EID', '{{ equipment.id }}').replace('IID', iid);
             $.getJSON(url)
-                    .done(function() {
+                    .done(function(data) {
                         $this.parents('li.thumb').remove();
+                        refreshMain(data.mainId);
                     })
                     .fail(function() {
                         alert('Fehler beim Entfernen des Bildes. Bitte versuche es erneut.');
@@ -289,8 +296,44 @@
                         refreshCtrl();
                     });
         }
+        function mainImage(e) {
+            e.preventDefault();
+            
+            var $this = $(this);
+            var iid = $this.data('id');
+            var url = '{{ path('equipment-image-main', { 'eid': 'EID', 'iid': 'IID' }) }}'.replace('EID', '{{ equipment.id }}').replace('IID', iid);
+            $.getJSON(url)
+                    .done(function() {
+                        refreshMain(iid);                        
+                    })
+                    .fail(function() {
+                        alert('Fehler beim Entfernen des Bildes. Bitte versuche es erneut.');
+                    });
+        }
+        function refreshMain(mainId) {
+            if (mainId == null)
+                return;
+            $("#img-list li.thumb").each(function() {
+                $this = $(this);
+                var curr = $this.find('a.remove').data('id');
+                if (curr == mainId) {
+                    $this.find('a.main').remove();
+                    var tmpl = '<img src="/img/icons/tag.png" class="main" title="Hauptbild" alt="Hauptbild"/>';
+                    $this.append($(tmpl));
+                }
+                else {
+                    $this.find('img.main').remove();
+                    var $a = $this.find('a.main');
+                    if ($a.length === 0) {
+                        var tmpl = '<a class="main" href="#" data-id="' + curr + '" title="Hauptbild machen"><img src="/img/icons/default.png" class="make-main" alt="Hauptbild machen"/></a>';
+                        $this.append($(tmpl));
+                        $this.find('a.main').click(mainImage);
+                    }
+                }
+            });                
+        }
         function refreshCtrl() {
-            if ($("#upload ul li").length >= 3) {
+            if ($("#upload ul li").length >= {{ constant('AppBundle\\Entity\\Equipment::MAX_NUM_IMAGES') }}) {
                 $("#drop").addClass('disabled');
             }
             else {
@@ -300,11 +343,11 @@
         function setupJcrop() {
             $("#cropper-modal .modal-body img").Jcrop({ 
                 aspectRatio: 4.0 / 3.0,
-                //minSize: [1024, 768],
+                minSize: [750, 563],
                 boxWidth: 600,
                 boxHeight: 400,
                 keySupport: false,
-                setSelect: [0, 0, 1024, 768]/*,
+                setSelect: [0, 0, 750, 563]/*,
                 onSelect: showCoords,
                 onChange: showCoords*/
             }, function() {
@@ -320,9 +363,10 @@
             refreshCtrl();
         
             $("li.thumb a.remove").click(deleteImage);
+            $("li.thumb a.main").click(mainImage);
             
             $('#drop a').click(function(){
-                if ($("#upload ul li").length >= 3)
+                if ($("#upload ul li").length >= {{ constant('AppBundle\\Entity\\Equipment::MAX_NUM_IMAGES') }})
                     return;
                 // Simulate a click on the file input button
                 // to show the file browser dialog
@@ -347,15 +391,20 @@
                         
                         var url = data.url;
                         var imgId = data.imgId;
+                        var main = data.main;
                         var tmpl = '<li class="thumb">' + 
                                     '<a href="' + url + '" target="_blank" title="öffnen"><img src="' + url + '" alt="öffnen"/></a>' +
                                     '<br/>' +
-                                    '<a href="#" class="remove" data-id="' + imgId + '" title="löschen"><img src="/img/icons/delete.png" alt="löschen"/></a>' +
-                                '</li>';
+                                    '<a href="#" class="remove" data-id="' + imgId + '" title="löschen"><img src="/img/icons/delete.png" alt="löschen"/></a>' + 
+                                    '<a class="main" href="#" data-id="' + imgId + '" title="Hauptbild machen"><img src="/img/icons/default.png" class="make-main" alt="Hauptbild machen"/></a>';
+                        if (main == 1)
+                            tmpl += '<img src="/img/icons/tag.png" class="main" title="Hauptbild" alt="Hauptbild"/>';
+                        tmpl += '</li>';
                         
                         var $html = $(tmpl);
                         $("#upload ul").append($html);
                         $html.find("a.remove").click(deleteImage);
+                        $html.find("a.main").click(mainImage);
                     })
                     .fail(function(data) {
                         alert('Bildverarbeitung fehlgeschlagen. Bitte versuche es erneut.');
@@ -431,28 +480,10 @@
 
             });
 
-
             // Prevent the default action when a file is dropped on the window
             $(document).on('drop dragover', function (e) {
                 e.preventDefault();
             });
-
-            // Helper function that formats the file sizes
-            function formatFileSize(bytes) {
-                if (typeof bytes !== 'number') {
-                    return '';
-                }
-
-                if (bytes >= 1000000000) {
-                    return (bytes / 1000000000).toFixed(2) + ' GB';
-                }
-
-                if (bytes >= 1000000) {
-                    return (bytes / 1000000).toFixed(2) + ' MB';
-                }
-
-                return (bytes / 1000).toFixed(2) + ' KB';
-            }
         });
     </script>
 {% endblock %}

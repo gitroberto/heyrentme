@@ -11,17 +11,17 @@
   <div class="container request-container">
     <div class="row">
         <div class="col-xs-12">
-            <h1>{{ booking.inquiry.equipment.name }} / Angebot stornieren</h1>
+            <h1>{{ equipment.name }} / Angebot stornieren</h1>
             <div class="row summary">
                 <div class="ad col-md-4 col-sm-12">
-                    <img src="{% if booking.inquiry.equipment.images|length > 0 %}{{ booking.inquiry.equipment.images[0].urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" alt="{{ booking.inquiry.equipment.name }}" class="img-responsive"/>
+                    <img src="{% if equipment.equipmentImages|length > 0 %}{{ equipment.equipmentImages[0].image.urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" alt="{{ equipment.name }}" class="img-responsive"/>
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
-                                {{ include('common/stars.html.twig', { rating: booking.inquiry.equipment.rating }) }}
-                                <p class="product-name">{{ booking.inquiry.equipment.name }}</p>
+                                {{ include('common/stars.html.twig', { rating: equipment.rating }) }}
+                                <p class="product-name">{{ equipment.name }}</p>
                             </div>
-                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.equipment.activePrice|number_format(2, ',') }} €</p>
+                            <div class="col-xs-6"><p class="price">{{ equipment.activePrice|number_format(2, ',') }} €</p>
                                 <p class="tag">pro Tag</p>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                     <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                     <p>{{ booking.totalPrice|number_format(2, ',') }} €</p>
                     <p class="dont-transform">
-                        {{ booking.inquiry.equipment.addressAsString }}
+                        {{ equipment.addressAsString }}
                     </p>
                 </div>
             </div>

@@ -20,8 +20,16 @@ class EquipmentBookingRepository extends EntityRepository {
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
         $q->setParameter('userId', $userId);
-        return $q->getResult();
+        $bks = $q->getResult();
         
+        // "hydrate" equipment images
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+        foreach($bks as $bk) {
+            $eq = $bk->getInquiry()->getEquipment();
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
+        }        
+        
+        return $bks;        
     }
     public function getAllForProvider($userId) {
         $dql = <<<EOT
@@ -35,7 +43,16 @@ EOT;
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
         $q->setParameter('userId', $userId);
-        return $q->getResult();
+        $bks = $q->getResult();
+        
+        // "hydrate" equipment images
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+        foreach($bks as $bk) {
+            $eq = $bk->getInquiry()->getEquipment();
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
+        }        
+        
+        return $bks;        
     }
     
     public function getAllForRentUserReminder(DateTime $datetime) {

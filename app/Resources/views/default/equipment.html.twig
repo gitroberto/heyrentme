@@ -69,8 +69,8 @@
                 </div>
               {% endif %}
               <div id="media-content">
-                    {% if item.images|length > 0 %}
-                        <img src="{{ item.images[0].urlPath(image_url_prefix) }}" alt=""/>
+                    {% if item.equipmentImages|length > 0 %}
+                        <img src="{{ item.equipmentImages[0].image.urlPath(image_url_prefix) }}" alt=""/>
                     {% else %}
                         <img src="/img/equipment-default.jpg" alt=""/>
                     {% endif %}
@@ -78,8 +78,8 @@
 
               <iframe id="player"></iframe>
               <div class="media-list" id="media-list">
-                    {% for img in item.images %}
-                        <span class="media-img"><img src="{{ img.urlPath(image_url_prefix) }}" alt=""/></span>
+                    {% for eimg in item.equipmentImages %}
+                        <span class="media-img"><img src="{{ eimg.image.urlPath(image_url_prefix) }}" alt=""/></span>
                     {% endfor %}
                     {#
                         <span><a class="videos-ico" id="3"></a><img src="/img/placeholder/video2.jpg" id="3" alt=""/>   </span>
@@ -417,7 +417,7 @@
                 {{ render(controller('AppBundle:Common:ReportOffer', { "id": item.id, "type": type } )) }}
                 
                 <div id ="ReportOfferConfirmationDiv" style="display:none;" >
-                    Thank you for your report!
+                    Vielen Dank für den Bericht!
                 </div>
             </div>
         </div>

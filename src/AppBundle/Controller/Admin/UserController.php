@@ -29,7 +29,7 @@ class UserController extends BaseAdminController {
             'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix')            
         ));
         
-        $subject = "User bloked.";
+        $subject = "Dein Account wurde blockiert";
         
         $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
         $message = Swift_Message::newInstance()

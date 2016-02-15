@@ -21,6 +21,8 @@ class Equipment
     const STATUS_REJECTED = 4;  
     const STATUS_INCOMPLETE = 5;
     
+    const MAX_NUM_IMAGES = 8;
+    
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -105,12 +107,7 @@ class Equipment
     protected $user;
     
     /**
-     * 
-     * @ORM\ManyToMany(targetEntity="Image")
-     * @ORM\JoinTable(name="equipment_image",
-     *      joinColumns={ @ORM\JoinColumn(name="equipment_id", referencedColumnName="id") },
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="image_id", referencedColumnName="id") }
-     *  )
+     * @ORM\OneToMany(targetEntity="EquipmentImage", mappedBy="equipment")
      */
     protected $images;
     
@@ -246,7 +243,6 @@ class Equipment
      */
     public function __construct()
     {
-        $this->images = new ArrayCollection();
         $this->status = Equipment::STATUS_INCOMPLETE;
     }
 
@@ -548,39 +544,6 @@ class Equipment
         return $this->subcategory;
     }
 
-    /**
-     * Add image
-     *
-     * @param Image $image
-     *
-     * @return Equipment
-     */
-    public function addImage(Image $image)
-    {
-        $this->images[] = $image;
-
-        return $this;
-    }
-
-    /**
-     * Remove image
-     *
-     * @param Image $image
-     */
-    public function removeImage(Image $image)
-    {
-        $this->images->removeElement($image);
-    }
-
-    /**
-     * Get images
-     *
-     * @return Collection
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
 
     /**
      * Set user
@@ -1115,4 +1078,46 @@ class Equipment
     {
         return $this->ratings;
     }
+
+    /**
+     * Add image
+     *
+     * @param \AppBundle\Entity\EquipmentImage $image
+     *
+     * @return Equipment
+     */
+    public function addImage(\AppBundle\Entity\EquipmentImage $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \AppBundle\Entity\EquipmentImage $image
+     */
+    public function removeImage(\AppBundle\Entity\EquipmentImage $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    protected $equipmentImages;
+    public function getEquipmentImages() {
+        return $this->equipmentImages;
+    }
+    public function setEquipmentImages($equipmentImages) {
+        $this->equipmentImages = $equipmentImages;
+    }    
 }

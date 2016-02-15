@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use AppBundle\Utils\SearchParams;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 /**
  * EquipmentRepository
@@ -61,9 +62,15 @@ class EquipmentRepository extends EntityRepository
             ->join('e.user', 'u');
         $qb->andWhere("u.id = {$userId}");
 
-        $q = $qb->getQuery();
+        $eqs = $qb->getQuery()->getResult();
         
-        return $q->getResult();        
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+        
+        foreach ($eqs as $eq) {
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
+        }
+        
+        return $eqs;
     }
     
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus) {
@@ -109,6 +116,78 @@ class EquipmentRepository extends EntityRepository
             ->getSingleScalarResult();
     }
     
+    public function getImageCount($equipmentId) {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(ei.image)')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->getQuery()
+            ->getSingleScalarResult();            
+    }
+ 
+    public function getEquipmentImages($equipmentId) {
+        // main first
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->addOrderBy('ei.main', 'desc')
+            ->addOrderBy('i.id');
+
+        $q = $qb->getQuery();
+        
+        return $q->getResult();        
+    }
+    public function setMainImage($equipmentId, $imageId) {
+        $sql = <<<EOT
+update equipment_image
+set main = case when image_id = {$imageId} then 1 else 0 end
+where equipment_id = {$equipmentId}
+EOT;
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->executeUpdate($sql);        
+    }
+    public function removeImage($equipmentId, $imageId, $imageStorageDir) {
+        $em = $this->getEntityManager();
+        $eq = $em->getRepository('AppBundle:Equipment')->find($equipmentId);        
+        $eimg = $em->getRepository('AppBundle:EquipmentImage')->findOneByImage($imageId);
+        $img = $em->getRepository('AppBundle:Image')->find($imageId);
+        $eq->removeImage($eimg);
+        $em->remove($eimg);
+        $em->getRepository('AppBundle:Image')->removeImage($img, $imageStorageDir);
+        $em->remove($img);
+        $em->flush();
+        // set main image (if not exists)
+        $sql = <<<EOT
+update equipment_image
+set main = 1
+where equipment_id = {$equipmentId}
+order by main desc, image_id asc
+limit 1;
+EOT;
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->executeUpdate($sql);        
+        
+        return $em->getRepository('AppBundle:Equipment')->getMainEquipmentImage($equipmentId);
+    }
+    public function getMainEquipmentImage($equipmentId) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->andWhere("ei.main = 1");
+        $q = $qb->getQuery();
+
+        $eimg = null;
+        try {
+            $eimg = $q->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        return $eimg;
+    }
+    
     /*
     public function getAll($categoryId = null) {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -141,6 +220,7 @@ class EquipmentRepository extends EntityRepository
             ->leftJoin('e.discounts', 'd');
         
         $qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
+        $qb->andWhere('u.status = '. User::STATUS_OK);
         
         if ($params->getCategoryId() != null) {
             $qb->andWhere("s.category = {$params->getCategoryId()}");
@@ -154,7 +234,6 @@ class EquipmentRepository extends EntityRepository
             $qb->andWhere('e.priceBuy > 0');
         }
         
-        $qb->andWhere('u.status = '. User::STATUS_OK);
         
         if ($params->getSort() === 'date') {
             $qb->orderBy('e.createdAt', 'desc');
@@ -162,9 +241,45 @@ class EquipmentRepository extends EntityRepository
         elseif ($params->getSort() === 'price') {
             $qb->orderBy ('e.price', 'asc');
         }
+                
+        $eqs = $qb->getQuery()->getResult();
         
-        $q = $qb->getQuery();
-        return $q->getResult();
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+        
+        foreach ($eqs as $eq) {
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
+        }
+        
+        return $eqs;
+    }
+    public function getOne($equipmentId) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        /*
+         * Please not this query uses "fetch join".
+         * It fetches images and discounts (associated with equipments) immediately 
+         * (instead of lazy loading them later).
+         * Keep for optimum performance.
+         */        
+        $qb->select('e') // this line forces fetch join
+            ->from('AppBundle:Equipment', 'e')
+            ->join('e.user', 'u');
+        
+        //$qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
+        //$qb->andWhere('u.status = '. User::STATUS_OK);
+        $qb->andWhere("e.id = {$equipmentId}");
+        
+        $eq = null;
+        try {
+            $eq = $qb->getQuery()->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        if ($eq !== null) {
+            $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
+        }
+        
+        return $eq;
     }
     
     public function clearFeatures($equipmentId) {

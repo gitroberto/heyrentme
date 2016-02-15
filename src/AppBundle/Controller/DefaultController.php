@@ -147,7 +147,7 @@ class DefaultController extends BaseController {
         $tal = null;
         if (ereg(DefaultController::RE_EQUIPMENT, $content)) {
             $arr = split('/', str_replace('E-', '', $content));
-            $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find(intval($arr[0]));
+            $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne(intval($arr[0]));
         }
         if (ereg(DefaultController::RE_TALENT, $content)) {
             $arr = split('/', str_replace('T-', '', $content));

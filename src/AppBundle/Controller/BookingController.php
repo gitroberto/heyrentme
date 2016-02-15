@@ -128,7 +128,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Du hast soeben eine Anfrage erhalten!')
                 ->setFrom($from)
                 ->setTo($provider->getEmail())
                 ->setBody($emailHtml, 'text/html');
@@ -198,7 +198,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Deine Anfrage wurde angenommen!')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -219,6 +219,7 @@ class BookingController extends BaseController {
      */
     public function confirmationAction(Request $request, $uuid) {
         $inq = $this->getDoctrineRepo('AppBundle:EquipmentInquiry')->findOneByUuid($uuid);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($inq->getEquipment()->getId());
 
         // sanity check
         if ($inq == null) {
@@ -305,7 +306,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Deine Buchung war erfolgreich!')
                 ->setFrom($from)
                 ->setTo($provider->getEmail())
                 ->setBody($emailHtml, 'text/html');
@@ -328,7 +329,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Deine Buchung war erfolgreich!')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -340,6 +341,7 @@ class BookingController extends BaseController {
         
         return $this->render('booking/confirmation.html.twig', array(
             'inquiry' => $inq,
+            'equipment' => $eq,
             'form' => $form->createView()
         ));
     }
@@ -451,6 +453,7 @@ class BookingController extends BaseController {
      */
     public function rateEquipmentAction(Request $request, $uuid) {
         $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->findOneByRateEquipmentUuid($uuid);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($bk->getInquiry()->getEquipment()->getId());
         
         if ($bk === null) {
             return new Response($status = Response::HTTP_FORBIDDEN);
@@ -458,7 +461,6 @@ class BookingController extends BaseController {
         }
         
         $inq = $bk->getInquiry();
-        $eq = $inq->getEquipment();
         
         // build form
         //<editor-fold>
@@ -549,6 +551,7 @@ class BookingController extends BaseController {
      */
     public function userCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->find($id);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($bk->getInquiry()->getEquipment()->getId());
         $user = $this->getUser();
         
         // check security        
@@ -605,7 +608,7 @@ class BookingController extends BaseController {
                 'inquiry' => $inq
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Eine Buchung wurde storniert')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -618,7 +621,7 @@ class BookingController extends BaseController {
                 'inquiry' => $inq
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Eine Buchung wurde storniert')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -630,6 +633,7 @@ class BookingController extends BaseController {
         
         return $this->render("booking/booking-user-cancel.html.twig", array(
             'booking' => $bk,
+            'equipment' => $eq,
             'form' => $form->createView()
         ));
     }
@@ -638,6 +642,7 @@ class BookingController extends BaseController {
      */
     public function providerCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:EquipmentBooking')->find($id);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($bk->getInquiry()->getEquipment()->getId());
         $user = $this->getUser();
         
         // todo: check security
@@ -694,7 +699,7 @@ class BookingController extends BaseController {
                 'inquiry' => $inq
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Eine Buchung wurde storniert')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -706,7 +711,7 @@ class BookingController extends BaseController {
                 'provider' => $provider
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Du hast soeben eine Anfrage erhalten')
+                ->setSubject('Eine Buchung wurde storniert')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
@@ -720,6 +725,7 @@ class BookingController extends BaseController {
         
         return $this->render("booking/booking-provider-cancel.html.twig", array(
             'booking' => $bk,
+            'equipment' => $eq,
             'form' => $form->createView()
         ));
     }

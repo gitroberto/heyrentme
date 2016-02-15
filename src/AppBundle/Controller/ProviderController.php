@@ -2,19 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Discount;
 use AppBundle\Entity\Equipment;
+use AppBundle\Entity\EquipmentImage;
 use AppBundle\Entity\Image;
-use AppBundle\Entity\User;
 use AppBundle\Utils\Utils;
-use DateInterval;
-use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Exception\Exception;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -129,7 +125,125 @@ class ProviderController extends BaseController {
          */       
         return $this->render('provider/profil.html.twig');
     }
-   
+
+    /**
+     * @Route("/provider-image", name="provider-image")
+     */
+    public function providerImageAction(Request $request) {  
+        $file = $request->files->get('upl');
+        if ($file->isValid()) {
+            $uuid = Utils::getUuid();
+            $path = 
+                $this->getParameter('image_storage_dir') .
+                DIRECTORY_SEPARATOR .
+                'temp' .
+                DIRECTORY_SEPARATOR;
+            $ext = strtolower($file->getClientOriginalExtension());
+            $name = sprintf("%s.%s", $uuid, $ext);
+            $filename = $path . DIRECTORY_SEPARATOR . $name;
+
+            $file->move($path, $name);
+
+            $msg = null;
+
+            $size = getimagesize($filename);
+            if ($size[0] < 250 || $size[1] < 250) {
+                $msg = "Die hochgeladene Bild ({$size[0]} x {$size[1]}) kleiner ist als erforderlich 250 x 250";
+            }
+            
+            $w = $file->getClientSize();
+            if ($w > 5 * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Die hochgeladene Bild (%.2f MB) größer ist als erlaubt  5 MB', $w / 1024 / 1024);
+            }
+            $exif = exif_imagetype($filename);
+            if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+                $msg = 'Die hochgeladene Bild ist weder JPG noch PNG';
+            }
+            
+
+            if ($msg !== null) {
+                unlink($filename);
+                $resp = array('message' => $msg);
+                return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+            }            
+
+            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
+            $resp = array(
+                'url' => $url,
+                'name' => $name,
+                'width' => $size[0],
+                'height' => $size[1]
+            );
+            return new JsonResponse($resp);
+        }
+                
+        return new JsonResponse(array('message' => 'Fehler beim Hochladen von Bild zu Server ...'), Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+    /**
+     * @Route("provider-image-save", name="provider-image-save")
+     */
+    public function providerImageSaveAction(Request $request) { 
+        $name = $request->get('name');
+        $id = $request->get('id');
+        $x = $request->get('x');
+        $x2 = $request->get('x2');
+        $y = $request->get('y');
+        $y2 = $request->get('y2');
+        $w = round($x2 - $x);
+        $h = round($y2 - $y);
+        
+        $user = $this->getUser();
+        
+        $sep = DIRECTORY_SEPARATOR;
+        $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
+        $arr = explode('.', $name);
+        $uuid = $arr[0];
+        $ext = $arr[1];
+        
+        $img = imagecreatefromstring(file_get_contents($path));
+        $dst = imagecreatetruecolor(250, 250);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, 250, 250, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . $uuid . '.' . $ext;
+        //$path2 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, 95);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        //rename($path, $path2);
+
+        // store entry in database
+        $em = $this->getDoctrine()->getManager();
+        
+        $oldImg = $user->getImage();
+        if ($oldImg != null) {
+            $user->setImage(null);
+            $this->getDoctrineRepo('AppBundle:Image')->removeImage($oldImg, $this->getParameter('image_storage_dir'));
+        }
+
+        
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($uuid);
+        $img->setExtension($ext);
+        $img->setPath('user');
+        $img->setOriginalPath('user' . $sep . 'original');
+        $em->persist($img);
+        $em->flush();
+        
+        $user->setImage($img);        
+        $em->flush();        
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix'))
+        );
+        return new JsonResponse($resp);
+    }
+    
     /**
      * @Route("user-image", name="user-image")
      */
@@ -290,7 +404,7 @@ class ProviderController extends BaseController {
             $providedOldPassword = $this->formHelper['password']->getData();
             $encoded_pass = $encoder->encodePassword($providedOldPassword, $user->getSalt());
             if ($encoded_pass != $user->getPassword()){
-                $context->buildViolation('Provided password is incorrect. Please enter your current password.')
+                $context->buildViolation('Das eingegebene Passwort ist leider falsch. Bitte gib hier dein aktuelles Passwort ein')
                         ->atPath('password')->addViolation();
             }
         }
@@ -302,12 +416,12 @@ class ProviderController extends BaseController {
             $repeatedPassword = $this->formHelper['repeatedPassword']->getData();
             
             if ($newPassword != $repeatedPassword) {
-                $context->buildViolation('Repeated password and password doesn\'t mach.')
+                $context->buildViolation('Das wiederholte Passwort muss mit dem erstem übereinstimmen. Bitte versuch es noch einmal')
                         ->atPath('repeatedPassword')->addViolation();
             }
             
             if (strlen($newPassword) < 6 ){
-                $context->buildViolation('Password have to have at least 6 chars.')
+                $context->buildViolation('Dein Passwort muss zumindest 6 Zeichen beinhalten')
                         ->atPath('newPassword')->addViolation();
             }            
         }
@@ -538,7 +652,7 @@ class ProviderController extends BaseController {
     public function equipmentEdit2Action(Request $request, $id) {
         $session = $request->getSession();
         
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($id);
         if (!$eq) {
             throw $this->createNotFoundException();
         }        
@@ -559,7 +673,7 @@ class ProviderController extends BaseController {
             'phone' => $user->getPhone()
         );
         
-        $this->imageCount = count($eq->getImages());
+        $this->imageCount = count($eq->getEquipmentImages());
         
         
         // validation form
@@ -599,7 +713,7 @@ class ProviderController extends BaseController {
                 'constraints' => array(
                     new NotBlank(),
                     new Length(array('max' => 4)),
-                    new Regex(array('pattern' => '/^\d{4}$/', 'message' => 'Please fill in a valid postal code'))
+                    new Regex(array('pattern' => '/^\d{4}$/', 'message' => 'Bitte gib hier eine gültige PLZ ein'))
                 )
             ))
             ->add('place', 'text', array(
@@ -620,14 +734,14 @@ class ProviderController extends BaseController {
                     'maxlength' => 10, 
                     'pattern' => '^[0-9]{1,10}$'),
                 'constraints' => array(
-                    new Regex(array('pattern' => '/^\d{1,10}$/', 'message' => 'Please fill in a valid phone number'))
+                    new Regex(array('pattern' => '/^\d{1,10}$/', 'message' => 'Bitte gib hier eine gültige Telefonnummer ein'))
                 )
             ))
             ->add('phonePrefix', 'text', array(
                 'required' => false, 
                 'attr' => array('maxlength' => 3, 'pattern' => '^[0-9]{1,3}$'),
                 'constraints' => array(
-                    new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Please fill in a valid phone number'))
+                    new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Bitte gib hier eine gültige Vorwahl ein'))
                 )
             ))
             ->getForm();
@@ -674,22 +788,23 @@ class ProviderController extends BaseController {
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
         if (!$value) {
-            $context->buildViolation('You must check this box')->atPath('accept')->addViolation();
+            $context->buildViolation('Bitte Checkbox bestätigen')->atPath('accept')->addViolation();
         }            
     }
     public function validateMakeSure($value, ExecutionContextInterface $context) {
         if (!$value) {
-            $context->buildViolation('You must check this box')->atPath('make_sure')->addViolation();
+            $context->buildViolation('Bitte Checkbox bestätigen')->atPath('make_sure')->addViolation();
         }            
     }
 
     private $imageCount = null; // num of existing images; necessary for image validation
     public function validateImages($data, ExecutionContextInterface $context) {
         if ($this->imageCount < 1) {
-            $context->buildViolation('Please upload at least one image')->addViolation();
+            $context->buildViolation('Bitte lade zumindest ein Bild hoch')->addViolation();
         }
-        else if ($this->imageCount > 3) {
-            $context->buildViolation('Please upload max. 3 images')->addViolation();
+        else if ($this->imageCount > Equipment::MAX_NUM_IMAGES) {
+            $num = Equipment::MAX_NUM_IMAGES;
+            $context->buildViolation('Bitte lade max. {$num} Bilder hoch')->addViolation();
         }
     }
     
@@ -697,8 +812,6 @@ class ProviderController extends BaseController {
      * @Route("equipment-image", name="equipment-image")
      */
     public function equipmentImageAction(Request $request) {  
-        // todo: check security
-        // todo: validate jpg/png
         $file = $request->files->get('upl');
         if ($file->isValid()) {
             $uuid = Utils::getUuid();
@@ -716,14 +829,19 @@ class ProviderController extends BaseController {
             $msg = null;
 
             $size = getimagesize($filename);
-            if ($size[0] < 1024 || $size[1] < 768) {
-                $msg = "Die hochgeladene Bild ({$size[0]} x {$size[1]}) kleiner ist als erforderlich 1024 x 768";
+            if ($size[0] < 750 || $size[1] < 563) {
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 px Breite)";
             }
             
             $w = $file->getClientSize();
-            if ($w > 10 * 1024 * 1024) { // 10 MB
-                $msg = sprintf('Die hochgeladene Bild (%.2f MB) größer ist als erlaubt  10 MB', $w / 1024 / 1024);
+            if ($w > 5 * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als 5 MB sein', $w / 1024 / 1024);
             }
+            $exif = exif_imagetype($filename);
+            if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+                $msg = 'Das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden';
+            }
+            
 
             if ($msg !== null) {
                 unlink($filename);
@@ -741,13 +859,12 @@ class ProviderController extends BaseController {
             return new JsonResponse($resp);
         }
                 
-        return new JsonResponse(array('message' => 'Fehler beim Hochladen von Bild zu Server ...'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
     /**
      * @Route("equipment-image-save", name="equipment-image-save")
      */
     public function equipmentImageSaveAction(Request $request) { 
-        // todo: check security
         $name = $request->get('name');
         $id = $request->get('id');
         $x = $request->get('x');
@@ -757,6 +874,12 @@ class ProviderController extends BaseController {
         $w = round($x2 - $x);
         $h = round($y2 - $y);
         
+        // check security
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
+        
         $sep = DIRECTORY_SEPARATOR;
         $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
         $arr = explode('.', $name);
@@ -764,8 +887,8 @@ class ProviderController extends BaseController {
         $ext = $arr[1];
         
         $img = imagecreatefromstring(file_get_contents($path));
-        $dst = imagecreatetruecolor($w, $h);
-        imagecopyresampled($dst, $img, 0, 0, $x, $y, $w, $h, $w, $h);
+        $dst = imagecreatetruecolor(750, 563);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, 750, 563, $w, $h);
 
         $path1 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . $uuid . '.' . $ext;
         $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
@@ -783,24 +906,29 @@ class ProviderController extends BaseController {
         rename($path, $path2);
 
         // store entry in database
+        $em = $this->getDoctrine()->getManager();
+        $cnt = $this->getDoctrineRepo('AppBundle:Equipment')->getImageCount($id);        
+        
         $img = new Image();
         $img->setUuid($uuid);
         $img->setName($uuid);
         $img->setExtension($ext);
         $img->setPath('equipment');
         $img->setOriginalPath('equipment' . $sep . 'original');
-
-        $em = $this->getDoctrine()->getManager();
         $em->persist($img);
         $em->flush();
-
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
-        $eq->addImage($img);
-        $em->flush();
+        
+        $eimg = new EquipmentImage();
+        $eimg->setImage($img);
+        $eimg->setEquipment($eq);
+        $eimg->setMain($cnt == 0 ? 1 : 0);
+        $em->persist($eimg);
+        $em->flush();        
         
         $resp = array(
             'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
-            'imgId' => $img->getId()
+            'imgId' => $img->getId(),
+            'main' => $eimg->getMain()
         );
         return new JsonResponse($resp);
     }
@@ -808,14 +936,29 @@ class ProviderController extends BaseController {
      * @Route("equipment-image-delete/{eid}/{iid}", name="equipment-image-delete")
      */
     public function equipmentImageDeleteAction(Request $request, $eid, $iid) {
-        // todo: check security
+        // check security
         $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
-        $img = $this->getDoctrineRepo('AppBundle:Image')->find($iid);
-        $eq->removeImage($img);
-        $this->getDoctrineRepo('AppBundle:Image')->removeImage($img, $this->getParameter('image_storage_dir'));
-        $em = $this->getDoctrine()->getManager();
-        $em->flush();
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
+
+        $eimg = $this->getDoctrineRepo('AppBundle:Equipment')->removeImage($eid, $iid, $this->getParameter('image_storage_dir'));
         
+        $id = $eimg === null ? null : $eimg->getImage()->getId();
+        $resp = array('mainId' => $id);
+        return new JsonResponse($resp);
+    }
+    /**
+     * @Route("equipment-image-main/{eid}/{iid}", name="equipment-image-main")
+     */
+    public function equipmentImageMainAction(Request $request, $eid, $iid) {
+        // check security
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
+
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->setMainImage($eid, $iid);        
         return new JsonResponse(Response::HTTP_OK);
     }
     
@@ -952,13 +1095,17 @@ class ProviderController extends BaseController {
     
     public function validateTime($data, ExecutionContextInterface $context) {
         if (!$data['timeMorning'] && !$data['timeAfternoon'] && !$data['timeEvening'] && !$data['timeWeekend'] ) {
-            $context->buildViolation('Please select at least one time')->addViolation();
+<<<<<<< HEAD
+            $context->buildViolation('Bitte wähle zumindest einen Zeitpunkt an dem du verfügbar sein kannst')->addViolation();
+=======
+            $context->buildViolation('Bitte wählen Sie mindestens ein Treffpunkt')->addViolation();
+>>>>>>> origin/main
         }
     }
     
     public function validatePhone($data, ExecutionContextInterface $context) {
         if (!empty($data['phone']) xor !empty($data['phonePrefix'])) {
-            $context->buildViolation('Please provide phone number (both prefix and number)')->addViolation();
+            $context->buildViolation('Bitte gib deine vollständige Telefonnummer an')->addViolation();
         }
     }
 
