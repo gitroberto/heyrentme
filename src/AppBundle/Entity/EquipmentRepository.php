@@ -125,6 +125,32 @@ class EquipmentRepository extends EntityRepository
             ->getSingleScalarResult();            
     }
  
+    public function getEquipmentMainImage($equipmentId) { // only main image, return: image or null
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->andWhere('ei.main = 1');
+
+        $ei = null;
+        try {
+            $ei = $qb->getQuery()->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        return $ei;
+    }
+    public function getEquipmentButMainImages($equipmentId) { // all except main
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->andWhere('ei.main = 0')
+            ->addOrderBy('i.id');
+
+        return $qb->getQuery()->getResult();
+    }
     public function getEquipmentImages($equipmentId) {
         // main first
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -158,18 +184,6 @@ EOT;
         $em->getRepository('AppBundle:Image')->removeImage($img, $imageStorageDir);
         $em->remove($img);
         $em->flush();
-        // set main image (if not exists)
-        $sql = <<<EOT
-update equipment_image
-set main = 1
-where equipment_id = {$equipmentId}
-order by main desc, image_id asc
-limit 1;
-EOT;
-        $conn = $this->getEntityManager()->getConnection();
-        $conn->executeUpdate($sql);        
-        
-        return $em->getRepository('AppBundle:Equipment')->getMainEquipmentImage($equipmentId);
     }
     public function getMainEquipmentImage($equipmentId) {
         $qb = $this->getEntityManager()->createQueryBuilder();

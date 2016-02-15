@@ -498,53 +498,84 @@ img.profileImage {
     clear: both;
 }
 
-#img-list li.thumb {
+#img-list-main {
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+}
+
+#img-list li.thumb, #img-list-main li.thumb {
     display: inline-block;
     margin-left: 10px;
     height: auto;
     position: relative;
 }
-#img-list li.thumb img {
+#img-list li.thumb img, #img-list-main li.thumb img {
     max-width: 100px;
+    max-height: 75px;
 }
 
-#img-list li.thumb img.main {
+#img-list li.thumb img.main, #img-list-main li.thumb img.main {
     position: absolute; 
     top: -4px; 
     left: -4px;
 }
-#img-list li.thumb img.make-main {
-    margin-left: 5px;
-}
-#img-list li.thumb span {
+#img-list li.thumb span, #img-list-main li.thumb span {
     background-image: none;
     display: inline-block;
 }
-#img-list .gauge canvas {
+#img-list .gauge canvas, #img-list-main .gauge canvas {
     display: block;
     top: 13px;
     left: 25px;
 }
-#img-list li.thumb .status {
+#img-list li.thumb .status, #img-list-main li.thumb .status {
     text-align: center;
     font-family: sans-serif;
 }
-#img-list li.thumb .gauge {
+#img-list li.thumb .gauge, #img-list-main li.thumb .gauge {
     display: block; 
     width: 100px; 
     height: 75px;
 }
 
-#drop.disabled {
+#drop.disabled, #drop-main.disabled {
     opacity: 0.3;
     cursor: not-allowed;
 }
-#drop.disabled a {
+#drop.disabled a, #drop-main.disabled a {
     cursor: not-allowed;
 }
-#drop.disabled a:hover {
+#drop.disabled a:hover, #drop-main.disabled a:hover {
     text-decoration: none;
 }
 p.how-many {
     text-align: center;
+}
+
+#drop {
+    padding: 10px 50px;
+}
+#upload {
+    margin: 0 auto;
+    padding: 0;
+}
+#drop-main {
+    padding: 10px 50px;
+    margin-bottom: 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+#drop-main input {
+    display: none;
+}
+#drop-main a {
+    padding: 12px 26px;
+    color: #000;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-top: -2px;
+    display: block;    
 }

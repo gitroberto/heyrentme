@@ -652,7 +652,10 @@ class ProviderController extends BaseController {
     public function equipmentEdit2Action(Request $request, $id) {
         $session = $request->getSession();
         
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($id);
+        $eqRepo = $this->getDoctrineRepo('AppBundle:Equipment');
+        $eq = $eqRepo->getOne($id);
+        $mainImage = $eqRepo->getEquipmentMainImage($id);
+        $images = $eqRepo->getEquipmentButMainImages($id);
         if (!$eq) {
             throw $this->createNotFoundException();
         }        
@@ -783,7 +786,9 @@ class ProviderController extends BaseController {
         
         return $this->render('provider\equipment_edit_step2.html.twig', array(
             'form' => $form->createView(),
-            'equipment' => $eq
+            'equipment' => $eq,
+            'mainImage' => $mainImage,
+            'images' => $images
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -871,6 +876,7 @@ class ProviderController extends BaseController {
         $x2 = $request->get('x2');
         $y = $request->get('y');
         $y2 = $request->get('y2');
+        $main = strtolower($request->get('main')) === 'true';
         $w = round($x2 - $x);
         $h = round($y2 - $y);
         
@@ -879,6 +885,17 @@ class ProviderController extends BaseController {
         if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
             return new Response($status = Response::HTTP_FORBIDDEN);
         }        
+
+        // new size
+        $nw = 750;
+        if ($main) {
+            $nh = 563;
+        }
+        else {
+            $nh = $h / $w * $nw;
+        }
+        
+        
         
         $sep = DIRECTORY_SEPARATOR;
         $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
@@ -887,8 +904,8 @@ class ProviderController extends BaseController {
         $ext = $arr[1];
         
         $img = imagecreatefromstring(file_get_contents($path));
-        $dst = imagecreatetruecolor(750, 563);
-        imagecopyresampled($dst, $img, 0, 0, $x, $y, 750, 563, $w, $h);
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, $nw, $nh, $w, $h);
 
         $path1 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . $uuid . '.' . $ext;
         $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
@@ -899,9 +916,6 @@ class ProviderController extends BaseController {
         else if ($ext === 'png') {
             imagepng($dst, $path1, 9);
         }
-        else if ($ext === 'gif') {
-            imagegif($dst, $path1);
-        }        
         
         rename($path, $path2);
 
@@ -921,7 +935,7 @@ class ProviderController extends BaseController {
         $eimg = new EquipmentImage();
         $eimg->setImage($img);
         $eimg->setEquipment($eq);
-        $eimg->setMain($cnt == 0 ? 1 : 0);
+        $eimg->setMain($main ? 1 : 0);
         $em->persist($eimg);
         $em->flush();        
         
@@ -944,9 +958,7 @@ class ProviderController extends BaseController {
 
         $eimg = $this->getDoctrineRepo('AppBundle:Equipment')->removeImage($eid, $iid, $this->getParameter('image_storage_dir'));
         
-        $id = $eimg === null ? null : $eimg->getImage()->getId();
-        $resp = array('mainId' => $id);
-        return new JsonResponse($resp);
+        return new JsonResponse(Response::HTTP_OK);
     }
     /**
      * @Route("equipment-image-main/{eid}/{iid}", name="equipment-image-main")
@@ -1095,11 +1107,7 @@ class ProviderController extends BaseController {
     
     public function validateTime($data, ExecutionContextInterface $context) {
         if (!$data['timeMorning'] && !$data['timeAfternoon'] && !$data['timeEvening'] && !$data['timeWeekend'] ) {
-<<<<<<< HEAD
             $context->buildViolation('Bitte wähle zumindest einen Zeitpunkt an dem du verfügbar sein kannst')->addViolation();
-=======
-            $context->buildViolation('Bitte wählen Sie mindestens ein Treffpunkt')->addViolation();
->>>>>>> origin/main
         }
     }
     
