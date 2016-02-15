@@ -30,7 +30,7 @@ class GeneralMailer {
         $to = $user->getEmail();
         #$to = 'sebastian0680@wp.pl'; 
         $message = \Swift_Message::newInstance()
-        ->setSubject('hey! VIENNA Welcome Email.')
+        ->setSubject('Willkommen bei hey! VIENNA')
         ->setFrom($from)
         ->setTo($to)
         ->setBody(

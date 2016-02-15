@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
-    <title>Bestätigung</title>
+    <title>Stornierung</title>
     
 </head>
 <body style="background-color:#f9f9f9;margin: 0;overflow-x: hidden;max-width: 600px;margin: 0 auto;" >
@@ -26,7 +26,7 @@
                 Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
             </h1>
             <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;margin-bottom: 100px;">
-                Die Buchung wurde auf Wunsch von {{ provider.name }} leider zurückgetreten.
+                Die Buchung wurde auf Wunsch von {{ provider.name }} leider storniert.
             </p>
         </td>
     </tr>
