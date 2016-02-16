@@ -857,9 +857,7 @@ class ProviderController extends BaseController {
             $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
             $resp = array(
                 'url' => $url,
-                'name' => $name,
-                'width' => $size[0],
-                'height' => $size[1]
+                'name' => $name
             );
             return new JsonResponse($resp);
         }
@@ -886,7 +884,20 @@ class ProviderController extends BaseController {
             return new Response($status = Response::HTTP_FORBIDDEN);
         }        
 
-        // new size
+        // init vars 
+        $sep = DIRECTORY_SEPARATOR;
+        $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
+        $arr = explode('.', $name);
+        $uuid = $arr[0];
+        $ext = $arr[1];
+
+        // check and calcualte size
+        if ($w === 0 || $h == 0) {
+            $size = getimagesize($path);
+            $w = $size[0];
+            $h = $size[1];
+        }
+        
         $nw = 750;
         if ($main) {
             $nh = 563;
@@ -894,14 +905,6 @@ class ProviderController extends BaseController {
         else {
             $nh = $h / $w * $nw;
         }
-        
-        
-        
-        $sep = DIRECTORY_SEPARATOR;
-        $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
-        $arr = explode('.', $name);
-        $uuid = $arr[0];
-        $ext = $arr[1];
         
         $img = imagecreatefromstring(file_get_contents($path));
         $dst = imagecreatetruecolor($nw, $nh);
