@@ -49,7 +49,7 @@ class UserController extends BaseAdminController {
         $user = $this->getDoctrineRepo('AppBundle:User')->find($id);
 
         if (!$user) {
-            throw $this->createNotFoundException('No user found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         
         $form = $this->createFormBuilder($user)->add('status', 'choice', array(

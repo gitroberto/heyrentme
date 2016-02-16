@@ -226,7 +226,7 @@ class TalentBookingController extends BaseController {
 
         // sanity check
         if ($inq == null) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         if ($inq->getBooking() !== null) { // booking already confirmed
             return new Response('', 403); // TODO: display a nice message to the user?

@@ -65,7 +65,7 @@ class FeatureController extends BaseAdminController {
         $feature = $this->getDoctrineRepo('AppBundle:Feature')->find($id);
 
         if (!$feature) {
-            throw $this->createNotFoundException('No feature found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         
         $form = $this->createFormBuilder($feature)
@@ -124,7 +124,7 @@ class FeatureController extends BaseAdminController {
         $featureSectionId =  $feature->getFeatureSection()->getId();
         
         if (!$feature) {
-            throw $this->createNotFoundException('No feature found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
                
         $em = $this->getDoctrine()->getManager();

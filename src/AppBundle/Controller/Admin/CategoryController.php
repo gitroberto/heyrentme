@@ -146,7 +146,7 @@ class CategoryController extends BaseAdminController {
         $category = $this->getDoctrineRepo('AppBundle:Category')->find($id);
 
         if (!$category) {
-            throw $this->createNotFoundException('No category found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         $form = $this->createFormBuilder($category)
@@ -282,7 +282,7 @@ class CategoryController extends BaseAdminController {
         $category = $this->getDoctrineRepo('AppBundle:Category')->find($id);
 
         if (!$category) {
-            throw $this->createNotFoundException('No category found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         //remove old Image (both file from filesystem and entity from db)

@@ -99,7 +99,7 @@ class DefaultController extends BaseController {
             return $result;
         }
         // Nothing was matched, URL is invalid
-        throw $this->createNotFoundException();
+        return new Response(Response::HTTP_NOT_FOUND);
     }
     
     private function processCategory(Request $request, $content) {
@@ -155,7 +155,7 @@ class DefaultController extends BaseController {
         }
         
         if ($eq === null && $tal === null) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         
@@ -164,7 +164,7 @@ class DefaultController extends BaseController {
         //<editor-fold>
         if ($eq !== null) {
             if ($eq->getStatus() !== Equipment::STATUS_APPROVED || $eq->getUser()->getStatus() !== User::STATUS_OK){
-                throw $this->createNotFoundException();
+                return new Response(Response::HTTP_NOT_FOUND);
             }
             
             $repo = 'AppBundle:Equipment';
@@ -176,7 +176,7 @@ class DefaultController extends BaseController {
         }
         else {
             if ($tal->getStatus() !== Talent::STATUS_APPROVED || $tal->getUser()->getStatus() !== User::STATUS_OK){
-                throw $this->createNotFoundException();
+                return new Response(Response::HTTP_NOT_FOUND);
             }
             $repo = 'AppBundle:Talent';
             $ratRepo = 'AppBundle:TalentRating';

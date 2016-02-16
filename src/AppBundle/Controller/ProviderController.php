@@ -439,7 +439,7 @@ class ProviderController extends BaseController {
         }
         
         if (!$equipment) {
-            throw $this->createNotFoundException('No equipment found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         $this->getDoctrineRepo('AppBundle:Image')->removeAllImages($equipment, $this->getParameter('image_storage_dir'));
@@ -456,7 +456,7 @@ class ProviderController extends BaseController {
     public function equipmentEdit1Action(Request $request, $id) {
         $equipment = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
         if (!$equipment) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         // security check
         if ($this->getUser()->getId() !== $equipment->getUser()->getId()) {
@@ -657,7 +657,7 @@ class ProviderController extends BaseController {
         $mainImage = $eqRepo->getEquipmentMainImage($id);
         $images = $eqRepo->getEquipmentButMainImages($id);
         if (!$eq) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         // security check
         if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
@@ -987,7 +987,7 @@ class ProviderController extends BaseController {
         //$eqid = 118; // TODO: remove this; dev only!
         $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eqid);
         if (!$eq) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         // security check
         if ($user->getId() !== $eq->getUser()->getId()) {
@@ -1085,7 +1085,7 @@ class ProviderController extends BaseController {
                 #following part was added because otherwise equipment status change was not save in db
                 $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eqid);
                 if (!$eq) {
-                    throw $this->createNotFoundException();
+                    return new Response(Response::HTTP_NOT_FOUND);
                 }  
                 
                 $eq->changeStatus(Equipment::STATUS_NEW, null);
@@ -1161,7 +1161,7 @@ class ProviderController extends BaseController {
         $id = $user->getId();
                 
         if (!$user) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }  
         
         $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());

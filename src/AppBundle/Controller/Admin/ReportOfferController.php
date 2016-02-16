@@ -31,7 +31,7 @@ class ReportOfferController  extends BaseAdminController {
         $reportOffer = $this->getDoctrineRepo('AppBundle:ReportOffer')->find($id);
 
         if (!$reportOffer) {
-            throw $this->createNotFoundException('No report found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
           
         $em = $this->getDoctrine()->getManager();

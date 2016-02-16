@@ -129,7 +129,7 @@ class SubcategoryController extends BaseAdminController {
     public function editAction(Request $request, $id) {
         $subcategory = $this->getDoctrineRepo('AppBundle:Subcategory')->find($id);
         if (!$subcategory) {
-            throw $this->createNotFoundException('No subcategory found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         $category = $subcategory->getCategory();
         
@@ -240,7 +240,7 @@ class SubcategoryController extends BaseAdminController {
         $subcategory = $this->getDoctrineRepo('AppBundle:Subcategory')->find($id);
 
         if (!$subcategory) {
-            throw $this->createNotFoundException('No subcategory found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         
         }
         //remove old Image (both file from filesystem and entity from db)

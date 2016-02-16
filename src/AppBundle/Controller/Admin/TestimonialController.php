@@ -180,7 +180,7 @@ class TestimonialController extends BaseAdminController {
         $testimonial = $this->getDoctrineRepo('AppBundle:Testimonial')->find($id);
 
         if (!$testimonial) {
-            throw $this->createNotFoundException('No $testimonial found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         $form = $this->createFormBuilder($testimonial)
@@ -291,7 +291,7 @@ class TestimonialController extends BaseAdminController {
         $testimonial = $this->getDoctrineRepo('AppBundle:Testimonial')->find($id);
 
         if (!$testimonial) {
-            throw $this->createNotFoundException('No testimonial found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         //remove old Image (both file from filesystem and entity from db)

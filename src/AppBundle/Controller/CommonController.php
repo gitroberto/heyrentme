@@ -140,14 +140,14 @@ class CommonController extends BaseController {
             if ($type == ReportOffer::OFFER_TYPE_EQUIPMENT){
                 $item = $this->getDoctrineRepo("AppBundle:Equipment")->find($id);
                 if (!$item) {
-                    throw $this->createNotFoundException('No equipment found for id '.$id);
+                    return new Response(Response::HTTP_NOT_FOUND);
                 }
                 $actionName = "admin_equipment_moderate";
                 $reportOffer->setEquipment($item);
             } else {
                 $item = $this->getDoctrineRepo("AppBundle:Talent")->find($id);
                 if (!$item) {
-                    throw $this->createNotFoundException('No talent found for id '.$id);
+                    return new Response(Response::HTTP_NOT_FOUND);
                 }
                 $actionName="admin_talent_moderate";
                 $reportOffer->setTalent($item);

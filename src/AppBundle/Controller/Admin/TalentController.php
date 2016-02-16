@@ -81,7 +81,7 @@ class TalentController extends BaseAdminController {
         $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
 
         if (!$talent) {
-            throw $this->createNotFoundException('No talent found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         $options = array();

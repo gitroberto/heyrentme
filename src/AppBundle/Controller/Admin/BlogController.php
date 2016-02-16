@@ -8,6 +8,7 @@ use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -35,7 +36,7 @@ class BlogController  extends BaseAdminController {
         
         $blog = $this->getDoctrineRepo('AppBundle:Blog')->find($id);
         if (!$blog) {
-            throw $this->createNotFoundException('No blog post found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         $blogs = $this->getDoctrineRepo('AppBundle:Blog')->getForRelatedOrderedByName($id);
         
@@ -270,7 +271,7 @@ class BlogController  extends BaseAdminController {
         $blog = $this->getDoctrineRepo('AppBundle:Blog')->find($id);
 
         if (!$blog) {
-            throw $this->createNotFoundException('No blog post found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         $form = $this->createFormBuilder($blog, array(
@@ -412,7 +413,7 @@ class BlogController  extends BaseAdminController {
         $blog = $this->getDoctrineRepo('AppBundle:Blog')->find($id);
 
         if (!$blog) {
-            throw $this->createNotFoundException('No blog post found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         //remove old Image (both file from filesystem and entity from db)

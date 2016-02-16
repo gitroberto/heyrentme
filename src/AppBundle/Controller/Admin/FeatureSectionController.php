@@ -81,7 +81,7 @@ class FeatureSectionController extends BaseAdminController {
         $featureSection = $this->getDoctrineRepo('AppBundle:FeatureSection')->find($id);
 
         if (!$featureSection) {
-            throw $this->createNotFoundException('No feature section found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         $form = $this->createFormBuilder($featureSection)
@@ -135,7 +135,7 @@ class FeatureSectionController extends BaseAdminController {
         $featureSection = $this->getDoctrineRepo('AppBundle:FeatureSection')->find($id);
 
         if (!$featureSection) {
-            throw $this->createNotFoundException('No feature section found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
                
         $em = $this->getDoctrine()->getManager();

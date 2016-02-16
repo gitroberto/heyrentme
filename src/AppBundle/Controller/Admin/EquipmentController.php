@@ -7,12 +7,9 @@ use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\ExecutionContextInterface;
-
-
-
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 class EquipmentController extends BaseAdminController {
     /**
@@ -81,7 +78,7 @@ class EquipmentController extends BaseAdminController {
         $equipment = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($id);
 
         if (!$equipment) {
-            throw $this->createNotFoundException('No equipment found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         $options = array();

@@ -89,7 +89,7 @@ class TalentController extends BaseController {
         }
         
         if (!$talent) {
-            throw $this->createNotFoundException('No talent found for id '.$id);
+            return new Response(Response::HTTP_NOT_FOUND);
         }
         
         $this->getDoctrineRepo('AppBundle:Image')->removeAllImages($talent, $this->getParameter('image_storage_dir'));
@@ -106,7 +106,7 @@ class TalentController extends BaseController {
     public function talentEdit1Action(Request $request, $id) {
         $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
         if (!$talent) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         // security check
         if ($this->getUser()->getId() !== $talent->getUser()->getId()) {
@@ -177,7 +177,7 @@ class TalentController extends BaseController {
         $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
         //$eq = $this->getDoctrineRepo('AppBundle:Talent')->find(117); //TODO: dev only! remove
         if (!$eq) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         // security check
         if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
@@ -539,7 +539,7 @@ class TalentController extends BaseController {
         //$eqid = 118; // TODO: remove this; dev only!
         $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($eqid);
         if (!$eq) {
-            throw $this->createNotFoundException();
+            return new Response(Response::HTTP_NOT_FOUND);
         }        
         // security check
         if ($user->getId() !== $eq->getUser()->getId()) {
@@ -650,7 +650,7 @@ class TalentController extends BaseController {
                 #following part was added because otherwise talent status change was not save in db
                 $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($eqid);
                 if (!$eq) {
-                    throw $this->createNotFoundException();
+                    return new Response(Response::HTTP_NOT_FOUND);
                 }  
                 
                 $eq->changeStatus(Talent::STATUS_NEW, null);
