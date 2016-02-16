@@ -483,12 +483,12 @@ class SchedulerService {
     }
     
     public function sendSecondDayWelcomeEmail($emailTo ){
-        $tmpl = 'Emails\User\\welcome_second_day.html.twig';
+        $tmpl = 'Emails\User\welcome_second_day.html.twig';
         $emailHtml = $this->templating->render($tmpl, array(
             'mailer_app_url_prefix' => $this->appUrlPrefix            
         ));
         $message = Swift_Message::newInstance()
-            ->setSubject('Welcom second day')
+            ->setSubject('Willkommen bei hey! VIENNA')
             ->setFrom($this->from)
             ->setTo($emailTo)
             ->setBody($emailHtml, 'text/html');
@@ -507,7 +507,7 @@ class SchedulerService {
             'equipmentUrl' => $equipmentUrl
         ));
         $message = Swift_Message::newInstance()
-            ->setSubject('Welcom third day')
+            ->setSubject('Willkommen bei hey! VIENNA')
             ->setFrom($this->from)
             ->setTo($emailTo)
             ->setBody($emailHtml, 'text/html');
