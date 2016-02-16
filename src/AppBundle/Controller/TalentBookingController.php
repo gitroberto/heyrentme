@@ -297,7 +297,7 @@ class TalentBookingController extends BaseController {
             $provider = $inq->getTalent()->getUser();
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             
-            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('einstellungen');
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('booking-list');
             $emailHtml = $this->renderView('Emails\talent\mail_to_provider_confirm_booking.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
