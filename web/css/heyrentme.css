@@ -582,3 +582,7 @@ p.how-many {
     margin-top: -2px;
     display: block;    
 }
+
+#media-container .media-list span {
+    overflow: hidden;
+}
