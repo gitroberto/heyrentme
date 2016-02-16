@@ -40,6 +40,7 @@ twig:
     strict_variables: "%kernel.debug%"
     globals:
         image_url_prefix: "%image_url_prefix%"
+        mailer_app_url_prefix: "%mailer_app_url_prefix%"
 
 # Assetic Configuration
 assetic:

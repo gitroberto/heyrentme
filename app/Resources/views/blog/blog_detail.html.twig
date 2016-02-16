@@ -31,11 +31,11 @@
             </div>
             <p class="detail-notice"></p>
             <div class="social-container">
-                <a class="social fb" href="#"></a>
-                <a class="social flash" href="#"></a>
-                <a class="social email" href="#"></a>
-                <a class="social tweet" href="#"></a>
-                <a class="social pin" href="#"></a>
+                <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}')"></a>
+                <a class="social flash"></a>
+                <a class="social email" href="mailto:"></a>
+                <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}')"></a>
+                <a class="social pin" href="javascript:pinIt('{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}', '{{ post.title|escape('js') }}')"></a>
             </div>
             <div class="position-relative">
                 {% if post.image %}
@@ -212,4 +212,24 @@
     <section class="detail-bottom container border-light-gray"></section>
   </div>
     
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+  var winTop = (screen.height / 2) - 160;
+  var winLeft = (screen.width / 2) - 260;
+
+  // fb share button
+  var shareFB = function(url) {
+    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=Facebook Share&p[summary]=Facebook share popup&p[url]=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=520,height=320');
+  };
+  // twitter button
+  var twittButton = function(title, url) {
+    window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+  };
+  // pin button
+  var pinIt = function(url, description) {
+    window.open('http://pinterest.com/pin/create/link/?url=' + url + '&description=' + description, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=520,height=320');
+  };
+</script>
 {% endblock %}
