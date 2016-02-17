@@ -520,3 +520,11 @@ min-height:200px;
 }
 
 
+.modal-dialog {
+    width:auto!important;
+}
+
+.rent-dialog p:last-child {
+margin-bottom:10px;
+}
+
