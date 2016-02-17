@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller;
 
+
 use AppBundle\Entity\Equipment;
 use AppBundle\Entity\EquipmentImage;
 use AppBundle\Entity\Image;
+use AppBundle\Entity\Talent;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
@@ -1306,12 +1308,14 @@ EOT;
         $id = $request->get('id');
         $type = $request->get('type');
         $status = $request->get('status');
-        
+        $modifiedStatus = null;
         if ($type === 'equipment') {
             $obj = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+            $modifiedStatus = Equipment::STATUS_MODIFIED;
         }
         else {
             $obj = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+            $modifiedStatus = Talent::STATUS_MODIFIED;
         }
         
         // security check
@@ -1322,6 +1326,7 @@ EOT;
         // save
         $em = $this->getDoctrine()->getManager();
         $obj->setOfferStatus($status);
+        $obj->setStatus($modifiedStatus);
         $em->persist($obj);
         $em->flush();            
         

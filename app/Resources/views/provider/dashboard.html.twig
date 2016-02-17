@@ -93,16 +93,18 @@
 
 
                                   {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
-                                    <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
-                                    <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" data-type="equipment" data-id="{{ eq.id }}" id="BtnSave_{{ eq.id }}" >speichern</a>
+                                    <a class="button-black background-facebook col-xs-3 itemToHide_{{ eq.id }}" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
+                                    <a class="button-black backgound-yellow col-xs-3 btnSaveStatus itemToHide_{{ eq.id }}" data-type="equipment" data-id="{{ eq.id }}" id="BtnSave_{{ eq.id }}" >speichern</a>
                                   {% endif %}
                                 </div>
                                 <div class="clear" ></div>
                                 <div>                                    
                                     {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
-                                        <textarea data-type="equipment" data-id="{{ eq.id }}" class="place_black placeholderStatusDashboard" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ eq.offerStatus }}</textarea>
+                                        <textarea data-type="equipment" data-id="{{ eq.id }}" class="place_black placeholderStatusDashboard itemToHide_{{ eq.id }}" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ eq.offerStatus }}</textarea>
                                     {% else %}
-                                        Status: Wird gerade überprüft...
+                                        <div id="StatusMessage_{{ eq.id }}">
+                                            Status: Wird gerade überprüft...
+                                        </div>
                                     {% endif %}
                                 </div>
                                 <div>
@@ -239,17 +241,19 @@
 
 
                                   {% if (tal.status == constant('AppBundle\\Entity\\Talent::STATUS_APPROVED')) %}
-                                    <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
-                                    <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" data-type="talent" data-id="{{ tal.id }}" id="BtnSave_{{ tal.id }}" >speichern</a>
+                                    <a class="button-black background-facebook col-xs-3 itemToHide_{{ tal.id }}" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
+                                    <a class="button-black backgound-yellow col-xs-3 btnSaveStatus itemToHide_{{ tal.id }}" data-type="talent" data-id="{{ tal.id }}" id="BtnSave_{{ tal.id }}" >speichern</a>
                                   {% endif %}
                                 </div>
                                 <div class="clear" ></div>
                                 <div>
                                     <ul id = "DivMessage_{{ tal.id }}" style="display:none;"></ul>
                                     {% if (tal.status == constant('AppBundle\\Entity\\Talent::STATUS_APPROVED')) %}
-                                        <textarea data-type="talent" data-id="{{ tal.id }}"  class="place_black placeholderStatusDashboard" id="TxtStatus_{{ tal.id }}" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ tal.offerStatus }}</textarea>                                
+                                        <textarea data-type="talent" data-id="{{ tal.id }}"  class="place_black placeholderStatusDashboard itemToHide_{{ tal.id }}" id="TxtStatus_{{ tal.id }}" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ tal.offerStatus }}</textarea>                                
                                     {% else %}
-                                        Status: Wird gerade überprüft...
+                                        <div id="StatusMessage_{{ tal.id }}">
+                                            Status: Wird gerade überprüft...
+                                        </div>
                                     {% endif %}
 
                                 </div>
@@ -379,6 +383,9 @@
         $.post(url, params)
                 .done(function() {
                     msg = 'Status gespeichert';
+                    //$(".itemToHide_"+id).hide();
+                    //$("#StatusMessage_"+id).show();
+                    location.reload();
                 })
                 .fail(function() {
                     msg = 'Speichern fehlgeschlagen ist, versuchen Sie es erneut';
