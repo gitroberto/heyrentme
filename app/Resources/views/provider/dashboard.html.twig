@@ -92,13 +92,18 @@
                                     </div>
 
 
-
-                                  <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
-                                  <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" data-type="equipment" data-id="{{ eq.id }}" id="BtnSave_{{ eq.id }}" >speichern</a>
+                                  {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
+                                    <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
+                                    <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" data-type="equipment" data-id="{{ eq.id }}" id="BtnSave_{{ eq.id }}" >speichern</a>
+                                  {% endif %}
                                 </div>
                                 <div class="clear" ></div>
                                 <div>                                    
-                                    <textarea data-type="equipment" data-id="{{ eq.id }}" class="place_black placeholderStatusDashboard" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ eq.offerStatus }}</textarea>
+                                    {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
+                                        <textarea data-type="equipment" data-id="{{ eq.id }}" class="place_black placeholderStatusDashboard" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ eq.offerStatus }}</textarea>
+                                    {% else %}
+                                        Status: Wird gerade überprüft...
+                                    {% endif %}
                                 </div>
                                 <div>
                                     <div class="row">
@@ -233,15 +238,19 @@
                                     </div>
 
 
-
-                                  <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
-                                  <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" data-type="talent" data-id="{{ tal.id }}" id="BtnSave_{{ tal.id }}" >speichern</a>
+                                  {% if (tal.status == constant('AppBundle\\Entity\\Talent::STATUS_APPROVED')) %}
+                                    <a class="button-black background-facebook col-xs-3" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
+                                    <a class="button-black backgound-yellow col-xs-3 btnSaveStatus" data-type="talent" data-id="{{ tal.id }}" id="BtnSave_{{ tal.id }}" >speichern</a>
+                                  {% endif %}
                                 </div>
                                 <div class="clear" ></div>
                                 <div>
                                     <ul id = "DivMessage_{{ tal.id }}" style="display:none;"></ul>
-                                    
-                                    <textarea data-type="talent" data-id="{{ tal.id }}"  class="place_black placeholderStatusDashboard" id="TxtStatus_{{ tal.id }}" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ tal.offerStatus }}</textarea>                                
+                                    {% if (tal.status == constant('AppBundle\\Entity\\Talent::STATUS_APPROVED')) %}
+                                        <textarea data-type="talent" data-id="{{ tal.id }}"  class="place_black placeholderStatusDashboard" id="TxtStatus_{{ tal.id }}" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ tal.offerStatus }}</textarea>                                
+                                    {% else %}
+                                        Status: Wird gerade überprüft...
+                                    {% endif %}
 
                                 </div>
                                 <div>
