@@ -464,7 +464,7 @@
               //$("#player").css('height', h);
         });
 
-
+        {% if item.video %}
         $("#media-list .media-video").click(function() {
             //$('#videos-ico').remove();
             var url = $(this).data('url');
@@ -475,7 +475,7 @@
             playerWidth();
             $(".product-detail .left-side .cart, .discount.discount-big").hide();
         });
-    
+        {% endif %}    
         
         $('#date-range').val(moment().add(1, 'days').format('DD.MM.YYYY'));
         updatePrice();

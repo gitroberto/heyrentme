@@ -96,7 +96,10 @@ class TalentBookingController extends BaseController {
             if (!$loggedIn) {
                 $inq->setName($data['name']);
                 $inq->setEmail($data['email']);
-                $u = $this->getDoctrineRepo('AppBundle:User')->findByEmail($data['email']);
+                $u = null;
+                try {
+                    $u = $this->getDoctrineRepo('AppBundle:User')->findOneByEmail($data['email']);
+                } catch (\Doctrine\ORM\NoResultException $e) {};
                 if ($u !== null) {
                     $inq->setUser($u);
                 }
