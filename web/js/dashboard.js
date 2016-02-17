@@ -196,7 +196,10 @@ function SaveStatusAndDiscount(){
                     location.reload();
                 }
                 DisableControl($("#"+discountPercentPrefix+id));
-                DisableControl($("#"+discountDurationPrefix+id));                
+                DisableControl($("#"+discountDurationPrefix+id));  
+                
+                
+                
             },
             error: function(data){
                 
