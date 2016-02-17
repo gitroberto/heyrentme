@@ -78,7 +78,7 @@ class TalentController extends BaseAdminController {
      * @Route("/admin/talent/moderate/{id}", name="admin_talent_moderate")
      */
     public function moderateAction(Request $request, $id) {
-        $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        $talent = $this->getDoctrineRepo('AppBundle:Talent')->getOne($id);
 
         if (!$talent) {
             return new Response(Response::HTTP_NOT_FOUND);

@@ -11,19 +11,19 @@
   <div class="container request-container">
     <div class="row">
         <div class="col-xs-12">
-            <h1>{{ booking.inquiry.talent.name }} / Vom Angebot zurücktreten</h1>
+            <h1>{{ talent.name }} / Vom Angebot zurücktreten</h1>
             <div class="row summary">
                 <div class="ad col-md-4 col-sm-12">
-                    <img src="{% if booking.inquiry.talent.images|length > 0 %}{{ booking.inquiry.talent.images[0].urlPath(image_url_prefix) }}{% else %}/img/talent-default.jpg{% endif %}"
-                         alt="{{ booking.inquiry.talent.name }}" 
+                    <img src="{% if talent.talentImages|length > 0 %}{{ talent.talentImages[0].image.urlPath(image_url_prefix) }}{% else %}/img/talent-default.jpg{% endif %}"
+                         alt="{{ talent.name }}" 
                          class="img-responsive"/>
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
-                                {{ include('common/stars.html.twig', { rating: booking.inquiry.talent.rating }) }}
-                                <p class="product-name">{{ booking.inquiry.talent.name }}</p>
+                                {{ include('common/stars.html.twig', { rating: talent.rating }) }}
+                                <p class="product-name">{{ talent.name }}</p>
                             </div>
-                            <div class="col-xs-6"><p class="price">{{ booking.inquiry.talent.activePrice|number_format(2, ',') }} €</p>
+                            <div class="col-xs-6"><p class="price">{{ talent.activePrice|number_format(2, ',') }} €</p>
                                 <p class="tag">pro Stunde</p>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                     <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                     <p>{{ booking.totalPrice|number_format(2, ',') }} €</p>
                     <p class="dont-transform">
-                        {{ booking.inquiry.talent.addressAsString }}
+                        {{ talent.addressAsString }}
                     </p>
                 </div>
             </div>

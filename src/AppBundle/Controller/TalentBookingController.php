@@ -223,6 +223,7 @@ class TalentBookingController extends BaseController {
      */
     public function confirmationAction(Request $request, $uuid) {
         $inq = $this->getDoctrineRepo('AppBundle:TalentInquiry')->findOneByUuid($uuid);
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->getOne($inq->getTalent()->getId());
 
         // sanity check
         if ($inq == null) {
@@ -343,6 +344,7 @@ class TalentBookingController extends BaseController {
         
         return $this->render('talent-booking/confirmation.html.twig', array(
             'inquiry' => $inq,
+            'talent' => $eq,
             'form' => $form->createView()
         ));
     }
@@ -454,6 +456,7 @@ class TalentBookingController extends BaseController {
      */
     public function rateTalentAction(Request $request, $uuid) {
         $bk = $this->getDoctrineRepo('AppBundle:TalentBooking')->findOneByRateTalentUuid($uuid);
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->getOne($bk->getInquiry()->getTalent()->getId());
         
         if ($bk === null) {
             return new Response($status = Response::HTTP_FORBIDDEN);
@@ -461,7 +464,6 @@ class TalentBookingController extends BaseController {
         }
         
         $inq = $bk->getInquiry();
-        $eq = $inq->getTalent();
         
         // build form
         //<editor-fold>
@@ -545,6 +547,7 @@ class TalentBookingController extends BaseController {
      */
     public function userCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:TalentBooking')->find($id);
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->getOne($bk->getInquiry()->getTalent()->getId());
         $user = $this->getUser();
         
         // check security        
@@ -626,6 +629,7 @@ class TalentBookingController extends BaseController {
         
         return $this->render("talent-booking/booking-user-cancel.html.twig", array(
             'booking' => $bk,
+            'talent' => $eq,
             'form' => $form->createView()
         ));
     }
@@ -634,6 +638,7 @@ class TalentBookingController extends BaseController {
      */
     public function providerCancelAction(Request $request, $id) {
         $bk = $this->getDoctrineRepo('AppBundle:TalentBooking')->find($id);
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->getOne($bk->getInquiry()->getTalent()->getId());
         $user = $this->getUser();
         
         // todo: check security
@@ -716,6 +721,7 @@ class TalentBookingController extends BaseController {
         
         return $this->render("talent-booking/booking-provider-cancel.html.twig", array(
             'booking' => $bk,
+            'talent' => $eq,
             'form' => $form->createView()
         ));
     }

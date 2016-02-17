@@ -40,10 +40,10 @@
             <div class="form-group">
               <label for="form_name" class="control-label col-xs-2">Images</label>
               <div class="col-xs-10 control-readonly">
-                {% for img in talent.images %}
+                {% for img in talent.talentImages %}
 
-                    <a class="thmb-link" href ="{{ img.urlPath(image_url_prefix) }}" target="_blank">
-                        <img class="thmb" src="{{ img.urlPath(image_url_prefix) }}"  alt=""/>
+                    <a class="thmb-link" href ="{{ img.image.urlPath(image_url_prefix) }}" target="_blank">
+                        <img class="thmb" src="{{ img.image.urlPath(image_url_prefix) }}"  alt=""/>
                     </a>
                     
                 {% endfor %}

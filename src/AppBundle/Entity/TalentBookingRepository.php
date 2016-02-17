@@ -20,8 +20,16 @@ class TalentBookingRepository extends EntityRepository {
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
         $q->setParameter('userId', $userId);
-        return $q->getResult();
+        $bks = $q->getResult();
         
+        // "hydrate" talent images
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Talent');
+        foreach($bks as $bk) {
+            $eq = $bk->getInquiry()->getTalent();
+            $eq->setTalentImages($repo->getTalentImages($eq->getId()));
+        }        
+        
+        return $bks;       
     }
     public function getAllForProvider($userId) {
         $dql = <<<EOT
@@ -35,7 +43,16 @@ EOT;
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
         $q->setParameter('userId', $userId);
-        return $q->getResult();
+        $bks = $q->getResult();
+        
+        // "hydrate" talent images
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Talent');
+        foreach($bks as $bk) {
+            $eq = $bk->getInquiry()->getTalent();
+            $eq->setTalentImages($repo->getTalentImages($eq->getId()));
+        }        
+        
+        return $bks;
     }
     
     public function getAllForRentUserReminder(DateTime $datetime) {
