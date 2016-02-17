@@ -43,7 +43,7 @@
                         <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
                         <a class="social flash" href="#"></a>
                         <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
-                        <a class="social email" href="mailto:"></a>
+                        <a class="social email" href="mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}"></a>
                       </span>
                     </span>
                 </div>
@@ -379,7 +379,7 @@
                         <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
                         <a class="social flash" href="#"></a>
                         <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
-                        <a class="social email" href="mailto:"></a>
+                        <a class="social email" href="mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}"></a>
                       </span>
                     </span>
             </div>
