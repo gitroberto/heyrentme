@@ -170,8 +170,8 @@
                     <div class="xol-xs-12">
                         <div class="row user-offers">
                             <div class="col-md-4 offer-detail">
-                                {% if tal.images|length > 0 %}
-                                    <img src="{{ tal.images[0].urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
+                                {% if tal.talentImages|length > 0 %}
+                                    <img src="{{ tal.talentImages[0].image.urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
                                 {% else %}
                                     <img src="/img/equipment-default.jpg" alt="placeholder" class="img-responsive" />
                                 {% endif %}

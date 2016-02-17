@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Talent;
+use AppBundle\Entity\TalentImage;
 use AppBundle\Entity\Video;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -174,8 +175,11 @@ class TalentController extends BaseController {
     public function talentEdit2Action(Request $request, $id) {
         $session = $request->getSession();
         
-        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
-        //$eq = $this->getDoctrineRepo('AppBundle:Talent')->find(117); //TODO: dev only! remove
+        $eqRepo = $this->getDoctrineRepo('AppBundle:Talent');
+        $eq = $eqRepo->getOne($id);
+        $mainImage = $eqRepo->getTalentMainImage($id);
+        $images = $eqRepo->getTalentButMainImages($id);
+
         if (!$eq) {
             return new Response(Response::HTTP_NOT_FOUND);
         }        
@@ -197,13 +201,7 @@ class TalentController extends BaseController {
             'phone' => $user->getPhone()
         );
         
-        if ($request->getMethod() == "GET") {
-            $session->set('TalentAddFileArray', array()); //initialize array of currently uploaded images
-        }
-        else {
-            $this->fileCount = count($session->get('TalentAddFileArray'));
-            $this->imageCount = count($eq->getImages());
-        }
+        $this->imageCount = count($eq->getTalentImages());
         
         
         // validation form
@@ -303,11 +301,7 @@ class TalentController extends BaseController {
                 $this->sendNewModifiedTalentInfoMessage($request, $eq);
             }
             $em->flush();
-            
-            // store images
-            $eqFiles = $session->get('TalentAddFileArray');
-            $this->handleImages($eqFiles, $eq, $em);
-            
+                        
             // handle video url
             if ($this->currentVideo !== null) {
                 if ($eq->getVideo() !== null) {
@@ -346,9 +340,15 @@ class TalentController extends BaseController {
             
             return $this->redirectToRoute('talent-edit-3', array('eqid' => $id));
         }
+
+        // clean up
+        $this->fileCount = null;
         
         return $this->render('talent/talent_edit_step2.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'talent' => $eq,
+            'mainImage' => $mainImage,
+            'images' => $images
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -399,18 +399,14 @@ class TalentController extends BaseController {
         $context->buildViolation('Bitte gib hier eine gültige Youtube- oder Vimeo-URL ein')->atPath('videoUrl')->addViolation();        
     }
     
-    private $fileCount = null; // num of uploaded images; necessary for image validation
     private $imageCount = null; // num of existing images; necessary for image validation
     public function validateImages($data, ExecutionContextInterface $context) {
-        $cnt = 0;
-        if ($this->fileCount !== null) {
-            $cnt += $this->fileCount;
-        }            
-        if ($this->imageCount !== null) {
-            $cnt += $this->imageCount;
-        }
-        if ($cnt == 0) {
+        if ($this->imageCount < 1) {
             $context->buildViolation('Bitte lade zumindest ein Bild hoch')->addViolation();
+        }
+        else if ($this->imageCount > Talent::MAX_NUM_IMAGES) {
+            $num = Talent::MAX_NUM_IMAGES;
+            $context->buildViolation('Bitte lade max. {$num} Bilder hoch')->addViolation();
         }
     }
     private function handleImages($eqFiles, $eq, $em) {
@@ -494,40 +490,158 @@ class TalentController extends BaseController {
             $em->flush();
         }
     }
-    
+
     /**
      * @Route("talent-image", name="talent-image")
      */
-    public function talentImage(Request $request) {        
+    public function talentImageAction(Request $request) {  
         $file = $request->files->get('upl');
         if ($file->isValid()) {
-            $session = $request->getSession();
-            $eqFiles = $session->get('TalentAddFileArray');
-            if (count($eqFiles) < 3) {
-                $uuid = Utils::getUuid();
-                $path = 
-                    $this->getParameter('image_storage_dir') .
-                    DIRECTORY_SEPARATOR .
-                    'temp' .
-                    DIRECTORY_SEPARATOR;
-                $name = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
-                $fullPath = $path . $name;
-                
-                $f = $file->move($path, $name);
-                
-                $ef = array(
-                    $uuid,
-                    $file->getClientOriginalName(),
-                    strtolower($file->getClientOriginalExtension()),
-                    $fullPath
-                );
-                
-                array_push($eqFiles, $ef);
-                $session->set('TalentAddFileArray', $eqFiles);
+            $uuid = Utils::getUuid();
+            $path = 
+                $this->getParameter('image_storage_dir') .
+                DIRECTORY_SEPARATOR .
+                'temp' .
+                DIRECTORY_SEPARATOR;
+            $ext = strtolower($file->getClientOriginalExtension());
+            $name = sprintf("%s.%s", $uuid, $ext);
+            $filename = $path . DIRECTORY_SEPARATOR . $name;
+
+            $file->move($path, $name);
+
+            $msg = null;
+
+            $size = getimagesize($filename);
+            if ($size[0] < 750 || $size[1] < 563) {
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 px Breite)";
             }
+            
+            $w = $file->getClientSize();
+            if ($w > 5 * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als 5 MB sein', $w / 1024 / 1024);
+            }
+            $exif = exif_imagetype($filename);
+            if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+                $msg = 'Das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden';
+            }
+            
+
+            if ($msg !== null) {
+                unlink($filename);
+                $resp = array('message' => $msg);
+                return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+            }            
+
+            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
+            $resp = array(
+                'url' => $url,
+                'name' => $name
+            );
+            return new JsonResponse($resp);
         }
-        return new Response($status = Response::HTTP_OK);
+                
+        return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+    /**
+     * @Route("talent-image-save", name="talent-image-save")
+     */
+    public function talentImageSaveAction(Request $request) { 
+        $name = $request->get('name');
+        $id = $request->get('id');
+        $x = $request->get('x');
+        $x2 = $request->get('x2');
+        $y = $request->get('y');
+        $y2 = $request->get('y2');
+        $main = strtolower($request->get('main')) === 'true';
+        $w = round($x2 - $x);
+        $h = round($y2 - $y);
+        
+        // check security
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
+
+        // init vars 
+        $sep = DIRECTORY_SEPARATOR;
+        $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
+        $arr = explode('.', $name);
+        $uuid = $arr[0];
+        $ext = $arr[1];
+
+        // check and calcualte size
+        if ($w === 0 || $h == 0) {
+            $size = getimagesize($path);
+            $w = $size[0];
+            $h = $size[1];
+        }
+        
+        $nw = 750;
+        if ($main) {
+            $nh = 563;
+        }
+        else {
+            $nh = $h / $w * $nw;
+        }
+        
+        $img = imagecreatefromstring(file_get_contents($path));
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, $nw, $nh, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . $uuid . '.' . $ext;
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, 95);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        rename($path, $path2);
+
+        // store entry in database
+        $em = $this->getDoctrine()->getManager();
+        $cnt = $this->getDoctrineRepo('AppBundle:Talent')->getImageCount($id);        
+        
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($uuid);
+        $img->setExtension($ext);
+        $img->setPath('talent');
+        $img->setOriginalPath('talent' . $sep . 'original');
+        $em->persist($img);
+        $em->flush();
+        
+        $eimg = new TalentImage();
+        $eimg->setImage($img);
+        $eimg->setTalent($eq);
+        $eimg->setMain($main ? 1 : 0);
+        $em->persist($eimg);
+        $em->flush();        
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
+            'imgId' => $img->getId(),
+            'main' => $eimg->getMain()
+        );
+        return new JsonResponse($resp);
+    }
+    /**
+     * @Route("talent-image-delete/{eid}/{iid}", name="talent-image-delete")
+     */
+    public function talentImageDeleteAction(Request $request, $eid, $iid) {
+        // check security
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($eid);
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
+
+        $eimg = $this->getDoctrineRepo('AppBundle:Talent')->removeImage($eid, $iid, $this->getParameter('image_storage_dir'));
+        
+        return new JsonResponse(Response::HTTP_OK);
+    }
+    
     
     /**
      * @Route("/provider/talent-edit-3/{eqid}", name="talent-edit-3")

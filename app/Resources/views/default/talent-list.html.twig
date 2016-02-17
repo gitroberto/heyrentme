@@ -1,9 +1,9 @@
 {% for tal in items %}
     <a class="text-black" href="{{ path('catchall', { 'content': tal.urlPath }) }}">
         <div class="col-md-4">
-            {% if tal.images|length > 0 %}
+            {% if tal.talentImages|length > 0 %}
                 <div style="height: 268px; overflow: hidden;">
-                <img src="{{ tal.images[0].urlPath(image_url_prefix) }}" alt="placeholder"/>
+                <img src="{{ tal.talentImages[0].image.urlPath(image_url_prefix) }}" alt="placeholder"/>
                 </div>
             {% else %}
                 <div style="height: 268px; overflow: hidden;">

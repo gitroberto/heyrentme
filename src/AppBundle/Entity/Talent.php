@@ -20,6 +20,7 @@ class Talent {
     const STATUS_REJECTED = 4;  
     const STATUS_INCOMPLETE = 5;
     
+    const MAX_NUM_IMAGES = 8;
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -80,12 +81,7 @@ class Talent {
     protected $user;
     
     /**
-     * 
-     * @ORM\ManyToMany(targetEntity="Image")
-     * @ORM\JoinTable(name="talent_image",
-     *      joinColumns={ @ORM\JoinColumn(name="talent_id", referencedColumnName="id") },
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="image_id", referencedColumnName="id") }
-     *  )
+     * @ORM\OneToMany(targetEntity="TalentImage", mappedBy="talent")
      */
     protected $images;
     
@@ -220,17 +216,17 @@ class Talent {
         
         $this->status = $newStatus;
         switch($newStatus){
-            case Equipment::STATUS_APPROVED:
-            case Equipment::STATUS_REJECTED:
+            case Talent::STATUS_APPROVED:
+            case Talent::STATUS_REJECTED:
                 #$mailer = $this->get('fos_user.mailer');
-                #$mailer->sendNewModifiedEquipmentInfoMessage($this);                
+                #$mailer->sendNewModifiedTalentInfoMessage($this);                
                 break;            
-            case Equipment::STATUS_INCOMPLETE:
+            case Talent::STATUS_INCOMPLETE:
                 break;
-            case Equipment::STATUS_NEW:
-            case Equipment::STATUS_MODIFIED:
+            case Talent::STATUS_NEW:
+            case Talent::STATUS_MODIFIED:
                 #$mailer = $this->get('fos_user.mailer');
-                #$mailer->sendNewModifiedEquipmentInfoMessage($this);                
+                #$mailer->sendNewModifiedTalentInfoMessage($this);                
                 break;
         }
         
@@ -854,40 +850,6 @@ class Talent {
     }
 
     /**
-     * Add image
-     *
-     * @param \AppBundle\Entity\Image $image
-     *
-     * @return Talent
-     */
-    public function addImage(\AppBundle\Entity\Image $image)
-    {
-        $this->images[] = $image;
-
-        return $this;
-    }
-
-    /**
-     * Remove image
-     *
-     * @param \AppBundle\Entity\Image $image
-     */
-    public function removeImage(\AppBundle\Entity\Image $image)
-    {
-        $this->images->removeElement($image);
-    }
-
-    /**
-     * Get images
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    /**
      * Add rating
      *
      * @param \AppBundle\Entity\TalentRating $rating
@@ -968,4 +930,45 @@ class Talent {
     {
         return $this->video;
     }
+
+    /**
+     * Add image
+     *
+     * @param \AppBundle\Entity\TalentImage $image
+     *
+     * @return Talent
+     */
+    public function addImage(\AppBundle\Entity\TalentImage $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \AppBundle\Entity\TalentImage $image
+     */
+    public function removeImage(\AppBundle\Entity\TalentImage $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+    protected $talentImages;
+    public function getTalentImages() {
+        return $this->talentImages;
+    }
+    public function setTalentImages($talentImages) {
+        $this->talentImages = $talentImages;
+    }    
 }

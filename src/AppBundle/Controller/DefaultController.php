@@ -151,7 +151,7 @@ class DefaultController extends BaseController {
         }
         if (ereg(DefaultController::RE_TALENT, $content)) {
             $arr = split('/', str_replace('T-', '', $content));
-            $tal = $this->getDoctrineRepo('AppBundle:Talent')->find(intval($arr[0]));
+            $tal = $this->getDoctrineRepo('AppBundle:Talent')->getOne(intval($arr[0]));
         }
         
         if ($eq === null && $tal === null) {

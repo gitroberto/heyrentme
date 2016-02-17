@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use AppBundle\Utils\SearchParams;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 /**
  * TalentRepository
@@ -60,9 +61,15 @@ class TalentRepository extends EntityRepository
             ->join('e.user', 'u');
         $qb->andWhere("u.id = {$userId}");
 
-        $q = $qb->getQuery();
+        $eqs = $qb->getQuery()->getResult();
         
-        return $q->getResult();        
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Talent');
+        
+        foreach ($eqs as $eq) {
+            $eq->setTalentImages($repo->getTalentImages($eq->getId()));
+        }
+        
+        return $eqs;
     }
     
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus) {
@@ -107,7 +114,93 @@ class TalentRepository extends EntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-    
+
+    public function getImageCount($talentId) {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(ei.image)')
+            ->from('AppBundle:TalentImage', 'ei')
+            ->andWhere("ei.talent = {$talentId}")
+            ->getQuery()
+            ->getSingleScalarResult();            
+    }
+ 
+    public function getTalentMainImage($talentId) { // only main image, return: image or null
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:TalentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.talent = {$talentId}")
+            ->andWhere('ei.main = 1');
+
+        $ei = null;
+        try {
+            $ei = $qb->getQuery()->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        return $ei;
+    }
+    public function getTalentButMainImages($talentId) { // all except main
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:TalentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.talent = {$talentId}")
+            ->andWhere('ei.main = 0')
+            ->addOrderBy('i.id');
+
+        return $qb->getQuery()->getResult();
+    }
+    public function getTalentImages($talentId) {
+        // main first
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:TalentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.talent = {$talentId}")
+            ->addOrderBy('ei.main', 'desc')
+            ->addOrderBy('i.id');
+
+        $q = $qb->getQuery();
+        
+        return $q->getResult();        
+    }
+    public function setMainImage($talentId, $imageId) {
+        $sql = <<<EOT
+update talent_image
+set main = case when image_id = {$imageId} then 1 else 0 end
+where talent_id = {$talentId}
+EOT;
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->executeUpdate($sql);        
+    }
+    public function removeImage($talentId, $imageId, $imageStorageDir) {
+        $em = $this->getEntityManager();
+        $eq = $em->getRepository('AppBundle:Talent')->find($talentId);        
+        $eimg = $em->getRepository('AppBundle:TalentImage')->findOneByImage($imageId);
+        $img = $em->getRepository('AppBundle:Image')->find($imageId);
+        $eq->removeImage($eimg);
+        $em->remove($eimg);
+        $em->getRepository('AppBundle:Image')->removeImage($img, $imageStorageDir);
+        $em->remove($img);
+        $em->flush();
+    }
+    public function getMainTalentImage($talentId) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('ei', 'i')
+            ->from('AppBundle:TalentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.talent = {$talentId}")
+            ->andWhere("ei.main = 1");
+        $q = $qb->getQuery();
+
+        $eimg = null;
+        try {
+            $eimg = $q->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        return $eimg;
+    }
+
     /*
     public function getAll($categoryId = null) {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -163,10 +256,44 @@ class TalentRepository extends EntityRepository
             $qb->orderBy ('e.price', 'asc');
         }
         
+        $eqs = $qb->getQuery()->getResult();
         
+        $repo = $this->getEntityManager()->getRepository('AppBundle:Talent');
         
-        $q = $qb->getQuery();
-        return $q->getResult();
+        foreach ($eqs as $eq) {
+            $eq->setTalentImages($repo->getTalentImages($eq->getId()));
+        }
+        
+        return $eqs;
+    }
+    public function getOne($talentId) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        /*
+         * Please not this query uses "fetch join".
+         * It fetches images and discounts (associated with talents) immediately 
+         * (instead of lazy loading them later).
+         * Keep for optimum performance.
+         */        
+        $qb->select('e') // this line forces fetch join
+            ->from('AppBundle:Talent', 'e')
+            ->join('e.user', 'u');
+        
+        //$qb->andWhere("e.status = ". Talent::STATUS_APPROVED);
+        //$qb->andWhere('u.status = '. User::STATUS_OK);
+        $qb->andWhere("e.id = {$talentId}");
+        
+        $eq = null;
+        try {
+            $eq = $qb->getQuery()->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        if ($eq !== null) {
+            $repo = $this->getEntityManager()->getRepository('AppBundle:Talent');
+            $eq->setTalentImages($repo->getTalentImages($eq->getId()));
+        }
+        
+        return $eq;
     }
     
     public function clearFeatures($talentId) {
