@@ -191,9 +191,7 @@ class RentalController extends BaseController {
     }
     
     private function sendGuidelinesEmail($request, $emailTo, $type) {
-        $url = sprintf('%s%s?register', 
-                $request->getSchemeAndHttpHost(),
-                $this->get('router')->generate('bookme'));
+        $url = $request->getSchemeAndHttpHost() . $this->get('router')->generate($type === Category::TYPE_EQUIPMENT ? 'rentme' : 'bookme');
         $videoUrl = $request->getSchemeAndHttpHost() .
                 $this->get('router')->generate('tutorial-video');
         $photoUrl = $request->getSchemeAndHttpHost() .
