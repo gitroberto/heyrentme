@@ -586,3 +586,7 @@ p.how-many {
 #media-container .media-list span {
     overflow: hidden;
 }
+
+#social-share {
+    z-index: 200;
+}

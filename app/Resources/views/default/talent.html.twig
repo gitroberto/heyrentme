@@ -43,7 +43,7 @@
                         <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
                         <a class="social flash" href="#"></a>
                         <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
-                        <a class="social email" href="mailto:"></a>
+                        <a class="social email" href="mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}"></a>
                       </span>
                     </span>
                 </div>
@@ -68,19 +68,21 @@
                 </div>
               {% endif %}
                 #}
-              <iframe id="player" {% if item.video %}src="{{ item.video.embedUrl }}"{% endif %} style="width: 750px; height: 563px;"></iframe>
+              
               <div id="media-content">
+                    {% if item.video %}
+                        <iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>
+                        <img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />
+                    {% endif %}
                     {% if item.images|length > 0 %}
-                        <img src="{{ item.images[0].urlPath(image_url_prefix) }}" alt=""/>
-                    {% else %}
-                        <img src="/img/equipment-default.jpg" alt=""/>
+                        <img src="{{ item.images[0].urlPath(image_url_prefix) }}" alt="" {% if item.video %}style="display: none;"{% endif %}/>
                     {% endif %}
               </div>
 
               <div class="media-list" id="media-list">
                     {% if item.video %}
-                        <span class="media-img">
-                            <a class="videos-ico" data-url="{{ item.video.embedUrl }}"></a>
+                        <span class="media-video" data-url="{{ item.video.embedUrl }}">
+                            <a class="videos-ico"></a>
                             <img src="{{ item.video.thumbnailUrl }}" />
                         </span>
                     {% endif %}
@@ -379,7 +381,7 @@
                         <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
                         <a class="social flash" href="#"></a>
                         <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
-                        <a class="social email" href="mailto:"></a>
+                        <a class="social email" href="mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}"></a>
                       </span>
                     </span>
             </div>
@@ -420,10 +422,23 @@
     <script src="/js/vendors/vimeo.js"></script>
   <script>
     $(window).load(function() {
-        var containerHieght = $('#media-content').height();
-        $("#player").css('height',containerHieght);
+        //var containerHieght = $('#media-content').height();
+        //$("#player").css('height',containerHieght);
+        playerWidth();
     });
+    
+    function playerWidth() {
+        var $pl = $("#player");
+        var $th = $("#player-thumb");
+        var w = $pl.outerWidth();
+        var h = Math.round(w * 9 / 16);
+        $pl.height(h);
+        $th.height(h);
+    }
+    
     $(function() {
+        playerWidth();
+        $(window).resize(playerWidth);
 
         $(document).on('click', "#videos-ico", function (evt) {
             $('#videos-ico').remove();
@@ -432,8 +447,8 @@
         });
 
         $('#videos-ico').show();
-        var containerHieght = $('#media-content').height();
-        $("#player").css('height',containerHieght);
+        //var containerHieght = $('#media-content').height();
+        //$("#player").css('height',containerHieght);
         var player = $f(document.getElementById('player'));
         var media = $('#media-list .media-img img');
         var mediaContainer = $('#media-content');
@@ -445,15 +460,19 @@
             $(mediaContainer).html(vals);
             console.log (vals);
             $(".product-detail .left-side .cart, .discount.discount-big").show();
-              var h = $('#media-content').height();
-              $("#player").css('height', h);
+              //var h = $('#media-content').height();
+              //$("#player").css('height', h);
         });
 
 
-        $("a.videos-ico").click(function() {
+        $("#media-list .media-video").click(function() {
             //$('#videos-ico').remove();
             var url = $(this).data('url');
-            $("#player").attr("src", url);
+            var tmpl = '<iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>' + 
+                        '<img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />';
+            
+            $("#media-content").empty().append($(tmpl));
+            playerWidth();
             $(".product-detail .left-side .cart, .discount.discount-big").hide();
         });
     
