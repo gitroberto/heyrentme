@@ -321,7 +321,11 @@ class ProviderController extends BaseController {
                             'constraints' => array(
                                 new Callback(array($this, 'ValidateIBAN'))
                         ) ))
-                ->add('bic', 'text', array('required' => false, 'data' => $user->getBic() ))
+                ->add('bic', 'text', array('required' => false, 'data' => $user->getBic(),
+                            'constraints' => array(
+                                new Regex(array('pattern' => '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$$/', 'message' => 'BIC code is incorrect.'))
+                                )
+                ))
                 ->getForm();
         $this->formHelper = $form;        
         $form->handleRequest($request);      
