@@ -476,7 +476,7 @@ class SchedulerService {
                 $u->setSecondDayEmailSentAt($now);
             }
             
-            if(!$u->getThirdDayEmailSentAt() && $this->isOlderThanOneDay($u->getSecondDayEmailSentAt(), $now)){                
+            if(!$u->getThirdDayEmailSentAt() && $u->getSecondDayEmailSentAt() !== null && $this->isOlderThanOneDay($u->getSecondDayEmailSentAt(), $now)){                
                 $this->sendThirdDayWelcomeEmail($u->getEmail());
                 $u->setThirdDayEmailSentAt($now);
             }
