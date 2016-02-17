@@ -98,15 +98,15 @@
                                   {% endif %}
                                 </div>
                                 <div class="clear" ></div>
+                                {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
                                 <div>                                    
-                                    {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
-                                        <textarea data-type="equipment" data-id="{{ eq.id }}" class="place_black placeholderStatusDashboard itemToHide_{{ eq.id }}" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ eq.offerStatus }}</textarea>
-                                    {% else %}
-                                        <div id="StatusMessage_{{ eq.id }}">
-                                            Status: Wird gerade überprüft...
-                                        </div>
-                                    {% endif %}
+                                    <textarea data-type="equipment" data-id="{{ eq.id }}" class="place_black placeholderStatusDashboard itemToHide_{{ eq.id }}" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ eq.offerStatus }}</textarea>
                                 </div>
+                                {% else %}
+                                    <div id="StatusMessage_{{ eq.id }}" class="col-xs-12 id">
+                                        <p>Status: Wird gerade überprüft...</p>
+                                    </div>
+                                {% endif %}
                                 <div>
                                     <div class="row">
                                         {#
@@ -251,8 +251,8 @@
                                     {% if (tal.status == constant('AppBundle\\Entity\\Talent::STATUS_APPROVED')) %}
                                         <textarea data-type="talent" data-id="{{ tal.id }}"  class="place_black placeholderStatusDashboard itemToHide_{{ tal.id }}" id="TxtStatus_{{ tal.id }}" placeholder="Neues zu diesem Angebot. Z.B. Aktuell ein wenig günstiger">{{ tal.offerStatus }}</textarea>                                
                                     {% else %}
-                                        <div id="StatusMessage_{{ tal.id }}">
-                                            Status: Wird gerade überprüft...
+                                        <div id="StatusMessage_{{ tal.id }}" class="col-xs-12 id">
+                                            <p>Status: Wird gerade überprüft...</p>
                                         </div>
                                     {% endif %}
 
