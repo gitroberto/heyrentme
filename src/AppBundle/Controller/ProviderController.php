@@ -680,10 +680,7 @@ class ProviderController extends BaseController {
             'place' => $eq->getAddrPlace(),
             'phonePrefix' => $user->getPhonePrefix(),
             'phone' => $user->getPhone()
-        );
-        
-        $this->equipmentImages = $eq->getEquipmentImages();
-        
+        );        
         
         // validation form
         //<editor-fold>        
@@ -752,11 +749,14 @@ class ProviderController extends BaseController {
         //</editor-fold>
         
         $form->handleRequest($request);
+        $mainImageValidation = null;
+        $imagesValidation = null;
+        if ($request->getMethod() === 'POST') {
+            $mainImageValidation = $this->mainImageValidation($mainImage);
+            $imagesValidation = $this->imagesValidation($images);
+        }
         
-        $mainImageValidation = $this->mainImageValidation();
-        $imagesValidation = $this->imagesValidation();
-        
-        if ($form->isValid() && $imagesValidation==="" && $imagesValidation === "") {
+        if ($form->isValid() && $mainImageValidation === null && $imagesValidation === null) {
             // update Equipment object
             $data = $form->getData();
             // map fields
@@ -807,30 +807,11 @@ class ProviderController extends BaseController {
             $context->buildViolation('Bitte Checkbox bestätigen')->atPath('make_sure')->addViolation();
         }            
     }
-
-    private $equipmentImages = null; // num of existing images; necessary for image validation
-    public function mainImageValidation() {
-        foreach($this->equipmentImages as $ei){
-            if ($ei->getMain() === 1){
-                return "";
-            }
-        }
-        return 'Bitte lade zumindest ein Bild hoch';        
+    public function mainImageValidation($mainImage) {
+        return $mainImage !== null ? null : 'Bitte lade zumindest ein Bild hoch';
     }
-    public function imagesValidation() {
-        $numberOfImages = 0;
-        foreach($this->equipmentImages as $ei){
-            if ($ei->getMain() === 0){
-                $numberOfImages++;
-            }
-        }
-        
-        if ($numberOfImages > Equipment::MAX_NUM_IMAGES) {
-            $num = Equipment::MAX_NUM_IMAGES;
-            return sprintF('Bitte lade max. %s Bilder hoch', $num);
-        } else {
-            return "";
-        }
+    public function imagesValidation($images) {
+        return count($images) <= Equipment::MAX_NUM_IMAGES ? null : sprintf('Bitte lade max. %s Bilder hoch', Equipment::MAX_NUM_IMAGES);
     }
     
     /**

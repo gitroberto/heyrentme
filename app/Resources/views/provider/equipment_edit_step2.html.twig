@@ -65,19 +65,11 @@
                       </ul>
                   </form>
                   <p class="how-many">Querformat / min. 750 px Breite / max. 5 MB / JPG oder PNG</p>
-                  <a href="{{ path('tutorial-photo') }}" target="_blank"><span class="tutorial">tutorial</span></a>
-                  
-                  {% if (mainImageValidation != "" ) %}
-                      <div class="err-msg">
-                         <br />
-                        <ul>
-                            <li>
-                                {{ mainImageValidation }}
-                            </li>
-                        </ul>
-                      </div>
-                  {% endif %}
-                  
+                  <a href="{{ path('tutorial-photo') }}" target="_blank"><span class="tutorial">tutorial</span></a>                  
+                  {% if mainImageValidation %}
+                        <br />
+                      <div class="err-msg"><ul><li>{{ mainImageValidation }}</li></ul></div>
+                  {% endif %}                  
             </div>
             <div class="upload-form">
                   <form id="upload" method="post" action="{{ path('equipment-image') }}" enctype="multipart/form-data">
@@ -96,15 +88,9 @@
                   </form>
                   <p class="how-many">Quer- oder Hochformat / min. 750 px Breite / max. 5 MB / JPG oder PNG</p>
                   
-                  {% if (imagesValidation != "" ) %}
-                      <div class="err-msg">
+                  {% if imagesValidation %}
                          <br />
-                        <ul>
-                            <li>
-                                {{ imagesValidation }}
-                            </li>
-                        </ul>
-                      </div>
+                      <div class="err-msg"><ul><li>{{ imagesValidation }}</li></ul></div>
                   {% endif %}
                   
               </div>

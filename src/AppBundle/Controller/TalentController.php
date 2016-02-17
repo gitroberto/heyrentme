@@ -199,18 +199,11 @@ class TalentController extends BaseController {
             'place' => $eq->getAddrPlace(),
             'phonePrefix' => $user->getPhonePrefix(),
             'phone' => $user->getPhone()
-        );
-        
-        $this->imageCount = count($eq->getTalentImages());
-        
+        );        
         
         // validation form
         //<editor-fold>        
-        $form = $this->createFormBuilder($data, array(
-                'constraints' => array(
-                    new Callback(array($this, 'validateImages'))
-                )
-            ))
+        $form = $this->createFormBuilder($data)
             ->add('description', 'textarea', array(
                 'attr' => array('maxlength' => 500),
                 'constraints' => array(
@@ -283,8 +276,14 @@ class TalentController extends BaseController {
         //</editor-fold>
         
         $form->handleRequest($request);
+        $mainImageValidation = null;
+        $imagesValidation = null;
+        if ($request->getMethod() === 'POST') {
+            $mainImageValidation = $this->mainImageValidation($mainImage);
+            $imagesValidation = $this->imagesValidation($images);
+        }
         
-        if ($form->isValid()) {
+        if ($form->isValid() && $mainImageValidation === null && $imagesValidation === null) {
             // update Talent object
             $data = $form->getData();
             // map fields
@@ -347,7 +346,9 @@ class TalentController extends BaseController {
             'form' => $form->createView(),
             'talent' => $eq,
             'mainImage' => $mainImage,
-            'images' => $images
+            'images' => $images,
+            'mainImageValidation' => $mainImageValidation,
+            'imagesValidation' => $imagesValidation
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -396,6 +397,12 @@ class TalentController extends BaseController {
             return;
         }
         $context->buildViolation('Bitte gib hier eine gültige Youtube- oder Vimeo-URL ein')->atPath('videoUrl')->addViolation();        
+    }
+    public function mainImageValidation($mainImage) {
+        return $mainImage !== null ? null : 'Bitte lade zumindest ein Bild hoch';
+    }
+    public function imagesValidation($images) {
+        return count($images) <= Talent::MAX_NUM_IMAGES ? null : sprintf('Bitte lade max. %s Bilder hoch', Talent::MAX_NUM_IMAGES);
     }
     
     private $imageCount = null; // num of existing images; necessary for image validation
