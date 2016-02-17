@@ -45,14 +45,14 @@
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" ><img src="/img/close-modal.png" alt="close"/></button>
                   <h4 class="modal-title reg" id="reg-titile">Anmelden</h4>
-                  <p class="reg-promo">Jetzt anmelden <span class="text-bold">5 &euro; Rabatt</span> für die 1. Buchung sichern! </p>                  
+                  <!-- <p class="reg-promo">Jetzt anmelden <span class="text-bold">5 &euro; Rabatt</span> für die 1. Buchung sichern! </p> -->               
                   <div id = "confirmationDiv" style="display:none;">
                       Dein Account ist jetzt registriert. Wir haben dir gerade eine Email mit Bestätigungslink geschickt um den Account zu aktivieren.
                   </div>
                   {{ render(controller('FOSUserBundle:Registration:register')) }}
                   
-                    <a data-dismiss="modal" data-toggle="modal" data-target="#login" class="has-account text-center" 
-                     href="#">Du hast bereits ein Konto? Melde dich an</a>                  
+                  <!--  <a data-dismiss="modal" data-toggle="modal" data-target="#login" class="has-account text-center" 
+                     href="#">Du hast bereits ein Konto? Melde dich an</a>    -->              
               </div>
           </div>
       </div>
@@ -173,7 +173,7 @@
         $("#emailConfirmed .close").unbind("click");
         $("#emailConfirmed .close").click(function(e){
             e.preventDefault();
-            location.href = "provider/profil";
+            location.href = "provider/dashboard";
         });
     });
 </script>
