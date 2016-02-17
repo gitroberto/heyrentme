@@ -689,8 +689,7 @@ class ProviderController extends BaseController {
         //<editor-fold>        
         $form = $this->createFormBuilder($data, array(
                 'constraints' => array(
-                    new Callback(array($this, 'validateImages')),
-                    new Callback(array($this, 'validatePhone'))
+                    new Callback(array($this, 'validateImages'))
                 )
             ))
             ->add('description', 'textarea', array(
@@ -738,7 +737,7 @@ class ProviderController extends BaseController {
                 )
             ))
             ->add('phone', 'text', array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                     'maxlength' => 10, 
                     'pattern' => '^[0-9]{1,10}$'),
@@ -747,7 +746,7 @@ class ProviderController extends BaseController {
                 )
             ))
             ->add('phonePrefix', 'text', array(
-                'required' => false, 
+                'required' => true, 
                 'attr' => array('maxlength' => 3, 'pattern' => '^[0-9]{1,3}$'),
                 'constraints' => array(
                     new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Bitte gib hier eine gültige Vorwahl ein'))
@@ -1120,12 +1119,6 @@ class ProviderController extends BaseController {
         }
     }
     
-    public function validatePhone($data, ExecutionContextInterface $context) {
-        if (!empty($data['phone']) xor !empty($data['phonePrefix'])) {
-            $context->buildViolation('Bitte gib deine vollständige Telefonnummer an')->addViolation();
-        }
-    }
-
     /**
      * @Route("/provider/equipment-edit-4", name="equipment-edit-4")
      */
