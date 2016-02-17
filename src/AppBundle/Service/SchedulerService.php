@@ -174,9 +174,11 @@ class SchedulerService {
                 else {
                     $tmpl = 'Emails\talent\mail_to_user_everything_ok.html.twig';
                 }
+                $url = $this->appUrlPrefix . $this->router->generate('booking-list');
                 $emailHtml = $this->templating->render($tmpl, array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
-                    'inquiry' => $inq
+                    'inquiry' => $inq,
+                    'url' => $url
                 ));
                 $message = Swift_Message::newInstance()
 
@@ -500,11 +502,13 @@ class SchedulerService {
         
         $talentUrl = $this->appUrlPrefix . $this->router->generate('bookme');
         $equipmentUrl = $this->appUrlPrefix . $this->router->generate('rentme');
+        $videoUrl = $this->appUrlPrefix . $this->router->generate('tutorial-video');
                 
         $emailHtml = $this->templating->render($tmpl, array(
             'mailer_app_url_prefix' => $this->appUrlPrefix,
             'talentUrl' => $talentUrl,
-            'equipmentUrl' => $equipmentUrl
+            'equipmentUrl' => $equipmentUrl,
+            'videoUrl' => $videoUrl
         ));
         $message = Swift_Message::newInstance()
             ->setSubject('Anbieter werden bei hey! VIENNA')

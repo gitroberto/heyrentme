@@ -19,7 +19,7 @@
                 <li id="kategorie-select"><a class="active-crumb haup-ico" href="#">Hauptkategorien &nbsp;&nbsp;&nbsp;</a></li>
                 <li>                    
                     <a class="active-crumb" 
-                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(2, {{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
+                       href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(2, {{ category.id }}){% else %}{{ path("offer-detail", { 'categoryId': category.id }) }}{% endif %}"
                        >In dieser Kategorie anbieten</a>
                 </li>
             </ul>
@@ -40,10 +40,10 @@
                     {% endif %}
                     <span class="back-icon" id="sharing-button">
                       <span id="social-share">
-                        <a class="social fb fb-like" data-href="https://www.facebook.com/heySharingCommunity" data-layout="button_count" data-show-faces="false"></a>
+                        <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
                         <a class="social flash" href="#"></a>
-                        <a class="social tweet twitter-follow-button"  href="https://twitter.com/hey_sharing" data-size="false" data-show-count="false" data-show-screen-name="false"></a>
-                        <a class="social email" href="#"></a>
+                        <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
+                        <a class="social email" href="mailto:"></a>
                       </span>
                     </span>
                 </div>
@@ -68,6 +68,7 @@
                 </div>
               {% endif %}
                 #}
+              <iframe id="player" {% if item.video %}src="{{ item.video.embedUrl }}"{% endif %} style="width: 750px; height: 563px;"></iframe>
               <div id="media-content">
                     {% if item.images|length > 0 %}
                         <img src="{{ item.images[0].urlPath(image_url_prefix) }}" alt=""/>
@@ -76,7 +77,6 @@
                     {% endif %}
               </div>
 
-              <iframe id="player" {% if item.video %}src="{{ item.video.embedUrl }}"{% endif %}></iframe>
               <div class="media-list" id="media-list">
                     {% if item.video %}
                         <span class="media-img">
@@ -89,47 +89,6 @@
                     {% endfor %}
               </div>
             </div>
-        <script src="/js/vendors/vimeo.js"></script>
-        <script>
-          $(document).load(function() {
-              var containerHieght = $('#media-content').height();
-              $("#player").css('height',containerHieght);
-          });
-          $(document).ready(function(){
-
-              $(document).on('click', "#videos-ico", function (evt) {
-                  $('#videos-ico').remove();
-                  $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
-                  $("#player").attr("src",$iframeSRC);
-              });
-
-              $('#videos-ico').show();
-              var containerHieght = $('#media-content').height();
-              $("#player").css('height',containerHieght);
-              var player = $f(document.getElementById('player'));
-              var media = $('#media-list .media-img img');
-              var mediaContainer = $('#media-content');
-
-
-              $(media).on('click',function(e){
-                  $("#player").attr("src",'');
-                  var vals = $(this).parent().html();
-                  $(mediaContainer).html(vals);
-                  console.log (vals);
-                  $(".product-detail .left-side .cart, .discount.discount-big").show();
-                    var h = $('#media-content').height();
-                    $("#player").css('height', h);
-              });
-
-
-              $("a.videos-ico").click(function() {
-                  //$('#videos-ico').remove();
-                  var url = $(this).data('url');
-                  $("#player").attr("src", url);
-                  $(".product-detail .left-side .cart, .discount.discount-big").hide();
-              });
-          });
-        </script>
             <div>
                 <div class="row">
                     <div class="col-md-8 col-xs-12 product-description" id="map-sibling">
@@ -417,10 +376,10 @@
                     {% endif %}
                 <span class="back-icon" id="sharing-button2">
                       <span id="social-share-bottom">
-                      <a class="social fb" href="#"></a>
-                      <a class="social flash" href="#"></a>
-                      <a class="social tweet" href="#"></a>
-                      <a class="social email" href="#"></a>
+                        <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
+                        <a class="social flash" href="#"></a>
+                        <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
+                        <a class="social email" href="mailto:"></a>
                       </span>
                     </span>
             </div>
@@ -458,8 +417,46 @@
 {% block script %}
   <script src="http://maps.googleapis.com/maps/api/js?language=de"></script>
   <script src="http://malsup.github.com/jquery.form.js"></script> 
+    <script src="/js/vendors/vimeo.js"></script>
   <script>
+    $(window).load(function() {
+        var containerHieght = $('#media-content').height();
+        $("#player").css('height',containerHieght);
+    });
     $(function() {
+
+        $(document).on('click', "#videos-ico", function (evt) {
+            $('#videos-ico').remove();
+            $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
+            $("#player").attr("src",$iframeSRC);
+        });
+
+        $('#videos-ico').show();
+        var containerHieght = $('#media-content').height();
+        $("#player").css('height',containerHieght);
+        var player = $f(document.getElementById('player'));
+        var media = $('#media-list .media-img img');
+        var mediaContainer = $('#media-content');
+
+
+        $(media).on('click',function(e){
+            $("#player").attr("src",'');
+            var vals = $(this).parent().html();
+            $(mediaContainer).html(vals);
+            console.log (vals);
+            $(".product-detail .left-side .cart, .discount.discount-big").show();
+              var h = $('#media-content').height();
+              $("#player").css('height', h);
+        });
+
+
+        $("a.videos-ico").click(function() {
+            //$('#videos-ico').remove();
+            var url = $(this).data('url');
+            $("#player").attr("src", url);
+            $(".product-detail .left-side .cart, .discount.discount-big").hide();
+        });
+    
         
         $('#date-range').val(moment().add(1, 'days').format('DD.MM.YYYY'));
         updatePrice();
@@ -587,5 +584,22 @@
         });
     }
     google.maps.event.addDomListener(window, 'load', init);
+
+      var winTop = (screen.height / 2) - 160;
+  var winLeft = (screen.width / 2) - 260;
+
+  // fb share button
+  var shareFB = function(url) {
+    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=Facebook Share&p[summary]=Facebook share popup&p[url]=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=520,height=320');
+  };
+  // twitter button
+  var twittButton = function(title, url) {
+    window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+  };
+  // pin button
+  var pinIt = function(url, description) {
+    window.open('http://pinterest.com/pin/create/link/?url=' + url + '&description=' + description, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=520,height=320');
+  };
+
   </script>
 {% endblock %}
