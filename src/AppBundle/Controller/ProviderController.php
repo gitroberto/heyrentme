@@ -682,16 +682,12 @@ class ProviderController extends BaseController {
             'phone' => $user->getPhone()
         );
         
-        $this->imageCount = count($eq->getEquipmentImages());
+        $this->equipmentImages = $eq->getEquipmentImages();
         
         
         // validation form
         //<editor-fold>        
-        $form = $this->createFormBuilder($data, array(
-                'constraints' => array(
-                    new Callback(array($this, 'validateImages'))
-                )
-            ))
+        $form = $this->createFormBuilder($data)
             ->add('description', 'textarea', array(
                 'attr' => array('maxlength' => 500),
                 'constraints' => array(
@@ -757,7 +753,10 @@ class ProviderController extends BaseController {
         
         $form->handleRequest($request);
         
-        if ($form->isValid()) {
+        $mainImageValidation = $this->mainImageValidation();
+        $imagesValidation = $this->imagesValidation();
+        
+        if ($form->isValid() && $imagesValidation==="" && $imagesValidation === "") {
             // update Equipment object
             $data = $form->getData();
             // map fields
@@ -793,7 +792,9 @@ class ProviderController extends BaseController {
             'form' => $form->createView(),
             'equipment' => $eq,
             'mainImage' => $mainImage,
-            'images' => $images
+            'images' => $images,
+            'mainImageValidation' => $mainImageValidation,
+            'imagesValidation' => $imagesValidation
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -807,14 +808,28 @@ class ProviderController extends BaseController {
         }            
     }
 
-    private $imageCount = null; // num of existing images; necessary for image validation
-    public function validateImages($data, ExecutionContextInterface $context) {
-        if ($this->imageCount < 1) {
-            $context->buildViolation('Bitte lade zumindest ein Bild hoch')->addViolation();
+    private $equipmentImages = null; // num of existing images; necessary for image validation
+    public function mainImageValidation() {
+        foreach($this->equipmentImages as $ei){
+            if ($ei->getMain() === 1){
+                return "";
+            }
         }
-        else if ($this->imageCount > Equipment::MAX_NUM_IMAGES) {
+        return 'Bitte lade zumindest ein Bild hoch';        
+    }
+    public function imagesValidation() {
+        $numberOfImages = 0;
+        foreach($this->equipmentImages as $ei){
+            if ($ei->getMain() === 0){
+                $numberOfImages++;
+            }
+        }
+        
+        if ($numberOfImages > Equipment::MAX_NUM_IMAGES) {
             $num = Equipment::MAX_NUM_IMAGES;
-            $context->buildViolation('Bitte lade max. {$num} Bilder hoch')->addViolation();
+            return sprintF('Bitte lade max. %s Bilder hoch', $num);
+        } else {
+            return "";
         }
     }
     
