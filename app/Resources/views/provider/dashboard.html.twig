@@ -28,14 +28,12 @@
                 <div class="col-xs-12">
                     <div class="xol-xs-12">
                         <div class="row user-offers">
-                            <div class="col-md-4 offer-detail">
-                                {% if eq.equipmentImages|length > 0 %}
-                                    <img src="{{ eq.equipmentImages[0].image.urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
-                                {% else %}
-                                    <img src="/img/equipment-default.jpg" alt="placeholder" class="img-responsive" />
-                                {% endif %}
-
-
+                            <div class="col-md-4 offer-detail">                                    
+                                    <a  target="_blank"
+                                        {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}href="{{ path('catchall', { 'content': eq.urlPath }) }}"{% endif %}
+                                        ><img 
+                                            src="{% if eq.equipmentImages|length > 0 %}{{ eq.equipmentImages[0].image.urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" alt="placeholder" 
+                                            class="img-responsive"/></a>
                                 <div class="product-info">
 
                                     <div class="row">
@@ -176,14 +174,12 @@
                 <div class="col-xs-12">
                     <div class="xol-xs-12">
                         <div class="row user-offers">
-                            <div class="col-md-4 offer-detail">
-                                {% if tal.talentImages|length > 0 %}
-                                    <img src="{{ tal.talentImages[0].image.urlPath(image_url_prefix) }}" alt="placeholder" class="img-responsive"/>                       
-                                {% else %}
-                                    <img src="/img/equipment-default.jpg" alt="placeholder" class="img-responsive" />
-                                {% endif %}
-
-
+                            <div class="col-md-4 offer-detail">                                
+                                    <a  target="_blank"
+                                        {% if (tal.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}href="{{ path('catchall', { 'content': tal.urlPath }) }}"{% endif %}
+                                        ><img 
+                                            src="{% if tal.talentImages|length > 0 %}{{ tal.talentImages[0].image.urlPath(image_url_prefix) }}{% else %}/img/equipment-default.jpg{% endif %}" 
+                                            alt="placeholder" class="img-responsive"/></a>
                                 <div class="product-info">
 
                                     <div class="row">
