@@ -5,7 +5,7 @@
 	<meta property="og:type"          content="article" />
 	<meta property="og:title"         content="{{ post.title }}" />
 	<meta property="og:description"   content="{{ post.title }}" />
-	<meta property="og:image"         content="{{ mailer_app_url_prefix }}{{ post.image.urlPath(image_url_prefix) }}" />    
+	<meta property="og:image"         content="{{ post.image.urlPath(image_url_prefix) }}" />    
 {% endblock %}
 
 {% block home_header %}

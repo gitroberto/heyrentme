@@ -6,7 +6,7 @@
 	<meta property="og:title"         content="{{ item.name }}" />
 	<meta property="og:description"   content="{{ item.description }}" />
         {% if item.equipmentImages|length > 0 %}
-            <meta property="og:image"         content="{{ mailer_app_url_prefix }}{{ item.equipmentImages[0].image.urlPath(image_url_prefix) }}" />    
+            <meta property="og:image"         content="{{ item.equipmentImages[0].image.urlPath(image_url_prefix) }}" />    
         {% endif %}
 {% endblock %}
 
