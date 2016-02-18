@@ -25,13 +25,13 @@
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 20px;" class="page-title">
                 Hallo {{ provider.name }},
             </h1>
-            <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">Falls nichts anderes mit <span style="font-weight: bold;">Ilse</span> vereinbart wurde, erfolgt in Kürze die Rückgabe deines Equipments.</p>
+            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">Falls nichts anderes mit <span style="font-weight: bold;">Ilse</span> vereinbart wurde, erfolgt in Kürze die Rückgabe deines Equipments.</p>
         </td>
     </tr>
     <tr>
         <td style="padding: 20px;padding-top: 10px;">
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Zeitpunkt Rückgabe:</span> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</span></p>
-            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> Grosse Neugasse 53/4, 1050 Wien{{ item.addressAsString }}</p>
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span>{{ item.addressAsString }}</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 22px;font-size: 15px;line-height: 22px;margin-top: 25px;margin-bottom: 0px;">Buchungsnr.: E-{{ inquiry.id }}</p>         
         </td>
     </tr>
