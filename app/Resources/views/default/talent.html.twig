@@ -534,8 +534,8 @@
             });
         $(".social.tweet").unbind('click').click(function(e) {
             e.preventDefault();
-            var title = '{{ item.name|escape('js') }}';
-            var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}';
+            var title = '{{ item.name|escape('js')|escape('url') }}';
+            var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url')|escape('url') }}';
             window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
         });
         $(".social.email").unbind('click').click(function(e) {
