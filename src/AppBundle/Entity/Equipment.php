@@ -176,11 +176,11 @@ class Equipment
     /**
      * @ORM\Column(type="integer")
      */
-    protected $functional;
+    protected $functional = 0; // default
     /**
      * @ORM\Column(type="integer")
      */
-    protected $accept;
+    protected $accept = 0; // default
 
     
     

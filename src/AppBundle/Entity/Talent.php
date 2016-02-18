@@ -153,11 +153,11 @@ class Talent {
     /**
      * @ORM\Column(type="integer")
      */
-    protected $licence;
+    protected $licence = 0; // default value
     /**
      * @ORM\Column(type="integer")
      */
-    protected $accept;
+    protected $accept = 0; // default value
 
     
     public function getUfid() { // user friendly id
