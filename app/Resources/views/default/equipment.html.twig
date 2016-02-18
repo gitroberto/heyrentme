@@ -62,14 +62,12 @@
                 {{ include('common/stars.html.twig', { rating: item.rating }) }}
             </div>
             <!-- VIDEO or GALLERY -->
-            <span class="status">Letzer Status für dieses Angebot:</span>
-            <p class="detail-notice">
-                {% if item.offerStatus %}
+            {% if item.offerStatus %}
+                <span class="status">Letzer Status für dieses Angebot:</span>
+                <p class="detail-notice">
                     {{ item.offerStatus }}
-                {% else %}
-                     Neuer Anbieter!
-                {% endif %}            
-            </p>
+                </p>
+            {% endif %}            
             <div class="position-relative" id="media-container">
               {% if item.priceBuy %}
                 <img src="/img/cart.png" alt="cart" class="cart">
