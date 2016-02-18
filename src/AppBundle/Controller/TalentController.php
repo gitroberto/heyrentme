@@ -367,6 +367,9 @@ class TalentController extends BaseController {
     }
     public function validateVideoUrl($value, ExecutionContextInterface $context) {
         $this->currentVideo = null;
+        if ($value == "") {
+            return;
+        }
         // vimeo
         preg_match(Video::RE_VIMEO, $value, $m);
         if (sizeof($m) !== 0) {
