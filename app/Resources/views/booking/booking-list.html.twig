@@ -11,7 +11,7 @@
   <div class="container request-container">
     <div class="row">
         <div class="col-xs-12">
-            <h1>Deine offenen Buchungen als Benutzer</h1>
+            <h1>Deine anstehenden Buchungen als Anbieter</h1>
         </div>
     </div>
       
@@ -54,13 +54,6 @@
                             {{ item.addressAsString }}
                         </p>
                     </div>
-                    <div class="col-sm-4 col-sm-push-4 margin-ort">
-                        {% if booking.status == constant('STATUS_BOOKED', booking) %}
-                            <button data-id="{{ booking.id }}" data-type="{% if booking.inquiry.equipment is defined %}equipment{% else %}talent{% endif %}" class="rabat-button">Buchung bearbeiten</button>
-                        {% else %}
-                            Status: {{ booking.statusAsString }}
-                        {% endif %}
-                    </div>
                 </div>
             </div>
         </div>
@@ -74,7 +67,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <h1>Deine offenen Buchungen als Anbieter</h1>
+            <h1>Deine offenen Buchungen als Kunde</h1>
         </div>
     </div>
       
@@ -122,7 +115,7 @@
                             <button data-id="{{ booking.id }}" data-type="{% if booking.inquiry.equipment is defined %}equipment{% else %}talent{% endif %}" class="rabat-button">Buchung bearbeiten</button>
                         {% else %}
                             Status: {{ booking.statusAsString }}
-                        {% endif %}
+                       {% endif %}
                     </div>
                 </div>
             </div>
@@ -136,28 +129,7 @@
     {% endfor %}
     <span class="add-margin-bottom-300"></span>
   </div>
-
-  <!-- Modal -->
-  <div id="allgemeine-modal" class="modal fade allgemeine register" role="dialog">
-      <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
-                  <h4 class="modal-title">Nutzungsbedingungen</h4>
-                  <h5>Headline 1</h5>
-                  <p>
-                    Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
-                  </p>
-                  <h5>Headline 2</h5>
-                  <p>
-                      Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
-                  </p>
-          </div>
-      </div>
-  </div>
 {% endblock %}
-
 
 {% block script %}
 <script>
