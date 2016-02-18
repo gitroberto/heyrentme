@@ -198,7 +198,9 @@ class TalentController extends BaseController {
             'postcode' => $eq->getAddrPostcode(),
             'place' => $eq->getAddrPlace(),
             'phonePrefix' => $user->getPhonePrefix(),
-            'phone' => $user->getPhone()
+            'phone' => $user->getPhone(),
+            'make_sure' => $eq->getLicence() > 0,
+            'accept' => $eq->getAccept() > 0
         );        
         
         // validation form
@@ -292,7 +294,9 @@ class TalentController extends BaseController {
             $eq->setAddrStreet($data['street']);
             $eq->setAddrNumber($data['number']);
             $eq->setAddrPostcode($data['postcode']);
-            $eq->setAddrPlace($data['place']);            
+            $eq->setAddrPlace($data['place']);   
+            $eq->setLicence(intval($data['make_sure']));
+            $eq->setAccept(intval($data['accept']));
             //</editor-fold>
             $em = $this->getDoctrine()->getManager();
             if ($eq->checkStatusOnSave()){

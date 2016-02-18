@@ -679,7 +679,9 @@ class ProviderController extends BaseController {
             'postcode' => $eq->getAddrPostcode(),
             'place' => $eq->getAddrPlace(),
             'phonePrefix' => $user->getPhonePrefix(),
-            'phone' => $user->getPhone()
+            'phone' => $user->getPhone(),
+            'make_sure' => $eq->getFunctional() > 0,
+            'accept' => $eq->getAccept() > 0,
         );        
         
         // validation form
@@ -766,6 +768,8 @@ class ProviderController extends BaseController {
             $eq->setAddrNumber($data['number']);
             $eq->setAddrPostcode($data['postcode']);
             $eq->setAddrPlace($data['place']);            
+            $eq->setFunctional(intval($data['make_sure']));
+            $eq->setAccept(intval($data['accept']));
             //</editor-fold>
             $em = $this->getDoctrine()->getManager();
             if ($eq->checkStatusOnSave()){

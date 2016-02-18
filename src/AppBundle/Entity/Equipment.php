@@ -173,6 +173,14 @@ class Equipment
      * @ORM\OneToMany(targetEntity="EquipmentRating", mappedBy="equipment")
      */
     protected $ratings;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $functional;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $accept;
 
     
     
@@ -1120,4 +1128,52 @@ class Equipment
     public function setEquipmentImages($equipmentImages) {
         $this->equipmentImages = $equipmentImages;
     }    
+
+    /**
+     * Set functional
+     *
+     * @param integer $functional
+     *
+     * @return Equipment
+     */
+    public function setFunctional($functional)
+    {
+        $this->functional = $functional;
+
+        return $this;
+    }
+
+    /**
+     * Get functional
+     *
+     * @return integer
+     */
+    public function getFunctional()
+    {
+        return $this->functional;
+    }
+
+    /**
+     * Set accept
+     *
+     * @param integer $accept
+     *
+     * @return Equipment
+     */
+    public function setAccept($accept)
+    {
+        $this->accept = $accept;
+
+        return $this;
+    }
+
+    /**
+     * Get accept
+     *
+     * @return integer
+     */
+    public function getAccept()
+    {
+        return $this->accept;
+    }
 }

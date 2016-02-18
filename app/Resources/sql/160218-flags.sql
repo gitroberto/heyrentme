@@ -1,0 +1,8 @@
+
+ALTER TABLE `equipment`
+	ADD COLUMN `functional` SMALLINT NOT NULL DEFAULT '0' AFTER `rating`,
+	ADD COLUMN `accept` SMALLINT NOT NULL DEFAULT '0' AFTER `functional`;
+
+ALTER TABLE `talent`
+	ADD COLUMN `licence` SMALLINT NOT NULL DEFAULT '0' AFTER `video_id`,
+	ADD COLUMN `accept` SMALLINT NOT NULL DEFAULT '0' AFTER `licence`;

@@ -149,6 +149,15 @@ class Talent {
      * @ORM\JoinColumn(name="video_id", referencedColumnName="id")
      */
     protected $video;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $licence;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $accept;
 
     
     public function getUfid() { // user friendly id
@@ -971,4 +980,52 @@ class Talent {
     public function setTalentImages($talentImages) {
         $this->talentImages = $talentImages;
     }    
+
+    /**
+     * Set licence
+     *
+     * @param integer $licence
+     *
+     * @return Talent
+     */
+    public function setLicence($licence)
+    {
+        $this->licence = $licence;
+
+        return $this;
+    }
+
+    /**
+     * Get licence
+     *
+     * @return integer
+     */
+    public function getLicence()
+    {
+        return $this->licence;
+    }
+
+    /**
+     * Set accept
+     *
+     * @param integer $accept
+     *
+     * @return Talent
+     */
+    public function setAccept($accept)
+    {
+        $this->accept = $accept;
+
+        return $this;
+    }
+
+    /**
+     * Get accept
+     *
+     * @return integer
+     */
+    public function getAccept()
+    {
+        return $this->accept;
+    }
 }
