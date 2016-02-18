@@ -26,7 +26,7 @@
                 Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
             </h1>
             <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">
-                Deine Buchung war erfolgreich! Wir schicken vor der Buchung noch eine Erinnerung. 
+                Deine Buchung war erfolgreich! Wir schicken vor der Buchung noch eine Erinnerung. Hier ist das <a style="color: black;" href="{{ mailer_app_url_prefix }}/doc/uebergabeprotokoll.pdf" target="_blank">Übernahmeprotokoll</a>, dass dir und dem Anbieter bei der Abwicklung helfen wird. 
                 Weiter unten findest du den genauen Buchungs- und Kontaktdaten. 
                 Hier kannst du die Buchung bis 24 Std. vor dem Buchungstermin 
                 {# provide cancel url #}
