@@ -420,8 +420,8 @@ img.user-avatar-profile {
 }
 
 .modal-dialog {
-    width: 90%;
-    max-width: 750px;
+	/* width: 90%; */
+    max-width: 600px;
 }
 #inquiry-modal .modal-dialog {
     max-width: 600px;

@@ -53,8 +53,7 @@
         
         <div class="col-xs-12">
             <h3>Ich möchte vom Angebot aus folgenden Gründen zurücktreten:</h3>
-            <input type="radio" id="es" name="radio-stornieren" value="no-show"><label for="es"><span></span> Anbieter ist bis 15 min. nach Buchungsbeginn nicht erschienen</label>
-            <input type="radio" id="talent" name="radio-stornieren" value="defect"><label for="talent"><span></span> Das Equipment ist defekt</label>
+            <input type="radio" id="es" name="radio-stornieren" value="no-show"><label for="es"><span></span> Anbieter ist bis 15 min. nach Buchungsbeginn nicht erschienen (Anbieter wird abgemahnt)</label>
             <input type="radio" id="sonstiges" name="radio-stornieren" value="other"><label for="sonstiges"><span></span> Sonstiges:</label>
             {{ form_widget(form.description, { 'attr': { 'class': 'full-rwd', 'disabled': 'disabled' } }) }}
             <button class="btn-red full-rwd">Angebot stornieren</button>
@@ -63,25 +62,6 @@
     {{ form_end(form) }}
         <span class="add-margin-bottom-300"></span>
   </div>
-  </div>
-  <!-- Modal -->
-  <div id="allgemeine-modal" class="modal fade allgemeine register" role="dialog">
-      <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
-                  <h4 class="modal-title">Nutzungsbedingungen</h4>
-                  <h5>Headline 1</h5>
-                  <p>
-                    Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
-                  </p>
-                  <h5>Headline 2</h5>
-                  <p>
-                      Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
-                  </p>
-          </div>
-      </div>
   </div>
 {% endblock %}
 

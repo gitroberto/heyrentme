@@ -25,7 +25,7 @@
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 20px;" class="page-title">
                 Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
             </h1>
-            <p style="font-family: helvetica, arial;font-weight: 100;line-height: 22px;">
+            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">
                 Deine Buchung war erfolgreich! Wir schicken vor der Buchung noch eine Erinnerung. 
                 Weiter unten findest du den genauen Buchungs- und Kontaktdaten. 
                 Hier kannst du die Buchung bis 24 Std. vor dem Buchungstermin 
@@ -39,7 +39,7 @@
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;"> <span style="font-weight: bold;">Beginn:</span> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Ende:</span> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</span></p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Kosten:</span>  {{ booking.totalPrice|number_format(2, ',') }} €</p>
-            {#<p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> {{ talent.addressAsString }}</p>#}
+            <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> {{ talent.addressAsString }}</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Anbieter Kontakt:</span> +43 {{ talent.user.fullPhone }}</p>
             {#
             {% if discountCode %}

@@ -18,7 +18,7 @@
             <div class="reply-select">
                 <select class="selectpicker" name="accept" id="accept" title="BITTE AUSWÄHLEN*">
                   <option value="1" selected>Auftrag annehmen</option>
-                  <option value="0" selected>Auftrag ablehnen</option>
+                  <option value="0">Auftrag ablehnen</option>
                 </select>
               </div>
             </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="row bewertung-request-form">
         <div class="col-xs-12">
-            <textarea name="message" id="message" placeholder="Möchtest du {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %} etwas mitteilen?"></textarea>
+            <textarea name="message" id="message" placeholder="Möchtest du {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %} etwas mitteilen? Falls die Buchungsdaten für dich nicht passen, kannst du die Anfrage ablehnen und {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %} bitten mit neuen Buchungsdaten anzufragen."></textarea>
             <button onclick="javascript:submit()">Absenden</button>
         </div>
     </div>
