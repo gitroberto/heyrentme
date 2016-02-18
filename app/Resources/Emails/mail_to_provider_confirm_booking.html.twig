@@ -22,7 +22,7 @@
         <td style="padding: 20px;padding-top: 0px;padding-bottom: 0px;">
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 20px;" class="page-title">Hallo {{ provider.name }},</h1>
             <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">
-                Deine Buchung war erfolgreich! Bitte bereite dein Equipment für die Vermietung vor! Wir schicken dir vor der Buchung noch ein Erinnerung. Im Anhang findest du ein Übernahmeprotokoll, dass dir bei der Vermietung helfen wird.</p>
+                Deine Buchung war erfolgreich! Bitte bereite dein Equipment für die Vermietung vor! Wir schicken dir vor der Buchung noch ein Erinnerung. Hier ist das <a style="color: black;" href="{{ mailer_app_url_prefix }}/doc/uebergabeprotokoll.pdf" target="_blank">Übernahmeprotokoll</a>, dass dir bei der Vermietung helfen wird.</p>
             {% if discountCode %}
             <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;"><span style="font-weight: bold;">
                     Anbieter Rabatt Rückerstattung

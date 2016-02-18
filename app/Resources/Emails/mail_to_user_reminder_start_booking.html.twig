@@ -25,7 +25,7 @@
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 20px;" class="page-title">
                 Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
             </h1>
-            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">Deine Buchung steht kurz bevor! Weiter unten findest du nochmals die Buchungsdaten und Kontaktdaten!</p>
+            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">Deine Buchung steht kurz bevor! Weiter unten findest du nochmals die Buchungsdaten und Kontaktdaten! Hier ist das <a style="color: black;" href="{{ mailer_app_url_prefix }}/doc/uebergabeprotokoll.pdf" target="_blank">Übernahmeprotokoll</a>, dass dir und dem Anbieter bei der Abwicklung helfen wird.</p>
         </td>
     </tr>
     <tr>

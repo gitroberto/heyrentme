@@ -60,12 +60,11 @@
     </div>
     <div class="row bewertung-request-form legals">
         <div class="col-xs-12">
-            <p>Bitte achte beim Verleih auf sorgsamen Umgang mit dem Equipment. Robert wird dafür sorgen, dass das Gerät funktionstüchtig und einsatzbereit ist. Ihr bekommt beide noch ein Übergabeprotokoll zur Kontrolle für bereits bestehender Schäden oder Kratzer. Bitte nimm zur Übergabe die Kaution sowie einen Personalausweis mit.</p>
-            <p>Sollte etwas vor dem Übergabetermin dazwischen kommen melde dich bitte direkt bei Robert. <br />
-                Für andere Rückfragen bitte Email an <a href="mailto:support@heysharing.com">support@heysharing.com</a> oder +43 664 180 80 21.</p>
+            <p>Sollte etwas vor dem Übergabetermin dazwischen kommen melde dich bitte direkt beim Anbieter. <br />
+                Für Rückfragen schreib uns bitte an <a href="mailto:support@heysharing.com">support@heysharing.com</a>.</p>
             <div class="checkbox">
               <div class="chbox-holder">
-                  {{ form_widget(form.agree) }}<label for="form_agree" class="padding-0"><span></span>Ich habe die hey! VIENNA <a href="#" data-toggle="modal" data-target=".allgemeine">Nutzungsbedingungen</a> gelesen und stimme diesen zu.</label>
+                  {{ form_widget(form.agree) }}<label for="form_agree" class="padding-0"><span></span>Ich habe die <a href="{{ path("kundeninfos_agb") }}" target="_blank">AGB</a> gelesen und stimme diesen zu.</label>
                   <div class="err-msg">{{ form_errors(form.agree) }}</div>
               </div>
             </div>
@@ -75,25 +74,6 @@
     <span class="add-margin-bottom-300"></span>
     {{ form_end(form) }}
   </div>
-  </div>
-  <!-- Modal -->
-  <div id="allgemeine-modal" class="modal fade allgemeine register" role="dialog">
-      <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
-                  <h4 class="modal-title">Nutzungsbedingungen</h4>
-                  <h5>Headline 1</h5>
-                  <p>
-                    Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
-                  </p>
-                  <h5>Headline 2</h5>
-                  <p>
-                      Ommodolo rperaesto consed dolore conse ex ex exerciduis at. Duipisl ilis acidunt inci exeriusto core dolummod eu feugait at wisisci bla consenibh enibh et ad tet autpate velesto coreetum nullumsandio odit nullaorem num volore tincip erostrud dolore magnis atum quissed eugiam, sis nisit nullaorpero duis nim nit nonseni ssismolesto commy nullum nos adio odolorem iriusto ex esto diatet alisim ipisl il doluptate tat, corpero ex elenibh ea facidunt lummolor am inim nim ing eriliquat.
-                  </p>
-          </div>
-      </div>
   </div>
     <script>
         function submit() {
