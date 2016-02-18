@@ -78,6 +78,7 @@ security:
         - { path: ^/provider, role: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/dashboard, role: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/booking/response, role: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/talent/response, role: IS_AUTHENTICATED_REMEMBERED }
         
         
         
