@@ -1,0 +1,230 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+      <div class="main-header">
+          <img src="/img/heyvienna.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+          <img src="/img/heyvienna_small.jpg" alt="rent me heading." class="img-responsive min-320"/>
+          <div class="main-search">
+            <h1 class="margin-bottom-40 text-white text-background mobile-hidden">Dein Marktplatz für <span
+                    class="text-yellow text-bold">Equipment und Dienstleistungen</span></h1>
+                    <div class="mobile-headers">
+                      <h1 class="text-white text-background desktop-hide-inline">Dein Marktplatz für</h1>
+                    </div>
+                    <div class="mobile-headers">
+                                      class="text-yellow text-bold">Equipment und Dienstleistungen</span></h1>
+                    </div>
+            <div class="search-form mobile-kategorie-form mobile-hidden">
+                <form method="post" accept-charset="utf-8" action="">
+                    <div style="display:none;">
+                        <input type="hidden" name="_method" value="POST"></div>
+                    <select name="gender2" class="selectpickerspc">
+                        <option value="S">HAUPTKATEGORIEN</option>
+                        <option value="T">HAUPTKATEGORIEN</option>
+                    </select>
+                    <input type="submit" class="desktop-hide" value="los geht's!"></form>
+                <ul class="col-xs-6 pull-right text-right kaup-select">
+                    {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
+                </ul>
+            </div>
+          </div>
+        </div>
+        <div>
+            <a href="#categories"><img src="/img/down.png" class="down-icon" alt="down"/></a>
+        </div>
+    </header>
+    <section class="main-categories">
+        <div class="container">
+            <span id="categories"></span>
+            <nav class="crumbs">
+                <ul class="col-xs-8">
+                    <li><a href="{{ path('start-page') }}">hey! VIENNA</a></li>
+                    <li><a href="{{ path('rentme') }}" class="active-crumb">Equipment mieten</a></li>
+                </ul>
+            </nav>
+            {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT'), 'mobile': true })) }}
+          </div>
+        <!-- Categories -->
+        <div class="container new-header mobile-hidden">
+          <div class="row">
+            <div class="col-xs-12">
+              <h2>Beliebtes Equipment bei <b>hey! VIENNA</b></h2>
+            </div>
+          </div>
+        </div>
+        <div class="container categories-container pages-categories">
+          <div class="row">
+                {% for cat in categories %}
+                    <div class="col-sm-4">
+                        <a href="{{ path('catchall', { 'content': cat.slug }) }}">
+                            <div class="categories-names">
+                                <h3>{{ cat.name }}</h3>
+                            </div>
+                        
+                        <img src="{{ cat.imageUrl }}" alt="{{ cat.name }}"/></a>
+                    </div>
+                {% endfor %}
+                  </div>
+          </div>
+        </section>
+      <section class="info">
+          <div class="container">
+              <div class="row">
+                  <div class="col-sm-6 pull-right">
+                      <h4 class="heading text-bold text-yellow">Tolle Angebote buchen -</h4>
+                      <h4 class="heading">bei hey! VIENNA</h4>
+
+                      <p><span class="text-bold">Finde das richtige Angebot für unterschiedliche Anwendungsbereiche!</span>
+                          <br>
+           Du hast manchmal ein Equipment (Sportgerät, Werkzeug, technisches Gerät) nicht zur Hand oder benötigst eine Dienstleistung im Privatbereich - Mit hey! sharing community hast du jetzt die Möglichkeit aus einer Vielzahl toller Angebote auszuwählen und sie direkt zu buchen. <br>
+            <br>
+            Wie das genau geht
+                          <a href="{{ path("hilfe_faq_faq") }}"> findest du hier.</a></p>
+                  </div>
+              </div>
+          </div>
+      </section>
+      <section class="slider container">
+        <div id="owl-demo" class="owl-carousel col-xs-11">
+          
+            {% for t in testimonials %}
+            <div class="item">
+                <div class="row">
+                    <div class="col-xs-3 col-xs-offset-1">
+                        {% if t.image %}
+                            <img src="{{ t.image.urlPath(image_url_prefix) }}" class="thumb testimonialDisplayImg" alt=""/>
+                        {% endif %}
+                        
+                    </div>
+                    <div class="col-xs-7">
+                        <p class="heading text-yellow">{{ t.name }}, {{ t.age }}</p>
+
+                        <p class="heading heading-small display-table">{{ t.place }}</p>
+
+                        <p class="testamonials">
+                            {{ t.description|raw }}
+                            <img src="/img/quote.png" alt="quote"/>       
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+      
+        </div>
+    </section>
+    <section class="info lower-info">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4 class="heading text-bold text-yellow">Angebote einstellen -</h4>
+                    <h4 class="heading">bei hey! VIENNA</h4>
+
+                    <p>
+                        <span class="text-bold">Anbieten bei hey! VIENNA ist kinderleicht!</span>
+                        <br>
+            <br>
+            Du möchtest deine Dienstleistung, dein Talent oder ein Equipment anbieten. Du möchtest deine Kundenbasis ausbauen und verfügst über keine oder nur sehr kleine Marketingbudgets. Auf hey! sharing community hast du jetzt die Möglichkeit ein Angebot kostenlos einzustellen und damit direkt Buchungsanfragen zu erhalten.<br>
+            <br>
+            Mehr dazu <a href="{{ path("hilfe_faq_faq") }}" class="text-link"> findest du hier.</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="about-us container">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Blog</h4>
+                <a href="{{ path("blog") }}">
+                    <img src="/img/allgemein-final/blog_equipment_small.jpg" alt="blog"/>
+                </a>
+                <p>Interessiert an spannenden Neuigkeiten zum Thema Equipment- und Talentsharing? Besuche unseren Blog!
+                    <br>
+                    <a href="{{ path("blog") }}">Zum Blog</a>
+                </p>
+
+            </div>
+            <div class="col-md-4">
+                <h4>Video ansehen</h4>
+                 <a data-toggle="modal" data-target="#hey-video" href="#">
+                    <img src="/img/allgemein-final/video_small.jpg" alt="Video ansehen"/>
+                </a>
+                <p>Zu viel zum lesen? ;-) Sieh dir unser Video an um gleich mehr darüber erfahren wie hey! VIENNA funktioniert<br>
+                     <a data-toggle="modal" data-target="#hey-video" href="#">Video ansehen</a>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>So funktioniert's!</h4>
+                <a href="{{ path("hilfe_faq_euipment_mieten") }}">
+                    <img src="/img/allgemein-final/so_funktionierts_small.jpg" alt="presse"/>
+                </a>
+                <p>Sind noch Fragen zur Buchung von Talenten oder Equipment offen? Hier erfährst du alle Details dazu. <br/>
+                    <a href="{{ path("hilfe_faq_euipment_mieten") }}">Hilfe &amp; FAQ</a>
+                </p>
+            </div>
+        </div>
+    </section>
+    <span class="add-margin"></span>
+	
+	   <!--modal-->
+<style>
+.content-modal-video {
+	position: relative!important;
+	padding-bottom: 55%!important;
+	padding-top: 15px!important;
+	height: 0!important;
+	overflow: hidden!important;
+}
+.content-modal-video iframe {
+	position: absolute!important;
+	top: 0!important;
+	left: 0!important;
+	width: 100%!important;
+	height: 100%!important;
+}
+
+.content-modal-video button {
+	z-index:9999;
+	position:relative;
+}
+</style>
+<div id="hey-video" class="modal fade delete-offer" role="dialog">
+  <div class="modal-dialog" style="max-width:1280px; max-height:720px"> 
+    <!-- Modal content-->
+    <div class="modal-content" style="max-width:1280px; max-height:720px">
+      <div class="content-modal-video">
+       <button style="color:white;" id="pause-button" type="button" class="close" data-dismiss="modal"><span class="close-start-video"></span> </button>
+        <iframe id="video" class="movie" src="https://player.vimeo.com/video/133739188?api=1"  width="1280" height="720" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!--
+        <a href="">
+            <div class="col-sm-4">
+                <div class="categories-names">
+                    <h3></h3>
+                </div>
+                <a href=""></a>
+            </div>
+        </a>
+    -->
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(function() {
+           $("#suche-dropdown").change(function() {
+                if ($(this).val() === 'BIETE') {
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        anbieten(1);
+                    {% else %}
+                        var url = '{{ path("rental") }}';
+                        window.location = url;
+                    {% endif %}
+                }
+           });
+        });
+    </script>
+{% endblock %}
