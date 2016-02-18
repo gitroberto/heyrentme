@@ -2,25 +2,21 @@
 
 {% block body %}
       <div class="main-header">
-          <img src="/img/allgemein-final/equipment_mieten.jpg" alt="Equipment mieten" class="img-responsive max-1600 max-320"/>
-          <img src="/img/allgemein-final/equipment_mieten_small.jpg" alt="Equipment mieten" class="img-responsive min-320"/>
+          <img src="/img/heyvienna.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/>
+          <img src="/img/heyvienna_small.jpg" alt="rent me heading." class="img-responsive min-320"/>
           <div class="main-search">
-            <h1 class="margin-bottom-40 text-white text-background mobile-hidden">Finde tolle Equipment-Angebote <span
-                    class="text-yellow text-bold">in deiner Nähe!</span></h1>
+            <h1 class="margin-bottom-40 text-white text-background mobile-hidden">Dein Marktplatz für <span
+                    class="text-yellow text-bold">Equipment und Dienstleistungen</span></h1>
                     <div class="mobile-headers">
-                      <h1 class="text-white text-background desktop-hide-inline">Finde tolle Equipment</h1>
+                      <h1 class="text-white text-background desktop-hide-inline">Dein Marktplatz für</h1>
                     </div>
                     <div class="mobile-headers">
-                      <h1 class="margin-bottom-40 text-white text-background desktop-hide-inline">Angebote <span
-                                      class="text-yellow text-bold">in deiner Nähe!</span></h1>
+                                      class="text-yellow text-bold">Equipment und Dienstleistungen</span></h1>
                     </div>
             <div class="search-form mobile-kategorie-form mobile-hidden">
                 <form method="post" accept-charset="utf-8" action="">
                     <div style="display:none;">
                         <input type="hidden" name="_method" value="POST"></div>
-                    <select id="suche-dropdown" name="gender" class="selectpicker mobile-hidden" title="SUCHE">
-                        <option value="BIETE">BIETE</option>
-                    </select>
                     <select name="gender2" class="selectpickerspc">
                         <option value="S">HAUPTKATEGORIEN</option>
                         <option value="T">HAUPTKATEGORIEN</option>
@@ -74,15 +70,15 @@
           <div class="container">
               <div class="row">
                   <div class="col-sm-6 pull-right">
-                      <h4 class="heading text-bold text-yellow">Equipment mieten - </h4>
-                      <h4 class="heading">wie geht das?</h4>
+                      <h4 class="heading text-bold text-yellow">Tolle Angebote buchen -</h4>
+                      <h4 class="heading">bei hey! VIENNA</h4>
 
-                      <p><span class="text-bold">Finde die richtige Ausrüstung für unterschiedliche Anwendungsbereiche!</span>
-                          <br><br>
-                          Suchst du Camping-Ausrüstung für dein Outdoor-Wochenende, Sport-Geräte zum Testen, Werkzeug für die anstehende Renovierung, Equipment für deine Party, technische Geräte oder andere spezielle Gebrauchsgegenstände? hey! VIENNA bietet dir dein Wunsch-Equipment zur Miete anstelle einer teuren Anschaffung. 
-                          <br><br>
-                          Wie das genau geht
-                          <a href="{{ path("hilfe_faq_euipment_mieten") }}"> findest du hier.</a></p>
+                      <p><span class="text-bold">Finde das richtige Angebot für unterschiedliche Anwendungsbereiche!</span>
+                          <br>
+           Du hast manchmal ein Equipment (Sportgerät, Werkzeug, technisches Gerät) nicht zur Hand oder benötigst eine Dienstleistung im Privatbereich - Mit hey! sharing community hast du jetzt die Möglichkeit aus einer Vielzahl toller Angebote auszuwählen und sie direkt zu buchen. <br>
+            <br>
+            Wie das genau geht
+                          <a href="{{ path("hilfe_faq_faq") }}"> findest du hier.</a></p>
                   </div>
               </div>
           </div>
@@ -119,15 +115,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
-                    <h4 class="heading text-bold text-yellow">Equipment anbieten - </h4>
-                    <h4 class="heading">wie geht das?</h4>
+                    <h4 class="heading text-bold text-yellow">Angebote einstellen -</h4>
+                    <h4 class="heading">bei hey! VIENNA</h4>
 
                     <p>
-                        <span class="text-bold">Bei hey! VIENNA ist Equipment vermieten kinderleicht!</span>
-                        <br><br>
-                        Du hast Equipment daheim herum stehen, dass du nur selten benutzt - Du bist ein gewerblicher Verleih, wirst mit deinem Angebot online aber nur schwer gefunden - bei hey! VIENNA hast du jetzt die Möglichkeit mehr aus deinem Equipment zu machen und dabei auch etwas dazuzuverdienen. Als Privatperson ist dein Equipment durch Nutzung der hey! Garantie von bis zu 750 € sowie einer selbst festgelegten Kaution für den Verleih geschützt! 
-                        <br><br>
-                        Mehr dazu <a href="{{ path("hilfe_faq_euipment_anbieten") }}" class="text-link"> findest du hier.</a>
+                        <span class="text-bold">Anbieten bei hey! VIENNA ist kinderleicht!</span>
+                        <br>
+            <br>
+            Du möchtest deine Dienstleistung, dein Talent oder ein Equipment anbieten. Du möchtest deine Kundenbasis ausbauen und verfügst über keine oder nur sehr kleine Marketingbudgets. Auf hey! sharing community hast du jetzt die Möglichkeit ein Angebot kostenlos einzustellen und damit direkt Buchungsanfragen zu erhalten.<br>
+            <br>
+            Mehr dazu <a href="{{ path("hilfe_faq_faq") }}" class="text-link"> findest du hier.</a>
                     </p>
                 </div>
             </div>
@@ -138,7 +135,7 @@
             <div class="col-md-4">
                 <h4>Blog</h4>
                 <a href="{{ path("blog") }}">
-                    <img src="/img/allgemein-final/blog_equipment_small.jpg" alt="Blog"/>
+                    <img src="/img/allgemein-final/blog_equipment_small.jpg" alt="blog"/>
                 </a>
                 <p>Interessiert an spannenden Neuigkeiten zum Thema Equipment- und Talentsharing? Besuche unseren Blog!
                     <br>
@@ -147,18 +144,18 @@
 
             </div>
             <div class="col-md-4">
-                <h4>Talente buchen</h4>
-                <a href="{{ path('bookme') }}">
-                    <img src="/img/allgemein-final/talente_buchen_start_unten_small.jpg" alt="Talente buchen"/>
+                <h4>Video ansehen</h4>
+                 <a data-toggle="modal" data-target="#hey-video" href="#">
+                    <img src="/img/allgemein-final/video_small.jpg" alt="Video ansehen"/>
                 </a>
-                <p>Bist du auch an der Buchung von tollen Talenten aus Wien interessiert? Hier kannst du unseren Service ausprobieren.
-                    <a href="{{ path('bookme') }}">Talente buchen</a>
+                <p>Zu viel zum lesen? ;-) Sieh dir unser Video an um gleich mehr darüber erfahren wie hey! VIENNA funktioniert<br>
+                     <a data-toggle="modal" data-target="#hey-video" href="#">Video ansehen</a>
                 </p>
             </div>
             <div class="col-md-4">
                 <h4>So funktioniert's!</h4>
                 <a href="{{ path("hilfe_faq_euipment_mieten") }}">
-                    <img src="/img/allgemein-final/so_funktionierts_small.jpg" alt="Hilfe und FAQ"/>
+                    <img src="/img/allgemein-final/so_funktionierts_small.jpg" alt="presse"/>
                 </a>
                 <p>Sind noch Fragen zur Buchung von Talenten oder Equipment offen? Hier erfährst du alle Details dazu. <br/>
                     <a href="{{ path("hilfe_faq_euipment_mieten") }}">Hilfe &amp; FAQ</a>
@@ -167,6 +164,40 @@
         </div>
     </section>
     <span class="add-margin"></span>
+	
+	   <!--modal-->
+<style>
+.content-modal-video {
+	position: relative!important;
+	padding-bottom: 55%!important;
+	padding-top: 15px!important;
+	height: 0!important;
+	overflow: hidden!important;
+}
+.content-modal-video iframe {
+	position: absolute!important;
+	top: 0!important;
+	left: 0!important;
+	width: 100%!important;
+	height: 100%!important;
+}
+
+.content-modal-video button {
+	z-index:9999;
+	position:relative;
+}
+</style>
+<div id="hey-video" class="modal fade delete-offer" role="dialog">
+  <div class="modal-dialog" style="max-width:1280px; max-height:720px"> 
+    <!-- Modal content-->
+    <div class="modal-content" style="max-width:1280px; max-height:720px">
+      <div class="content-modal-video">
+       <button style="color:white;" id="pause-button" type="button" class="close" data-dismiss="modal"><span class="close-start-video"></span> </button>
+        <iframe id="video" class="movie" src="https://player.vimeo.com/video/133739188?api=1"  width="1280" height="720" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
 
     <!--
         <a href="">
