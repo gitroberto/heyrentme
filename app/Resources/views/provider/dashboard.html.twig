@@ -93,7 +93,7 @@
 
 
                                   {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
-                                    <a class="button-black background-facebook col-xs-3 itemToHide_{{ eq.id }}" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
+                                    <a class="button-black background-facebook col-xs-3" data-href="{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': eq.urlPath }) }}" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
                                     <a class="button-black backgound-yellow col-xs-3 btnSaveStatus itemToHide_{{ eq.id }}" data-type="equipment" data-id="{{ eq.id }}" id="BtnSave_{{ eq.id }}" >speichern</a>
                                   {% endif %}
                                 </div>
@@ -241,7 +241,7 @@
 
 
                                   {% if (tal.status == constant('AppBundle\\Entity\\Talent::STATUS_APPROVED')) %}
-                                    <a class="button-black background-facebook col-xs-3 itemToHide_{{ tal.id }}" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
+                                    <a class="button-black background-facebook col-xs-3" data-href="{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': tal.urlPath }) }}" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
                                     <a class="button-black backgound-yellow col-xs-3 btnSaveStatus itemToHide_{{ tal.id }}" data-type="talent" data-id="{{ tal.id }}" id="BtnSave_{{ tal.id }}" >speichern</a>
                                   {% endif %}
                                 </div>
@@ -362,6 +362,15 @@
 <script>
     $(function() {
         $('a.btnSaveStatus').click(save);
+        
+        $(".background-facebook").click(function(e) {
+            e.preventDefault();
+            var href = $(this).data('href');
+            FB.ui({
+                method: 'share',
+                href: href
+            }, function(response){});
+        });
     });    
     
     function save() {

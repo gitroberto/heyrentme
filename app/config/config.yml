@@ -41,6 +41,7 @@ twig:
     globals:
         image_url_prefix: "%image_url_prefix%"
         mailer_app_url_prefix: "%mailer_app_url_prefix%"
+        facebook_client_id: "%facebook_client_id%"
 
 # Assetic Configuration
 assetic:

@@ -1,5 +1,15 @@
 {% extends "base.html.twig" %}
 
+{% block head %}
+	<meta property="og:url"           content="{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}" />
+	<meta property="og:type"          content="article" />
+	<meta property="og:title"         content="{{ item.name }}" />
+	<meta property="og:description"   content="{{ item.description }}" />
+        {% if item.talentImages|length > 0 %}
+            <meta property="og:image"         content="{{ mailer_app_url_prefix }}{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" />    
+        {% endif %}
+{% endblock %}
+
 {% block home_header %}
     {{ include('common/home_header_bg.html.twig') }}
 {% endblock %}
@@ -40,7 +50,7 @@
                     {% endif %}
                     <span class="back-icon" id="sharing-button">
                       <span id="social-share">
-                        <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
+                        <a class="social fb" href="#"></a>
                         <a class="social flash" href="#"></a>
                         <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
                         <a class="social email" href="mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}"></a>
@@ -378,7 +388,7 @@
                     {% endif %}
                 <span class="back-icon" id="sharing-button2">
                       <span id="social-share-bottom">
-                        <a class="social fb" href="javascript:shareFB('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
+                        <a class="social fb" href="#"></a>
                         <a class="social flash" href="#"></a>
                         <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
                         <a class="social email" href="mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}"></a>
@@ -508,7 +518,20 @@
         $("#tests, #tests2").change(function() {
             updatePrice();
         });
-        
+        $(".social.fb").click(function(e) {
+                e.preventDefault();
+                FB.ui({
+                    method: 'share',
+                    href: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
+                }, function(response){});
+            });
+        $(".social.flash").click(function(e) {
+                e.preventDefault();
+                FB.ui({
+                    method: 'send',
+                    link: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
+                }, function(response){});
+            });
     });
     
     function updatePrice() {
@@ -607,11 +630,9 @@
       var winTop = (screen.height / 2) - 160;
   var winLeft = (screen.width / 2) - 260;
 
-  // fb share button
-  var shareFB = function(url) {
-    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=Facebook Share&p[summary]=Facebook share popup&p[url]=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=520,height=320');
-  };
-  // twitter button
+
+
+// twitter button
   var twittButton = function(title, url) {
     window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
   };
