@@ -224,26 +224,40 @@
 
 {% block script %}
 <script type="text/javascript">
-  var winTop = (screen.height / 2) - 160;
-  var winLeft = (screen.width / 2) - 260;
-
-  // twitter button
-  var twittButton = function(title, url) {
-    window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-  };
-  // pin button
-  var pinIt = function(url, description) {
-    window.open('http://pinterest.com/pin/create/link/?url=' + url + '&description=' + description, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=520,height=320');
-  };
   
   $(function() {
-    $(".social.fb").click(function(e) {
-        e.preventDefault();
-        FB.ui({
-            method: 'share',
-            href: '{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}'
-        }, function(response){});
-    });
+        $(".social.fb").unbind('click').click(function(e) {
+                e.preventDefault();
+                FB.ui({
+                    method: 'share',
+                    href: '{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}'
+                }, function(response){});
+            });
+        $(".social.flash").unbind('click').click(function(e) {
+                e.preventDefault();
+                FB.ui({
+                    method: 'send',
+                    link: '{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}'
+                }, function(response){});
+            });
+        $(".social.tweet").unbind('click').click(function(e) {
+            e.preventDefault();
+            var title = '{{ post.title|escape('url') }}';
+            var url = '{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug })|escape('url') }}';
+            window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+        });
+        $(".social.email").unbind('click').click(function(e) {
+            e.preventDefault();
+            var url = 'mailto:?subject=Empfohlenes%20Artikel%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('blog_detail', { 'slug': post.slug })|escape('url') }}';
+            window.location = url;
+        });
+        $(".social.pin").unbind('click').click(function(e) {
+            var winTop = (screen.height / 2) - 160;
+            var winLeft = (screen.width / 2) - 260;
+            var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('blog_detail', { 'slug': post.slug })|escape('url') }}';
+            var description = '{{ post.title|escape('url') }}';
+            window.open('http://pinterest.com/pin/create/link/?url=' + url + '&description=' + description, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=520,height=320');
+        });
   });
   
 </script>

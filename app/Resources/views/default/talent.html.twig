@@ -52,8 +52,8 @@
                       <span id="social-share">
                         <a class="social fb" href="#"></a>
                         <a class="social flash" href="#"></a>
-                        <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
-                        <a class="social email" href="mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}"></a>
+                        <a class="social tweet" href="#"></a>
+                        <a class="social email" href="#"></a>
                       </span>
                     </span>
                 </div>
@@ -390,8 +390,8 @@
                       <span id="social-share-bottom">
                         <a class="social fb" href="#"></a>
                         <a class="social flash" href="#"></a>
-                        <a class="social tweet" href="javascript:twittButton('{{ post.title|escape('js') }}', '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}')"></a>
-                        <a class="social email" href="mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}"></a>
+                        <a class="social tweet" href="#"></a>
+                        <a class="social email" href="#"></a>
                       </span>
                     </span>
             </div>
@@ -518,20 +518,31 @@
         $("#tests, #tests2").change(function() {
             updatePrice();
         });
-        $(".social.fb").click(function(e) {
+        $(".social.fb").unbind('click').click(function(e) {
                 e.preventDefault();
                 FB.ui({
                     method: 'share',
                     href: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
                 }, function(response){});
             });
-        $(".social.flash").click(function(e) {
+        $(".social.flash").unbind('click').click(function(e) {
                 e.preventDefault();
                 FB.ui({
                     method: 'send',
                     link: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
                 }, function(response){});
             });
+        $(".social.tweet").unbind('click').click(function(e) {
+            e.preventDefault();
+            var title = '{{ item.name|escape('js') }}';
+            var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}';
+            window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+        });
+        $(".social.email").unbind('click').click(function(e) {
+            e.preventDefault();
+            var url = 'mailto:?subject=Empfohlenes%20Angebot%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}';
+            window.location = url;
+        });
     });
     
     function updatePrice() {
@@ -627,19 +638,6 @@
     }
     google.maps.event.addDomListener(window, 'load', init);
 
-      var winTop = (screen.height / 2) - 160;
-  var winLeft = (screen.width / 2) - 260;
-
-
-
-// twitter button
-  var twittButton = function(title, url) {
-    window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-  };
-  // pin button
-  var pinIt = function(url, description) {
-    window.open('http://pinterest.com/pin/create/link/?url=' + url + '&description=' + description, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=520,height=320');
-  };
 
   </script>
 {% endblock %}
