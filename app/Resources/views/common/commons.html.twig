@@ -179,7 +179,9 @@
         });
         $(".social.email").click(function(e) {
             e.preventDefault();
-            var url = 'mailto:?subject=hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}/';
+            var subject = encodeURIComponent('hey! VIENNA');
+            var body = encodeURIComponent('{{ mailer_app_url_prefix }}/');
+            var url = 'mailto:?subject=' + subject + '&body=' + body;
             window.location = url;
         });
     });

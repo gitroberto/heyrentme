@@ -248,7 +248,9 @@
         });
         $(".social.email").unbind('click').click(function(e) {
             e.preventDefault();
-            var url = 'mailto:?subject=Empfohlenes%20Artikel%20auf%20hey!%20VIENNA&body={{ mailer_app_url_prefix|escape('url') }}{{ path('blog_detail', { 'slug': post.slug })|escape('url') }}';
+            var subject = encodeURIComponent('Empfohlenes Artikel auf hey! VIENNA');
+            var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}');
+            var url = 'mailto:?subject=' + subject + '&body=' + body;
             window.location = url;
         });
         $(".social.pin").unbind('click').click(function(e) {
