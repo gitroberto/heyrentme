@@ -205,7 +205,7 @@ class BookingController extends BaseController {
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
-                ->setSubject('Deine Anfrage wurde angenommen!')
+                ->setSubject('Deine Anfrage bei hey! VIENNA')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');

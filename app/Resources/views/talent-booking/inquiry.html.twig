@@ -3,7 +3,13 @@
         <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
         <h4 class="modal-title">Unverbindliche Anfrage</h4>
         <p><span class="text-bold" >Datum:</span>  <span id="from-date">{{ inquiry.from|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy, HH:mm') }}</span></p>
-        <p><span class="text-bold">Gesamtkosten AB: </span><span class="price-calc">{{ inquiry.price|number_format(2, ',') }}</span> €</p>
+        <p><span class="text-bold">Kosten ab: </span><span class="price-calc">{{ inquiry.price|number_format(2, ',') }}</span> €</p>
+		<p>
+            <span class="text-bold">Ort:</span>
+            {{ inquiry.whereabouts }}
+            (Genaue Adresse wird nach Buchung bekanntgegeben)
+        </p>
+		<div style="height:10px"></div>
         {{ form_start(form) }}
             <div>
                 {% if not loggedIn %}

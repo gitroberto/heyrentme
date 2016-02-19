@@ -515,6 +515,19 @@ margin-left:0;
 margin-top:10px;
 }
 
+.angrafge-dialog {
+    max-width: 600px !important;
+}
+
+.offer-detail .product-info .no-stars, .main-offers .product-info .no-stars {
+margin-left:8px;
+}
+
+.left-side .product-info {
+margin-top:15px;
+}
+
+
 .product-detail .left-side .product-description p {
 min-height:200px;
 }
