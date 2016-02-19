@@ -16,12 +16,12 @@
     </header>
     <section>
     <div class="container background-white rent-container">
-      <select class="mobile-menu-select desktop-hide" name="forma"  onchange="location = this.options[this.selectedIndex].value;">
+      <!-- <select class="mobile-menu-select desktop-hide" name="forma"  onchange="location = this.options[this.selectedIndex].value;">
         <option value="kundeninfos_presse.php">Presse</option>
         <option value="kundeninfos_kontakt.php">Kontakt</option>
         <option value="kundeninfos_impressum.php">Impressum</option>
         <option selected="selected" value="kundeninfos_agb.php">AGB</option>
-      </select>
+      </select> -->
       {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_agb", "pageNameShort":"AGBs" } )) }}
       <span class="clearfix"></span> 
       <!-- Left nav -->

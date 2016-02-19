@@ -19,8 +19,8 @@
     <div class="container background-white rent-container">
         {# TODO #}
         <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
-          <option value="pages/info">Fototurial</option>
-          <option value="info">hey! Portrait-Videos</option>
+         <option value="{{ path("tutorial-photo") }}">Foto Tutorial</option>
+         <option value="{{ path("tutorial-video") }}" selected="selected">Video Tutorial</option>
         </select>
         <nav class="crumbs">
             <ul class="col-xs-10">
