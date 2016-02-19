@@ -364,6 +364,17 @@ color:black;
 } 
 }
 
+@media (min-width: 1000px) {
+.product-detail .left-side .product-description p {
+min-height:200px;
+}
+
+.product-info .no-stars {
+margin-left:0;
+margin-top:10px;
+}
+}
+
 @media (max-width: 1000px) {
 	
 .media-list {
@@ -510,10 +521,7 @@ display:none;
 
 /* 02-15-2016 FIXES */
 
-.product-info .no-stars {
-margin-left:0;
-margin-top:10px;
-}
+
 
 .angrafge-dialog {
     max-width: 600px !important;
@@ -526,12 +534,6 @@ margin-left:8px;
 .left-side .product-info {
 margin-top:15px;
 }
-
-
-.product-detail .left-side .product-description p {
-min-height:200px;
-}
-
 
 .modal-dialog {
     width:auto!important;
