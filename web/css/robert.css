@@ -541,6 +541,21 @@ margin-top:15px;
 margin-bottom:10px;
 }
 
+.crumbs ul li a {
+padding: 3px 6px 3px 6px
+}
+
+.kaup-select .crumbs ul li a {
+padding: 3px 12px 3px 12px
+}
+.kaup-select .crumbs ul .active-crumb {
+background-color: #000;
+}
+
+.haup-ico {
+background-image: url('../img/pfeil_hauptkat.png');
+}
+
 /* Detailseite Anbieten Formular Änderungen */
 
  .btn-group.bootstrap-select {
