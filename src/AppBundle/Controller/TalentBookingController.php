@@ -169,6 +169,9 @@ class TalentBookingController extends BaseController {
             return new Response('', Response::HTTP_FORBIDDEN);
         }
         
+        $saved = false;
+        $acc = null;
+        $dashboardUrl = null;
         if ($request->getMethod() === "POST") {
             $acc = intval($request->request->get('accept'));
             $msg = $request->request->get('message');
@@ -178,6 +181,7 @@ class TalentBookingController extends BaseController {
             if ($acc > 0) {
                 $inq->setUuid(Utils::getUuid());
             }
+            
             
             $em = $this->getDoctrine()->getManager();
             $em->flush();
@@ -212,12 +216,19 @@ class TalentBookingController extends BaseController {
             $this->get('mailer')->send($message);
             //</editor-fold>
             
-            return $this->redirectToRoute('dashboard');
+            $dashboardUrl = $this->generateUrl('dashboard');
+            
+            //return $this->redirectToRoute('dashboard');
+            $saved = true;
         }
         
         return $this->render('talent-booking/response.html.twig', array(
             'talent' => $eq,
-            'inquiry' => $inq
+            'inquiry' => $inq,
+            'saved' => $saved, 
+            'decision' => $acc,
+            'dashboardUrl' => $dashboardUrl
+                
         ));
     }
     

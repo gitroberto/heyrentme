@@ -3,6 +3,9 @@
 {% block home_header %}{% endblock %}
 
 {% block body %}
+   
+  
+    
   <div class="request-container head-req">
     <img src="/img/detail-bg.jpg" alt="image" class="img-responsive max-320"/></div>
     <img src="/img/detail-bg-rwd.jpg" alt="image" class="img-responsive min-320"/></div>
@@ -207,9 +210,51 @@
       </div>
   </div>
 </div>
+  
+  
+  {% if saved is defined and saved != null %}
+  <div id="confirmation-modal" class="modal fade feed" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button id ="close-confirm" type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                  <h4 class="modal-title">Confirmation</h4>
+                  
+                    {% if decision > 0 %}
+                        You accepted offert.
+                    {% else %}
+                        You rejected offert.
+                    {% endif %}
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+  <a href="#" data-toggle="modal" data-target="#confirmation-modal"></a>
+  {% endif %}
+  
   <script>
       function submit() {
           $("form").submit();
       }
-      </script>
+      
+      var showModal = "{{ saved }}";
+      var url = "{{ dashboardUrl }}";
+      
+        $(function(){                   
+            
+            if (showModal) {
+                if ($("a[data-target='#confirmation-modal']").size() > 0) {
+                    $("a[data-target='#confirmation-modal']")[0].click();      
+                }
+                
+                $("#confirmation-modal").on("hidden.bs.modal", function(){ 
+                    location.href = url;
+                });
+            }
+            
+        });
+      
+  </script>  
 {% endblock %}
