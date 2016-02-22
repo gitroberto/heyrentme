@@ -14,7 +14,11 @@
             <h1>{{ talent.name }} / Jetzt Buchen</h1>
             <div class="row summary">
                 <div class="ad col-md-4 col-sm-12">
-                    <img src="{{ talent.talentImages[0].image.urlPath(image_url_prefix) }}" alt="{{ talent.name }}" class="img-responsive"/>
+                    {% if (talent.talentImages|length > 0 ) %}
+                        <img src="{{ talent.talentImages[0].image.urlPath(image_url_prefix) }}" alt="{{ talent.name }}" class="img-responsive"/>
+                    {% else %}
+                        <img src="/img/equipment-default.jpg" alt="{{ talent.name }}" class="img-responsive"/>
+                    {% endif %}
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">

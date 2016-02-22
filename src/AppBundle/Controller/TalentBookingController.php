@@ -233,7 +233,7 @@ class TalentBookingController extends BaseController {
             return new Response(Response::HTTP_NOT_FOUND);
         }
         if ($inq->getBooking() !== null) { // booking already confirmed
-            return new Response('', 403); // TODO: display a nice message to the user?
+            return $this->redirectToRoute('booking-list');
         }
         
         $data = array('uuid' => $uuid);
