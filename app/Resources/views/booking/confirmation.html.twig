@@ -14,7 +14,11 @@
             <h1>{{ equipment.name }} / Jetzt Buchen</h1>
             <div class="row summary">
                 <div class="ad col-md-4 col-sm-12">
-                    <img src="{{ equipment.equipmentImages[0].image.urlPath(image_url_prefix) }}" alt="{{ equipment.name }}" class="img-responsive"/>
+                    {% if (equipment.equipmentImages|length > 0 ) %}
+                        <img src="{{ equipment.equipmentImages[0].image.urlPath(image_url_prefix) }}" alt="{{ equipment.name }}" class="img-responsive"/>
+                    {% else %}
+                        <img src="/img/equipment-default.jpg" alt="{{ equipment.name }}" class="img-responsive"/>
+                    {% endif %}
                     <div class="product-info product-ad">
                         <div class="row">
                             <div class="col-xs-6">
