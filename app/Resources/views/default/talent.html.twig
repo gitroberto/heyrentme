@@ -516,27 +516,27 @@
         $("#tests, #tests2").change(function() {
             updatePrice();
         });
-        $(".social.fb").unbind('click').click(function(e) {
+        $(".social.fb").off('click touchstart').on('click touchstart', function(e) {
                 e.preventDefault();
                 FB.ui({
                     method: 'share',
                     href: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
                 }, function(response){});
             });
-        $(".social.flash").unbind('click').click(function(e) {
+        $(".social.flash").off('click touchstart').on('click touchstart', function(e) {
                 e.preventDefault();
                 FB.ui({
                     method: 'send',
                     link: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
                 }, function(response){});
             });
-        $(".social.tweet").unbind('click').click(function(e) {
+        $(".social.tweet").off('click touchstart').on('click touchstart', function(e) {
             e.preventDefault();
             var title = '{{ item.name|escape('js')|escape('url') }}';
             var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url')|escape('url') }}';
             window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
         });
-        $(".social.email").unbind('click').click(function(e) {
+        $(".social.email").off('click touchstart').on('click touchstart', function(e) {
             e.preventDefault();
             var subject = encodeURIComponent('Empfohlenes Angebot auf hey! VIENNA');
             var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}');
