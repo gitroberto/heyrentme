@@ -232,8 +232,8 @@ class BookingController extends BaseController {
         if ($inq == null) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-        if ($inq->getBooking() !== null) { // booking already confirmed
-            return new Response('', 403); // TODO: display a nice message to the user?
+        if ($inq->getBooking() !== null) { // booking already confirmed            
+            return $this->redirectToRoute('booking-list');
         }
         
         $data = array('uuid' => $uuid);
