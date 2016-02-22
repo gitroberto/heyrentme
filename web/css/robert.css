@@ -556,6 +556,10 @@ background-color: #000;
 background-image: url('../img/pfeil_hauptkat.png');
 }
 
+.form-container input {
+text-transform:none!important;
+}
+
 /* Detailseite Anbieten Formular Änderungen */
 
  .btn-group.bootstrap-select {
