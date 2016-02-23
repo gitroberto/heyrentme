@@ -11,7 +11,8 @@
   <div class="container request-container">
     <div class="row">
         <div class="col-xs-12">
-            <h1>Deine anstehenden Buchungen als Anbieter</h1>
+            <h1>Deine offenen Buchungen als Kunde</h1>
+			
         </div>
     </div>
       
@@ -54,6 +55,13 @@
                             {{ item.addressAsString }}
                         </p>
                     </div>
+					 <div class="col-sm-4 col-sm-push-4 margin-ort">
+                        {% if booking.status == constant('STATUS_BOOKED', booking) %}
+                            <button data-id="{{ booking.id }}" data-type="{% if booking.inquiry.equipment is defined %}equipment{% else %}talent{% endif %}" class="rabat-button">Buchung bearbeiten</button>
+                        {% else %}
+                            Status: {{ booking.statusAsString }}
+                       {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,7 +75,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <h1>Deine offenen Buchungen als Kunde</h1>
+            <h1>Deine anstehenden Buchungen als Anbieter</h1>
         </div>
     </div>
       
@@ -109,13 +117,6 @@
                         <p class="dont-transform">
                             {{ item.addressAsString }}
                         </p>
-                    </div>
-                    <div class="col-sm-4 col-sm-push-4 margin-ort">
-                        {% if booking.status == constant('STATUS_BOOKED', booking) %}
-                            <button data-id="{{ booking.id }}" data-type="{% if booking.inquiry.equipment is defined %}equipment{% else %}talent{% endif %}" class="rabat-button">Buchung bearbeiten</button>
-                        {% else %}
-                            Status: {{ booking.statusAsString }}
-                       {% endif %}
                     </div>
                 </div>
             </div>
