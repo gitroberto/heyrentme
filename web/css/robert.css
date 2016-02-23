@@ -629,3 +629,91 @@ max-width:350px;
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 /* IE10+ CSS styles go here alternative */
 }
+
+
+/* Tarifoptionen & Preisauf Anfrage Confirmation */
+
+.rdisable {
+	opacity: 0.5;
+}
+
+.preisauf input {
+margin-right: 10px;	
+height: 47px;
+margin-bottom: 20px;
+padding-left: 13px;
+font-family: 'open sans',sans-serif;
+font-size: 15px;
+color: black;
+text-transform: uppercase;
+border: none;
+border-left: 1px solid #ccc;
+border-top: 1px solid #ccc;
+}
+
+.preisauf label {
+font-family: 'open sans';
+color: black;
+margin-right: 20px;
+font-weight: normal;
+}
+
+.preisauf {
+margin-top:22px;
+}
+
+/* Neues Buchungstool */
+
+.einzelstunden {
+background-color:transparent !important;
+max-width:90%;
+margin:auto;
+padding-top:20px;
+}
+
+.einzelstunden .date-container {
+margin-top:0!important;
+}
+
+.einzelstunden .panel-title {
+text-transform:none!important;
+}
+
+.einzelstunden .panel-heading {
+box-shadow: 0 1px 0 rgba(0,0,0,0.08)!important;
+background-color:#fff;
+border-color:transparent!important;
+padding: 12px 15px;
+}
+
+.einzelstunden .accordion-yellow p, .einzelstunden .panel-heading:hover p {
+color:#fff;
+}
+
+.einzelstunden .panel-body p {
+margin-bottom:10px;
+}
+
+.einzelstunden .panel-body {
+padding:0!important;
+}
+
+.yellow {
+background-color:#f0c814;
+width: 90%;
+margin: -15px 0 30px 0;
+padding: 6px 0;
+}
+
+.yellow:hover {
+background-color:#000;
+}
+
+.right-side .offer-dates .date-picker .time-container {
+    margin-top: 35px;
+    margin-bottom: 30px;
+}
+
+.right-side .offer-dates .date-picker .green-big-button {
+margin-top:10px;
+}
