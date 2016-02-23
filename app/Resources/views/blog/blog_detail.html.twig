@@ -226,34 +226,34 @@
 <script type="text/javascript">
   
   $(function() {
-        $(".social.fb").unbind('click').click(function(e) {
+        $(".social.fb").off('click touchstart').on('click touchstart', function(e) {
                 e.preventDefault();
                 FB.ui({
                     method: 'share',
                     href: '{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}'
                 }, function(response){});
             });
-        $(".social.flash").unbind('click').click(function(e) {
+        $(".social.flash").off('click touchstart').on('click touchstart', function(e) {
                 e.preventDefault();
                 FB.ui({
                     method: 'send',
                     link: '{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}'
                 }, function(response){});
             });
-        $(".social.tweet").unbind('click').click(function(e) {
+        $(".social.tweet").off('click touchstart').on('click touchstart', function(e) {
             e.preventDefault();
             var title = '{{ post.title|escape('url') }}';
             var url = '{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug })|escape('url') }}';
             window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
         });
-        $(".social.email").unbind('click').click(function(e) {
+        $(".social.email").off('click touchstart').on('click touchstart', function(e) {
             e.preventDefault();
             var subject = encodeURIComponent('Empfohlenes Artikel auf hey! VIENNA');
             var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('blog_detail', { 'slug': post.slug }) }}');
             var url = 'mailto:?subject=' + subject + '&body=' + body;
             window.location = url;
         });
-        $(".social.pin").unbind('click').click(function(e) {
+        $(".social.pin").off('click touchstart').on('click touchstart', function(e) {
             var winTop = (screen.height / 2) - 160;
             var winLeft = (screen.width / 2) - 260;
             var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('blog_detail', { 'slug': post.slug })|escape('url') }}';

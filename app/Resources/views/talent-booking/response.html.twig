@@ -50,14 +50,9 @@
                         <img src="{{ inquiry.user.getProfilePicture(false, image_url_prefix) }}" alt=""/>
                     {% endif %}
                     <p>{% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %}</p>
-                    {# todo: ratings for a user #}
-                    <ul data-toggle="modal" data-target=".bewertungen">
-                        <li><span class="marked glyphicon glyphicon-star"></span></li>
-                        <li><span class="marked glyphicon glyphicon-star"></span></li>
-                        <li><span class="marked glyphicon glyphicon-star"></span></li>
-                        <li><span class="glyphicon glyphicon-star"></span></li>
-                        <li><span class="glyphicon glyphicon-star"></span></li>
-                    </ul>
+                    {% if inquiry.user.rating %}
+                        {{ include('common/stars.html.twig', { rating: inquiry.user.rating }) }}
+                    {% endif %}
                 </div>
                 <div class="col-sm-10 col-xs-8 question-content">
                     <p class="text-italic">
@@ -125,6 +120,7 @@
       </div>
   </div>
 </div>
+  {# todo: add ratings and link #}
   <div id="bewertungen-modal" class="modal fade bewertungen register" role="dialog">
       <div class="modal-dialog">
           <!-- Modal content-->
@@ -218,15 +214,15 @@
           <!-- Modal content-->
           <div class="modal-content">
               <div class="modal-header">
-                  <button id ="close-confirm" type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
-                  <h4 class="modal-title">Confirmation</h4>
-                  
-                    {% if decision > 0 %}
-                        You accepted offert.
-                    {% else %}
-                        You rejected offert.
-                    {% endif %}
-                  
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+      <div class="content-modal">
+        {% if decision > 0 %}
+	    <p class="text-bold">Vielen Dank!</p>
+        <p class="delate-info">Du hast die Anfrage erfolgreich angenommen! Wir haben dir eine Bestätigung per Email geschickt.</p>
+		{% else %}
+		<p class="text-bold">Anfrage abgelehnt</p>
+		<p class="delate-info">Die Anfrage wurde auf deinen Wunsch abgelehnt. Wir haben dir eine Bestätigung per Email geschickt.</p>
+		 {% endif %}
               </div>
           </div>
       </div>

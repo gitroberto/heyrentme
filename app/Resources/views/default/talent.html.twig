@@ -419,6 +419,18 @@
         </div>
     </div>
   </div>
+    <div id="inquiry-sent" class="modal fade delete-offer" role="dialog">
+      <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+          <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+          <div class="content-modal">
+            <p class="text-bold">Vielen Dank!</p>
+            <p class="delate-info">Ihre Anfrage wurde verschickt.</p>
+          </div>
+        </div>
+      </div>
+    </div>                                
 </div>
   </div>
 {% endblock %}
@@ -516,27 +528,27 @@
         $("#tests, #tests2").change(function() {
             updatePrice();
         });
-        $(".social.fb").unbind('click').click(function(e) {
+        $(".social.fb").off('click touchstart').on('click touchstart', function(e) {
                 e.preventDefault();
                 FB.ui({
                     method: 'share',
                     href: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
                 }, function(response){});
             });
-        $(".social.flash").unbind('click').click(function(e) {
+        $(".social.flash").off('click touchstart').on('click touchstart', function(e) {
                 e.preventDefault();
                 FB.ui({
                     method: 'send',
                     link: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
                 }, function(response){});
             });
-        $(".social.tweet").unbind('click').click(function(e) {
+        $(".social.tweet").off('click touchstart').on('click touchstart', function(e) {
             e.preventDefault();
             var title = '{{ item.name|escape('js')|escape('url') }}';
             var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url')|escape('url') }}';
             window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
         });
-        $(".social.email").unbind('click').click(function(e) {
+        $(".social.email").off('click touchstart').on('click touchstart', function(e) {
             e.preventDefault();
             var subject = encodeURIComponent('Empfohlenes Angebot auf hey! VIENNA');
             var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}');
@@ -597,6 +609,7 @@
         // check response
         if (xhr.getResponseHeader('content-type').indexOf('json') > -1 && data.status === 'ok') { // form was submitted successfully
             $("#inquiry-modal").modal('hide');
+            $("#inquiry-sent").modal('show');            
         }
         else { // make ajaxForm again (ie. attach events to new DOM elements)
             $("#inquiry-modal form").ajaxForm({

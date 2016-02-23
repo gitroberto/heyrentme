@@ -545,7 +545,7 @@ margin-bottom:10px;
 padding: 3px 6px 3px 6px
 }
 
-.kaup-select .crumbs ul li a {
+.kaup-select li a {
 padding: 3px 12px 3px 12px
 }
 .kaup-select .crumbs ul .active-crumb {
@@ -554,6 +554,10 @@ background-color: #000;
 
 .haup-ico {
 background-image: url('../img/pfeil_hauptkat.png');
+}
+
+.form-container input {
+text-transform:none!important;
 }
 
 /* Detailseite Anbieten Formular Änderungen */

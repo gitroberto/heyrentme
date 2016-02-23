@@ -9,14 +9,13 @@
 <div class="col-xs-12 border-bottom-white form-head">
   <div class="form-container">
     <div class="row">
-      <div class="col-md-6 "> 
-        <p class="form-heading">Jetzt anbieten</p>
+      <div class="col-md-6 "> <span class="number-one"></span>
+        <p class="form-heading">Bitte wähle eine Detailkategorie</p>
       </div>
-      <div class="col-md-6"><span class="form-info">Nutze unsere <a data-toggle="modal" data-target="#hey-garantie" href="#">hey! Garantie</a> für Privatanbieter!</span> </div>
+      <div class="col-md-6"> <span class="form-info">Nutze unsere <a data-toggle="modal" data-target="#hey-garantie" href="#">hey! Garantie</a> von bis zu <b>750,- €</b> für Privatanbieter!</span> </div>
     </div>
   </div>
 </div>
-         
 <div class="col-xs-12">
   <div class="form-container form-input">
     <div class="row">
@@ -30,30 +29,32 @@
   </div>
 </div>
 </div>
-
- <div class="row">
-                 <a data-toggle="modal" data-target="#reg-modal" href="#" class="green-big-button jetztanbieten">Jetzt anbieten!</a>
-              </div>     
-				  
-      <div class="row">
-        <div class="col-xs-12 abstand">
-          <div class="form-container form-input anleitungform">
-            <div class="row">            
-                <p>Anleitung erhalten</p>
-            </div>
-            <div class="row">            
-                 {# <input type="text" name="name4" placeholder="EMAIL*" class="" id="name4"> #}
+<div class="row">
+<div class="col-xs-12 border-bottom-white form-head">
+  <div class="form-container">
+    <div class="row">
+      <div class="col-md-5"> <span class="number-two"></span>
+        <p class="form-heading">Anleitung erhalten</p>
+      </div>
+      <div class="col-md-7"> <span class="form-info">Deine Email dient nur zur Kontaktaufnahme und wird nicht weitergegeben!</span> </div>
+    </div>
+  </div>
+</div>
+<div class="col-xs-12">
+  <div class="form-container form-input max-inputs">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-md-4 padding-left-none-mobile">
+            {# <input type="text" name="name4" placeholder="EMAIL*" class="" id="name4"> #}
             {{ form_widget(form.email, { 'attr': { 'placeholder': 'EMAIL*' } }) }}
             <div class="err-msg">
                 {{ form_errors(form.email) }}
             </div>
-             <div class="row">            
-                <input type="submit" class="button-black backgound-yellow text-black anleitung" value="Anleitung schicken">
-    </form>
-            </div>
-          </div>
         </div>
       </div>
+    </div>
   </div>
-  </div>
+</div>
+</div>        
+<input type="submit" class="green-big-button" value="Anleitung schicken">
 {{ form_end(form) }}
