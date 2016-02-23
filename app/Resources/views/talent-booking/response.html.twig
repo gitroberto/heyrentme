@@ -50,14 +50,9 @@
                         <img src="{{ inquiry.user.getProfilePicture(false, image_url_prefix) }}" alt=""/>
                     {% endif %}
                     <p>{% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %}</p>
-                    {# todo: ratings for a user #}
-                    <ul data-toggle="modal" data-target=".bewertungen">
-                        <li><span class="marked glyphicon glyphicon-star"></span></li>
-                        <li><span class="marked glyphicon glyphicon-star"></span></li>
-                        <li><span class="marked glyphicon glyphicon-star"></span></li>
-                        <li><span class="glyphicon glyphicon-star"></span></li>
-                        <li><span class="glyphicon glyphicon-star"></span></li>
-                    </ul>
+                    {% if inquiry.user.rating %}
+                        {{ include('common/stars.html.twig', { rating: inquiry.user.rating }) }}
+                    {% endif %}
                 </div>
                 <div class="col-sm-10 col-xs-8 question-content">
                     <p class="text-italic">
@@ -125,6 +120,7 @@
       </div>
   </div>
 </div>
+  {# todo: add ratings and link #}
   <div id="bewertungen-modal" class="modal fade bewertungen register" role="dialog">
       <div class="modal-dialog">
           <!-- Modal content-->
