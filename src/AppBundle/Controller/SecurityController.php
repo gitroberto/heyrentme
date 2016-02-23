@@ -98,9 +98,12 @@ class SecurityController extends BaseSecurityController
             return $this->redirect( $url.'?login');
         }                    
         
-        return new RedirectResponse($referer);
+        if (empty($referer)) {
+            return $this->redirectToRoute("profil");
+        } else {
+            return new RedirectResponse($referer);
+        }
         
-        //return $this->redirectToRoute("profil");
         
     }
     
