@@ -9,6 +9,7 @@ use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -87,6 +88,8 @@ class SecurityController extends BaseSecurityController
             $session->set('logged_out_message', null);
         }
         
+        $referer = $request->headers->get('referer');
+        
         if ($user && $user->getStatus() != User::STATUS_OK){        
             $message = $this->getMessage($user);            
             $session->set('logged_out_message', $message);            
@@ -94,7 +97,10 @@ class SecurityController extends BaseSecurityController
             $url = $this->generateUrl('rentme');
             return $this->redirect( $url.'?login');
         }                    
-        return $this->redirectToRoute("profil");
+        
+        return new RedirectResponse($referer);
+        
+        //return $this->redirectToRoute("profil");
         
     }
     
