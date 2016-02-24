@@ -22,7 +22,30 @@ class DefaultController extends BaseController {
      * @Route("/", name="start-page")
      */
     public function indexAction(Request $request) {
+        
+        $token = $request->query->get('token');
+        
+        $equipmentCats = $this->getCategoriesByType($request, Category::TYPE_EQUIPMENT);
+        $talentCats = $this->getCategoriesByType($request, Category::TYPE_TALENT);
+        
+        //if param = 0 then get all from db
+        $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(null);
+        
+        $confirmed= null;
+        $confParam = $request->query->get('confirmed');
+        if ($confParam != null){
+            $confirmed = true;
+        }
+        
+        return $this->render('default/newStartPage.html.twig', array(
+            'equipmentCategories' => $equipmentCats,
+            'talentCategories' => $talentCats,
+            'token' => $token,
+            'confirmed' => $confirmed,
+            'testimonials' => $testimonials
+        ));
         return $this->render('default/index.html.twig');
+        
     }
     
     /**
@@ -30,6 +53,7 @@ class DefaultController extends BaseController {
      */
     public function rentmeAction(Request $request, $token=null) {      
         $cats = $this->getCategoriesByType($request, Category::TYPE_EQUIPMENT);
+        
         
         //if param = 0 then get all from db
         $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(Testimonial::TYPE_EQUIPMENT);
