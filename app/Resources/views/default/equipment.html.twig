@@ -248,6 +248,23 @@
             <div class="offer-dates">
                 <h3>Anfrage für:</h3>
                 <h4>{{ item.name }}</h4>
+                
+                <div class="panel-group" id="panel-quote-group">
+                <div class="panel panel-default einzelstunden">
+                    <div class="panel-heading" id="robert-heading">
+                        <p class="panel-title">
+                           PREIS PRO TAG: {{ item.activePrice|number_format(2, ',') }} € 
+                            <span class="pull-right">
+                                <a>
+                                    <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+                   
+                    <div id="collapseQuote" class="panel-collapse robertcollapse collapse">
+                        <div class="panel-body">
+                
                 <div class="date-picker">
                     <!-- Date -->
                     <div class="date-container  position-relative">
@@ -317,6 +334,12 @@
                     <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
                     <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
                 </div>
+            
+                    </div>
+                </div>
+            </div>
+                </div>
+                <a data-toggle="modal" data-target="#feedback-modal" id="fragestellenbut" class="green-big-button yellow" href="#">Eine Frage stellen</a>
             </div>
             <div class="user-data">
                 <h3>Details:</h3>
@@ -571,6 +594,14 @@
             var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}');
             var url = 'mailto:?subject=' + subject + '&body=' + body;
             window.location = url;
+        });
+        $('#robert-heading').on('click', function () {
+            $('.robertcollapse').collapse('toggle');
+            if($('#fragestellenbut').is(':hidden'))
+                $('#fragestellenbut').show();
+            else
+                $('#fragestellenbut').hide();
+    
         });
     });
     $(window).load(function(){
