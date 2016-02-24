@@ -721,6 +721,10 @@ color:#000;
 font-size: 18px;
 }  
 
+#mobile-nav p {
+width: 240px;
+}
+
 .about-us .col-md-4 {
 width: 33%;
 float: left;
@@ -813,7 +817,6 @@ box-shadow: 1px 1px 2px #888;
 width: 33%;
 float: left;
 }
-
 
 .help-page {
     padding-bottom: 20em;
