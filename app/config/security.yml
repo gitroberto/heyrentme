@@ -39,8 +39,8 @@ security:
             #<added by Seba>
             pattern: ^/
             oauth:
-                failure_path: /equipment?login
-                login_path: /equipment?login
+                failure_path: /?login
+                login_path: /?login
                 check_path: /connect_check
                 provider: fos_userbundle           
                 default_target_path: /loggedInFace
@@ -77,10 +77,8 @@ security:
         - { path: ^/vermietung, role: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/provider, role: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/dashboard, role: IS_AUTHENTICATED_REMEMBERED }
-        - { path: ^/booking/response, role: IS_AUTHENTICATED_REMEMBERED }
-        - { path: ^/talent/response, role: IS_AUTHENTICATED_REMEMBERED }
-        
-        
+        - { path: ^/booking, role: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/talent/, role: IS_AUTHENTICATED_REMEMBERED }
         
         
     #</added by Seba>

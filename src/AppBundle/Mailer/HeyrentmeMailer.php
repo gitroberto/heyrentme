@@ -51,10 +51,10 @@ class HeyrentmeMailer implements MailerInterface {
     {
         $from = $this->fromEmail;    
         $template = 'Emails/password_reseting_email.html.twig';
-        $url = $this->router->generate('rentme', array(), true) . "/" . $user->getConfirmationToken();
+        $url = $this->router->generate('start-page', array(), true) ;
                 
         //$url = path('rentme') . "?passwordResetButton&token=" + $user->getConfirmationToken();
-        $url .= "?passwordReset";
+        $url .= "?passwordReset&token=".$user->getConfirmationToken();
         $to = $user->getEmail();
         $rendered = $this->templating->render($template, array(
             'user' => $user,

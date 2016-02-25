@@ -164,6 +164,7 @@
                                 {% for opinion in opinions %}
                                 <div class="col-md-4">
                                     <div class="product-info">
+                                        <img class="user-avatar eq-details-avatar" src="{{ opinion.booking.inquiry.user.getProfilePicture(true, image_url_prefix) }}" alt="" />
                                         {{ include('common/stars.html.twig', { rating: opinion.rating }) }}
                                         <p>
                                             {{ opinion.opinion }}
@@ -171,34 +172,7 @@
                                     </div>
                                 </div>
                                 {% endfor %}
-                                <div class="col-md-4">
-                                    <div class="product-info">
-                                        <ul>
-                                            <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                            <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                            <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                            <li><span class="glyphicon glyphicon-star"></span> </li>
-                                            <li><span class="glyphicon glyphicon-star"></span> </li>
-                                        </ul>
-                                        <p>
-                                            Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="product-info">
-                                        <ul>
-                                            <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                            <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                            <li><span class="marked glyphicon glyphicon-star"></span> </li>
-                                            <li><span class="glyphicon glyphicon-star"></span> </li>
-                                            <li><span class="glyphicon glyphicon-star"></span> </li>
-                                        </ul>
-                                        <p>
-                                            Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget.
-                                        </p>
-                                    </div>
-                                </div>
+                                
                                 <!-- row end -->
                             </div>
                         </div>
@@ -210,6 +184,7 @@
                 {% for opinion in opinions %}
                 <div class="col-md-4">                    
                     <div class="product-info">
+                        <img class="user-avatar eq-details-avatar" src="{{ opinion.booking.inquiry.user.getProfilePicture(true, image_url_prefix) }}" alt="" />
                         {{ include('common/stars.html.twig', { rating: opinion.rating }) }}
                         <p>{{ opinion.opinion }}</p>
                     </div>
@@ -220,7 +195,7 @@
             <div class="row user-notes mobile-hidden">                
                 <!-- row end -->
                 <div class="col-xs-12">
-                    <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
+                    <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                 </div>
             </div>
         <!-- LEFT side ends -->
@@ -229,6 +204,23 @@
             <div class="offer-dates">
                 <h3>Anfrage für:</h3>
                 <h4>{{ item.name }}</h4>
+
+                <div class="panel-group" id="panel-quote-group">
+                <div class="panel panel-default einzelstunden">
+                    <div class="panel-heading" id="robert-heading">
+                        <p class="panel-title">
+                           EINZELSTUNDEN ab: {{ item.activePrice|number_format(2, ',') }} € 
+                            <span class="pull-right">
+                                <a>
+                                    <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+                   
+                    <div id="collapseQuote" class="panel-collapse robertcollapse collapse">
+                        <div class="panel-body">
+                
                 <div class="date-picker">
                     <!-- Date -->
                     <div class="date-container  position-relative">
@@ -293,8 +285,13 @@
                     </div>
                     <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
                     <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
-                    <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
+                    <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                 </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+                <a data-toggle="modal" data-target="#feedback-modal" id="fragestellenbut" class="green-big-button yellow" href="#">Eine Frage stellen</a>
             </div>
             <div class="user-data">
                 <h3>Details:</h3>
@@ -555,6 +552,14 @@
             var url = 'mailto:?subject=' + subject + '&body=' + body;
             window.location = url;
         });
+        $('#robert-heading').on('click', function () {
+            $('.robertcollapse').collapse('toggle');
+            if($('#fragestellenbut').is(':hidden'))
+                $('#fragestellenbut').show();
+            else
+                $('#fragestellenbut').hide();
+    
+        });
     });
     
     function updatePrice() {
@@ -605,6 +610,17 @@
             });
         });
     }
+    
+    {% if (loggedIn) %}
+        $("a.inquiry").click(inquiry);
+    {% else %}
+        $("a.inquiry").click(function(){
+            if ($("a[data-target='#reg-modal']").size() > 0) {
+                    $("a[data-target='#reg-modal']")[0].click();      
+                }
+        });
+    {% endif %}
+    
     function makeAjaxForm(data, status, xhr) {
         // check response
         if (xhr.getResponseHeader('content-type').indexOf('json') > -1 && data.status === 'ok') { // form was submitted successfully

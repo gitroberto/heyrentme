@@ -2,12 +2,12 @@
     <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
         <div class="col-md-4">
             {% if eq.equipmentImages|length > 0 %}
-                <div style="height: 268px; overflow: hidden;">
+                <div class="rcatimage">
                 <img src="{{ eq.equipmentImages[0].image.urlPath(image_url_prefix) }}" alt="placeholder"/>
                 </div>
             {% else %}
-                <div style="height: 268px; overflow: hidden;">
-                <img src="/img/equipment-default.jpg" alt="placeholder" style="max-height: 268px; overflow: hidden;"/>
+                <div class="rcatimage">
+                <img src="/img/equipment-default.jpg" alt="placeholder"/>
                 </div>
             {% endif %}
             {% if eq.priceBuy %}

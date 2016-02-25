@@ -51,12 +51,22 @@ class TestimonialRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
         $qb->select('t')
-            ->from('AppBundle:Testimonial', 't')
-            ->where('t.type = :type')
-            ->orderBy("t.position");
+            ->from('AppBundle:Testimonial', 't');
+            #->where('t.type = :type')
+        
+        if ($type) {
+            $qb->where('t.type = :type');
+        }
+        
+        
+        $qb->orderBy("t.type", "desc")
+            ->addOrderBy("t.position");
        
-        $q = $qb->getQuery()
-                ->setParameter(':type', $type);
+        $q = $qb->getQuery();
+        
+        if ($type) {
+                $q->setParameter(':type', $type);
+        }
         // page and page size
         
         if ($maxResults != 0)
