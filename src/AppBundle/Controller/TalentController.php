@@ -75,7 +75,9 @@ class TalentController extends BaseController {
         }
         
         return $this->render('talent/talent_edit_step1.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'complete' => false,
+            'id' => $subcategoryId
         ));
     }
     /**
@@ -161,9 +163,11 @@ class TalentController extends BaseController {
             
             return $this->redirectToRoute('talent-edit-2', array('id' => $id));
         }
-        
+        $complete = $talent->getStatus() != Talent::STATUS_INCOMPLETE;
         return $this->render('talent/talent_edit_step1.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'complete' => $complete,
+            'id' => $id
         ));
     }        
 
@@ -345,14 +349,16 @@ class TalentController extends BaseController {
 
         // clean up
         $this->fileCount = null;
-        
+        $complete = $eq->getStatus() != Talent::STATUS_INCOMPLETE;
         return $this->render('talent/talent_edit_step2.html.twig', array(
             'form' => $form->createView(),
             'talent' => $eq,
             'mainImage' => $mainImage,
             'images' => $images,
             'mainImageValidation' => $mainImageValidation,
-            'imagesValidation' => $imagesValidation
+            'imagesValidation' => $imagesValidation,
+            'complete' => $complete,
+            'id' => $id
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -786,13 +792,15 @@ class TalentController extends BaseController {
                 $em->flush();
             }         
            
-            return $this->redirectToRoute('equipment-edit-4');
+            return $this->redirectToRoute('talent-edit-4', array('id' => $eqid));
         }
 
         //$features = $this->getDoctrineRepo('AppBundle:Talent')->getFeaturesAsArray($eq->getId());
-        
+        $complete = $eq->getStatus() != Talent::STATUS_INCOMPLETE;
         return $this->render('talent/talent_edit_step3.html.twig', array(
-            'form' => $form->createView()/*,
+            'form' => $form->createView(),
+            'complete' => $complete,
+            'id' => $eqid/*,
             'subcategory' => $eq->getSubcategory(),
             'features' => $features,
             'featureSectionRepo' => $this->getDoctrineRepo('AppBundle:FeatureSection')*/
@@ -806,10 +814,13 @@ class TalentController extends BaseController {
     }
     
     /**
-     * @Route("/provider/talent-edit-4", name="talent-edit-4")
+     * @Route("/provider/talent-edit-4/{id}", name="talent-edit-4")
      */
-    public function talentEdit4Action(Request $request) {
-        return $this->render('provider\talent_edit_step4.html.twig');
+    public function talentEdit4Action(Request $request, $id) {
+        return $this->render('talent\talent_edit_step4.html.twig', array(
+            'complete' => true,
+            'id' => $id
+        ));
     }    
 
     /**

@@ -11,10 +11,10 @@
               <img src="/img/logo-small.png" alt=""/>
               <ul class="steps">
                   <li class="step-1"><span class="counters text-bold"><span class="n-one"></span>Tarif</span></li>
-                  <li class="step-2"><span class="counters greyed"><span class="nh-two"></span>Beschreibung</span>
+                  <li class="step-2"><span id="button_2" class="{% if (complete) %}top-menu-button{% endif %} counters greyed"><span class="nh-two"></span>Beschreibung</span>
                   </li>
-                  <li class="step-3"><span class="counters greyed"><span class="nh-three"></span>Details</span></li>
-                  <li class="step-4"><span class="counters greyed"><span class="nh-four"></span>Fertig</span></li>
+                  <li class="step-3"><span id="button_3" class="{% if (complete) %}top-menu-button{% endif %} counters greyed"><span class="nh-three"></span>Details</span></li>
+                  <li class="step-4"><span id="button_4" class="{% if (complete) %}top-menu-button{% endif %} counters greyed"><span class="nh-four"></span>Fertig</span></li>
               </ul>
           </div>
           <!-- Right side -->
@@ -217,11 +217,42 @@
           </div>
   </section>
   <script>
+      var fieldsChanged = false;
+      var url2 = "{{ path('equipment-edit-2', {'id': id}) }}";
+      var url3 = "{{ path('equipment-edit-3', {'eqid': id}) }}";
+      var url4 = "{{ path('equipment-edit-4', {'id': id}) }}";
+      
+      function topMenuClick(){
+          
+          if (!fieldsChanged || confirm('Sie haben ungesicherte Änderungen. Möchtest du fortfahren?')){
+              switch($(this).attr("id").split("_")[1]){
+                  case "2":
+                      location.href = url2;
+                      break;
+                  case "3":
+                      location.href = url3;
+                      break;
+                  case "4":
+                      location.href = url4;
+                      break;
+              }
+              
+          } 
+      }
+      
       $(document).ready(function () {
           $("#range_30").ionRangeSlider({
               min: 1,
               max: 100
           });
+          
+          $("form input[type='text']").on("change", function(){
+              fieldsChanged = true;
+          });
+          
+          $(".top-menu-button").click(topMenuClick);
+          
+          
       })
   </script>
   </div>

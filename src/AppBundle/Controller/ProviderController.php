@@ -558,8 +558,12 @@ class ProviderController extends BaseController {
             return $this->redirectToRoute('equipment-edit-2', array('id' => $id));
         }
         
+        $complete = $equipment->getStatus() != Equipment::STATUS_INCOMPLETE;
+        
         return $this->render('provider\equipment_edit_step1.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'complete' => $complete,
+            'id' => $id
         ));
     }        
     /**
@@ -649,7 +653,9 @@ class ProviderController extends BaseController {
         }
         
         return $this->render('provider\equipment_edit_step1.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'complete' => false,
+            'id' => $subcategoryId
         ));
     }
     /**
@@ -792,13 +798,17 @@ class ProviderController extends BaseController {
         // clean up
         $this->fileCount = null;
         
+        $complete = $eq->getStatus() != Equipment::STATUS_INCOMPLETE;
+        
         return $this->render('provider\equipment_edit_step2.html.twig', array(
             'form' => $form->createView(),
             'equipment' => $eq,
             'mainImage' => $mainImage,
             'images' => $images,
             'mainImageValidation' => $mainImageValidation,
-            'imagesValidation' => $imagesValidation
+            'imagesValidation' => $imagesValidation,
+            'complete' => $complete,
+            'id' => $id
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -1099,13 +1109,16 @@ class ProviderController extends BaseController {
                 $em->flush();
             }         
            
-            return $this->redirectToRoute('equipment-edit-4');
+            return $this->redirectToRoute('equipment-edit-4', array('id' => $eqid));
         }
 
         //$features = $this->getDoctrineRepo('AppBundle:Equipment')->getFeaturesAsArray($eq->getId());
+        $complete = $eq->getStatus() != Equipment::STATUS_INCOMPLETE;
         
         return $this->render('provider\equipment_edit_step3.html.twig', array(
-            'form' => $form->createView()/*,
+            'form' => $form->createView(),
+            'complete' => $complete,
+            'id' => $eqid/*,
             'subcategory' => $eq->getSubcategory(),
             'features' => $features,
             'featureSectionRepo' => $this->getDoctrineRepo('AppBundle:FeatureSection')*/
@@ -1120,10 +1133,13 @@ class ProviderController extends BaseController {
     }
     
     /**
-     * @Route("/provider/equipment-edit-4", name="equipment-edit-4")
+     * @Route("/provider/equipment-edit-4/{id}", name="equipment-edit-4")
      */
-    public function equipmentEdit4Action(Request $request) {
-        return $this->render('provider\equipment_edit_step4.html.twig');
+    public function equipmentEdit4Action(Request $request, $id) {
+        return $this->render('provider\equipment_edit_step4.html.twig', array(
+            'complete' => true,
+            'id' => $id
+        ));
     }    
     
     private function testIfStringConstainsInt($s)

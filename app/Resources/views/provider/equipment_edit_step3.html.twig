@@ -9,11 +9,11 @@
           <!-- Left side -->
           <div class="col-md-9">
               <img src="/img/logo-small.png" alt=""/>            <ul class="steps">
-                  <li class="step-1 active-step"><span class="counters"><span class="n-one"></span>Tarif</span></li>
-                  <li class="step-2 active-step"><span class="counters"><span class="n-two"></span>Beschreibung</span>
+                  <li class="step-1 active-step"><span id="button_1" class="top-menu-button counters"><span class="n-one"></span>Tarif</span></li>
+                  <li class="step-2 active-step"><span id="button_2" class="top-menu-button counters"><span class="n-two"></span>Beschreibung</span>
                   </li>
                   <li class="step-3"><span class="counters text-bold"><span class="n-three"></span>Details</span></li>
-                  <li class="step-4"><span class="counters greyed"><span class="nh-four"></span>Fertig</span></li>
+                  <li class="step-4"><span id="button_4" class="{% if (complete) %}top-menu-button{% endif %} counters greyed"><span class="nh-four"></span>Fertig</span></li>
               </ul>
           </div>
 
@@ -182,4 +182,39 @@
     });
   </script>
   #}
+    <script>
+      var fieldsChanged = false;
+      
+      var url1 = "{{ path('equipment-edit-1', {'id': id} ) }}"
+      var url2 = "{{ path('equipment-edit-2', {'id': id}) }}";      
+      var url4 = "{{ path('equipment-edit-4', {'id': id }) }}";
+      
+      function topMenuClick(){
+          
+          if (!fieldsChanged || confirm('Sie haben ungesicherte Änderungen. Möchtest du fortfahren?')){
+              switch($(this).attr("id").split("_")[1]){
+                  case "1":
+                      location.href = url1;
+                      break;
+                  case "2":
+                      location.href = url2;
+                      break;
+                  case "4":
+                      location.href = url4;
+                      break;
+              }
+          } 
+      }
+      
+      $(document).ready(function () {
+          $("form input[type='text']").on("change", function(){
+              fieldsChanged = true;
+          });
+          $("form textarea").on("change", function(){
+              fieldsChanged = true;
+          });
+          $(".top-menu-button").click(topMenuClick);
+      })
+  </script>
+
 {% endblock %}

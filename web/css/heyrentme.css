@@ -590,3 +590,7 @@ p.how-many {
 #social-share {
     z-index: 200;
 }
+
+.top-menu-button{
+    cursor:pointer;
+}
