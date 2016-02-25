@@ -275,6 +275,33 @@ body .users .form-last-item .memo a {
 width:50%;
 }
 
+/* Blog */
+
+.blog-detail .left-side .blog-content p {
+text-align:left;
+}
+
+.blog-detail .left-side .blog-content h2 {
+font-family: 'open sans', sans-serif;
+font-weight: bold;	
+}
+
+.blog-detail .left-side .blog-content li {
+font-family: 'open sans', sans-serif;
+font-size: 16px;
+}
+
+.blog-detail .left-side .blog-content strong {
+font-family: 'open sans', sans-serif;
+}
+
+.blog-detail .left-side .blog-content a {
+font-family: 'open sans', sans-serif;
+color:#000;
+text-decoration:underline;
+}
+
+
 /* Formulare */
 
 body .users .user-forms .form-container .normal-input {
