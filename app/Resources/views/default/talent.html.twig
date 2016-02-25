@@ -220,7 +220,7 @@
             <div class="row user-notes mobile-hidden">                
                 <!-- row end -->
                 <div class="col-xs-12">
-                    <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
+                    <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                 </div>
             </div>
         <!-- LEFT side ends -->
@@ -293,7 +293,7 @@
                     </div>
                     <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
                     <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
-                    <a class="green-big-button" href="javascript:inquiry()">Jetzt anfragen!</a>
+                    <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                 </div>
             </div>
             <div class="user-data">
@@ -605,6 +605,17 @@
             });
         });
     }
+    
+    {% if (loggedIn) %}
+        $("a.inquiry").click(inquiry);
+    {% else %}
+        $("a.inquiry").click(function(){
+            if ($("a[data-target='#reg-modal']").size() > 0) {
+                    $("a[data-target='#reg-modal']")[0].click();      
+                }
+        });
+    {% endif %}
+    
     function makeAjaxForm(data, status, xhr) {
         // check response
         if (xhr.getResponseHeader('content-type').indexOf('json') > -1 && data.status === 'ok') { // form was submitted successfully
