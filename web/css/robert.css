@@ -25,11 +25,14 @@
 }
 
 #feedback {
-	background-image: url('../img/feedback.png');
+left: 0;
+-moz-transform: rotate(180deg);
+-ms-transform: rotate(180deg);
+-o-transform: rotate(180deg);
+-webkit-transform: rotate(180deg);
+transform: rotate(180deg);
 }
-#feedback:hover {
-	background-image: url('../img/feedback-hover.png');
-}
+
 .home-header .button-black, #feedback, .main-categories .row div .categories-names h3, footer nav a {
 	transition: all 200ms ease;
 }
