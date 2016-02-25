@@ -590,3 +590,11 @@ p.how-many {
 #social-share {
     z-index: 200;
 }
+
+.product-info .user-avatar.eq-details-avatar {
+    border-radius: 50%;
+    margin-bottom: 15px;
+    margin-right: 5px;
+    margin-top: 5px;
+    width: 140px;
+}

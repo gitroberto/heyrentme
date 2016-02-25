@@ -164,6 +164,7 @@
                                 {% for opinion in opinions %}
                                 <div class="col-md-4">
                                     <div class="product-info">
+                                        <img class="user-avatar eq-details-avatar" src="{{ opinion.booking.inquiry.user.getProfilePicture(true, image_url_prefix) }}" alt="" />
                                         {{ include('common/stars.html.twig', { rating: opinion.rating }) }}
                                         <p>
                                             {{ opinion.opinion }}
@@ -210,6 +211,7 @@
                 {% for opinion in opinions %}
                 <div class="col-md-4">                    
                     <div class="product-info">
+                        <img class="user-avatar eq-details-avatar" src="{{ opinion.booking.inquiry.user.getProfilePicture(true, image_url_prefix) }}" alt="" />
                         {{ include('common/stars.html.twig', { rating: opinion.rating }) }}
                         <p>{{ opinion.opinion }}</p>
                     </div>
