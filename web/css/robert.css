@@ -727,6 +727,19 @@ color:#000;
 .glyphicon-triangle-bottom:before, .glyphicon-triangle-top:before {
     font-size: 10px;
 }
+
+/* Dashboard */
+
+body .users .support {
+background-color: transparent;
+padding-bottom: 0;
+border-bottom: 0;
+}
+
+html body .dashboard .user-offers .buttons .first-button, .dashboard .green-big-button, body .user-nav, .users .col-md-9 a img, .users .support a img {
+   display:none;
+}
+
 }
 
 /* Portrait iphone6+ 
