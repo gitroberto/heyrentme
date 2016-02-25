@@ -59,8 +59,8 @@ class TestimonialRepository extends EntityRepository
         }
         
         
-        $qb->orderBy("t.type")
-            ->orderBy("t.position");
+        $qb->orderBy("t.type", "desc")
+            ->addOrderBy("t.position");
        
         $q = $qb->getQuery();
         
