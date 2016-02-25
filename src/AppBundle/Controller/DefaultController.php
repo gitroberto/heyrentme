@@ -182,7 +182,7 @@ class DefaultController extends BaseController {
             return new Response(Response::HTTP_NOT_FOUND);
         }
         
-        
+        $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
         
         // determine prev/next
         //<editor-fold>
@@ -245,7 +245,8 @@ class DefaultController extends BaseController {
             'prev' => $prev,
             'post' => $post,
             'opinions' => $opinions,
-            'type' => $type
+            'type' => $type,
+            'loggedIn' => $loggedIn
         ));
     }
 

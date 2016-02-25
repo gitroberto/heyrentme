@@ -1,16 +1,6 @@
 <li id="kaup-hidden">
-    <p class="display-block"><a class="haup-link">{% if equipment %}Equipment mieten{% else %}Talente buchen{% endif %}</a></p>
-    <span id="close-haup" class="haup-close-icon"></span>
-    {% for cat in cats1 %}
-        <a href="{{ path('catchall', { 'content': cat.slug }) }}" style="padding: 0;">
-            <p>
-                <img src="{{ cat.imageUrl }}" class="category-drop-down" alt=""/>
-                {{ cat.name }}
-            </p>
-        </a>
-    {% endfor %}
-    <span class="clearfix"></span>
     <p class="display-block"><a class="haup-link">{% if not equipment %}Equipment mieten{% else %}Talente buchen{% endif %}</a></p>
+    <span id="close-haup" class="haup-close-icon"></span>
     {% for cat in cats2 %}
         <a href="{{ path('catchall', { 'content': cat.slug }) }}" style="padding: 0;">
             <p>
@@ -19,4 +9,18 @@
             </p>
         </a>
     {% endfor %}
+    
+    <span class="clearfix"></span>
+    <p class="display-block"><a class="haup-link">{% if equipment %}Equipment mieten{% else %}Talente buchen{% endif %}</a></p>
+    
+    {% for cat in cats1 %}
+        <a href="{{ path('catchall', { 'content': cat.slug }) }}" style="padding: 0;">
+            <p>
+                <img src="{{ cat.imageUrl }}" class="category-drop-down" alt=""/>
+                {{ cat.name }}
+            </p>
+        </a>
+    {% endfor %}
+    
+    
 </li>
