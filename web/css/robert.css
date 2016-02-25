@@ -275,6 +275,33 @@ body .users .form-last-item .memo a {
 width:50%;
 }
 
+/* Blog */
+
+.blog-detail .left-side .blog-content p {
+text-align:left;
+}
+
+.blog-detail .left-side .blog-content h2 {
+font-family: 'open sans', sans-serif;
+font-weight: bold;	
+}
+
+.blog-detail .left-side .blog-content li {
+font-family: 'open sans', sans-serif;
+font-size: 16px;
+}
+
+.blog-detail .left-side .blog-content strong {
+font-family: 'open sans', sans-serif;
+}
+
+.blog-detail .left-side .blog-content a {
+font-family: 'open sans', sans-serif;
+color:#000;
+text-decoration:underline;
+}
+
+
 /* Formulare */
 
 body .users .user-forms .form-container .normal-input {
@@ -337,45 +364,213 @@ color:black;
 }
 
 
-/* Mobile Fixes */
+/* Mobile Nav */
 
-/* Portrait iphone6+ */
-@media only screen 
-  and (min-device-width: 414px) 
-  and (max-device-width: 1000px) 
-  and (orientation: portrait) { 
-.welcome {
-    top: 45%;
+.sb-left {
+	padding-top: 0px;
+	padding-left: 0px;
+}
+.sb-left a {
+	font-family: 'Roboto Slab', sans-serif;
+	width: 100%;
+	border-bottom: 1px solid #4d4d4d;
+	padding: 16px;
+	padding-left: 30px;
+}
+.mob-anb-verm {
+	border-bottom: 1px solid #000;
+	background-color: #f0c814;
+	color: #000000 !important;
+}
+.sb-style-overlay {
+	z-index: 999;
 }
 
-.date-picker-wrapper.single-date {
-    width: 100%;
-}
-}
+/* 02-15-2016 FIXES */
 
-/* Ipad Portrait and Landscape */
-
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) { 
-.main-categories .row div .categories-names h3 {
-    font-size: 16px;
-} 
+.angrafge-dialog {
+    max-width: 600px !important;
 }
 
-@media (min-width: 1000px) {
-.product-detail .left-side .product-description p {
-min-height:200px;
+.offer-detail .product-info .no-stars, .main-offers .product-info .no-stars {
+margin-left:8px;
 }
 
-.product-info .no-stars {
-margin-left:0;
+.left-side .product-info {
+margin-top:15px;
+}
+
+.modal-dialog {
+    width:auto!important;
+}
+
+.rent-dialog p:last-child {
+margin-bottom:10px;
+}
+
+.crumbs ul li a {
+padding: 3px 6px 3px 6px
+}
+
+.kaup-select li a {
+padding: 3px 12px 3px 12px
+}
+.kaup-select .crumbs ul .active-crumb {
+background-color: #000;
+}
+
+.haup-ico {
+background-image: url('../img/pfeil_hauptkat.png');
+}
+
+.form-container input {
+text-transform:none!important;
+}
+
+/* Detailseite Anbieten Formular Änderungen */
+
+ .btn-group.bootstrap-select {
+width: 100%;
+max-width:375px
+ }	 
+.jetztanbieten { 
+font-size: 24px;
+max-width: 750px;
+padding: 8px 0;
+margin-top: -5px;
+display:block;
+margin:auto;
+	}
+.anleitungemail {
+width:100%
+}
+.anleitung {
+text-transform:none!important;
+font-size:15px!important;
+background-color:#fff;
+font-weight:400;
+margin:auto!important;
+max-width:750px!important;
+}
+.abstand {
+	margin-top:10px;
+}
+.anleitungform p {
+	margin-bottom:10px;
+	font-family: 'Open Sans',sans-serif;
+	font-size:15px;
+	font-weight:700;
+}
+.anleitungform .row {
+text-align:center;
+}
+
+.anleitungform input {
+width:100%;
+max-width:375px;
+}
+
+/* Tarifoptionen & Preisauf Anfrage Confirmation */
+
+.rdisable {
+	opacity: 0.5;
+}
+
+.preisauf input {
+margin-right: 10px;	
+height: 47px;
+margin-bottom: 20px;
+padding-left: 13px;
+font-family: 'open sans',sans-serif;
+font-size: 15px;
+color: black;
+text-transform: uppercase;
+border: none;
+border-left: 1px solid #ccc;
+border-top: 1px solid #ccc;
+}
+
+.preisauf label {
+font-family: 'open sans';
+color: black;
+margin-right: 20px;
+font-weight: normal;
+}
+
+.preisauf {
+margin-top:22px;
+}
+
+/* Neues Buchungstool */
+
+.einzelstunden {
+background-color:transparent !important;
+max-width:90%;
+margin:auto;
+padding-top:20px;
+}
+
+.einzelstunden .date-container {
+margin-top:0!important;
+}
+
+.einzelstunden .panel-title {
+text-transform:none!important;
+}
+
+.einzelstunden .panel-heading {
+box-shadow: 0 1px 0 rgba(0,0,0,0.08)!important;
+background-color:#fff;
+border-color:transparent!important;
+padding: 12px 15px;
+}
+
+.einzelstunden .accordion-yellow p, .einzelstunden .panel-heading:hover p {
+color:#fff;
+}
+
+.einzelstunden .panel-body p {
+margin-bottom:10px;
+}
+
+.einzelstunden .panel-body {
+padding:0!important;
+}
+
+.yellow {
+background-color:#f0c814;
+width: 90%;
+margin: -15px 0 30px 0;
+padding: 6px 0;
+}
+
+.yellow:hover {
+background-color:#000;
+}
+
+.right-side .offer-dates .date-picker .time-container {
+    margin-top: 35px;
+    margin-bottom: 30px;
+}
+
+.right-side .offer-dates .date-picker .green-big-button {
 margin-top:10px;
 }
+
+
+/* IE9+ Comments */
+
+@media screen and (min-width:0) and (min-resolution: +72dpi) { 
+
 }
 
-@media (max-width: 1000px) {
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+/* IE10+ CSS styles go here alternative */
+}
+
+/* iPhone & Smartphone */
+
+@media (max-width: 736px) {
 	
 .media-list {
     display:inherit;
@@ -488,120 +683,6 @@ font-size: 11px;
 }
 }
 
-/* Small Web-Screen */
-
-@media (max-width: 1200px) {
-img.down-icon {
-display:none;
-}
-}
-
-
-/* Mobile Nav */
-
-.sb-left {
-	padding-top: 0px;
-	padding-left: 0px;
-}
-.sb-left a {
-	font-family: 'Roboto Slab', sans-serif;
-	width: 100%;
-	border-bottom: 1px solid #4d4d4d;
-	padding: 16px;
-	padding-left: 30px;
-}
-.mob-anb-verm {
-	border-bottom: 1px solid #000;
-	background-color: #f0c814;
-	color: #000000 !important;
-}
-.sb-style-overlay {
-	z-index: 999;
-}
-
-/* 02-15-2016 FIXES */
-
-.angrafge-dialog {
-    max-width: 600px !important;
-}
-
-.offer-detail .product-info .no-stars, .main-offers .product-info .no-stars {
-margin-left:8px;
-}
-
-.left-side .product-info {
-margin-top:15px;
-}
-
-.modal-dialog {
-    width:auto!important;
-}
-
-.rent-dialog p:last-child {
-margin-bottom:10px;
-}
-
-.crumbs ul li a {
-padding: 3px 6px 3px 6px
-}
-
-.kaup-select li a {
-padding: 3px 12px 3px 12px
-}
-.kaup-select .crumbs ul .active-crumb {
-background-color: #000;
-}
-
-.haup-ico {
-background-image: url('../img/pfeil_hauptkat.png');
-}
-
-.form-container input {
-text-transform:none!important;
-}
-
-/* Detailseite Anbieten Formular Änderungen */
-
- .btn-group.bootstrap-select {
-width: 100%;
-max-width:375px
- }	 
-.jetztanbieten { 
-font-size: 24px;
-max-width: 750px;
-padding: 8px 0;
-margin-top: -5px;
-display:block;
-margin:auto;
-	}
-.anleitungemail {
-width:100%
-}
-.anleitung {
-text-transform:none!important;
-font-size:15px!important;
-background-color:#fff;
-font-weight:400;
-margin:auto!important;
-max-width:750px!important;
-}
-.abstand {
-	margin-top:10px;
-}
-.anleitungform p {
-	margin-bottom:10px;
-	font-family: 'Open Sans',sans-serif;
-	font-size:15px;
-	font-weight:700;
-}
-.anleitungform .row {
-text-align:center;
-}
-
-.anleitungform input {
-width:100%;
-max-width:375px;
-}
 
 @media (max-width: 736px) {
 .anleitung {
@@ -618,102 +699,270 @@ max-width:350px;
 .abstand {
 	margin-top:60px;
 }
-}
-
-/* IE9+ Comments */
-
-@media screen and (min-width:0) and (min-resolution: +72dpi) { 
-
-}
-
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-/* IE10+ CSS styles go here alternative */
-}
-
-
-/* Tarifoptionen & Preisauf Anfrage Confirmation */
-
-.rdisable {
-	opacity: 0.5;
-}
-
-.preisauf input {
-margin-right: 10px;	
-height: 47px;
-margin-bottom: 20px;
-padding-left: 13px;
-font-family: 'open sans',sans-serif;
-font-size: 15px;
-color: black;
-text-transform: uppercase;
-border: none;
-border-left: 1px solid #ccc;
-border-top: 1px solid #ccc;
-}
-
-.preisauf label {
-font-family: 'open sans';
-color: black;
-margin-right: 20px;
-font-weight: normal;
-}
-
-.preisauf {
-margin-top:22px;
-}
-
-/* Neues Buchungstool */
-
 .einzelstunden {
-background-color:transparent !important;
-max-width:90%;
-margin:auto;
-padding-top:20px;
-}
-
-.einzelstunden .date-container {
-margin-top:0!important;
-}
-
-.einzelstunden .panel-title {
-text-transform:none!important;
+max-width:100%;
 }
 
 .einzelstunden .panel-heading {
-box-shadow: 0 1px 0 rgba(0,0,0,0.08)!important;
-background-color:#fff;
-border-color:transparent!important;
-padding: 12px 15px;
-}
-
-.einzelstunden .accordion-yellow p, .einzelstunden .panel-heading:hover p {
-color:#fff;
-}
-
-.einzelstunden .panel-body p {
-margin-bottom:10px;
-}
-
-.einzelstunden .panel-body {
-padding:0!important;
+padding: 4px 15px 10px 15px
 }
 
 .yellow {
-background-color:#f0c814;
-width: 90%;
-margin: -15px 0 30px 0;
-padding: 6px 0;
+    width: 100%;
+    margin: 10px 0 30px 0;
+	background-color:#f0c814;
 }
 
-.yellow:hover {
-background-color:#000;
+.einzelstunden .accordion-yellow p, .einzelstunden .panel-heading:hover p  {
+color:#000;
 }
 
-.right-side .offer-dates .date-picker .time-container {
-    margin-top: 35px;
-    margin-bottom: 30px;
+.glyphicon-triangle-bottom:before, .glyphicon-triangle-top:before {
+    font-size: 10px;
+}
 }
 
-.right-side .offer-dates .date-picker .green-big-button {
+/* Portrait iphone6+ 
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 1000px) 
+  and (orientation: portrait) { 
+.welcome {
+    top: 45%;
+}
+
+.date-picker-wrapper.single-date {
+    width: 100%;
+}
+}
+*/
+
+/* Ipad Portrait */
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (orientation: portrait) {
+
+.main-categories .row div .categories-names h3 {
+font-size: 18px;
+}  
+
+#mobile-nav p {
+width: 240px;
+}
+
+.about-us .col-md-4 {
+width: 33%;
+float: left;
+margin-top:30px;
+}
+
+.about-us h4 {
+font-size: 20px;
+display:none;
+}
+.main-categories .col-md-4 {
+width: 33%;
+float: left;
+}
+
+.product-info .product-name {
+font-size: 11px;
+}
+
+.product-info img.product-user, .product-info img.product-user2 {
+width: 60px !important;
+height: 60px !important;
+bottom: 50px;
+}
+
+.main-categories .product-info .glyphicon {
+font-size: 12px;
+}
+
+.main-offers .cart {
+max-width: 25%!important;
+}
+
+.product-info .price {
+font-size: 12px;
+}
+
+.product-info .tag {
+font-size: 8px;
+}
+
+.btn-group.bootstrap-select {
+max-width: 100%;
+}
+
+
+.mobile-blog-heading a.button-black.backgound-yellow.text-black {
+width: auto;
+
+}
+
+.help-heading h1 {
+max-width: 80%;
+}
+
+.blog-container {
+background-color:transparent!important;
+}
+
+.blog-detail .left-side .detail-controls .left-icon {
+margin-bottom:auto;
+}
+
+.blog-detail .right-side p {
+font-size: 11px;
+}
+
+.blog-detail .right-side .user-info .grey-info {
+font-size: 13px;
+margin-top: 10px;
+}
+
+.blog-detail .right-side .user-info img.icon-info {
+max-width: 55px;
+}
+
+.blog-detail {
+margin-top:15px;
+}
+
+.blog-detail .left-side .blog-content {
+ margin-bottom: 40px;
+}
+
+.button.btn.dropdown-toggle.btn-info {
+box-shadow: 1px 1px 2px #888;
+}
+
+.help-page .col-md-4 {
+width: 33%;
+float: left;
+}
+
+.help-page {
+    padding-bottom: 20em;
+}
+
+.rent-container .col-xs-12, .main-categories .new-header {
+display:block !important;
+}
+
+.new-header h2, .rent-container h2 {
+ font-size: 28px;
+}
+
+.rent-container h2 {
+margin-bottom: 20px;
+}
+
+.background-light-grey, .background-light-gray, .user-data, .offer-dates {
+background-color: transparent !important;
+}
+
+.help-heading h1 {
+    font-size: 28px;
+}
+
+.help-heading .button-black.backgound-yellow.text-black {
+font-size: 15px;
+}
+
+.rent-heading h1 {
+font-size: 28px;
+}
+
+.rent-heading {
+    top: 33%;
+}
+.glyphicon-triangle-bottom:before, .glyphicon-triangle-top:before {
+    font-size: 10px;
+}
+
+.background-white.rent-container form.first-step-form div.row, .form-container, .bg-white {
+background-color: transparent !important;
+}
+
+.border-bottom-white {
+    border-bottom: none;
+}
+
+button.btn.dropdown-toggle.btn-info, .anleitung, .panel-default>.panel-heading {
+box-shadow: 1px 1px 2px #888 !important;
+border: none;
+}
+
+.anleitungform input, .anleitung, .jetztanbieten, .first-step-form .btn-group.bootstrap-select {
+width:100% !important;
+max-width:none !important;
+}
+
+.anleitungform input, .anleitung, .jetztanbieten {
+width:96% !important;
+}
+
+.jetztanbieten {
+margin-bottom:20px!important;
+}
+
+.main-header .main-search h1 {
+    font-size: 28px;
+}
+
+.product-detail .user-info {
+display:none;
+}
+
+.blog-detail .user-info {
+display:block;
+}
+
+  }
+  
+/* Ipad Landscape */
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (orientation: landscape)  { 
+.main-categories .row div .categories-names h3 {
+    font-size: 24px;
+} 
+
+.owl-item .col-xs-3 {
+    width: 33%;
+}
+
+}
+
+/* Small Desktop Screen */
+
+@media (max-width: 1200px) {
+img.down-icon {
+display:none;
+}
+
+#feedback {
+display:none;
+}
+}
+
+
+
+/* Big Desktop Screen */
+
+@media (min-width: 1200px) {
+.product-detail .left-side .product-description p {
+min-height:200px;
+}
+
+.product-info .no-stars {
+margin-left:0;
 margin-top:10px;
+}
 }
