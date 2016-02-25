@@ -180,17 +180,17 @@
 
             </div>
             <div class="col-md-4">
-                <h4>Video ansehen</h4>
-                <a href="{{ path('bookme') }}">
+                <h4>Video ansehen</h4>                    
+                <a data-toggle="modal" data-target="#hey-video" href="#">
                     <img src="/img/allgemein-final/video_small.jpg" alt="Talente buchen"/>
                 </a>
                     <p>Zu viel zum lesen? ;-) Sieh dir unser Video an um gleich mehr darüber erfahren wie hey! VIENNA funktioniert
-                    <br>
-                    <a href="#">Video ansehen</a>
+                    <br>                    
+                    <a href="#" data-target="#hey-video" data-toggle="modal">Video ansehen</a>
                 </p>
             </div>
             <div class="col-md-4">
-                <h4>So funktioniert's!</h4>
+                <h4>So funktioniert´s!</h4>
                 <a href="{{ path("hilfe_faq_euipment_mieten") }}">
                     <img src="/img/allgemein-final/so_funktionierts_small.jpg" alt="Hilfe und FAQ"/>
                 </a>
@@ -200,6 +200,9 @@
             </div>
         </div>
     </section>
+                
+    
+                
     <span class="add-margin"></span>
 
     <!--
@@ -214,10 +217,40 @@
     -->
   </div>
     
+  <div id="hey-video" class="modal fade delete-offer" role="dialog">
+    <div class="modal-dialog" style="max-width:1280px; max-height:720px"> 
+      <!-- Modal content-->
+      <div class="modal-content" style="max-width:1280px; max-height:720px">
+        <div class="content-modal-video">
+         <button style="color:white;" id="pause-button" type="button" class="close" data-dismiss="modal"><span class="close-start-video"></span> </button>
+          <iframe id="video" class="movie" src="https://player.vimeo.com/video/133739188?api=1"  width="1280" height="720" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
     
     
-    
-    
+ <style>
+.content-modal-video {
+	position: relative!important;
+	padding-bottom: 55%!important;
+	padding-top: 15px!important;
+	height: 0!important;
+	overflow: hidden!important;
+}
+.content-modal-video iframe {
+	position: absolute!important;
+	top: 0!important;
+	left: 0!important;
+	width: 100%!important;
+	height: 100%!important;
+}
+
+.content-modal-video button {
+	z-index:9999;
+	position:relative;
+}
+</style>
     
     
     
