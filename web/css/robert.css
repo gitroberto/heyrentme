@@ -797,9 +797,9 @@ font-size: 11px;
 }
 
 .product-info img.product-user, .product-info img.product-user2 {
-width: 60px !important;
-height: 60px !important;
-bottom: 50px;
+width: 50px !important;
+height: 50px !important;
+bottom: 40px;
 }
 
 .main-categories .product-info .glyphicon {
