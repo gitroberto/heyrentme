@@ -158,6 +158,10 @@ class Talent {
      * @ORM\Column(type="integer")
      */
     protected $accept = 0; // default value
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $requestPrice = 0; // default value
 
     
     public function getUfid() { // user friendly id
@@ -1027,5 +1031,29 @@ class Talent {
     public function getAccept()
     {
         return $this->accept;
+    }
+
+    /**
+     * Set requestPrice
+     *
+     * @param integer $requestPrice
+     *
+     * @return Talent
+     */
+    public function setRequestPrice($requestPrice)
+    {
+        $this->requestPrice = $requestPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get requestPrice
+     *
+     * @return integer
+     */
+    public function getRequestPrice()
+    {
+        return $this->requestPrice;
     }
 }

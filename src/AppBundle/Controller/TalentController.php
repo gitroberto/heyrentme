@@ -29,7 +29,11 @@ class TalentController extends BaseController {
         
         // build form
         //<editor-fold>
-        $form = $this->createFormBuilder()
+        $form = $this->createFormBuilder(null, array(
+                'error_bubbling' => false,
+                'constraints' => array(
+                    new Callback(array($this, 'validateStep1'))
+                )))
                 ->add('name', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
@@ -37,10 +41,10 @@ class TalentController extends BaseController {
                     )
                 ))
                 ->add('price', 'integer', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 500))
-                    )
+                    'required' => false
+                ))
+                ->add('requestPrice', 'checkbox', array(
+                    'required' => false
                 ))
                 ->getForm();
         //</editor-fold>
@@ -59,6 +63,7 @@ class TalentController extends BaseController {
             $eq->setUser($user);
             $eq->setSubcategory($subcat);
             $eq->setPrice($data['price']);
+            $eq->setRequestPrice($data['requestPrice'] ? 1 : 0);
             $eq->setStatus(Talent::STATUS_INCOMPLETE);
             //</editor-fold>
             // save to db
@@ -80,6 +85,19 @@ class TalentController extends BaseController {
             'id' => $subcategoryId
         ));
     }
+    
+    public function validateStep1($data, ExecutionContextInterface $context) {
+        $p = $data['price'];
+        $rp = $data['requestPrice'];
+        
+        if ($p === null xor $rp) {
+            $context->buildViolation('Sie müssen entweder Preis beim Check Preis auf Anfrage füllen.')->atPath('price')->addViolation();
+        }
+        if ($p !== null and ($p < 10 or $p > 500)) {
+            $context->buildViolation('Preis muss eine Zahl zwischen 10 und 500 sein.')->atPath('price')->addViolation();
+        }
+    }
+    
     /**
      * @Route("/provider/talent-delete/{id}", name="talent-delete")
      */
@@ -120,24 +138,29 @@ class TalentController extends BaseController {
         //<editor-fold> map fields            
         $data = array(
             'name' => $talent->getName(),
-            'price' => $talent->getPrice()
+            'price' => $talent->getPrice(),
+            'requestPrice' => $talent->getRequestPrice() > 0
         );
         //</editor-fold>
         
         // build form
         //<editor-fold>
-        $form = $this->createFormBuilder($data)
+        $form = $this->createFormBuilder($data, array(
+                'error_bubbling' => false,
+                'constraints' => array(
+                    new Callback(array($this, 'validateStep1'))
+                )))
                 ->add('name', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Length(array('max' => 256))
+                        new Length(array('max' => 32))
                     )
                 ))
                 ->add('price', 'integer', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 2500))
-                    )
+                    'required' => false
+                ))
+                ->add('requestPrice', 'checkbox', array(
+                    'required' => false
                 ))
                 ->getForm();
         //</editor-fold>
@@ -151,6 +174,7 @@ class TalentController extends BaseController {
             //<editor-fold> map fields            
             $talent->setName($data['name']);
             $talent->setPrice($data['price']);
+            $talent->setRequestPrice($data['requestPrice'] ? 1 : 0);
             //</editor-fold>
             
             // save to db

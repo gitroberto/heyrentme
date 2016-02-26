@@ -48,16 +48,17 @@
                     <div class="form-container form-input form-last-item">
                         <div class="row">
                              <div class="col-sm-7">
-                                  <label for="name2">Angebotsname:</label>
+                                  <label for="name2">Angebotsname:*</label>
                                   {#<input type="text" name="name2" placeholder="Maximal 32 Zeichen" class="normal-input " id="offer-name" maxlength="32" required>#}
                                   {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 32 Zeichen', 'class': 'normal-input', 'maxlength': '32' } }) }}
                                   <div class="err-msg">{{ form_errors(form.name) }}</div>
                               </div>
                                <div class="col-sm-5">
-                                  <label for="form[price]">Preis pro Stunde:</label>
+                                  <label for="form[price]">Preis pro Stunde:*</label>
                                   {#<input type="number" name="name2" placeholder="0" class="small-input " id="preis_pro_tag" min="10" max="500" required>#}
                                   {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '500' }}) }},- €
                                   <div class="err-msg">{{ form_errors(form.price) }}</div>
+                                  <div class="err-msg">{{ form_errors(form) }}</div>
                               </div>
                             <!--<div class="col-sm-6">
                                 <label for="name2">Preis pro Stunde:</label><input type="text" name="name2" style="width:110px" placeholder="z.B.: ab 20" class="small-input " id="name2">                                ,- €
@@ -72,6 +73,50 @@
                    
 
                 </div>
+                
+                <div class="col-xs-12 border-bottom-white form-head">
+                    <div class="form-container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                              
+
+                                <p class="form-heading">Tarif Optionen</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="form-info">Optionale Einstellungen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                              
+                <div class="col-xs-12">
+                    <div class="form-container form-input form-last-item">
+                       <!-- <div class="row">
+                         <div class="col-sm-4">
+                                  <label for="name2">5 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="5_block" min="50" max="2500"> ,- €
+                              </div>
+                                <div class="col-sm-4">
+                                  <label for="name2">10 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="10_block" min="100" max="5000"> ,- €
+                              </div>
+                                <div class="col-sm-4">
+                                  <label for="name2">20 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="20_block" min="200" max="10000"> ,- €
+                              </div>
+                              </div>                            
+                          <p class="memo">Diese Optionen helfen dir dabei attraktive Angebote für deine Kunden zu schnüren. Im Normalfall werden für den 5 Std. Block 10-15%, den 10 Std. Block 15-20% und für den 20 Std. 20-25% Rabatt angeboten.</p>  -->
+                           <div class="row">
+                           <div class="col-sm-12">
+                                <div class="chbox-holder rdisable">
+                                    {{ form_widget(form.requestPrice, { 'attr': { 'disabled': 'disabled' } }) }}
+                                    <label for="form_requestPrice"><span></span>Preis nur auf Anfrage (auf deine Portraitseite nicht sichtbar)</label>
+                                  </div>
+                                
+                            </div>
+                           </div> 
+                           <p class="memo">Diese Option ist nur für Stundentarife ab 50,- € vorgesehen. Bestätige dazu bitte erst den Stundentarif. Bitte beachte, dass
+es für deine Interessenten generell übersichtlicher ist, wenn ein Stundentarif angegeben wird.</p>  
+                          </div>                     
+                    </div>
+                              
             </div>
             <input type="submit" class="yellow-button" value="Einstellungen speichern &gt;&gt;">
             {{ form_end(form) }}
@@ -93,6 +138,7 @@
       var url2 = "{{ path('talent-edit-2', {'id': id}) }}";
       var url3 = "{{ path('talent-edit-3', {'eqid': id}) }}";
       var url4 = "{{ path('talent-edit-4', {'id': id}) }}";
+      var lastPrice = null;
       
       function topMenuClick(){
           
@@ -111,6 +157,38 @@
               
           } 
       }
+      function priceChanged() {
+          var $price = $("#form_price");
+          var price = parseInt($price.val());
+          var $req = $("#form_requestPrice");
+          var $reqHold = $req.parent(".chbox-holder");
+          if (price >= 50) {
+              $req.removeAttr('disabled');
+              $reqHold.removeClass('rdisable');
+          }
+          else {
+              $req.prop('checked', false);
+              $req.attr('disabled', 'disabled');
+              $reqHold.addClass('rdisable');
+          }
+      }
+      function requestPriceChanged() {
+          var $price = $("#form_price");
+          var price = parseInt($price.val());
+          var $req = $("#form_requestPrice");
+          var req = $req.prop('checked');
+          if (req) {
+              $price.attr('disabled', 'disabled');
+              if (typeof price !== 'undefined' && price !== null && price !== '' && !isNaN(price))
+                lastPrice = price;
+              $price.val('');
+          }
+          else {
+              $price.removeAttr('disabled');
+              if (lastPrice !== null)
+                $price.val(lastPrice);              
+          }
+      }
       
       $(document).ready(function () {
           
@@ -119,8 +197,9 @@
           });
           
           $(".top-menu-button").click(topMenuClick);
+          $("#form_price").on('change keyup', priceChanged);
+          $("#form_requestPrice").on('click change', requestPriceChanged);
           
-          
-      })
+      });
   </script>
 {% endblock %}
