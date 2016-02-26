@@ -291,7 +291,7 @@
                 </div>
             </div>
                 </div>
-                <a data-toggle="modal" data-target="#feedback-modal" id="fragestellenbut" class="green-big-button yellow" href="#">Eine Frage stellen</a>
+                <a id="fragestellenbut" class="green-big-button yellow question" href="#">Eine Frage stellen</a>
             </div>
             <div class="user-data">
                 <h3>Details:</h3>
@@ -399,6 +399,10 @@
     <div class="modal-dialog rent-dialog angrafge-dialog">
     </div>
   </div>
+  <div id="question-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog rent-dialog angrafge-dialog">
+    </div>
+  </div>
   <div id="melden" class="modal fade" role="dialog">
     <div class="modal-dialog" role="document">
         <!-- Modal content-->
@@ -428,6 +432,18 @@
         </div>
       </div>
     </div>                                
+    <div id="question-sent" class="modal fade delete-offer" role="dialog">
+      <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+          <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+          <div class="content-modal">
+            <p class="text-bold">Vielen Dank!</p>
+            <p class="delate-info">Ihre Frage wurde verschickt.</p>
+          </div>
+        </div>
+      </div>
+    </div>                
 </div>
   </div>
 {% endblock %}
@@ -560,7 +576,54 @@
                 $('#fragestellenbut').hide();
     
         });
+        
+        {% if (loggedIn) %}
+            $("a.inquiry").click(inquiry);
+        {% else %}
+            $("a.inquiry").click(function(){
+                if ($("a[data-target='#reg-modal']").size() > 0) {
+                        $("a[data-target='#reg-modal']")[0].click();      
+                    }
+            });
+        {% endif %}
+
+        {% if (loggedIn) %}
+            $("a.question").click(question);
+        {% else %}
+            $("a.question").click(function(){
+                if ($("a[data-target='#reg-modal']").size() > 0) {
+                        $("a[data-target='#reg-modal']")[0].click();      
+                    }
+            });
+        {% endif %}
     });
+    function question(e) {
+        e.preventDefault();
+        
+        // assemble params
+        var url = '{{ path('talent-question', { 'id': item.id }) }}';
+                
+        $("#question-modal .modal-dialog").load(url, function(data) {
+            $("#question-modal").modal();
+            $("#question-modal form").ajaxForm({
+                target: $("#question-modal .modal-dialog"),
+                success: makeQuestionAjaxForm
+            });
+        });
+    }
+    function makeQuestionAjaxForm(data, status, xhr) {
+        // check response
+        if (xhr.getResponseHeader('content-type').indexOf('json') > -1 && data.status === 'ok') { // form was submitted successfully
+            $("#question-modal").modal('hide');
+            $("#question-sent").modal('show');            
+        }
+        else { // make ajaxForm again (ie. attach events to new DOM elements)
+            $("#question-modal form").ajaxForm({
+                target: $("#question-modal .modal-dialog"),
+                success: makeQuestionAjaxForm
+            });
+        }
+    }
     
     function updatePrice() {
         var span = calculateTimespan();
@@ -594,7 +657,9 @@
         return { 'h1': h1, 'h2': h2, 'date1': date1, 'date2': date2, 'diff': diff };
     }
 
-    function inquiry() {
+    function inquiry(e) {
+        e.preventDefault();
+        
         var span = calculateTimespan();
         
         // assemble params
@@ -610,17 +675,7 @@
             });
         });
     }
-    
-    {% if (loggedIn) %}
-        $("a.inquiry").click(inquiry);
-    {% else %}
-        $("a.inquiry").click(function(){
-            if ($("a[data-target='#reg-modal']").size() > 0) {
-                    $("a[data-target='#reg-modal']")[0].click();      
-                }
-        });
-    {% endif %}
-    
+        
     function makeAjaxForm(data, status, xhr) {
         // check response
         if (xhr.getResponseHeader('content-type').indexOf('json') > -1 && data.status === 'ok') { // form was submitted successfully

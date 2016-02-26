@@ -1,0 +1,213 @@
+{% extends 'base.html.twig' %}
+
+{% block home_header %}{% endblock %}
+
+{% block body %}
+  <div class="request-container head-req">
+    <img src="/img/detail-bg.jpg" alt="image" class="img-responsive max-320"/></div>
+    <img src="/img/detail-bg-rwd.jpg" alt="image" class="img-responsive min-320"/></div>
+  <div class="container request-container reply-page">
+        <div class="col-xs-12">
+            <h1>Nachricht an {{ asker.name }}</h1>
+        </div>
+    <div class="row bewertung-request-form">
+        {{ form_start(form, { 'attr': { 'id': 'reply' } }) }}
+        <div class="col-xs-12">
+            {{ form_widget(form.reply, { 'attr': { 'placeholder': 'Deine Nachricht an ' ~ asker.name }}) }}
+            {#<textarea placeholder="Deine Nachricht an {{ asker.name }}"></textarea>#}
+            <button>Absenden</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    <div class="row user-answer">
+        <div class="col-xs-12">
+            <h2>Anfrage</h2>
+            <div class="row">
+                <div class="col-sm-2 col-xs-4 user">
+                    <img src="/img/woman2.png" alt=""/>
+                    <p>{{ asker.name }}</p>
+                    {% if asker.rating %}
+                        {{ include('common/stars.html.twig', { rating: asker.rating }) }}
+                    {% endif %}
+                </div>
+                <div class="col-sm-10 col-xs-8 question-content">
+                    <p class="text-italic">
+                        {{ question.message|nl2br }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="add-margin-bottom-300"></span>
+  </div>
+  </div>
+  <div id="allge-modal" class="modal fade anfrage register" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header ort form-container">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                  <h4 class="modal-title">Angebot Adresse bearbeiten</h4>
+                  <div class="row">
+                    <div class="col-xs-8">
+                      <input type="text" placeholder="Strasse*" />
+                    </div>
+                    <div class="col-xs-4">
+                      <input type="text" placeholder="Hausnr.*" />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <input type="text" placeholder="Plz*" />
+                    </div>
+                    <div class="col-xs-5">
+                      <input type="text" placeholder="Ort*" />
+                    </div>
+                  </div>
+                  <button type="button" class="sp">Speichern</button>
+          </div>
+      </div>
+  </div>
+</div>
+  <div id="phone-modal" class="modal fade phone register" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header form-container">
+                  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                  <h4 class="modal-title">Telefon Nr. für User-Rückfragen bearbeiten</h4>
+                  <div class="phone-inputs">
+                    <span>+43</span><input type="number" maxlength="3" min="0" placeholder="664" />
+                    <input type="number" maxlength="7" min="0" placeholder="1808021" />
+                    <button type="button" class="sp">Speichern</button>
+                  </div>
+          </div>
+      </div>
+  </div>
+</div>
+  <div id="bewertungen-modal" class="modal fade bewertungen register" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header form-container">
+                <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                <h4 class="modal-title">Bewertungen für Ilse</h4>
+                <div class="row">
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                  <div class="col-xs-4 mark">
+                    <ul>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="marked glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                        <li><span class="glyphicon glyphicon-star"></span></li>
+                    </ul>
+                    <p>
+                      Hast du ein tolles Produkt, benötigst für deine Anzeige aber Hilfe, mit denProduktfotos? Dann kannst du unseren Photoservice in Anspruch nehmen. Schreib uns dazu an support@hey-tsc.com
+                    </p>
+                  </div>
+                </div>
+          </div>
+      </div>
+  </div>
+</div>
+  
+    {% if saved == 1 %}
+        <div id="message-sent" class="modal fade delete-offer" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                    <div class="content-modal">
+                        <p class="text-bold">Vielen Dank!</p>
+                        <p class="delate-info">Ihre Nachricht wurde verschickt.</p>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    {% endif %}
+  
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(function() {
+            {% if not question.reply %}    
+                $("#reply button").click(function() {
+                    var form = $("#reply")[0];
+                    if (form.checkValidity())
+                        $("#reply").submit();
+                });
+            {% else %}
+                $("#reply button, #reply textarea").attr('disabled', 'disabled');
+                $("#reply button").css({ 'opacity': 0.5 });
+            {% endif %}
+                
+            {% if saved == 1 %}
+                $("#message-sent").modal('show');
+                $("#message-sent").on("hidden.bs.modal", function() {
+                    window.location = '{{ path('dashboard') }}';
+                });
+            {% endif %}
+        });
+    </script>
+{% endblock %}

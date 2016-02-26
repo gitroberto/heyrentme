@@ -2,14 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\DiscountCode;
 use AppBundle\Entity\TalentBooking;
 use AppBundle\Entity\TalentBookingCancel;
-use AppBundle\Entity\DiscountCode;
-use AppBundle\Entity\TalentRating;
 use AppBundle\Entity\TalentInquiry;
+use AppBundle\Entity\TalentQuestion;
+use AppBundle\Entity\TalentRating;
 use AppBundle\Entity\UserRating;
 use AppBundle\Utils\Utils;
 use DateTime;
+use Doctrine\ORM\NoResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -99,7 +101,7 @@ class TalentBookingController extends BaseController {
                 $u = null;
                 try {
                     $u = $this->getDoctrineRepo('AppBundle:User')->findOneByEmail($data['email']);
-                } catch (\Doctrine\ORM\NoResultException $e) {};
+                } catch (NoResultException $e) {};
                 if ($u !== null) {
                     $inq->setUser($u);
                 }
@@ -740,4 +742,143 @@ class TalentBookingController extends BaseController {
         ));
     }
     
+    /**
+     * @Route("/talent/question/{id}", name="talent-question")
+     */
+    public function questionAction(Request $request, $id) {
+        $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        $question = new TalentQuestion();
+        $user = $this->getUser();
+                
+        // build form
+        //<editor-fold>
+        $url = $this->generateUrl('talent-question', array(
+            'id' => $id
+        ));
+        
+        $builder = $this->createFormBuilder()
+            ->setAction($url)
+            ->add('message', 'textarea', array(
+                'constraints' => array(
+                    new NotBlank(),
+                 )
+            ));
+        $form = $builder->getForm();
+        //</editor-fold>
+       
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
+            
+            $q = new TalentQuestion();
+            $q->setTalent($eq);
+            $q->setMessage($data['message']);
+            $q->setUser($user);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($q);
+            $em->flush();
+            // send email
+            //<editor-fold>
+            // prepare params
+            $provider = $eq->getUser();
+            $url = $request->getSchemeAndHttpHost() .
+                    $this->generateUrl('talent-reply', array('id' => $q->getId()));
+            $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+            $emailHtml = $this->renderView('Emails\mail_to_provider_question.html.twig', array(
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
+                'provider' => $provider,
+                'question' => $q,
+                'talent' => $eq,
+                'url' => $url
+            ));
+            $message = Swift_Message::newInstance()
+                ->setSubject('Du hast soeben eine Anfrage erhalten!')
+                ->setFrom($from)
+                ->setTo($provider->getEmail())
+                ->setBody($emailHtml, 'text/html');
+            $this->get('mailer')->send($message);
+            //</editor-fold>
+    
+            return new JsonResponse(array('status' => 'ok'));
+        }
+        
+        return $this->render('talent-booking/question.html.twig', array(
+            'loggedIn' => $loggedIn,
+            'question' => $question,
+            'form' => $form->createView(),
+            'talent' => $eq
+        ));
+    }
+
+    /**
+     * @Route("/talent/reply/{id}", name="talent-reply")
+     */
+    public function replyAction(Request $request, $id) {
+        $q = $this->getDoctrineRepo('AppBundle:TalentQuestion')->find($id);
+        $eq = $q->getTalent();
+        $user = $this->getUser();
+        $provider = $eq->getUser();
+        $asker = $q->getUser();
+                
+        if ($user->getId() != $provider->getId()) {
+            return new Response(Response::HTTP_FORBIDDEN);
+        }
+        
+        $saved = 0;
+        
+        $data = array('reply' => $q->getReply());
+        $builder = $this->createFormBuilder($data)
+            ->add('reply', 'textarea', array(
+                'constraints' => array(
+                    new NotBlank()
+                 )
+            ));
+        $form = $builder->getForm();
+        //</editor-fold>
+       
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $q->setReply($data['reply']);
+            
+            $em->flush();
+            // send email
+            //<editor-fold>
+            // prepare params
+            $url = $request->getSchemeAndHttpHost() .
+                    $this->generateUrl('catchall', array('content' => $eq->getUrlPath()));
+            $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+            $emailHtml = $this->renderView('Emails\talent\mail_to_user_reply_question.html.twig', array(
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
+                'asker' => $asker,
+                'provider' => $provider,
+                'question' => $q,
+                'url' => $url
+            ));
+            $message = Swift_Message::newInstance()
+                ->setSubject('Du hast soeben eine Anfrage erhalten!')
+                ->setFrom($from)
+                ->setTo($provider->getEmail())
+                ->setBody($emailHtml, 'text/html');
+            $this->get('mailer')->send($message);
+            //</editor-fold>
+            
+            $saved = 1;
+        }
+        
+        return $this->render('talent-booking/reply.html.twig', array(
+            'asker' => $asker,
+            'provider' => $provider,
+            'form' => $form->createView(),
+            'question' => $q,
+            'saved' => $saved
+        ));
+    }
 }
