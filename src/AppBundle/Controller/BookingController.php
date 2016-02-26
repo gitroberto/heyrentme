@@ -871,7 +871,7 @@ class BookingController extends BaseController {
             $message = Swift_Message::newInstance()
                 ->setSubject('Du hast soeben eine Anfrage erhalten!')
                 ->setFrom($from)
-                ->setTo($provider->getEmail())
+                ->setTo($asker->getEmail())
                 ->setBody($emailHtml, 'text/html');
             $this->get('mailer')->send($message);
             //</editor-fold>
