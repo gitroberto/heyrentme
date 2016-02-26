@@ -209,7 +209,7 @@
                 <div class="panel panel-default einzelstunden">
                     <div class="panel-heading" id="robert-heading">
                         <p class="panel-title">
-                           EINZELSTUNDEN ab: {{ item.activePrice|number_format(2, ',') }} € 
+                           EINZELSTUNDEN{% if item.requestPrice %}: auf Anfr.{% else %} ab: {{ item.activePrice|number_format(2, ',') }} €{% endif %} 
                             <span class="pull-right">
                                 <a>
                                     <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
@@ -284,7 +284,11 @@
                         </select>
                     </div>
                     <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
-                    <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
+                    <p class="price">{#<span>ab</span>#}
+                        <b class="price-calc">
+                            {% if item.requestPrice %}auf Anfr.{% else %}{{ item.activePrice|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}
+                        </b>                         
+                    </p>
                     <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                 </div>
                     </div>
@@ -300,7 +304,7 @@
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
                     <p>
-                        {{ item.activePrice|number_format(2, ',') }} € pro Stunde
+                        {% if item.requestPrice %}Kosten auf Anfr.{% else %}{{ item.activePrice|number_format(2, ',') }} € pro Stunde{% endif %}
                     </p>
                   </div>
                     {#
@@ -454,6 +458,8 @@
   <script src="http://malsup.github.com/jquery.form.js"></script> 
     <script src="/js/vendors/vimeo.js"></script>
   <script>
+    var itemPrice = {% if item.requestPrice %}null{% else %}{{ item.activePrice|number_format(2) }}{% endif %};
+      
     $(window).load(function() {
         //var containerHieght = $('#media-content').height();
         //$("#player").css('height',containerHieght);
@@ -627,9 +633,13 @@
     
     function updatePrice() {
         var span = calculateTimespan();
-        var total = {{ item.activePrice|number_format(2) }} * span.diff;
-        console.log(span);
-        $(".price-calc").text(total.toFixed(2).replace('.', ','));
+        if (itemPrice !== null) {
+            var total = {{ item.activePrice|number_format(2) }} * span.diff;
+            $(".price-calc").html(' <span>ab</span> ' + total.toFixed(2).replace('.', ','));
+        }
+        else {
+            $(".price-calc").text('auf Anfr.');
+        }
     }
     function calculateTimespan() {
         var fh = $.trim($("#tests").val().replace('Uhrzeit ab', '')).split(':');    // from hour
