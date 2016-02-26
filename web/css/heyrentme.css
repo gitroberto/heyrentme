@@ -607,3 +607,8 @@ p.how-many {
     margin-top: 5px;
     width: 140px;
 }
+
+.top-menu-button{
+    cursor:pointer;
+}
+

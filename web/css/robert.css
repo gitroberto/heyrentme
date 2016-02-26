@@ -727,6 +727,19 @@ color:#000;
 .glyphicon-triangle-bottom:before, .glyphicon-triangle-top:before {
     font-size: 10px;
 }
+
+/* Dashboard */
+
+body .users .support {
+background-color: transparent;
+padding-bottom: 0;
+border-bottom: 0;
+}
+
+html body .dashboard .user-offers .buttons .first-button, .dashboard .green-big-button, body .user-nav, .users .col-md-9 a img, .users .support a img {
+   display:none;
+}
+
 }
 
 /* Portrait iphone6+ 
@@ -929,6 +942,42 @@ display:none;
 display:block;
 }
 
+/* Dashboard */
+
+body .users .support {
+background-color: transparent;
+padding-bottom: 0;
+border-bottom: 0;
+}
+
+html body .dashboard .user-offers .buttons .first-button, .dashboard .green-big-button, body .user-nav, .users .col-md-9 a img, .users .support a img {
+   display:none;
+}
+
+body .dashboard .user-offers {
+    margin-bottom: 70px;
+}
+
+.summary .col-sm-push-4 {
+left: 0;
+}
+
+.summary .product-name {
+font-size: 15px;
+}
+
+.summary .product-info .price {
+font-size: 15px;
+}
+
+.summary .product-info .tag {
+font-size: 12px;
+}
+
+.request-container .summary .summary-info p {
+    font-size: 16px;
+}
+
   }
   
 /* Ipad Landscape */
@@ -957,6 +1006,24 @@ display:none;
 #feedback {
 display:none;
 }
+
+body .users .steps {
+    width: 60%;
+    margin-left: 15%;
+}
+
+body .users .steps .step-1{
+    width: 100px;
+}
+
+body .users .steps .step-2 {
+    width: 160px;
+}
+
+body .users .steps .step-3{
+    width: 130px;
+}
+
 }
 
 
