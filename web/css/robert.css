@@ -2,6 +2,11 @@
 
 }
 
+@media (max-width: 980px) {
+nav#mobile-nav>.container {
+    height: 49px;
+}
+
 .elastic-video {
 	position: relative;
 	padding-bottom: 55%;
