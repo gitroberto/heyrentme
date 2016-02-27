@@ -420,7 +420,8 @@ color:black;
 }
 
 .offer-detail .product-info .no-stars, .main-offers .product-info .no-stars {
-margin-left:8px;
+margin-left:15px;
+margin-top:0;
 }
 
 .left-side .product-info {
