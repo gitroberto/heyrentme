@@ -43,6 +43,10 @@ margin-left:0;
 margin-top:10px;
 }
 
+.right-side .user-info .grey-info {
+margin-top: 5px;
+}
+
 .faq-header {
 	margin-top: 10px !important;
 	font-weight: bold !important;
