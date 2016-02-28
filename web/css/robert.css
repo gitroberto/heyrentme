@@ -2,6 +2,22 @@
 
 }
 
+.register p.reg-promo {
+padding: 0 13%;
+}
+
+.reg {
+background-position: 8%;
+}
+
+#login .reg {
+background-position: 26%;
+}
+
+#login h4 {
+    margin-left: 7%;
+}
+
 @media (max-width: 980px) {
 nav#mobile-nav>.container {
     height: 49px;
@@ -121,6 +137,8 @@ transform: rotate(180deg);
 .profilebutton img {
 	display: inline-block;
 	margin-right: 7px;
+	max-width: 36px !important;
+    max-height: 36px !important;
 }
 
 .form-container .form-heading {
@@ -454,6 +472,7 @@ background-color: #000;
 
 .haup-ico {
 background-image: url('../img/pfeil_hauptkat.png');
+background-position: 94% 9px;
 }
 
 .form-container input {
