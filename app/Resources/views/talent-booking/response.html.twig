@@ -3,14 +3,11 @@
 {% block home_header %}{% endblock %}
 
 {% block body %}
-   
-  
-    
   <div class="request-container head-req">
     <img src="/img/detail-bg.jpg" alt="image" class="img-responsive max-320"/></div>
     <img src="/img/detail-bg-rwd.jpg" alt="image" class="img-responsive min-320"/></div>
   <div class="container request-container reply-page">
-    <form method="post">
+    {{ form_start(form, { 'attr': { 'id': 'response' } }) }}
     <div class="row question">
         <div class="col-xs-12">
             <h1>Anfrage bearbeiten</h1>
@@ -18,13 +15,18 @@
             <p>
                 {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %}
                 möchte dein Angebot für den unten genannten Zeitraum buchen.</p>
-            <div class="reply-select">
-                <select class="selectpicker" name="accept" id="accept" title="BITTE AUSWÄHLEN*">
-                  <option value="1" selected>Auftrag annehmen</option>
-                  <option value="0">Auftrag ablehnen</option>
-                </select>
+            <div class="col-sm-6 reply-select">
+                {{ form_widget(form.status, { 'attr': { 'class': 'selectpicker', 'title': 'BITTE AUSWÄHLEN*' } }) }}
+                <div class="err-msg">'{{ form_errors(form.status) }}</div>
               </div>
-            </div>
+            {% if talent.requestPrice == 1 %}
+                <div class="col-sm-6 preisauf">
+                    <label for="form[price]">Gesamtpreis inkl. USt.:</label>
+                    {{ form_widget(form.price, { 'attr': { 'placeholder': '0', 'class': 'small-input' } }) }},- €
+                    <div class="err-msg">'{{ form_errors(form.price) }}</div>
+                </div>
+            {% endif %}
+        </div>
     </div>
     <div class="row answer">
         <div class="col-xs-12">
@@ -37,10 +39,12 @@
     </div>
     <div class="row bewertung-request-form">
         <div class="col-xs-12">
-            <textarea name="message" id="message" placeholder="Möchtest du {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %} etwas mitteilen? Falls die Buchungsdaten für dich nicht passen, kannst du die Anfrage ablehnen und {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %} bitten mit neuen Buchungsdaten anzufragen."></textarea>
-            <button onclick="javascript:submit()">Absenden</button>
+            {% set ph = "Möchtest du " ~ inquiry.user.name ~ " etwas mitteilen? Falls die Buchungsdaten für dich nicht passen, kannst du die Anfrage ablehnen und " ~ inquiry.user.name ~ " bitten mit neuen Buchungsdaten anzufragen." %}
+            {{ form_widget(form.message, { 'attr': { 'placeholder': ph } }) }}
+            <button>Absenden</button>
         </div>
     </div>
+    {{ form_end(form) }}
     <div class="row user-answer">
         <div class="col-xs-12">
             <h2>Anfrage</h2>
@@ -73,7 +77,6 @@
         </div>
     </div>
     <span class="add-margin-bottom-300"></span>
-    </form>
   </div>
   </div>
   <div id="allge-modal" class="modal fade anfrage register" role="dialog">
@@ -208,8 +211,8 @@
 </div>
   
   
-  {% if saved is defined and saved != null %}
-  <div id="confirmation-modal" class="modal fade feed" role="dialog">
+  {% if saved %}
+  <div id="question-modal" class="modal fade delete-offer" role="dialog">
       <div class="modal-dialog">
           <!-- Modal content-->
           <div class="modal-content">
@@ -227,29 +230,19 @@
           </div>
       </div>
   </div>
-  <a href="#" data-toggle="modal" data-target="#confirmation-modal"></a>
   {% endif %}
   
   <script>
-      function submit() {
-          $("form").submit();
-      }
-      
-      var showModal = "{{ saved }}";
-      var url = "{{ dashboardUrl }}";
-      
-        $(function(){                   
-            
-            if (showModal) {
-                if ($("a[data-target='#confirmation-modal']").size() > 0) {
-                    $("a[data-target='#confirmation-modal']")[0].click();      
-                }
-                
-                $("#confirmation-modal").on("hidden.bs.modal", function(){ 
-                    location.href = url;
+        $(function(){                               
+            $("#response button").click(function() {
+                $("#response").submit();
+            });
+            {% if saved %}
+                $("#question-modal").modal();                
+                $("#question-modal").on("hidden.bs.modal", function(){ 
+                    window.location = '{{ path('dashboard') }}';
                 });
-            }
-            
+            {% endif %}            
         });
       
   </script>  

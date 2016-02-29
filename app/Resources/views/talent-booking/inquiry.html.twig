@@ -3,7 +3,7 @@
         <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
         <h4 class="modal-title">Unverbindliche Anfrage</h4>
         <p><span class="text-bold" >Datum:</span>  <span id="from-date">{{ inquiry.from|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy, HH:mm') }}</span></p>
-        <p><span class="text-bold">Kosten ab: </span><span class="price-calc">{{ inquiry.price|number_format(2, ',') }}</span> €</p>
+        <p><span class="text-bold">Kosten ab: </span><span class="price-calc">{%if talent.requestPrice == 0 %}{{ inquiry.price|number_format(2, ',') }}</span> €{% else %}AUF ANFR.{% endif %}</p>
 		<p>
             <span class="text-bold">Ort:</span>
             {{ inquiry.whereabouts }}
@@ -12,12 +12,14 @@
 		<div style="height:10px"></div>
         {{ form_start(form) }}
             <div>
+                {#
                 {% if not loggedIn %}
                     {{ form_widget(form.name, { 'attr': { 'placeholder': 'DEIN NAME*' }}) }}
                     <div class="err-msg">{{ form_errors(form.name) }}</div>
                     {{ form_widget(form.email, { 'attr': { 'placeholder': 'DEIN EMAIL*' }}) }}
                     <div class="err-msg">{{ form_errors(form.email) }}</div>
                 {% endif %}
+                #}
                 {{ form_widget(form.message, { 'attr': { 'rows': '5', 'placeholder': 'NACHRICHT: WOFÜR BENÖTIGST DU DEN SERVICE? BESCHREIBE DEINE ANFRAGE*' }}) }}
                 <div class="err-msg">{{ form_errors(form.message) }}</div>
                 <input type="submit" value="abschicken">

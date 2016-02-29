@@ -1084,3 +1084,28 @@ padding: 6px 0;
 .yellow:hover {
 background-color:#000;
 }
+
+.preisauf input {
+    margin-right: 10px;	
+    height: 47px;
+    margin-bottom: 20px;
+    padding-left: 13px;
+    font-family: 'open sans',sans-serif;
+    font-size: 15px;
+    color: black;
+    text-transform: uppercase;
+    border: none;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+}
+
+.preisauf label {
+    font-family: 'open sans';
+    color: black;
+    margin-right: 20px;
+    font-weight: normal;
+}
+
+.preisauf {
+    margin-top:22px;
+}

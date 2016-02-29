@@ -11,16 +11,15 @@ use AppBundle\Entity\TalentRating;
 use AppBundle\Entity\UserRating;
 use AppBundle\Utils\Utils;
 use DateTime;
-use Doctrine\ORM\NoResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 class TalentBookingController extends BaseController {
@@ -36,8 +35,11 @@ class TalentBookingController extends BaseController {
         //<editor-fold>
         $from = DateTime::createFromFormat('Y-m-d\TH:i+', $dateFrom);
         $to = DateTime::createFromFormat('Y-m-d\TH:i+', $dateTo);
-        $diff = $to->diff($from);        
-        $price = $diff->h * $eq->getActivePrice();
+        $diff = $to->diff($from);       
+        $price = null;
+        if ($eq->getRequestPrice() === 0) {
+            $price = $diff->h * $eq->getActivePrice();
+        }
         
         $inquiry = array(
             'from' => $from,
@@ -58,7 +60,7 @@ class TalentBookingController extends BaseController {
         
         $builder = $this->createFormBuilder()
             ->setAction($url);
-        if (!$loggedIn) {
+/*        if (!$loggedIn) {
             $builder->add('name', 'text', array(
                 'attr' => array (
                     'max-length' => 128
@@ -79,6 +81,7 @@ class TalentBookingController extends BaseController {
                 )
             ));
         }
+ */
         $builder->add('message', 'textarea', array(
                 'constraints' => array(
                     new NotBlank(),
@@ -95,7 +98,7 @@ class TalentBookingController extends BaseController {
             // map fields & save
             //<editor-fold>
             $inq->setTalent($eq);
-            if (!$loggedIn) {
+/*            if (!$loggedIn) {
                 $inq->setName($data['name']);
                 $inq->setEmail($data['email']);
                 $u = null;
@@ -107,8 +110,8 @@ class TalentBookingController extends BaseController {
                 }
             }
             else {
-                $inq->setUser($this->getUser());                
-            }
+ */
+            $inq->setUser($this->getUser());                
             $inq->setMessage($data['message']);
             $inq->setFromAt($inquiry['from']);
             $inq->setToAt($inquiry['to']);
@@ -174,16 +177,52 @@ class TalentBookingController extends BaseController {
         $saved = false;
         $acc = null;
         $dashboardUrl = null;
-        if ($request->getMethod() === "POST") {
-            $acc = intval($request->request->get('accept'));
-            $msg = $request->request->get('message');
+        
+        // build form
+        //<editor-fold>
+        $statuses = array(
+            1 => 'Auftrag annehmen',
+            0 => 'Auftrag ablehnen'
+        );        
+        $builder = $this->createFormBuilder()
+            ->add('status', 'choice', array(
+                'choices' => $statuses,
+                'constraints' => new NotBlank()
+            ))
+            ->add('message', 'textarea', array(
+                'required' => false
+            ));
+        if ($eq->getRequestPrice() == 1) {
+            $builder->add('price', 'integer', array(                
+                'attr' => array(
+                    'min' => 10,
+                    'max' => 2500
+                ),
+                'constraints' => array(
+                    new NotBlank(),
+                    new Range(array(
+                        'min' => 10,
+                        'max' => 2500
+                    ))
+                )
+            ));
+        }
+        $form = $builder->getForm();
+        //</editor-fold>
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
             
-            $inq->setAccepted($acc);
-            $inq->setResponse($msg);
-            if ($acc > 0) {
+            $inq->setAccepted($data['status']);
+            $inq->setResponse($data['message']);
+            if ($eq->getRequestPrice() === 1) {
+                $inq->setPrice($data['price']);
+            }
+            if ($data['status'] === 1) {
                 $inq->setUuid(Utils::getUuid());
             }
-            
             
             $em = $this->getDoctrine()->getManager();
             $em->flush();
@@ -198,7 +237,7 @@ class TalentBookingController extends BaseController {
                 $email = $inq->getEmail();
             }
             $url = null;
-            if ($acc > 0) {
+            if ($inq->getAccepted() === 1) {
                 $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('talent-confirmation', array('uuid' => $inq->getUuid()));
             }
@@ -217,9 +256,7 @@ class TalentBookingController extends BaseController {
                 ->setBody($emailHtml, 'text/html');
             $this->get('mailer')->send($message);
             //</editor-fold>
-            
-            $dashboardUrl = $this->generateUrl('dashboard');
-            
+                        
             //return $this->redirectToRoute('dashboard');
             $saved = true;
         }
@@ -229,8 +266,7 @@ class TalentBookingController extends BaseController {
             'inquiry' => $inq,
             'saved' => $saved, 
             'decision' => $acc,
-            'dashboardUrl' => $dashboardUrl
-                
+            'form' => $form->createView()                
         ));
     }
     
