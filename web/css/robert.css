@@ -122,6 +122,16 @@ transform: rotate(180deg);
 	font-family: 'open sans', sans-serif !important;
 	margin-bottom: 5px !important;
 }
+
+.rtext-page .content ul li {
+font-size: 16px !important;
+color:#000;
+}
+
+.rtext-page .content ul li strong {
+font-family: 'open sans', sans-serif !important;
+}
+
 .main-categories .row:last-child {
 	border-bottom: none !important;
 }
@@ -747,6 +757,10 @@ font-size: 11px;
 
 
 @media (max-width: 736px) {
+
+.blog-detail .left-side .blog-content {
+    margin-bottom: 40px;
+}
 	
 .rhomehead {
 display: inherit !important;
