@@ -24,7 +24,7 @@
             <h2>Anfrage</h2>
             <div class="row">
                 <div class="col-sm-2 col-xs-4 user">
-                    <img src="/img/woman2.png" alt=""/>
+                    <img src="{{ asker.getProfilePicture(false, image_url_prefix) }}" alt=""/>
                     <p>{{ asker.name }}</p>
                     {% if asker.rating %}
                         {{ include('common/stars.html.twig', { rating: asker.rating }) }}
