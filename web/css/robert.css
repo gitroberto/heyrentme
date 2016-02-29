@@ -753,7 +753,14 @@ display: inherit !important;
 }
 
 .rhomehead h2 {
-font-size: 15px;
+font-size: 22px;
+line-height: 26px;
+margin-bottom:0;
+margin-top: 20px;
+}
+
+.rpagecat {
+margin-top:-20px
 }
 
 .rhomehead .categories-container {
