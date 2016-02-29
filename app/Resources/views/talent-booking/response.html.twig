@@ -220,11 +220,11 @@
                   <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
       <div class="content-modal">
         {% if decision > 0 %}
-	    <p class="text-bold">Vielen Dank!</p>
-        <p class="delate-info">Du hast die Anfrage erfolgreich angenommen! Wir haben dir eine Bestätigung per Email geschickt.</p>
-		{% else %}
 		<p class="text-bold">Anfrage abgelehnt</p>
 		<p class="delate-info">Die Anfrage wurde auf deinen Wunsch abgelehnt. Wir haben dir eine Bestätigung per Email geschickt.</p>
+		{% else %}
+		<p class="text-bold">Vielen Dank!</p>
+        <p class="delate-info">Du hast die Anfrage erfolgreich angenommen! Wir haben dir eine Bestätigung per Email geschickt.</p>
 		 {% endif %}
               </div>
           </div>
