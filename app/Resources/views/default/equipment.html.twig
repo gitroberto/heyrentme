@@ -600,8 +600,8 @@
             $("a.inquiry").click(inquiry);
         {% else %}
             $("a.inquiry").click(function(){
-                if ($("a[data-target='#reg-modal']").size() > 0) {
-                        $("a[data-target='#reg-modal']")[0].click();      
+                if ($("a[data-target='#login']").size() > 0) {
+                        $("a[data-target='#login']")[0].click();      
                     }
             });
         {% endif %}
@@ -610,8 +610,8 @@
             $("a.question").click(question);
         {% else %}
             $("a.question").click(function(){
-                if ($("a[data-target='#reg-modal']").size() > 0) {
-                        $("a[data-target='#reg-modal']")[0].click();      
+                if ($("a[data-target='#login']").size() > 0) {
+                        $("a[data-target='#login']")[0].click();      
                     }
             });
         {% endif %}

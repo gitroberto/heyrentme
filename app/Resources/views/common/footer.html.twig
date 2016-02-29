@@ -2,11 +2,11 @@
       <a href="{{ path('start-page') }}">Home</a>
       <a href="{{ path('bookme') }}">Talente buchen</a>
       <a href="{{ path('rentme') }}">Equipment mieten</a>
-	  <a href="#" data-toggle="modal" data-target="#choose-offer">Anbieten / Vermieten</a>
       <a href="{{ path('blog') }}">Blog</a>
 	  <a href="#" data-toggle="modal" data-target="#reg-modal">Registrieren</a>
       <a href="#" data-toggle="modal" data-target="#login">Login</a>
   </div>
+  <!--
   <div class="sb-slidebar sb-right sb-style-overlay sb-toggle-right">
      <span id="social-shares">
      <a class="social fb" href="#"></a>
@@ -16,6 +16,7 @@
          <span class="clearfix"></span>
      </span>
   </div>
+  -->
   <div id="feedback" data-toggle="modal" data-target=".feed"></div>
   <!-- Modal -->
   <a id="passwordResetButton" data-dismiss="modal" data-toggle="modal" data-target="#passwordReset" class="has-account text-center" href="#"></a>
@@ -44,15 +45,15 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" ><img src="/img/close-modal.png" alt="close"/></button>
-                  <h4 class="modal-title reg" id="reg-titile">Anmelden</h4>
-                  <!-- <p class="reg-promo">Jetzt anmelden <span class="text-bold">5 &euro; Rabatt</span> für die 1. Buchung sichern! </p> -->               
+                  <h4 class="modal-title reg" id="reg-titile">Registrieren</h4>
+                   <p class="reg-promo">Jetzt registrieren und <span class="text-bold">5 &euro; Rabatt</span> für die 1. Buchung sichern! </p>               
                   <div id = "confirmationDiv" style="display:none;">
                       Dein Account ist jetzt registriert. Wir haben dir gerade eine Email mit Bestätigungslink geschickt um den Account zu aktivieren.
                   </div>
                   {{ render(controller('FOSUserBundle:Registration:register')) }}
                   
-                  <!--  <a data-dismiss="modal" data-toggle="modal" data-target="#login" class="has-account text-center" 
-                     href="#">Du hast bereits ein Konto? Melde dich an</a>    -->              
+                   <a data-dismiss="modal" data-toggle="modal" data-target="#login" class="has-account text-center" 
+                     href="#">Du hast bereits ein Konto? Melde dich an</a>              
               </div>
           </div>
       </div>
