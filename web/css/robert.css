@@ -776,6 +776,10 @@ font-size: 11px;
 .blog-detail .left-side .blog-content {
     margin-bottom: 40px;
 }
+
+.rblogheader {
+display:none
+}
 	
 .rhomehead {
 display: inherit !important;
