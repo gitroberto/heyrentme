@@ -910,8 +910,12 @@ font-size: 20px;
 display:none;
 }
 .main-categories .col-md-4 {
-width: 33%;
+width: 32.7%;
 float: left;
+}
+
+.main-categories .product-info .no-stars {
+font-size: 11px;
 }
 
 .product-info .product-name {
