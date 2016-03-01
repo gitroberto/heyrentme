@@ -634,6 +634,8 @@ margin-top:10px;
 /* IE10+ CSS styles go here alternative */
 }
 
+
+
 @media (max-width: 980px) {
 nav#mobile-nav>.container {
     height: 49px;
@@ -644,6 +646,11 @@ nav#mobile-nav>.container {
 
 @media (max-width: 736px) {
 	
+.help-page .blog-content .col-md-4 {
+    margin-bottom: 50px;
+}
+
+
 .media-list {
     display:inherit;
 }	
@@ -773,6 +780,10 @@ margin-bottom:0;
 margin-top: 20px;
 }
 
+.rhomehead h2 b {
+display: inline-block;
+}
+	
 .rpagecat {
 margin-top:-20px
 }
