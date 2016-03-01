@@ -1,9 +1,9 @@
 <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
-	<option value="{{ path("kundeninfos_presse") }}">KUNDENINFOS</option>
-    <option value="{{ path("kundeninfos_presse") }}">PRESSE</option>
-    <option value="{{ path("kundeninfos_kontakt") }}">KONTAKT</option>
-    <option value="{{ path("kundeninfos_impressum") }}">IMPRESSUM</option>
-    <option value="{{ path("kundeninfos_agb") }}">AGB</option>
+    <option value="{{ path("kundeninfos_presse") }}">KUNDENINFOS</option>
+    <option value="{{ path("kundeninfos_presse") }}" {% if pageName == "kundeninfos_presse" %}selected="selected"{% endif %}>PRESSE</option>
+    <option value="{{ path("kundeninfos_kontakt") }}" {% if pageName == "kundeninfos_kontakt" %}selected="selected"{% endif %}>KONTAKT</option>
+    <option value="{{ path("kundeninfos_impressum") }}" {% if pageName == "kundeninfos_impressum" %}selected="selected"{% endif %}>IMPRESSUM</option>
+    <option value="{{ path("kundeninfos_agb") }}" {% if pageName == "kundeninfos_agb" %}selected="selected"{% endif %}>AGB</option>
   </select>
   <nav class="crumbs">
       <ul class="col-xs-10">
