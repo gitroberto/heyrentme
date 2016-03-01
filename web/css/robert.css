@@ -648,6 +648,15 @@ margin-top:10px;
 nav#mobile-nav>.container {
     height: 49px;
 }
+
+p.rhinweis-mob {
+    font-family: 'open sans',sans-serif;
+    color: #777;
+    font-size: 13px;
+    margin-top: 15px;
+    padding-left: 15px;
+    max-width: 95%;
+}
 }
 
 /* iPhone & Smartphone */
