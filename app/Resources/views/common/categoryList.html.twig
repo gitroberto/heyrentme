@@ -1,5 +1,5 @@
 <li id="kaup-hidden">
-    <p class="display-block"><a class="haup-link">{% if not equipment %}Equipment mieten{% else %}Talente buchen{% endif %}</a></p>
+    <p class="display-block">{% if not equipment %}<a class="haup-link" href="{{ path('rentme') }}">Equipment mieten</a>{% else %}<a class="haup-link" href="{{ path('bookme') }}">Talente buchen</a>{% endif %}</p>
     <span id="close-haup" class="haup-close-icon"></span>
     {% for cat in cats2 %}
         <a href="{{ path('catchall', { 'content': cat.slug }) }}" style="padding: 0;">
@@ -11,7 +11,7 @@
     {% endfor %}
     
     <span class="clearfix"></span>
-    <p class="display-block"><a class="haup-link">{% if equipment %}Equipment mieten{% else %}Talente buchen{% endif %}</a></p>
+    <p class="display-block">{% if equipment %}<a class="haup-link" href="{{ path('rentme') }}">Equipment mieten</a>{% else %}<a class="haup-link" href="{{ path('bookme') }}">Talente buchen</a>{% endif %}</p>
     
     {% for cat in cats1 %}
         <a href="{{ path('catchall', { 'content': cat.slug }) }}" style="padding: 0;">
