@@ -780,6 +780,10 @@ font-size: 11px;
 .rblogheader {
 display:none
 }
+
+.blog-container {
+padding-top:0;
+}
 	
 .rhomehead {
 display: inherit !important;
