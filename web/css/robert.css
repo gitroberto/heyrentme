@@ -2,6 +2,10 @@
 
 }
 
+.blog-detail .left-side h1 {
+margin-top: 15px;
+}
+
 .register p.reg-promo {
 padding: 0 13%;
 }
@@ -458,6 +462,10 @@ margin-top:0;
 
 .left-side .product-info {
 margin-top:15px;
+}
+
+.product-detail .left-side .product-info {
+margin-top:10px;
 }
 
 .modal-dialog {
