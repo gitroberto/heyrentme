@@ -783,6 +783,10 @@ margin-top: 20px;
 .rhomehead h2 b {
 display: inline-block;
 }
+
+.main-categories .row div .categories-names h3 {
+font-size: 24px;
+}
 	
 .rpagecat {
 margin-top:-20px
