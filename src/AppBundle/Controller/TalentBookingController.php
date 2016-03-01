@@ -285,6 +285,7 @@ class TalentBookingController extends BaseController {
             return $this->redirectToRoute('booking-list');
         }
         
+        $saved = false;
         $data = array('uuid' => $uuid);
         
         $form = $this->createFormBuilder($data
@@ -345,6 +346,8 @@ class TalentBookingController extends BaseController {
             $em->persist($bk);
             $em->flush();                        
             
+            $saved = true;
+
             // send email to provider & user
             //<editor-fold>
             $provider = $inq->getTalent()->getUser();
@@ -390,14 +393,13 @@ class TalentBookingController extends BaseController {
                 ->setBody($emailHtml, 'text/html');
             $this->get('mailer')->send($message);
             //</editor-fold>
-        
-            return $this->redirectToRoute('rentme');
         }
         
         return $this->render('talent-booking/confirmation.html.twig', array(
             'inquiry' => $inq,
             'talent' => $eq,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'saved' => $saved
         ));
     }
 

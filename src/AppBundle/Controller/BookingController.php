@@ -247,6 +247,7 @@ class BookingController extends BaseController {
             return $this->redirectToRoute('booking-list');
         }
         
+        $saved = false;
         $data = array('uuid' => $uuid);
         
         $form = $this->createFormBuilder($data
@@ -306,7 +307,9 @@ class BookingController extends BaseController {
             
             // save booking
             $em->persist($bk);
-            $em->flush();                        
+            $em->flush();      
+            
+            $saved = true;
             
             // send email to provider & user
             //<editor-fold>
@@ -352,15 +355,14 @@ class BookingController extends BaseController {
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
             $this->get('mailer')->send($message);
-            //</editor-fold>
-        
-            return $this->redirectToRoute('rentme');
+            //</editor-fold>        
         }
         
         return $this->render('booking/confirmation.html.twig', array(
             'inquiry' => $inq,
             'equipment' => $eq,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'saved' => $saved
         ));
     }
 
