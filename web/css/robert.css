@@ -663,6 +663,10 @@ p.rhinweis-mob {
 
 @media (max-width: 736px) {
 	
+.about-us p {
+    font-size: 15px;
+}
+	
 .help-page .blog-content .col-md-4 {
     margin-bottom: 50px;
 }
