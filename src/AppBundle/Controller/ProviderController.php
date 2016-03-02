@@ -1326,6 +1326,7 @@ EOT;
             $obj = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
             $modifiedStatus = Talent::STATUS_MODIFIED;
         }
+        $this->sendNewModifiedEquipmentInfoMessage($request, $obj, $type);
         
         // security check
         if ($this->getUser()->getId() !== $obj->getUser()->getId()) {
@@ -1342,23 +1343,36 @@ EOT;
         return new JsonResponse(array("status" => "ok"));
     }
     
-    public function sendNewModifiedEquipmentInfoMessage(Request $request, Equipment $eq)
+    public function sendNewModifiedEquipmentInfoMessage(Request $request, $eq, $type="equipment")
     {      
                         
         $to = $this->getParameter('admin_email');
-        $template = 'Emails/Equipment/new_modified_item.html.twig';        
-        
-        $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));        
-        
-        $emailHtml = $this->renderView($template, array(                                    
-            'equipment' => $eq,
-            'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),            
-            'url' => $url
-        ));
+        $emailHtml = null;
+        $url = "";        
+        if ($type === 'equipment') {
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));                    
+            $subject = 'New/modified equipment notification.';
+            
+            $emailHtml = $this->renderView('Emails/Equipment/new_modified_item.html.twig', array(                                    
+                'equipment' => $eq,
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),            
+                'url' => $url
+            ));
+            
+        } else {
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));                    
+            $subject = 'New/modified talent notification.';
+            
+            $emailHtml = $this->renderView('Emails\talent\new_modified_item.html.twig', array(                                    
+                'talent' => $eq,
+                'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),            
+                'url' => $url
+            ));
+        }
         
         $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
         $message = Swift_Message::newInstance()
-            ->setSubject('New/modified equipment notification.')
+            ->setSubject($subject)
             ->setFrom($from)
             ->setTo($to)
             ->setBody($emailHtml, 'text/html');
