@@ -941,6 +941,14 @@ display:none;
   and (min-device-width: 768px) 
   and (max-device-width: 1024px) 
   and (orientation: portrait) {
+
+#footer {
+margin-top: 5em;
+}
+	  
+.help-page .faq {
+width: 100%;
+}
 	  
 .main-categories .product-info  {
     min-height: 35px;
@@ -1052,7 +1060,7 @@ float: left;
 }
 
 .help-page {
-    padding-bottom: 20em;
+padding-bottom: 0;
 }
 
 .rent-container .col-xs-12, .main-categories .new-header {
@@ -1195,8 +1203,35 @@ display:none;
 } 
 
 .owl-item .col-xs-3 {
-    width: 33%;
+width: 33%;
 }
+
+.container {
+width: 1000px;
+}
+
+.rent-heading .button-black {
+    display: inherit;
+    width: 70%;
+    text-align: center;
+}
+
+.main-categories .row div .categories-names h3 {
+font-size: 22px;
+}
+
+.slider {
+margin-left: 5% !important;
+}
+
+.rent-heading .ad {
+display:none;
+}
+
+.rent-heading ul.heading-list {
+margin-top: 0;
+}
+
 
 }
 
