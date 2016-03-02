@@ -56,28 +56,36 @@ class ImageRepository extends \Doctrine\ORM\EntityRepository
     }
     
     public function removeAllImages($object, $image_storage_dir) {
-        $oldImages = $object->getImages();
+        $itemImages = $object->getImages();
         
-        foreach($oldImages as $ol){
-
-            /*$fullPath = sprintf("%s%s\\%s",
-                $image_storage_dir,
-                $oldImage->getPath(),
-                $oldImage->getName());*/
+        $fs = new Filesystem();
+        $em = $this->getEntityManager();
+        
+        foreach($itemImages as $itemImage){
+            $ol = $itemImage->getImage();
+            // image
             $fullPath = 
                 $image_storage_dir .
                     DIRECTORY_SEPARATOR .
                     $ol->getPath() .
                     DIRECTORY_SEPARATOR .
                     $ol->getUuid() . '.' . $ol->getExtension();
-
-            $fs = new Filesystem();
             if (file_exists($fullPath)){
                 $fs->remove($fullPath);
             }
-            $em = $this->getEntityManager();
-
-            $object->removeImage($ol); 
+            // original
+            $fullPath = 
+                $image_storage_dir .
+                    DIRECTORY_SEPARATOR .
+                    $ol->getOriginalPath() .
+                    DIRECTORY_SEPARATOR .
+                    $ol->getUuid() . '.' . $ol->getExtension();
+            if (file_exists($fullPath)){
+                $fs->remove($fullPath);
+            }
+            // database
+            $object->removeImage($itemImage);
+            $em->remove($itemImage);
             $em->remove($ol);
             $em->flush();
         }
