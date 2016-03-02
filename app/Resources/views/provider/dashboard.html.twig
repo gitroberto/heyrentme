@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block home_header %}
+<link rel="stylesheet" href="{{ asset('css/heyrentme.css') }}" rel="stylesheet" type="text/css"/>
+
+{% endblock %}
+
 {% block body %}
  {% include('provider/user_nav.html.twig') %}
 <section class="users container background-light-grey dashboard">
