@@ -942,6 +942,10 @@ display:none;
   and (max-device-width: 1024px) 
   and (orientation: portrait) {
 
+.new-header h2 b, .main-header .main-search .text-bold, .rent-heading h1, .rent-container h2, .blog-content .col-md-4 div h3, .button-black, .green-big-button {
+font-weight: normal;
+}
+
 #footer {
 margin-top: 5em;
 }
@@ -955,7 +959,7 @@ width: 100%;
 }
 
 .main-categories .row div .categories-names h3 {
-font-size: 18px;
+font-size: 16px;
 }  
 
 #mobile-nav p {
@@ -1201,6 +1205,11 @@ display:none;
 .main-categories .row div .categories-names h3 {
     font-size: 24px;
 } 
+
+.new-header h2 b, .main-header .main-search .text-bold, .rent-heading h1, .rent-container h2, .blog-content .col-md-4 div h3, .button-black, .green-big-button {
+font-weight: normal;
+}
+
 
 .owl-item .col-xs-3 {
 width: 33%;
