@@ -26,7 +26,7 @@
                 Hallo {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %},
             </h1>
             <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;margin-bottom: 100px;">
-                Die Buchung wurde auf Wunsch von {{ provider.name }} leider storniert.
+                Die Buchung für "{{ inquiry.talent.name }}" wurde auf Wunsch von {{ provider.name }} leider storniert.
             </p>
         </td>
     </tr>
