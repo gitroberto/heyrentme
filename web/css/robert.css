@@ -662,6 +662,11 @@ p.rhinweis-mob {
 display:none;
 }
 
+#footer>.container {
+background-color: black;
+width: 100%;
+}
+
 .user-upload .btn-default {
 background-color:transparent;
 }
