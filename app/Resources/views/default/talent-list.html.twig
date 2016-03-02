@@ -1,4 +1,8 @@
 {% for tal in items %}
+    {% if loop.index0 % 3 == 0 %}
+        <div class="row">
+    {% endif %}
+
     <a class="text-black" href="{{ path('catchall', { 'content': tal.urlPath }) }}">
         <div class="col-md-4">
             {% if tal.talentImages|length > 0 %}
@@ -44,6 +48,10 @@
             <span class="list-desc-border"></span>
         </div>
     </a>
+
+    {% if loop.index0 % 3 == 2 %}
+        </div>
+    {% endif %}
 {% else %}
     <p>
         Keine passenden Talente gefunden

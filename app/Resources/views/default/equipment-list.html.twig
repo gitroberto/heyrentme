@@ -1,4 +1,8 @@
 {% for eq in items %}
+    {% if loop.index0 % 3 == 0 %}
+        <div class="row">
+    {% endif %}
+    
     <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
         <div class="col-md-4">
             {% if eq.equipmentImages|length > 0 %}
@@ -44,6 +48,10 @@
             <span class="list-desc-border"></span>
         </div>
     </a>
+
+    {% if loop.index0 % 3 == 2 %}
+        </div>
+    {% endif %}
 {% else %}
     <p>
         Keine Angebote gefunden - Wir arbeiten daran ;-)

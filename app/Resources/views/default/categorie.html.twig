@@ -40,7 +40,7 @@
     </div>
   </header>
   <div class="search-form mobile-kategorie-form select-select desktop-hide">
-    <span class="clearfix"></span>
+    <div class="clearfix"></div>
   </div>
   <div class="container">
   {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT'), 'mobile': true })) }}
@@ -90,8 +90,8 @@
           </div>
           #}
         </div>
-        <span class="clearfix"></span>
-        <div class="row" id="equipment-list">
+        <div class="clearfix"></div>
+        <div id="equipment-list">
             {{ render(controller('AppBundle:Default:itemList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
         </div>
     </div>
