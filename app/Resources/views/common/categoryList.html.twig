@@ -10,7 +10,7 @@
         </a>
     {% endfor %}
     
-    <span class="clearfix"></span>
+    <br style="clear: both;"/>
     <p class="display-block">{% if equipment %}<a class="haup-link" href="{{ path('rentme') }}">Equipment mieten</a>{% else %}<a class="haup-link" href="{{ path('bookme') }}">Talente buchen</a>{% endif %}</p>
     
     {% for cat in cats1 %}
