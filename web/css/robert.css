@@ -648,11 +648,38 @@ margin-top:10px;
 nav#mobile-nav>.container {
     height: 49px;
 }
+
+p.rhinweis-mob {
+    font-family: 'open sans',sans-serif;
+    color: #777;
+    font-size: 13px;
+    margin-top: 15px;
+    padding-left: 15px;
+    max-width: 95%;
+}
+
+.rlogosmall img {
+display:none;
+}
+
+#footer>.container {
+background-color: black;
+width: 100%;
+}
+
+.user-upload .btn-default {
+background-color:transparent;
+}
+
 }
 
 /* iPhone & Smartphone */
 
 @media (max-width: 736px) {
+	
+.about-us p {
+    font-size: 15px;
+}
 	
 .help-page .blog-content .col-md-4 {
     margin-bottom: 50px;
@@ -775,6 +802,14 @@ font-size: 11px;
 
 .blog-detail .left-side .blog-content {
     margin-bottom: 40px;
+}
+
+.rblogheader {
+display:none
+}
+
+.blog-container {
+padding-top:0;
 }
 	
 .rhomehead {
