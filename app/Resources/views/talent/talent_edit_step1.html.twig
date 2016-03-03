@@ -138,7 +138,6 @@ es für deine Interessenten generell übersichtlicher ist, wenn ein Stundentarif
       var url2 = "{{ path('talent-edit-2', {'id': id}) }}";
       var url3 = "{{ path('talent-edit-3', {'eqid': id}) }}";
       var url4 = "{{ path('talent-edit-4', {'id': id}) }}";
-      var lastPrice = null;
       
       function topMenuClick(){
           
@@ -179,14 +178,9 @@ es für deine Interessenten generell übersichtlicher ist, wenn ein Stundentarif
           var req = $req.prop('checked');
           if (req) {
               $price.attr('disabled', 'disabled');
-              if (typeof price !== 'undefined' && price !== null && price !== '' && !isNaN(price))
-                lastPrice = price;
-              $price.val('');
           }
           else {
               $price.removeAttr('disabled');
-              if (lastPrice !== null)
-                $price.val(lastPrice);              
           }
       }
       
