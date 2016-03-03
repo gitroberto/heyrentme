@@ -2,6 +2,10 @@
 
 }
 
+.dashboard .product-info .no-stars {
+margin-left: 0;
+}
+
 .blog-detail .left-side h1 {
 margin-top: 15px;
 }
@@ -114,7 +118,7 @@ transform: rotate(180deg);
 	font-size: 15px;
 }
 .help-page {
-	padding-bottom: 25em;
+	padding-bottom: 10em;
 }
 .help-page .content ul {
 	margin-top: 10px !important;
@@ -672,6 +676,26 @@ width: 100%;
 background-color:transparent;
 }
 
+#footer {
+margin-top: 5em;
+}
+
+.einzelstunden .accordion-yellow p, .einzelstunden .panel-heading:hover p  {
+color:#000;
+}
+
+.einzelstunden {
+box-shadow: none;
+}
+
+.right-side .offer-dates, .right-side .user-data {
+background: transparent;
+}
+
+.panel .panel-body {
+background-color: transparent;
+}
+
 }
 
 /* iPhone & Smartphone Landscape */
@@ -717,7 +741,7 @@ display:none;
 }
 
 .panel {
-    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  /*  box-shadow: 0 1px 1px rgba(0,0,0,0.2); */
 }
 	
 #mobile-nav p {
@@ -870,7 +894,7 @@ max-width:100%;
 }
 
 .einzelstunden .panel-heading {
-padding: 4px 15px 10px 15px
+padding: 0 15px 10px 15px
 }
 
 .yellow {
@@ -881,10 +905,6 @@ padding: 4px 15px 10px 15px
 
 .product-detail .left-side .product-info {
     margin-top: -10px;
-}
-
-.einzelstunden .accordion-yellow p, .einzelstunden .panel-heading:hover p  {
-color:#000;
 }
 
 .glyphicon-triangle-bottom:before, .glyphicon-triangle-top:before {
@@ -937,13 +957,25 @@ display:none;
   and (min-device-width: 768px) 
   and (max-device-width: 1024px) 
   and (orientation: portrait) {
+
+.new-header h2 b, .main-header .main-search .text-bold, .rent-heading h1, .rent-container h2, .blog-content .col-md-4 div h3, .button-black, .green-big-button, .product-detail .left-side h1, .right-side h4, .right-side .user-data .user-name {
+font-weight: normal;
+}
+
+.help-page .blog-content .col-md-4 div h3 {
+font-size: 18px;
+}
+	  
+.help-page .faq {
+width: 100%;
+}
 	  
 .main-categories .product-info  {
     min-height: 35px;
 }
 
 .main-categories .row div .categories-names h3 {
-font-size: 18px;
+font-size: 16px;
 }  
 
 #mobile-nav p {
@@ -1048,7 +1080,7 @@ float: left;
 }
 
 .help-page {
-    padding-bottom: 20em;
+padding-bottom: 0;
 }
 
 .rent-container .col-xs-12, .main-categories .new-header {
@@ -1190,9 +1222,41 @@ display:none;
     font-size: 24px;
 } 
 
-.owl-item .col-xs-3 {
-    width: 33%;
+.new-header h2 b, .main-header .main-search .text-bold, .rent-heading h1, .rent-container h2, .blog-content .col-md-4 div h3, .button-black, .green-big-button, .product-detail .left-side h1, .right-side h4, .right-side .user-data .user-name {
+font-weight: normal;
 }
+
+
+.owl-item .col-xs-3 {
+width: 33%;
+}
+
+.container {
+width: 1000px;
+}
+
+.rent-heading .button-black {
+    display: inherit;
+    width: 70%;
+    text-align: center;
+}
+
+.main-categories .row div .categories-names h3 {
+font-size: 22px;
+}
+
+.slider {
+margin-left: 5% !important;
+}
+
+.rent-heading .ad {
+display:none;
+}
+
+.rent-heading ul.heading-list {
+margin-top: 0;
+}
+
 
 }
 
