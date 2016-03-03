@@ -4,6 +4,7 @@ namespace AppBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Exception\Exception;
 
 class ThumbnailService {
@@ -29,6 +30,11 @@ class ThumbnailService {
                 $ext = $img->getExtension();
                 $path = $this->imageStorageDir . $sep . "equipment" . $sep . $img->getUuid() . "." . $ext;
                 $path2 = $this->imageStorageDir . $sep . "equipment" . $sep . "thumbnail" . $sep . $img->getUuid() . "." . $ext;
+                
+                $fs = new Filesystem();
+                if (!$fs->exists($path)) {
+                    continue;
+                }
                 
                 $size = getimagesize($path);
                 $w = $size[0];
@@ -75,6 +81,11 @@ class ThumbnailService {
                 $path = $this->imageStorageDir . $sep . "talent" . $sep . $img->getUuid() . "." . $ext;
                 $path2 = $this->imageStorageDir . $sep . "talent" . $sep . "thumbnail" . $sep . $img->getUuid() . "." . $ext;
                 
+                $fs = new Filesystem();
+                if (!$fs->exists($path)) {
+                    continue;
+                }
+
                 $size = getimagesize($path);
                 $w = $size[0];
                 $h = $size[1];
