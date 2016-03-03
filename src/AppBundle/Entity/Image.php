@@ -37,10 +37,27 @@ class Image
      * @ORM\Column(type="string", length=128)
      */
     protected $originalPath;
+    /**
+     * @ORM\Column(type="string", length=128)
+     */
+    protected $thumbnailPath;
     
     public function getUrlPath($image_url_prefix) {
         return "{$image_url_prefix}{$this->getPath()}/{$this->getUuid()}.{$this->getExtension()}";
     }
+    public function getThumbnailUrlPath($image_url_prefix) {
+        $tp = $this->getThumbnailPath();
+        if ($tp !== null) {
+            $path = str_replace("\\", "/", $tp);
+            return "{$image_url_prefix}{$path}/{$this->getUuid()}.{$this->getExtension()}";
+        }
+        else { // fallback: better display large image than nothing
+            return $this->getUrlPath($image_url_prefix);
+        }
+    }
+    
+    
+    
     /**
      * Get id
      *
@@ -169,5 +186,29 @@ class Image
     public function getOriginalPath()
     {
         return $this->originalPath;
+    }
+
+    /**
+     * Set thumbnailPath
+     *
+     * @param string $thumbnailPath
+     *
+     * @return Image
+     */
+    public function setThumbnailPath($thumbnailPath)
+    {
+        $this->thumbnailPath = $thumbnailPath;
+
+        return $this;
+    }
+
+    /**
+     * Get thumbnailPath
+     *
+     * @return string
+     */
+    public function getThumbnailPath()
+    {
+        return $this->thumbnailPath;
     }
 }

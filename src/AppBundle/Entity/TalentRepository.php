@@ -395,4 +395,13 @@ EOT;
         $conn->close();        
     }
     
+    public function getAllThumbnailless() {
+        $sql = <<<EOT
+            select ei, i
+            from AppBundle:TalentImage ei
+                join ei.image i
+            where i.thumbnailPath is null
+EOT;
+        return $this->getEntityManager()->createQuery($sql)->getResult();
+    }
 }

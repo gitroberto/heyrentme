@@ -85,51 +85,15 @@
                     {% endif %}
               </div>
 
-              <iframe id="player"></iframe>
               <div class="media-list" id="media-list">
                     {% for eimg in item.equipmentImages %}
-                        <span class="media-img"><img src="{{ eimg.image.urlPath(image_url_prefix) }}" alt=""/></span>
+                        <span class="media-img"><img src="{{ eimg.image.thumbnailUrlPath(image_url_prefix) }}" data-url="{{ eimg.image.urlPath(image_url_prefix) }}" alt=""/></span>
                     {% endfor %}
                     {#
                         <span><a class="videos-ico" id="3"></a><img src="/img/placeholder/video2.jpg" id="3" alt=""/>   </span>
                     #}
               </div>
             </div>
-        <script src="/js/vendors/vimeo.js"></script>
-        <script>
-          $(document).ready(function(){
-
-              $(document).on('click', "#videos-ico", function (evt) {
-                  $('#videos-ico').remove();
-                  $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
-                  $("#player").attr("src",$iframeSRC);
-              });
-
-              $('#videos-ico').show();
-              var containerHieght = $('#media-content').height();
-              $("#player").css('height',containerHieght);
-              var player = $f(document.getElementById('player'));
-              var media = $('#media-list .media-img img');
-              var mediaContainer = $('#media-content');
-
-
-              $(media).on('click',function(e){
-                  $("#player").attr("src",'');
-                  var vals = $(this).parent().html();
-                  $(mediaContainer).html(vals);
-                  console.log (vals);
-                  $(".product-detail .left-side .cart, .discount.discount-big").show();
-              });
-
-
-              $("#3").click(function() {
-                  $('#videos-ico').remove();
-                  $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
-                  $("#player").attr("src",$iframeSRC);
-                  $(".product-detail .left-side .cart, .discount.discount-big").hide();
-              });
-          });
-        </script>
             <div>
                 <div class="row">
                     <div class="col-md-8 col-xs-12 product-description" id="map-sibling">
@@ -466,6 +430,7 @@
 {% block script %}
   <script src="http://maps.googleapis.com/maps/api/js?language=de"></script>
   <script src="http://malsup.github.com/jquery.form.js"></script> 
+  <script src="/js/vendors/vimeo.js"></script>
   <script>
     function addData(tag,data) {
         var tag  = tag;
@@ -474,6 +439,20 @@
         $(tag).html(date);
     };
     $(document).ready(function(){
+        var media = $('#media-list .media-img img');
+        var mediaContainer = $('#media-content');
+
+        $(media).on('click',function(e){
+            var $n = $(this).parent().clone();
+            var $img = $n.find("img");
+            $img.on('load', function() {
+              $(mediaContainer).empty().append($n);
+              $(".product-detail .left-side .cart, .discount.discount-big").show();
+            });
+            $img.attr('src', $img.data('url'));                  
+        });
+        
+        
         var t1 = $('#date-range').val(moment().add(1, "days").format('[AB] DD.MM.YYYY'));
         var t2 = (moment().add(2, "days").format('[BIS] DD.MM.YYYY'));
 

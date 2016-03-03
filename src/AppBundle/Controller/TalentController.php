@@ -612,6 +612,8 @@ class TalentController extends BaseController {
         $uuid = $arr[0];
         $ext = $arr[1];
 
+        // scale image
+        // <editor-fold>
         // check and calcualte size
         if ($w === 0 || $h == 0) {
             $size = getimagesize($path);
@@ -642,8 +644,37 @@ class TalentController extends BaseController {
         }
         
         rename($path, $path2);
+        imagedestroy($dst);
+        // </editor-fold>
+        // 
+        // create thumbnail
+        //<editor-fold>
+        $nw = 360;
+        if ($main) {
+            $nh = 270;
+        }
+        else {
+            $nh = $h / $w * $nw;
+        }
+        
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, $nw, $nh, $w, $h);
+
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . 'thumbnail' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path2, 85);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path2, 9);
+        }        
+        imagedestroy($dst);        
+        //</editor-fold>
+        
+        imagedestroy($img);
 
         // store entry in database
+        //<editor-fold>
         $em = $this->getDoctrine()->getManager();
         $cnt = $this->getDoctrineRepo('AppBundle:Talent')->getImageCount($id);        
         
@@ -653,6 +684,7 @@ class TalentController extends BaseController {
         $img->setExtension($ext);
         $img->setPath('talent');
         $img->setOriginalPath('talent' . $sep . 'original');
+        $img->setThumbnailPath('talent' . $sep . 'thumbnail');
         $em->persist($img);
         $em->flush();
         
@@ -662,6 +694,7 @@ class TalentController extends BaseController {
         $eimg->setMain($main ? 1 : 0);
         $em->persist($eimg);
         $em->flush();        
+        //</editor-fold>
         
         $resp = array(
             'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),

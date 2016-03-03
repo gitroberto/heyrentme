@@ -40,6 +40,14 @@ class ImageRepository extends \Doctrine\ORM\EntityRepository
                     DIRECTORY_SEPARATOR .
                     $image->getUuid() . '.' . $image->getExtension();
             
+            $thumbnailPath = $image_storage_dir .
+                    DIRECTORY_SEPARATOR .
+                    $image->getPath() .
+                    DIRECTORY_SEPARATOR .
+                    "thumbnail" .
+                    DIRECTORY_SEPARATOR .
+                    $image->getUuid() . '.' . $image->getExtension();
+            
             
             $fs = new Filesystem();
             if (file_exists($fullPath)){
@@ -47,6 +55,9 @@ class ImageRepository extends \Doctrine\ORM\EntityRepository
             }
             if (file_exists($originalPath)){
                 $fs->remove($originalPath);
+            }
+            if (file_exists($thumbnailPath)){
+                $fs->remove($thumbnailPath);
             }
             $em = $this->getEntityManager();
 

@@ -95,7 +95,7 @@
                         </span>
                     {% endif %}
                     {% for img in item.talentImages %}
-                        <span class="media-img"><img src="{{ img.image.urlPath(image_url_prefix) }}" alt=""/></span>
+                        <span class="media-img"><img src="{{ img.image.thumbnailUrlPath(image_url_prefix) }}" data-url="{{ img.image.urlPath(image_url_prefix) }}" alt=""/></span>
                     {% endfor %}
               </div>
             </div>
@@ -494,13 +494,14 @@
 
 
         $(media).on('click',function(e){
-            $("#player").attr("src",'');
-            var vals = $(this).parent().html();
-            $(mediaContainer).html(vals);
-            console.log (vals);
-            $(".product-detail .left-side .cart, .discount.discount-big").show();
-              //var h = $('#media-content').height();
-              //$("#player").css('height', h);
+            $("#player").remove();
+            var $n = $(this).parent().clone();
+            var $img = $n.find("img");
+            $img.on('load', function() {
+              $(mediaContainer).empty().append($n);
+              $(".product-detail .left-side .cart, .discount.discount-big").show();
+            });
+            $img.attr('src', $img.data('url'));                  
         });
 
         {% if item.video %}
