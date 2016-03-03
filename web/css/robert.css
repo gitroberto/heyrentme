@@ -676,6 +676,26 @@ width: 100%;
 background-color:transparent;
 }
 
+#footer {
+margin-top: 5em;
+}
+
+.einzelstunden .accordion-yellow p, .einzelstunden .panel-heading:hover p  {
+color:#000;
+}
+
+.einzelstunden {
+box-shadow: none;
+}
+
+.right-side .offer-dates, .right-side .user-data {
+background: transparent;
+}
+
+.panel .panel-body {
+background-color: transparent;
+}
+
 }
 
 /* iPhone & Smartphone Landscape */
@@ -721,7 +741,7 @@ display:none;
 }
 
 .panel {
-    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  /*  box-shadow: 0 1px 1px rgba(0,0,0,0.2); */
 }
 	
 #mobile-nav p {
@@ -874,7 +894,7 @@ max-width:100%;
 }
 
 .einzelstunden .panel-heading {
-padding: 4px 15px 10px 15px
+padding: 0 15px 10px 15px
 }
 
 .yellow {
@@ -885,10 +905,6 @@ padding: 4px 15px 10px 15px
 
 .product-detail .left-side .product-info {
     margin-top: -10px;
-}
-
-.einzelstunden .accordion-yellow p, .einzelstunden .panel-heading:hover p  {
-color:#000;
 }
 
 .glyphicon-triangle-bottom:before, .glyphicon-triangle-top:before {
@@ -944,10 +960,6 @@ display:none;
 
 .new-header h2 b, .main-header .main-search .text-bold, .rent-heading h1, .rent-container h2, .blog-content .col-md-4 div h3, .button-black, .green-big-button {
 font-weight: normal;
-}
-
-#footer {
-margin-top: 5em;
 }
 	  
 .help-page .faq {
