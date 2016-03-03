@@ -148,8 +148,8 @@ font-family: 'open sans', sans-serif !important;
 	padding-bottom: 8px;
 }
 .profilebutton {
-	padding-top: 5px;
-	padding-bottom: 4px;
+	padding-top: 4.5px;
+	padding-bottom: 3.5px;
 }
 .profilebutton img {
 	display: inline-block;
@@ -541,6 +541,10 @@ text-align:center;
 .anleitungform input {
 width:100%;
 max-width:375px;
+}
+
+.anleitungform .button-black:focus {
+color:#000;
 }
 
 /* Tarifoptionen & Preisauf Anfrage Confirmation */
