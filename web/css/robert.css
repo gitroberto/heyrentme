@@ -3,7 +3,7 @@
 }
 
 .dashboard .product-info .no-stars {
-margin-left: 0;
+margin-left: 0 !important;
 }
 
 .blog-detail .left-side h1 {
