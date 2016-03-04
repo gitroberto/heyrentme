@@ -36,6 +36,7 @@
                 <li><a class="active-crumb" href="{{ path("rental-detail", { 'categoryId': category.id }) }}">{{ category.name }}</a></li>
             </ul>
         </nav>
+        {# todo: ? div below doesn't show up anywhere #}
         <div class="mobile-hidden"> <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
           <option value="/heyrentme">HAUPKATEGORIE</option>
           <option value="/heyrentme">HAUS & GARTEN</option>
