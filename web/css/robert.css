@@ -2,6 +2,14 @@
 
 }
 
+.rkeinebuchung {
+
+}
+
+#drop-main a, #drop a {
+text-transform: none!important;
+}
+
 .dashboard .product-info .no-stars {
 margin-left: 0 !important;
 }
