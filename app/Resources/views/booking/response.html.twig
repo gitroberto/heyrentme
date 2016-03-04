@@ -58,9 +58,9 @@
                     <div class="question-data">
                         <p class="text-bold"><strong>Buchungsdaten:</strong></p>
                         <p class="text-bold"><strong>{{ equipment.name }}</strong></p>
-                        <p class="no-margin-bottom"><strong>Beginn:</strong>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
-                        <p class="no-margin-bottom"><strong>Ende:</strong>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
-                        <p class="no-margin-bottom"><strong>Dein Verdienst:</strong> {{ inquiry.price|number_format(2, ',') }} €</p>
+                        <p class="no-margin-bottom"><strong>Beginn:</strong> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
+                        <p class="no-margin-bottom"><strong>Ende:</strong> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
+                        <p class="no-margin-bottom"><strong>Dein Verdienst: </strong> {{ inquiry.price|number_format(2, ',') }} €</p>
                         <p class="no-margin-bottom"><strong> Kaution:</strong> {{ inquiry.deposit|number_format(2, ',') }} €</p>
                         <p><strong>Ort:</strong> {{ equipment.addressAsString }}
                             {# TODO: add modal to update address 
