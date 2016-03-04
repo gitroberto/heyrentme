@@ -6,6 +6,15 @@
 
 }
 
+.modal-dialog form .rent-dialog form .angrafge-dialog form {
+margin-left: 20px;
+margin-right: 20px;
+}
+
+.rent-dialog p {
+text-transform: none!important;
+}
+
 #drop-main a, #drop a {
 text-transform: none!important;
 }
