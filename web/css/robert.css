@@ -27,7 +27,7 @@
 }
 
 
-.modal-dialog form .rent-dialog form .angrafge-dialog form {
+.modal-dialog form, .rent-dialog form, .angrafge-dialog form {
 margin-left: 20px;
 margin-right: 20px;
 }
