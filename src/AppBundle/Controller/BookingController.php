@@ -414,7 +414,6 @@ class BookingController extends BaseController {
         
         if ($bk === null) {
             return new Response($status = Response::HTTP_FORBIDDEN);
-            // todo: check user identity
         }
                 
         $inq = $bk->getInquiry();
@@ -485,7 +484,6 @@ class BookingController extends BaseController {
         
         if ($bk === null) {
             return new Response($status = Response::HTTP_FORBIDDEN);
-            // todo: check user identity
         }
         
         $inq = $bk->getInquiry();

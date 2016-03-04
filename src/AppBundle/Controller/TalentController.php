@@ -726,7 +726,6 @@ class TalentController extends BaseController {
         $session = $request->getSession();
         $user = $this->getUser();
         
-        //$eqid = 118; // TODO: remove this; dev only!
         $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($eqid);
         if (!$eq) {
             return new Response(Response::HTTP_NOT_FOUND);
@@ -749,7 +748,6 @@ class TalentController extends BaseController {
             'descCondition' => $eq->getDescCondition()
         );
         
-        // TODO: add server-side validation for features
         $form = $this->createFormBuilder($data, array('constraints' => array(
                             new Callback(array($this, 'validateTime'))
                         ) )
@@ -784,7 +782,6 @@ class TalentController extends BaseController {
         $this->formHelper = $form;
         $form->handleRequest($request);
                         
-        // TODO: add server-side validation
         if ($form->isValid()) {
             $data = $form->getData();
             /*

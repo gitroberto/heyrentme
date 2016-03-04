@@ -295,8 +295,6 @@ class ProviderController extends BaseController {
         $user = $this->getUser();
         
         //$form = $this->createForm(EinstellungenType::class, $user);
-        // TODO: add server-side validation (zob. equipmentEdit3Action for phone)
-        // TODO: remove max_length, see phone
         $form = $this->createFormBuilder(null)
                 ->add('password', 'password', array( 'required'=>false, 'constraints' => array(
                             new Callback(array($this, 'validateOldPassword'))
@@ -1034,7 +1032,6 @@ class ProviderController extends BaseController {
         $session = $request->getSession();
         $user = $this->getUser();
         
-        //$eqid = 118; // TODO: remove this; dev only!
         $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eqid);
         if (!$eq) {
             return new Response(Response::HTTP_NOT_FOUND);
@@ -1054,7 +1051,6 @@ class ProviderController extends BaseController {
             'descCondition' => $eq->getDescCondition()
         );
         
-        // TODO: add server-side validation for features
         $form = $this->createFormBuilder($data, array('constraints' => array(
                             new Callback(array($this, 'validateTime'))
                         ) )
@@ -1082,7 +1078,6 @@ class ProviderController extends BaseController {
         $this->formHelper = $form;
         $form->handleRequest($request);
             
-        // TODO: add server-side validation
         if ($form->isValid()) {
             $data = $form->getData();
             /*

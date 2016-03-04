@@ -23,7 +23,6 @@ class EquipmentRepository extends EntityRepository
     }   
     
     public function getAllForOtherCategories($subcategoryId) {
-        //TODO: add user status = ok 
         $sql = "select e from AppBundle:Equipment e where e.subcategory != :subcategoryId and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
