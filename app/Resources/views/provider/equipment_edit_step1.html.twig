@@ -54,7 +54,7 @@
                                <div class="col-sm-5">
                                   <label for="form[price]">Preis pro Tag:</label>
                                   {#<input type="number" name="name2" placeholder="0" class="small-input" id="preis_pro_tag" min="10" max="2500" required> ,- €#}
-                                  {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }},- € 
+                                  {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }}EUR 
                                   <div class="err-msg">{{ form_errors(form.price) }}</div>
                               </div>
                               <!--<div class="col-sm-6 text-right">
@@ -84,7 +84,7 @@
                                       <div class="col-xs-5">
                                         <span>Original-Wert (ca.)</span>
                                         {# <input type="text" name="name2" placeholder="z.B.: 500" class="small-input " id="name2">    ,- € #}
-                                        {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }},- € 
+                                        {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }}EUR 
                                         <div class="err-msg">{{ form_errors(form.value) }}</div>
                                       </div>
                                       <div class="col-xs-3">
@@ -103,7 +103,7 @@
                                       <div class="col-xs-4">
                                         <span>Kaution</span>
                                         {# <input type="text" name="name2" placeholder="z.B.: 20" class="small-input " id="name2">    ,- € #}
-                                        {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '1000' }}) }},- € 
+                                        {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '1000' }}) }}EUR 
                                         <div class="err-msg">{{ form_errors(form.deposit) }}</div>
                                       </div>
                                   </div>
@@ -141,7 +141,7 @@
                                               <div class="kaution">
                                                 <span>Verkaufspreis bei Kauf</span>
                                                 {# <input type="text" name="name2" placeholder="z.B.: 250" class="small-input " id="name2">,- € #}
-                                                {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }},- € 
+                                                {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }}EUR 
                                                 <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
                                               </div>
                                           </div>

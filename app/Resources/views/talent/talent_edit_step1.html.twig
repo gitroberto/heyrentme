@@ -56,12 +56,12 @@
                                <div class="col-sm-5">
                                   <label for="form[price]">Preis pro Stunde:*</label>
                                   {#<input type="number" name="name2" placeholder="0" class="small-input " id="preis_pro_tag" min="10" max="500" required>#}
-                                  {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '500' }}) }},- €
+                                  {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '500' }}) }}EUR
                                   <div class="err-msg">{{ form_errors(form.price) }}</div>
                                   <div class="err-msg">{{ form_errors(form) }}</div>
                               </div>
                             <!--<div class="col-sm-6">
-                                <label for="name2">Preis pro Stunde:</label><input type="text" name="name2" style="width:110px" placeholder="z.B.: ab 20" class="small-input " id="name2">                                ,- €
+                                <label for="name2">Preis pro Stunde:</label><input type="text" name="name2" style="width:110px" placeholder="z.B.: ab 20" class="small-input " id="name2">                                EUR
                             </div>-->
                             <!--<div class="col-sm-6 text-right">
                                 <label class="chbox"><input type="checkbox"> <span> Keine Angabe</span></label>
@@ -93,13 +93,13 @@
                     <div class="form-container form-input form-last-item">
                        <!-- <div class="row">
                          <div class="col-sm-4">
-                                  <label for="name2">5 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="5_block" min="50" max="2500"> ,- €
+                                  <label for="name2">5 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="5_block" min="50" max="2500"> EUR
                               </div>
                                 <div class="col-sm-4">
-                                  <label for="name2">10 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="10_block" min="100" max="5000"> ,- €
+                                  <label for="name2">10 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="10_block" min="100" max="5000"> EUR
                               </div>
                                 <div class="col-sm-4">
-                                  <label for="name2">20 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="20_block" min="200" max="10000"> ,- €
+                                  <label for="name2">20 Std. Block</label><input type="number" name="name2" placeholder="0" class="small-input " id="20_block" min="200" max="10000"> EUR
                               </div>
                               </div>                            
                           <p class="memo">Diese Optionen helfen dir dabei attraktive Angebote für deine Kunden zu schnüren. Im Normalfall werden für den 5 Std. Block 10-15%, den 10 Std. Block 15-20% und für den 20 Std. 20-25% Rabatt angeboten.</p>  -->

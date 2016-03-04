@@ -22,7 +22,7 @@
             {% if talent.requestPrice == 1 %}
                 <div class="col-sm-6 preisauf">
                     <label for="form[price]">Gesamtpreis inkl. USt.:</label>
-                    {{ form_widget(form.price, { 'attr': { 'placeholder': '0', 'class': 'small-input' } }) }},- €
+                    {{ form_widget(form.price, { 'attr': { 'placeholder': '0', 'class': 'small-input' } }) }}EUR
                     <div class="err-msg">'{{ form_errors(form.price) }}</div>
                 </div>
             {% endif %}
