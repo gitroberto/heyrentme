@@ -96,4 +96,13 @@ class BlogRepository extends EntityRepository
         }
         return $q->getSingleScalarResult() == 0;
     }
+    public function getAllThumbnailless() {
+        $dql = <<<EOT
+            select b, i
+            from AppBundle:Blog b
+                join b.image i
+            where i.thumbnailPath is null
+EOT;
+        return $this->getEntityManager()->createQuery($dql)->getResult();
+    }
 }

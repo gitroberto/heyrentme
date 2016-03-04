@@ -40,7 +40,7 @@
                 <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
                     <div class="col-sm-4">
                         {% if post.image %}
-                            <img src="{{ post.image.urlPath(image_url_prefix) }}" alt="{{ post.title }}"/>
+                            <img src="{{ post.image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ post.title }}"/>
                         {% else %}
                             {# TODO: change default blog photo #}
                             <img src="/img/placeholder/blog2.jpg" alt="{{ post.title }}" class="blogimg"/>

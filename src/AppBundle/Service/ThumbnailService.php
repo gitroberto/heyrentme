@@ -122,6 +122,51 @@ class ThumbnailService {
             }
         }
         
+        // blog
+        $blogs = $this->em->getRepository("AppBundle:Blog")->getAllThumbnailless();
+        foreach ($blogs as $blog) { // TalentImage objects            
+            try {
+                $img = $blog->getImage();
+                $ext = $img->getExtension();
+                $path = $this->imageStorageDir . $sep . "blog" . $sep . $img->getUuid() . "." . $ext;
+                $path2 = $this->imageStorageDir . $sep . "blog" . $sep . "thumbnail" . $sep . $img->getUuid() . "." . $ext;
+                
+                $fs = new Filesystem();
+                if (!$fs->exists($path)) {
+                    continue;
+                }
+
+                $size = getimagesize($path);
+                $w = $size[0];
+                $h = $size[1];
+                $nw = 360;
+                $nh = 270;
+                
+                $msg = "generating thumbnail for image id={$img->getId()}, size: {$w}x{$h} to {$nw}x{$nh}, path: {$path} to {$path2}";
+                $this->logger->debug($msg);
+                        
+                $src = imagecreatefromstring(file_get_contents($path));
+                $dst = imagecreatetruecolor($nw, $nh);
+                imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+                if ($ext === 'jpg' || $ext === 'jpeg') {
+                    imagejpeg($dst, $path2, 85);
+                }
+                else if ($ext === 'png') {
+                    imagepng($dst, $path2, 9);
+                }        
+
+                imagedestroy($dst);        
+                imagedestroy($src);
+                
+                $img->setThumbnailPath("blog" . $sep . "thumbnail");
+                $this->em->flush();                
+            } catch (Exception $ex) {
+                $msg = "ERROR generating thumbnail for image id={$ei->getImage()->getId()}";
+                $this->logger->error($msg);
+                $this->logger->error($ex->getTraceAsString());
+            }
+        }
+        
     }
 
 }

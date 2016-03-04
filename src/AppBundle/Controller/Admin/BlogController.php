@@ -192,15 +192,41 @@ class BlogController  extends BaseAdminController {
                 // save file
                 $uuid = Utils::getUuid();
                 $image_storage_dir = $this->getParameter('image_storage_dir');
+                $ext = strtolower($file->getClientOriginalExtension());
                 
                 $destDir = 
                     $image_storage_dir .
                     DIRECTORY_SEPARATOR .
                     'blog' .
                     DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext);
                 
-                $file->move($destDir, $destFilename);
+                $file->move($destDir, $destFilename);                
+                
+                // create thumbnail
+                //<editor-fold>
+                $fullpath = $destDir . DIRECTORY_SEPARATOR . $destFilename;
+                $fullpath2 = $image_storage_dir . DIRECTORY_SEPARATOR . "blog" . DIRECTORY_SEPARATOR . "thumbnail" . DIRECTORY_SEPARATOR . $uuid . "." . $ext;
+                
+                $size = getimagesize($fullpath);
+                $w = $size[0];
+                $h = $size[1];                
+                $nw = 360;
+                $nh = 270;
+                
+                $src = imagecreatefromstring(file_get_contents($fullpath));
+                $dst = imagecreatetruecolor($nw, $nh);
+                imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+                if ($ext === 'jpg' || $ext === 'jpeg') {
+                    imagejpeg($dst, $fullpath2, 85);
+                }
+                else if ($ext === 'png') {
+                    imagepng($dst, $fullpath2, 9);
+                }        
+
+                imagedestroy($dst);        
+                imagedestroy($src);
+                //</editor-fold>
                 
                 // create object
                 $img = new Image();
@@ -208,6 +234,7 @@ class BlogController  extends BaseAdminController {
                 $img->setName($file->getClientOriginalName());
                 $img->setExtension($file->getClientOriginalExtension());
                 $img->setPath('blog');
+                $img->setThumbnailPath('blog' . DIRECTORY_SEPARATOR . 'thumbnail');
                               
                 $em->persist($img);
                 $em->flush();
@@ -334,6 +361,7 @@ class BlogController  extends BaseAdminController {
                 // save file
                 $uuid = Utils::getUuid();
                 $image_storage_dir = $this->getParameter('image_storage_dir');
+                $ext = strtolower($file->getClientOriginalExtension());
                 
                 //$destDir = sprintf("%sblog\\",$image_storage_dir);                
                 $destDir = 
@@ -341,16 +369,42 @@ class BlogController  extends BaseAdminController {
                         DIRECTORY_SEPARATOR .
                         'blog' .
                         DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext);
                 
                 $file->move($destDir, $destFilename);
                 
+                // create thumbnail
+                //<editor-fold>
+                $fullpath = $destDir . DIRECTORY_SEPARATOR . $destFilename;
+                $fullpath2 = $image_storage_dir . DIRECTORY_SEPARATOR . "blog" . DIRECTORY_SEPARATOR . "thumbnail" . DIRECTORY_SEPARATOR . $uuid . "." . $ext;
+                
+                $size = getimagesize($fullpath);
+                $w = $size[0];
+                $h = $size[1];
+                $nw = 360;
+                $nh = 270;
+                
+                $src = imagecreatefromstring(file_get_contents($fullpath));
+                $dst = imagecreatetruecolor($nw, $nh);
+                imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+                if ($ext === 'jpg' || $ext === 'jpeg') {
+                    imagejpeg($dst, $fullpath2, 85);
+                }
+                else if ($ext === 'png') {
+                    imagepng($dst, $fullpath2, 9);
+                }        
+
+                imagedestroy($dst);        
+                imagedestroy($src);
+                //</editor-fold>
+
                 // create object
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($file->getClientOriginalName());
                 $img->setExtension($file->getClientOriginalExtension());
                 $img->setPath('blog');
+                $img->setThumbnailPath('blog' . DIRECTORY_SEPARATOR . 'thumbnail');
                               
                 $em->persist($img);
                 $em->flush();
