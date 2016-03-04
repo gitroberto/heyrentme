@@ -416,9 +416,17 @@ class BookingController extends BaseController {
             return new Response($status = Response::HTTP_FORBIDDEN);
             // todo: check user identity
         }
-        
+                
         $inq = $bk->getInquiry();
         $bkUser = $inq->getUser();
+
+        $user = $this->getUser();
+        $provider = $inq->getEquipment()->getUser();
+        
+        // check security
+        if ($user === null || $user->getId() !== $provider->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }
         
         // build form
         //<editor-fold>
@@ -481,6 +489,14 @@ class BookingController extends BaseController {
         }
         
         $inq = $bk->getInquiry();
+        
+        $user = $this->getUser();
+        $renter = $inq->getUser();
+
+        // check security
+        if ($user === null || $user->getId() !== $renter->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }                
         
         // build form
         //<editor-fold>
@@ -665,7 +681,7 @@ class BookingController extends BaseController {
         $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOne($bk->getInquiry()->getEquipment()->getId());
         $user = $this->getUser();
         
-        // todo: check security
+        // check security
         if ($user->getId() !== $bk->getInquiry()->getEquipment()->getUser()->getId()) {
             return new Response(Response::HTTP_FORBIDDEN);
         }

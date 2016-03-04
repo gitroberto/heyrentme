@@ -457,6 +457,14 @@ class TalentBookingController extends BaseController {
         $inq = $bk->getInquiry();
         $bkUser = $inq->getUser();
         
+        $user = $this->getUser();
+        $provider = $inq->getTalent()->getUser();
+        
+        // check security
+        if ($user === null || $user->getId() !== $provider->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }
+
         // build form
         //<editor-fold>
             $form = $this->createFormBuilder()
@@ -517,8 +525,15 @@ class TalentBookingController extends BaseController {
             // todo: check user identity
         }
         
-        $inq = $bk->getInquiry();
-        
+        $inq = $bk->getInquiry();        
+        $user = $this->getUser();
+        $renter = $inq->getUser();
+
+        // check security
+        if ($user === null || $user->getId() !== $renter->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }                
+                
         // build form
         //<editor-fold>
             $form = $this->createFormBuilder()
@@ -695,7 +710,7 @@ class TalentBookingController extends BaseController {
         $eq = $this->getDoctrineRepo('AppBundle:Talent')->getOne($bk->getInquiry()->getTalent()->getId());
         $user = $this->getUser();
         
-        // todo: check security
+        // check security
         if ($user->getId() !== $bk->getInquiry()->getTalent()->getUser()->getId()) {
             return new Response(Response::HTTP_FORBIDDEN);
         }
