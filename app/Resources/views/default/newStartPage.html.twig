@@ -107,12 +107,12 @@
           <div class="container">
               <div class="row">
                   <div class="col-sm-6 pull-right">
-                      <h4 class="heading text-bold text-yellow">Tolle Angebote buchen - </h4>
+                      <h4 class="heading text-bold text-yellow">Tolle Angebote buchen</h4>
                       <h4 class="heading">bei hey! VIENNA</h4>
 
                       <p><span class="text-bold">Finde das richtige Angebot für unterschiedliche Anwendungsbereiche!</span>
                           <br><br>
-                          Du hast manchmal ein Equipment (Sportgerät, Werkzeug, technisches Gerät) nicht zur Hand oder benötigst eine Dienstleistung im Privatbereich - Mit hey! sharing community hast du jetzt die Möglichkeit aus einer Vielzahl toller Angebote auszuwählen und sie direkt zu buchen. 
+                          Du hast manchmal ein Equipment (Sportgerät, Werkzeug, technisches Gerät) nicht zur Hand oder benötigst eine Dienstleistung im Privatbereich - In der hey! sharing community hast du jetzt die Möglichkeit aus einer Vielzahl toller Angebote auszuwählen und sie direkt zu buchen. 
                           <br><br>
                           Wie das genau geht
                           <a href="{{ path("hilfe_faq_faq") }}"> findest du hier.</a></p>
@@ -152,7 +152,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
-                    <h4 class="heading text-bold text-yellow">Angebote einstellen - </h4>
+                    <h4 class="heading text-bold text-yellow">Angebote einstellen</h4>
                     <h4 class="heading">bei hey! VIENNA</h4>
 
                     <p>
@@ -228,35 +228,7 @@
       </div>
     </div>
   </div>
-    
-    
- <style>
-.content-modal-video {
-	position: relative!important;
-	padding-bottom: 55%!important;
-	padding-top: 15px!important;
-	height: 0!important;
-	overflow: hidden!important;
-}
-.content-modal-video iframe {
-	position: absolute!important;
-	top: 0!important;
-	left: 0!important;
-	width: 100%!important;
-	height: 100%!important;
-}
-
-.content-modal-video button {
-	z-index:9999;
-	position:relative;
-}
-</style>
-    
-    
-    
-    
-    
-    
+        
 {% endblock %}
 
 {% block script %}
@@ -274,4 +246,19 @@
            });
         });
     </script>
+	
+<script>
+        var iframe = document.getElementById('video');
+        // $f == Froogaloop
+        var player = $f(iframe);
+        var pauseButton = document.getElementById("pause-button");
+        pauseButton.addEventListener("click", function() {
+            player.api("pause");
+        });
+		 var pauseArea = document.getElementById("hey-video");
+        pauseArea.addEventListener("click", function() {
+            player.api("pause");
+        });
+</script>
+	
 {% endblock %}

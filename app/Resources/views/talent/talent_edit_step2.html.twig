@@ -8,7 +8,7 @@
       <div class="row">
           <!-- Left side -->
           <div class="col-xs-9">
-              <img src="/img/logo-small.png" alt=""/>
+              <a href="{{ path('dashboard') }}"><img src="/img/logo-small.png" alt=""/></a>
               <ul class="steps">
                   <li class="step-1 active-step"><span id="button_1" class="top-menu-button counters"><span class="n-one"></span>Tarif</span></li>
                   <li class="step-2"><span class="counters text-bold"><span class="n-two"></span>Beschreibung</span>
@@ -101,7 +101,7 @@
                       <div class="form-container form-input-border">
                           <div class="row">
                               <div class="col-sm-12">
-                                  <p class="form-heading-small">Beschreibe dein Angebot* (Hier bitte keine persönlichen Kontaktdaten oder Web-Links)</p>
+                                  <p class="form-heading-small">Beschreibe dein Angebot* (Anmerkung: Persönliche Kontaktdaten oder Web-Links werden automatisch entfernt.)</p>
                                   <div class="err-msg">{{ form_errors(form) }}</div>
                                   {{ form_widget(form.description, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
                                  <div class="chbox-holder">
@@ -161,7 +161,7 @@
           <div class="form-container border-bottom-white margin-ort">
               <div class="row">
                 <div class="col-sm-12">
-                  <p>Tel.-Nr. für Rückfragen*</p>
+                  <p>Telefon Nr. für Rückfragen*</p>
                 </div>
               </div>
             </div>
@@ -192,7 +192,7 @@
                   <p class="text-bold">Ein tolles Foto zu deiner Anzeige ver-
                       bessert die Chancen, dass dein Angebot
                       gebucht wird um ein Vielfaches!</p>
-                  <p>Lies unser <a href="{{ path("tutorial-photo") }}" target="_blank">Foto-Tutorial</a>, falls du für deine Angebotsfotos noch ein paar Tipps dazu benötigst!</p>
+                  <p>In unserem <a href="{{ path("tutorial-photo") }}" target="_blank">Foto-Tutorial</a> findest du ein paar nützliche Tipps.</p>
                   <div id="owl-demo" class="owl-carousel user-owl">
                       <div class="item">
                           <img src="/img/allgemein-final/form_t_1.jpg" alt=""/>                    </div>

@@ -2,8 +2,46 @@
 
 }
 
+.rkeinebuchung {
+
+}
+
+.content-modal-video {
+	position: relative!important;
+	padding-bottom: 55%!important;
+	padding-top: 15px!important;
+	height: 0!important;
+	overflow: hidden!important;
+}
+.content-modal-video iframe {
+	position: absolute!important;
+	top: 0!important;
+	left: 0!important;
+	width: 100%!important;
+	height: 100%!important;
+}
+
+.content-modal-video button {
+	z-index:9999;
+	position:relative;
+}
+
+
+.modal-dialog form .rent-dialog form .angrafge-dialog form {
+margin-left: 20px;
+margin-right: 20px;
+}
+
+.rent-dialog p {
+text-transform: none!important;
+}
+
+#drop-main a, #drop a {
+text-transform: none!important;
+}
+
 .dashboard .product-info .no-stars {
-margin-left: 0;
+margin-left: 0 !important;
 }
 
 .blog-detail .left-side h1 {
@@ -148,8 +186,8 @@ font-family: 'open sans', sans-serif !important;
 	padding-bottom: 8px;
 }
 .profilebutton {
-	padding-top: 5px;
-	padding-bottom: 4px;
+	padding-top: 4.5px;
+	padding-bottom: 3.5px;
 }
 .profilebutton img {
 	display: inline-block;
@@ -541,6 +579,10 @@ text-align:center;
 .anleitungform input {
 width:100%;
 max-width:375px;
+}
+
+.anleitungform .button-black:focus {
+color:#000;
 }
 
 /* Tarifoptionen & Preisauf Anfrage Confirmation */
