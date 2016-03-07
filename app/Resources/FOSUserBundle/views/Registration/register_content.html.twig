@@ -29,7 +29,7 @@
     
     <input type="submit" value="mit E-mail anmelden">
     <label class="agb">{{ form_widget(form.accept, { 'attr': { 'id' : 'acceptCheckBox' } }) }}
-        <span>Ich akzeptiere die <a href="#">AGBs</a> von hey! sharing community</span>
+        <span>Ich akzeptiere die <a href="{{ path("kundeninfos_agb") }}" target="_blank">AGBs</a> von hey! sharing community</span>
     </label>
 {{ form_end(form) }}
 
