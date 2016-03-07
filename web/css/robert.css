@@ -770,10 +770,10 @@ display:none;
 @media (max-width: 736px) {
 	
 #login h4 {
-    margin-left: none;
+    margin-left: 0;
 }
 .register h4 {
-    margin-left: none;
+    margin-left: 0;
 }	
 	
 .about-us p {
