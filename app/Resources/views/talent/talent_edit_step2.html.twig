@@ -247,7 +247,6 @@
   <script src="/js/vendors/upload/jquery.ui.widget.js"></script>
   <script src="/js/vendors/upload/jquery.iframe-transport.js"></script>
   <script src="/js/vendors/upload/jquery.fileupload.js"></script>
-  <script src="/js/vendors/upload/script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.color.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
@@ -337,7 +336,9 @@
                 jcropApi = this;
             });
             $("#img-list li.process, #img-list-main li.process").remove();
-            $("#cropper-modal").modal();
+            $("#cropper-modal").modal({ 
+                'backdrop': 'static' 
+            });
         }
         
         $(function() {

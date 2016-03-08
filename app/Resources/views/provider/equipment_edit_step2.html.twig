@@ -290,8 +290,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
   
-  {#<script src="/js/vendors/upload/script.js"></script>#}
-
     <script>
         
         var fieldsChanged = false;
@@ -377,7 +375,9 @@
                 jcropApi = this;
             });
             $("#img-list li.process, #img-list-main li.process").remove();
-            $("#cropper-modal").modal();
+            $("#cropper-modal").modal({ 
+                'backdrop': 'static' 
+            });
         }
         
         $(function() {
