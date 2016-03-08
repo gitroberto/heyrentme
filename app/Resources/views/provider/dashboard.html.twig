@@ -188,8 +188,12 @@
                                             <p class="product-name">{{ tal.name }}</p>
                                         </div>
                                         <div class="col-xs-4">
-                                            <p class="price">{{ tal.price }} &#8364;</p>
-                                            <p class="tag">pro Stunde</p>
+                                            {% if tal.requestPrice == 1 %}
+                                                <p class="price">auf&nbsp;Anfr.</p>
+                                            {% else %}
+                                                <p class="price">{{ tal.price }} &#8364;</p>
+                                                <p class="tag">pro Stunde</p>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

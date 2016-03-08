@@ -67,7 +67,7 @@
                         <p class="text-bold"><strong>{{ talent.name }}</strong></p>
                         <p class="no-margin-bottom"><strong>Beginn:</strong> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
                         <p class="no-margin-bottom"><strong>Ende:</strong> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
-                        <p class="no-margin-bottom"><strong>Dein Verdienst:</strong> {{ inquiry.price|number_format(2, ',') }} €</p>
+                        <p class="no-margin-bottom"><strong>Dein Verdienst:</strong> {% if talent.requestPrice == 1 %}auf&nbsp;Anfr.{% else %}{{ inquiry.price|number_format(2, ',') }} €{% endif %}</p>
                             {# TODO: add modal to update address 
                             (<a href="" data-toggle="modal" data-target=".anfrage">editieren</a>)</p> #}
                         <p class="last">Buchungsnr.: T-{{ inquiry.id }}</p>
