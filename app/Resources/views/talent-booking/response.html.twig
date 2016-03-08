@@ -23,7 +23,7 @@
                 <div class="col-sm-6 preisauf">
                     <label for="form[price]">Gesamtpreis inkl. USt.:</label>
                     {{ form_widget(form.price, { 'attr': { 'placeholder': '0', 'class': 'small-input' } }) }}EUR
-                    <div class="err-msg">'{{ form_errors(form.price) }}</div>
+                    <div class="err-msg">{{ form_errors(form.price) }}</div>
                 </div>
             {% endif %}
         </div>
@@ -40,8 +40,8 @@
     <div class="row bewertung-request-form">
         <div class="col-xs-12">
             {% set ph = "Möchtest du " ~ inquiry.user.name ~ " etwas mitteilen? Falls die Buchungsdaten für dich nicht passen, kannst du die Anfrage ablehnen und " ~ inquiry.user.name ~ " bitten mit neuen Buchungsdaten anzufragen." %}
-            {{ form_widget(form.message, { 'attr': { 'placeholder': ph } }) }}
-            <button>Absenden</button>
+            {{ form_widget(form.response, { 'attr': { 'placeholder': ph } }) }}
+            <button id="response-submit">Absenden</button>
         </div>
     </div>
     {{ form_end(form) }}
@@ -232,10 +232,15 @@
   </div>
   {% endif %}
   
+  {% endblock %}
+  
+  {% block script %}
   <script>
-        $(function(){                               
-            $("#response button").click(function() {
-                $("#response").submit();
+        $(function(){
+            $("#response-submit").click(function() {
+                var form = document.getElementById('response');
+                if (form.checkValidity())
+                    form.submit();
             });
             {% if saved %}
                 $("#question-modal").modal();                

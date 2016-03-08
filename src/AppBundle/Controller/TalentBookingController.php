@@ -169,27 +169,27 @@ class TalentBookingController extends BaseController {
         if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
             return new Response('', Response::HTTP_FORBIDDEN);
         }
-        // sanity check
-        if ($inq->getAccepted() !== null) { // already responded
-            return new Response('', Response::HTTP_FORBIDDEN);
-        }
         
-        $saved = false;
+        $saved = $inq->getAccepted() !== null;
         $acc = null;
-        $dashboardUrl = null;
         
         // build form
         //<editor-fold>
+        $data = array(
+            'status' => $inq->getAccepted(),
+            'response' => $inq->getResponse(),
+            'price' => $inq->getPrice()
+        );        
         $statuses = array(
             1 => 'Auftrag annehmen',
             0 => 'Auftrag ablehnen'
         );        
-        $builder = $this->createFormBuilder()
+        $builder = $this->createFormBuilder($data)
             ->add('status', 'choice', array(
                 'choices' => $statuses,
                 'constraints' => new NotBlank()
             ))
-            ->add('message', 'textarea', array(
+            ->add('response', 'textarea', array(
                 'required' => false
             ));
         if ($eq->getRequestPrice() == 1) {
@@ -212,11 +212,11 @@ class TalentBookingController extends BaseController {
         
         $form->handleRequest($request);
         
-        if ($form->isValid()) {
+        if ($form->isValid() && !$saved) {
             $data = $form->getData();
             
             $inq->setAccepted($data['status']);
-            $inq->setResponse($data['message']);
+            $inq->setResponse($data['response']);
             if ($eq->getRequestPrice() === 1) {
                 $inq->setPrice($data['price']);
             }
@@ -257,7 +257,6 @@ class TalentBookingController extends BaseController {
             $this->get('mailer')->send($message);
             //</editor-fold>
                         
-            //return $this->redirectToRoute('dashboard');
             $saved = true;
         }
         

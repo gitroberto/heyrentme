@@ -166,21 +166,40 @@ class BookingController extends BaseController {
         if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
             return new Response('', Response::HTTP_FORBIDDEN);
         }
-        // sanity check
-        if ($inq->getAccepted() !== null) { // already responded
-            return new Response('', Response::HTTP_FORBIDDEN);
-        }
         
-        $saved = false;
+        $saved = $inq->getAccepted() !== null;
         $acc = null;
-        $dashboardUrl = null;
-        if ($request->getMethod() === "POST") {
-            $acc = intval($request->request->get('accept'));
-            $msg = $request->request->get('message');
+        
+        // build form
+        //<editor-fold>
+        $data = array(
+            'status' => $inq->getAccepted(),
+            'response' => $inq->getResponse()
+        );        
+        $statuses = array(
+            1 => 'Auftrag annehmen',
+            0 => 'Auftrag ablehnen'
+        );        
+        $builder = $this->createFormBuilder($data)
+            ->add('status', 'choice', array(
+                'choices' => $statuses,
+                'constraints' => new NotBlank()
+            ))
+            ->add('response', 'textarea', array(
+                'required' => false
+            ));
+        $form = $builder->getForm();
+        //</editor-fold>
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid() && !$saved) {
+            $data = $form->getData();
             
-            $inq->setAccepted($acc);
-            $inq->setResponse($msg);
-            if ($acc > 0) {
+            $inq->setAccepted($data['status']);
+            $inq->setResponse($data['response']);
+
+            if ($data['status'] === 1) {
                 $inq->setUuid(Utils::getUuid());
             }
             
@@ -217,9 +236,6 @@ class BookingController extends BaseController {
             $this->get('mailer')->send($message);
             //</editor-fold>
             
-            $dashboardUrl = $this->generateUrl('dashboard');
-            
-            //return $this->redirectToRoute('dashboard');
             $saved = true;
         }
         
@@ -228,7 +244,7 @@ class BookingController extends BaseController {
             'inquiry' => $inq,
             'saved' => $saved, 
             'decision' => $acc,
-            'dashboardUrl' => $dashboardUrl
+            'form' => $form->createView()
         ));
     }
     
