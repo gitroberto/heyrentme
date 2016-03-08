@@ -193,7 +193,7 @@ es für deine Interessenten generell übersichtlicher ist, wenn ein Stundentarif
           $(".top-menu-button").click(topMenuClick);
           $("#form_price").on('change keyup', priceChanged);
           $("#form_requestPrice").on('click change', requestPriceChanged);
-          
+          priceChanged();
       });
   </script>
 {% endblock %}
