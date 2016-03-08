@@ -15,7 +15,7 @@
             <p>
                 {% if inquiry.user %}{{ inquiry.user.name }}{% else %}{{ inquiry.name }}{% endif %}
                 möchte dein Angebot für den unten genannten Zeitraum buchen.</p>
-            <div class="col-sm-6 reply-select">
+            <div class="{% if talent.requestPrice == 1 %}col-sm-6{% else %}col-sm-12{% endif %} reply-select">
                 {{ form_widget(form.status, { 'attr': { 'class': 'selectpicker', 'title': 'BITTE AUSWÄHLEN*' } }) }}
                 <div class="err-msg">'{{ form_errors(form.status) }}</div>
               </div>
