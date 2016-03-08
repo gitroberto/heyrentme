@@ -809,7 +809,7 @@ class BookingController extends BaseController {
             $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('booking-reply', array('id' => $q->getId()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails\mail_to_provider_question.html.twig', array(
+            $emailHtml = $this->renderView('Emails/mail_to_provider_question.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'question' => $q,
