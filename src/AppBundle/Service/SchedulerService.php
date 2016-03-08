@@ -260,7 +260,7 @@ class SchedulerService {
                 else {
                     $email = $inq->getEmail();
                 }
-                $emailHtml = $this->templating->render('Emails\mail_to_user_reminder_return_offer.html.twig', array(
+                $emailHtml = $this->templating->render('Emails/mail_to_user_reminder_return_offer.html.twig', array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,
@@ -298,7 +298,7 @@ class SchedulerService {
                 $discountCode = $bk->getDiscountCode();
 
                 $email = $provider->getEmail();
-                $emailHtml = $this->templating->render('Emails\mail_to_provider_reminder_return_offer.html.twig', array(
+                $emailHtml = $this->templating->render('Emails/mail_to_provider_reminder_return_offer.html.twig', array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
                     'provider' => $provider,
                     'inquiry' => $inq,

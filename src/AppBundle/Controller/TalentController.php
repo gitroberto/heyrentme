@@ -871,7 +871,7 @@ class TalentController extends BaseController {
      * @Route("/provider/talent-edit-4/{id}", name="talent-edit-4")
      */
     public function talentEdit4Action(Request $request, $id) {
-        return $this->render('talent\talent_edit_step4.html.twig', array(
+        return $this->render('talent/talent_edit_step4.html.twig', array(
             'complete' => true,
             'id' => $id
         ));

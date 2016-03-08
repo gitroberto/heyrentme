@@ -558,7 +558,7 @@ class ProviderController extends BaseController {
         
         $complete = $equipment->getStatus() != Equipment::STATUS_INCOMPLETE;
         
-        return $this->render('provider\equipment_edit_step1.html.twig', array(
+        return $this->render('provider/equipment_edit_step1.html.twig', array(
             'form' => $form->createView(),
             'complete' => $complete,
             'id' => $id
@@ -650,7 +650,7 @@ class ProviderController extends BaseController {
             return $this->redirectToRoute('equipment-edit-2', array('id' => $eq->getId()));
         }
         
-        return $this->render('provider\equipment_edit_step1.html.twig', array(
+        return $this->render('provider/equipment_edit_step1.html.twig', array(
             'form' => $form->createView(),
             'complete' => false,
             'id' => $subcategoryId
@@ -798,7 +798,7 @@ class ProviderController extends BaseController {
         
         $complete = $eq->getStatus() != Equipment::STATUS_INCOMPLETE;
         
-        return $this->render('provider\equipment_edit_step2.html.twig', array(
+        return $this->render('provider/equipment_edit_step2.html.twig', array(
             'form' => $form->createView(),
             'equipment' => $eq,
             'mainImage' => $mainImage,
@@ -1145,7 +1145,7 @@ class ProviderController extends BaseController {
         //$features = $this->getDoctrineRepo('AppBundle:Equipment')->getFeaturesAsArray($eq->getId());
         $complete = $eq->getStatus() != Equipment::STATUS_INCOMPLETE;
         
-        return $this->render('provider\equipment_edit_step3.html.twig', array(
+        return $this->render('provider/equipment_edit_step3.html.twig', array(
             'form' => $form->createView(),
             'complete' => $complete,
             'id' => $eqid/*,
@@ -1166,7 +1166,7 @@ class ProviderController extends BaseController {
      * @Route("/provider/equipment-edit-4/{id}", name="equipment-edit-4")
      */
     public function equipmentEdit4Action(Request $request, $id) {
-        return $this->render('provider\equipment_edit_step4.html.twig', array(
+        return $this->render('provider/equipment_edit_step4.html.twig', array(
             'complete' => true,
             'id' => $id
         ));
@@ -1393,7 +1393,7 @@ EOT;
             $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));                    
             $subject = 'New/modified talent notification.';
             
-            $emailHtml = $this->renderView('Emails\talent\new_modified_item.html.twig', array(                                    
+            $emailHtml = $this->renderView('Emails/talent/new_modified_item.html.twig', array(                                    
                 'talent' => $eq,
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),            
                 'url' => $url

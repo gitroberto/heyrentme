@@ -132,7 +132,7 @@ class TalentBookingController extends BaseController {
             $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('talent-response', array('id' => $inq->getId()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails\talent\mail_to_provider_offer_request.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_provider_offer_request.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
@@ -242,7 +242,7 @@ class TalentBookingController extends BaseController {
                     $this->generateUrl('talent-confirmation', array('uuid' => $inq->getUuid()));
             }
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails\talent\mail_to_user_confirm_offer_accepted.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_user_confirm_offer_accepted.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
@@ -354,7 +354,7 @@ class TalentBookingController extends BaseController {
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             
             $url = $request->getSchemeAndHttpHost() . $this->generateUrl('einstellungen');
-            $emailHtml = $this->renderView('Emails\talent\mail_to_provider_confirm_booking.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_provider_confirm_booking.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
@@ -377,7 +377,7 @@ class TalentBookingController extends BaseController {
                 $email = $inq->getEmail();
             }
             $url = $request->getSchemeAndHttpHost() . $this->generateUrl('booking-list');
-            $emailHtml = $this->renderView('Emails\talent\mail_to_user_confirm_booking.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_user_confirm_booking.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
@@ -665,7 +665,7 @@ class TalentBookingController extends BaseController {
                 $email = $inq->getEmail();
             }
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails\talent\mail_to_user_confirm_cancel.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_user_confirm_cancel.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq
@@ -678,7 +678,7 @@ class TalentBookingController extends BaseController {
             $this->get('mailer')->send($message);
             // to provider
             $email = $provider->getEmail();
-            $emailHtml = $this->renderView('Emails\talent\mail_to_provider_cancel.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_provider_cancel.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq
@@ -756,7 +756,7 @@ class TalentBookingController extends BaseController {
                 $email = $inq->getEmail();
             }
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails\talent\mail_to_user_cancel.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_user_cancel.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq
@@ -769,7 +769,7 @@ class TalentBookingController extends BaseController {
             $this->get('mailer')->send($message);
             // to provider
             $email = $provider->getEmail();
-            $emailHtml = $this->renderView('Emails\talent\mail_to_provider_confirm_cancel.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_provider_confirm_cancel.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider
             ));
@@ -906,7 +906,7 @@ class TalentBookingController extends BaseController {
             $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('catchall', array('content' => $eq->getUrlPath()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-            $emailHtml = $this->renderView('Emails\talent\mail_to_user_reply_question.html.twig', array(
+            $emailHtml = $this->renderView('Emails/talent/mail_to_user_reply_question.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'asker' => $asker,
                 'provider' => $provider,
