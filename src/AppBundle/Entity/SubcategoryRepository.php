@@ -64,7 +64,7 @@ class SubcategoryRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery();
         $rows = $q->getResult();
         
-        $arr = array('' => 'Detailkategorie Wählen');
+        $arr = array('' => 'Detailkategorie wählen');
         foreach($rows as $sc) {
             $arr[$sc->getId()] = $sc->getName();
         }
