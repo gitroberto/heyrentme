@@ -27,7 +27,7 @@ monolog:
         console:
             type:  console
         scheduler:
-            type: stream
+            type: rotating_file
             path: "%kernel.logs_dir%/scheduler-%kernel.environment%.log"
-            level: error
+            level: debug
             channels: ["scheduler"]

@@ -1216,7 +1216,7 @@ class ProviderController extends BaseController {
         $image = $user->getImage();
         $folder = $this->getParameter('image_storage_dir');
         $user->setImage(null);        
-        $this->RemoveAndDeleteRelatedImage($image, $folder);
+        $this->RemoveAndDeleteRelatedImage($image, $folder); // todo: why not Image::removeImage?
         $m->flush();
         
         foreach ($equipments as $eq) {
@@ -1243,7 +1243,7 @@ class ProviderController extends BaseController {
                 $tal->removeImage($ti);
                 $m->remove($ti);
                 $m->flush();
-                $this->RemoveAndDeleteRelatedImage($ti, $folder);
+                $this->RemoveAndDeleteRelatedImage($ti, $folder);                
             }
         }
         
@@ -1328,6 +1328,8 @@ class ProviderController extends BaseController {
     delete from talent_booking_cancel where user_id = {$id};
     delete from equipment_inquiry where user_id = {$id};
     delete from talent_inquiry where user_id = {$id};
+    delete from equipment_question where user_id = {$id};
+    delete from talent_question where user_id = {$id};
     delete from discount_code where user_id = {$id};
     delete from user_rating where user_id = {$id};
     delete from fos_user where id = {$id};
@@ -1335,8 +1337,8 @@ EOT;
         
         $em = $this->getDoctrine()->getEntityManager();        
         $conn = $em->getConnection();
-        $conn->executeUpdate($sql);        
-        
+        $conn->executeUpdate($sql);
+        $this->get('monolog.logger.artur')->debug($sql);
         
         return $this->redirectToRoute("fos_user_security_logout");
     }

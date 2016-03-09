@@ -45,7 +45,7 @@ class DefaultController extends BaseController {
             'testimonials' => $testimonials
         ));
         return $this->render('default/index.html.twig');
-        
+
     }
     
     /**
