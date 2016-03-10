@@ -310,18 +310,20 @@ class User extends BaseUser
     
     
     
+    public function getFacebookPicture($large) {
+        if ($this->facebookID === null) {
+            return null;
+        }
+        return 'http://graph.facebook.com/'. $this->facebookID .'/picture' . ($large ? '?type=large' : '');
+    }
     
-    
-    public function getProfilePicture($large, $imageUrlPrefix)
-    {
-        $imageUrl = "/img/placeholder/user-big.png";
+    public function getProfilePicture($large, $imageUrlPrefix) {
+        $imageUrl = "/img/placeholder/user-big.png"; // default
         if ($this->image != null) {            
             $imageUrl = $this->image->getUrlPath($imageUrlPrefix);            
-        } else if ($this->facebookID != null){
-            $imageUrl = 'http://graph.facebook.com/'. $this->facebookID .'/picture';
-            if ($large){
-                $imageUrl .= "?type=large";
-            }
+        } 
+        else if ($this->facebookID != null){
+            $imageUrl = $this->getFacebookPicture($large);
         }         
 
         return $imageUrl;

@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Image;
 use AppBundle\Entity\User;
+use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -184,6 +186,35 @@ class UserController extends BaseAdminController {
                 $userMgr->updateCanonicalFields($user);                
                 $userMgr->updateUser($user);                
                 
+                $em = $this->getDoctrine()->getManager();
+                $file = $request->files->get('upload');
+                if ($file != null && $file->isValid()) {
+                    // save file
+                    $uuid = Utils::getUuid();
+                    $image_storage_dir = $this->getParameter('image_storage_dir');
+
+                    $destDir = 
+                            $image_storage_dir .
+                            DIRECTORY_SEPARATOR .
+                            'user' .
+                            DIRECTORY_SEPARATOR;
+                    $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+
+                    $file->move($destDir, $destFilename);
+
+                    // create object
+                    $img = new Image();
+                    $img->setUuid($uuid);
+                    $img->setName($destFilename);
+                    $img->setExtension($file->getClientOriginalExtension());
+                    $img->setOriginalPath($file->getClientOriginalName());
+                    $img->setPath('user');
+
+                    $em->persist($img);
+                    $user->setImage($img);
+                }
+                $em->flush();
+                
                 return $this->redirectToRoute("admin_users_list");
             }
         
@@ -278,7 +309,6 @@ class UserController extends BaseAdminController {
                 $data = $form->getData();
                 
                 $userMgr = $this->get('fos_user.user_manager');
-                $user = $userMgr->createUser();
                 $user->setUsername($data['email']);
                 $user->setEmail($data['email']);
                 if (!empty($data['password'])) {
@@ -296,11 +326,50 @@ class UserController extends BaseAdminController {
                 $userMgr->updateCanonicalFields($user);                
                 $userMgr->updateUser($user);                
                 
+                $em = $this->getDoctrine()->getManager();
+                $file = $request->files->get('upload');
+                if ($file != null && $file->isValid()) {
+
+                    //remove old Image (both file from filesystem and entity from db)
+                    $oldimg = $user->getImage();
+                    if ($oldimg !== null) {
+                        $this->getDoctrineRepo('AppBundle:Image')->removeImage($oldimg, $this->getParameter('image_storage_dir'));
+                        $user->setImage(null);
+                        $em->flush();
+                    }
+
+                    // save file
+                    $uuid = Utils::getUuid();
+                    $image_storage_dir = $this->getParameter('image_storage_dir');
+
+                    $destDir = 
+                            $image_storage_dir .
+                            DIRECTORY_SEPARATOR .
+                            'user' .
+                            DIRECTORY_SEPARATOR;
+                    $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+
+                    $file->move($destDir, $destFilename);
+
+                    // create object
+                    $img = new Image();
+                    $img->setUuid($uuid);
+                    $img->setName($destFilename);
+                    $img->setExtension($file->getClientOriginalExtension());
+                    $img->setOriginalPath($file->getClientOriginalName());
+                    $img->setPath('user');
+
+                    $em->persist($img);
+                    $user->setImage($img);
+                }
+                $em->flush();
+
                 return $this->redirectToRoute("admin_users_list");
             }
         
         return $this->render('admin/user/edit.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'user' => $user
         ));
     }
     

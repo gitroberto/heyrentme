@@ -2,6 +2,22 @@
     font-family: 'open sans', sans-serif;
 }
 
+input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #999;
+}
+input::-moz-placeholder { /* Firefox 19+ */
+  color: #999;
+}
+input:-ms-input-placeholder { /* IE 10+ */
+  color: #999;
+}
+input:-moz-placeholder { /* Firefox 18- */
+  color: #999;
+}
+input {
+    color: black;
+}
+
 .adm-header {
     padding: 4px 16px;
     font-size: 24px;
@@ -41,8 +57,8 @@ nav.crumbs {
 }
 
 .thumb {
-    max-width: 250px;
-    max-height: 150px;
+    max-width: 200px;
+    max-height: 100px;
 }
 
 
@@ -57,4 +73,17 @@ nav.crumbs {
 }
 .select-box {
     width: 400px;
+}
+
+/* new form style ----------------------------------------------------------- */
+.form {
+    width: 800px;
+    margin-left: 0;
+}
+.row {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.text-line-fill {
+    width: 100%;
 }

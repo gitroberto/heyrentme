@@ -1,43 +1,5 @@
 {% extends 'admin/admin.base.html.twig' %}
 
-{% block head %}
-    {{ parent() }}
-    <script>
-        var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-={}[]|?><';
-        var digits = '0123456789';
-        function generate(array, length) {
-            var l = array.length;
-            var pwd = '';
-            for (var i = 0; i < length; i++) 
-                pwd += array[Math.round(Math.random() * (l - 1), 0)];
-            return pwd;
-        }
-        $(function() {
-            $("#pwd-safe").click(function(e) {
-                e.preventDefault();
-                $("#form_password").val(generate(chars, 12));
-            });
-            $("#pwd-temp").click(function(e) {
-                e.preventDefault();
-                $("#form_password").val('temp_' + generate(digits, 5));
-            });
-        });
-    </script>
-    <style>
-        .form {
-            width: 800px;
-            margin-left: 0;
-        }
-        .row {
-            margin-top: 8px;
-            margin-bottom: 8px;
-        }
-        .text-line-fill {
-            width: 100%;
-        }
-    </style>
-{% endblock %}
-
 {% block breadcrumb %}
     {{ parent() }}
     <li><a href="{{ path('admin_users_list') }}" class="active">User</a></li>
@@ -112,6 +74,11 @@
             {{ form_widget(form.bic, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'BIC' }}) }}
         </div>
         <div class="col-xs-4 err-msg">{{ form_errors(form.bic) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="upload" class="control-label">Photo</label></div>
+        <div class="col-xs-6"><input type="file" name="upload" id="upload"/></div>
+        <div class="col-xs-4 err-msg"></div>
     </div>
 </div>
 <br/>
