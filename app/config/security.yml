@@ -70,8 +70,7 @@ security:
     #<added by Seba>
     access_control:
         - { path: ^/admin/, role: ROLE_SUPER_ADMIN }
-        - { path: ^/preview/equipment/, role: ROLE_SUPER_ADMIN }
-        - { path: ^/preview/talent/, role: ROLE_SUPER_ADMIN }
+        - { path: ^/preview/, role: IS_AUTHENTICATED_ANONYMOUSLY }        
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
