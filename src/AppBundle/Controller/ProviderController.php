@@ -329,7 +329,7 @@ class ProviderController extends BaseController {
                 ->getForm();
         $this->formHelper = $form;        
         $form->handleRequest($request);      
-        
+        $saved = false;
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $newPassword = $form['newPassword']->getData();
@@ -349,10 +349,13 @@ class ProviderController extends BaseController {
             $user->setBic($form['bic']->getData());
             
             $em->flush();
+            $saved = true;
+                    
         }
       
         return $this->render('provider/einstellungen.html.twig', array(  
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'saved' => $saved
         ));
     }        
     

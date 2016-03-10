@@ -124,4 +124,35 @@
       </div>
   </div>
   </div>
+  
+  
+  {% if saved %}
+  <div id="saved-modal" class="modal fade delete-offer" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+      <div class="content-modal">
+        
+                <p class="text-bold">Vielen Dank,</p>
+                <p class="delate-info">Ihre neuen Einstellungen wurden gespeichert.</p>
+		 
+              </div>
+          </div>
+      </div>
+  </div>
+  {% endif %}
+  
+  
+{% endblock %}
+
+{% block script %}
+     <script>
+        $(function(){
+            {% if saved %}
+                $("#saved-modal").modal();                
+            {% endif %}            
+        });
+    </script>
 {% endblock %}
