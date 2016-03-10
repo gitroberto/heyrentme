@@ -184,7 +184,7 @@ class DefaultController extends BaseController {
         
         
         
-        return $this->displayItem($request, true, $eq, $tal);
+        return $this->displayItem($request, false, $eq, $tal);
     }
     
     /**
@@ -195,7 +195,7 @@ class DefaultController extends BaseController {
         if ($tal === null) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-        return $this->displayItem($request, false, null, $tal);
+        return $this->displayItem($request, true, null, $tal);
     }
     
     /**
@@ -206,16 +206,16 @@ class DefaultController extends BaseController {
         if ($eq === null) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-        return $this->displayItem($request, false, $eq, null);
+        return $this->displayItem($request, true, $eq, null);
     }
     
-    private function displayItem(Request $request, $checkStatus, $eq = null, $tal = null){
+    private function displayItem(Request $request, $isPreview, $eq = null, $tal = null){
         
         $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
         // determine prev/next
         //<editor-fold>
         if ($eq !== null) {
-            if ($checkStatus && ($eq->getStatus() !== Equipment::STATUS_APPROVED || $eq->getUser()->getStatus() !== User::STATUS_OK)){
+            if (!$isPreview && ($eq->getStatus() !== Equipment::STATUS_APPROVED || $eq->getUser()->getStatus() !== User::STATUS_OK)){
                 return new Response(Response::HTTP_NOT_FOUND);
             }
             
@@ -227,7 +227,7 @@ class DefaultController extends BaseController {
             $type = ReportOffer::OFFER_TYPE_EQUIPMENT;
         }
         else {
-            if ($checkStatus && ($tal->getStatus() !== Talent::STATUS_APPROVED || $tal->getUser()->getStatus() !== User::STATUS_OK)){
+            if (!$isPreview && ($tal->getStatus() !== Talent::STATUS_APPROVED || $tal->getUser()->getStatus() !== User::STATUS_OK)){
                 return new Response(Response::HTTP_NOT_FOUND);
             }
             $repo = 'AppBundle:Talent';
@@ -274,7 +274,8 @@ class DefaultController extends BaseController {
             'post' => $post,
             'opinions' => $opinions,
             'type' => $type,
-            'loggedIn' => $loggedIn
+            'loggedIn' => $loggedIn,
+            'isPreview' => $isPreview
         ));
     }
 

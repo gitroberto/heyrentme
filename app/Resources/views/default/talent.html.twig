@@ -449,7 +449,22 @@
       </div>
     </div>                
 </div>
-
+{% if isPreview %}
+  <div id="action-disabled-modal" class="modal fade delete-offer" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+              <div class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+      <div class="content-modal">
+        
+                <p class="delate-info">Diese Funktion ist in der Vorschau nicht verfügbar</p>
+		 
+              </div>
+          </div>
+      </div>
+  </div>
+  {% endif %}
 {% endblock %}
 
 
@@ -601,6 +616,16 @@
                 if ($("a[data-target='#login']").size() > 0) {
                         $("a[data-target='#login']")[0].click();      
                     }
+            });
+        {% endif %}
+            
+        {% if (isPreview) %}
+            $('#kategorie-select').unbind("click");
+            $("a").unbind("click");
+            $("a").attr("data-target", "");            
+            $("a:not(#robert-heading a)").click(function(e){
+               e.preventDefault();
+               $("#action-disabled-modal").modal(); 
             });
         {% endif %}
     });
