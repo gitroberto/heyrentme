@@ -16,7 +16,7 @@
 <div class="form-horizontal">
     <div class="err-msg">{{ form_errors(form) }}</div>    
     {{ form_widget(form.id) }}
-    <div class="page">
+    <div class="page">        
         <div class="row">
             <div class="form-group">
               <label for="form_name" class="control-label col-xs-2">Name</label>
@@ -185,6 +185,7 @@
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" class="button-black backgound-yellow text-black" value="Save">
                 <a class="button-black backgound-yellow text-black" href="{{ path('admin_equipment_list') }}">Cancel</a>
+                <a class="button-black backgound-yellow text-black" target="_blank" href="{{ path('preview_equipment', { "uuid":equipment.uuid }) }}">preview</a>
             </div>
         </div>
     </div>

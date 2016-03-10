@@ -33,7 +33,8 @@ $(document).ready(function(){
 
 
 function rowActions(cellvalue, options, cellobject) {
-      return   "<a title='Moderate'             href='equipment/moderate/"   +  options.rowId + "'><u>moderate</u></a>  ";
+      return   "<a title='Moderate'             href='equipment/moderate/"   +  options.rowId + "'><u>moderate</u></a>  "+
+               "<a title='Preview' target='_blank' href='"   +  cellobject[7] + "'><u>preview</u></a>  ";
   }
 
 var $grid = $('#jqgrid');

@@ -59,6 +59,7 @@ class TalentController extends BaseController {
             // map fields, TODO: consider moving to Talent's method
             //<editor-fold> map fields
             $eq = new Talent();
+            $eq->setUuid(Utils::getUuid());  
             $eq->setName($data['name']);
             $eq->setUser($user);
             $eq->setSubcategory($subcat);

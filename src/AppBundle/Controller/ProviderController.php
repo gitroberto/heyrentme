@@ -629,6 +629,7 @@ class ProviderController extends BaseController {
             //<editor-fold> map fields
             $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
             $eq = new Equipment();
+            $eq->setUuid(Utils::getUuid());            
             $eq->setName($data['name']);
             $eq->setUser($user);
             $eq->setSubcategory($subcat);

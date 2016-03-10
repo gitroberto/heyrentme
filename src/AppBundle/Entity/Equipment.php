@@ -186,7 +186,24 @@ class Equipment
      */
     protected $accept = 0; // default
 
+    /**
+     * @ORM\Column(type="string", length=36)
+     */
+    protected $uuid;
     
+    
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
     
     public function getUfid() { // user friendly id
         return "E-{$this->id}";

@@ -182,12 +182,40 @@ class DefaultController extends BaseController {
             return new Response(Response::HTTP_NOT_FOUND);
         }
         
-        $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
         
+        
+        return $this->displayItem($request, true, $eq, $tal);
+    }
+    
+    /**
+     * @Route("/preview/talent/{uuid}", name="preview_talent")
+     */
+    public function previewTalentAction(Request $request, $uuid) {
+        $tal = $this->getDoctrineRepo('AppBundle:Talent')->getOneByUuid($uuid);
+        if ($tal === null) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+        return $this->displayItem($request, false, null, $tal);
+    }
+    
+    /**
+     * @Route("/preview/equipment/{uuid}", name="preview_equipment")
+     */
+    public function previewEquipmentAction(Request $request, $uuid) {
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->getOneByUuid($uuid);
+        if ($eq === null) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+        return $this->displayItem($request, false, $eq, null);
+    }
+    
+    private function displayItem(Request $request, $checkStatus, $eq = null, $tal = null){
+        
+        $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
         // determine prev/next
         //<editor-fold>
         if ($eq !== null) {
-            if ($eq->getStatus() !== Equipment::STATUS_APPROVED || $eq->getUser()->getStatus() !== User::STATUS_OK){
+            if ($checkStatus && ($eq->getStatus() !== Equipment::STATUS_APPROVED || $eq->getUser()->getStatus() !== User::STATUS_OK)){
                 return new Response(Response::HTTP_NOT_FOUND);
             }
             
@@ -199,7 +227,7 @@ class DefaultController extends BaseController {
             $type = ReportOffer::OFFER_TYPE_EQUIPMENT;
         }
         else {
-            if ($tal->getStatus() !== Talent::STATUS_APPROVED || $tal->getUser()->getStatus() !== User::STATUS_OK){
+            if ($checkStatus && ($tal->getStatus() !== Talent::STATUS_APPROVED || $tal->getUser()->getStatus() !== User::STATUS_OK)){
                 return new Response(Response::HTTP_NOT_FOUND);
             }
             $repo = 'AppBundle:Talent';

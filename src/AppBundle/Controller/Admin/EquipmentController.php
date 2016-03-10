@@ -51,6 +51,7 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getPrice();
             $cell[$i++] = $dataRow->getUser()->getUsername();
             $cell[$i++] = $dataRow->getStatusStr();
+            $cell[$i++] = $this->generateUrl('preview_equipment', array('uuid'=>$dataRow->getUuid()));
             
             $row['cell'] = $cell;
             array_push($rows, $row);

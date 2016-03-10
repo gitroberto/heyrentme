@@ -45,3 +45,7 @@ services:
         class: AppBundle\Service\ThumbnailService
         arguments: [@doctrine.orm.entity_manager, @monolog.logger, { image_storage_dir : %image_storage_dir% }]
         
+    filluuid:
+        class: AppBundle\Service\FillUuidService
+        arguments: [@doctrine.orm.entity_manager]
+        

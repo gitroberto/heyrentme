@@ -295,6 +295,37 @@ EOT;
         return $eq;
     }
     
+    public function getOneByUuid($uuid) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        /*
+         * Please not this query uses "fetch join".
+         * It fetches images and discounts (associated with equipments) immediately 
+         * (instead of lazy loading them later).
+         * Keep for optimum performance.
+         */        
+        $qb->select('e') // this line forces fetch join
+            ->from('AppBundle:Equipment', 'e');
+        
+        //$qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
+        //$qb->andWhere('u.status = '. User::STATUS_OK);
+        $qb->andWhere($qb->expr()->eq('e.uuid', ':uuid'));
+        
+        $eq = null;
+        try {
+            $q = $qb->getQuery();
+            $q->setParameter(':uuid', "{$uuid}");
+            $eq = $q->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        if ($eq !== null) {
+            $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
+            $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
+        }
+        
+        return $eq;
+    }
+    
     public function clearFeatures($equipmentId) {
         $sql = 'delete from AppBundle:EquipmentFeature ef where ef.equipment = :equipment';
         $q = $this->getEntityManager()->createQuery($sql);
@@ -400,6 +431,14 @@ EOT;
             from AppBundle:EquipmentImage ei
                 join ei.image i
             where i.thumbnailPath is null
+EOT;
+        return $this->getEntityManager()->createQuery($sql)->getResult();
+    }
+    public function getAllWithoutUuid() {
+        $sql = <<<EOT
+            select e
+            from AppBundle:Equipment e                
+            where e.uuid is null
 EOT;
         return $this->getEntityManager()->createQuery($sql)->getResult();
     }

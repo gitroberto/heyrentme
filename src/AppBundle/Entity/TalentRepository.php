@@ -295,7 +295,36 @@ EOT;
         
         return $eq;
     }
-    
+    public function getOneByUuid($uuid) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        /*
+         * Please not this query uses "fetch join".
+         * It fetches images and discounts (associated with talents) immediately 
+         * (instead of lazy loading them later).
+         * Keep for optimum performance.
+         */        
+        $qb->select('t') // this line forces fetch join
+            ->from('AppBundle:Talent', 't');      
+        
+        //$qb->andWhere("e.status = ". Talent::STATUS_APPROVED);
+        //$qb->andWhere('u.status = '. User::STATUS_OK);
+        $qb->andWhere($qb->expr()->eq('t.uuid', ':uuid'));
+        
+        $eq = null;
+        try {
+            $q = $qb->getQuery();
+            $q->setParameter(':uuid', "{$uuid}");
+            $eq = $q->getSingleResult();
+        } catch (NoResultException $e) {}
+        
+        if ($eq !== null) {
+            $repo = $this->getEntityManager()->getRepository('AppBundle:Talent');
+            $eq->setTalentImages($repo->getTalentImages($eq->getId()));
+        }
+        
+        return $eq;
+    }
     public function clearFeatures($talentId) {
         $sql = 'delete from AppBundle:TalentFeature ef where ef.talent = :talent';
         $q = $this->getEntityManager()->createQuery($sql);
@@ -401,6 +430,15 @@ EOT;
             from AppBundle:TalentImage ei
                 join ei.image i
             where i.thumbnailPath is null
+EOT;
+        return $this->getEntityManager()->createQuery($sql)->getResult();
+    }
+    
+    public function getAllWithoutUuid() {
+        $sql = <<<EOT
+            select t
+            from AppBundle:Talent t                
+            where t.uuid is null
 EOT;
         return $this->getEntityManager()->createQuery($sql)->getResult();
     }
