@@ -323,7 +323,7 @@ class ProviderController extends BaseController {
                         ) ))
                 ->add('bic', 'text', array('required' => false, 'data' => $user->getBic(),
                             'constraints' => array(
-                                new Regex(array('pattern' => '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$$/', 'message' => 'BIC code is incorrect.'))
+                                new Regex(array('pattern' => '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$$/', 'message' => 'BIC-Code ist nicht korrekt.'))
                                 )
                 ))
                 ->getForm();

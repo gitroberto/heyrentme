@@ -1,0 +1,123 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+    <script>
+        var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-={}[]|?><';
+        var digits = '0123456789';
+        function generate(array, length) {
+            var l = array.length;
+            var pwd = '';
+            for (var i = 0; i < length; i++) 
+                pwd += array[Math.round(Math.random() * (l - 1), 0)];
+            return pwd;
+        }
+        $(function() {
+            $("#pwd-safe").click(function(e) {
+                e.preventDefault();
+                $("#form_password").val(generate(chars, 12));
+            });
+            $("#pwd-temp").click(function(e) {
+                e.preventDefault();
+                $("#form_password").val('temp_' + generate(digits, 5));
+            });
+        });
+    </script>
+    <style>
+        .form {
+            width: 800px;
+            margin-left: 0;
+        }
+        .row {
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        .text-line-fill {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_users_list') }}" class="active">User</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>User edit</h1>
+    
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+<div class="container form">
+    <div class="row">
+        <div class="col-xs-4 err-msg">{{ form_errors(form) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_email">email&nbsp;(username)</label></div>
+        <div class="col-xs-6">
+            {{ form_widget(form.email, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'email' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.email) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_password" class="control-label">password</label></div>
+        <div class="col-xs-6">
+            {{ form_widget(form.password, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'password' }}) }}
+            <br/>
+            <span style="font-size: smaller;">generate <a href="#" id="pwd-temp">temporary</a> | <a href="#" id="pwd-safe">safe</a> password</span>
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.password) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_name" class="control-label">name</label></div>
+        <div class="col-xs-6">
+            {{ form_widget(form.name, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'name' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.name) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_surname" class="control-label">surname</label></div>
+        <div class="col-xs-6">
+            {{ form_widget(form.surname, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'surname' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.surname) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_aboutMyself" class="control-label">about myself</label></div>
+        <div class="col-xs-6">          
+          {{ form_widget(form.aboutMyself, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'about myself' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.aboutMyself) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_phonePrefix" class="control-label">phone</label></div>
+        <div class="col-xs-2">
+            {{ form_widget(form.phonePrefix, { 'attr': { 'class': 'text-line-fill short', 'placeholder': 'phone prefix' }}) }}
+        </div>
+        <div class="col-xs-4">            
+            {{ form_widget(form.phone, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'phone number' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.phonePrefix) }}{{ form_errors(form.phone) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_iban" class="control-label">IBAN</label></div>
+        <div class="col-xs-6">            
+            {{ form_widget(form.iban, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'IBAN' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.iban) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_bic" class="control-label">BIC</label></div>
+        <div class="col-xs-6">            
+            {{ form_widget(form.bic, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'BIC' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.bic) }}</div>
+    </div>
+</div>
+<br/>
+<input type="submit" class="button-black backgound-yellow text-black" value="Add">
+<a class="button-black backgound-yellow text-black" href="{{ path('admin_users_list') }}">Cancel</a>
+
+{{ form_end(form) }}
+
+{% endblock %}

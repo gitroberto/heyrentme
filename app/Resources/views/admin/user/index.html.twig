@@ -8,6 +8,7 @@
 {% block body %}
 <h1>Users</h1>
 
+<a class="button-black backgound-yellow text-black" href="{{ path('admin-user-add') }}">New user</a>
 <br/>
 <br/>
 
@@ -33,8 +34,10 @@ $(document).ready(function(){
 
 
 function rowActions(cellvalue, options, cellobject) {
-      return   "<a title='Details'             href='users/details/"   +  options.rowId + "'><u>Details</u></a>  ";
-  }
+    var s = '<a title="View user details" href="{{ path('admin-user-details', { 'id': ':ID:' }) }}"><u>details</u></a> ';
+    s += '<a title="Edit user details" href="{{ path('admin-user-edit', { 'id': ':ID:' }) }}"><u>edit</u></a> ';
+    return s.replace(/:ID:/g, options.rowId);
+}
 
 var $grid = $('#jqgrid');
 
