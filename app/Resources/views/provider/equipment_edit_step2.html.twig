@@ -136,29 +136,33 @@
                           <div class="row ort">
                               <div class="col-sm-12">
                                   <div class="row">
-                                    <div class="col-xs-8">
-                                      {# <input type="text" placeholder="Strasse*" /> #}
+                                    <div class="col-xs-6">
                                         {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse*' } }) }}
                                         <div class="err-msg">{{ form_errors(form.street, { 'attr': { 'class': 'err-msg' } }) }}</div>
                                     </div>
-                                    <div class="col-xs-4">
-                                      {# <input type="text" placeholder="Hausnr.*" /> #}
+                                    <div class="col-xs-3">
                                         {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.*', 'class': 'security' } }) }}
                                         <div class="err-msg">{{ form_errors(form.number, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        {{ form_widget(form.flatNumber, { 'attr': { 'placeholder': 'Türnr.', 'class': 'security' } }) }}
+                                        <div class="err-msg">{{ form_errors(form.flatNumber, { 'attr': { 'class': 'err-msg' } }) }}</div>
                                     </div>
                                   </div>
                                   <div class="row">
                                     <div class="col-xs-3">
-                                      {# <input type="text" placeholder="Plz*" /> #}
                                         {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ*' } }) }}
                                         <div class="err-msg">{{ form_errors(form.postcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
                                     </div>
                                     <div class="col-xs-5">
-                                      {# <input type="text" placeholder="Ort*" /> #}
                                         {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort*' } }) }}
                                         <div class="err-msg">{{ form_errors(form.place, { 'attr': { 'class': 'err-msg' } }) }}</div>
                                     </div>
                                   </div>
+                                <div class="chbox-holder">
+                                    {{ form_widget(form.defaultAddress) }}
+                                    <label for="form_defaultAddress"><span></span>Als Standardadresse für weitere Angebote speichern</label>
+                                </div>
                               </div>
                           </div>
                       </div>

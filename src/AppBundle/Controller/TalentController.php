@@ -230,6 +230,13 @@ class TalentController extends BaseController {
             'make_sure' => $eq->getLicence() > 0,
             'accept' => $eq->getAccept() > 0
         );        
+        if (empty($eq->getAddrStreet())) {
+            $data['street'] = $user->getAddrStreet();
+            $data['number'] = $user->getAddrNumber();
+            $data['flatNumber'] = $user->getAddrFlatNumber();
+            $data['postcode'] = $user->getAddrPostcode();
+            $data['place'] = $user->getAddrPlace();      
+        }
         
         // validation form
         //<editor-fold>        
@@ -267,6 +274,12 @@ class TalentController extends BaseController {
                     new Length(array('max' => 16))
                 )
             ))
+            ->add('flatNumber', 'text', array(
+                'required' => false,
+                'constraints' => array(
+                    new Length(array('max' => 16))
+                )
+            ))
             ->add('postcode', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
@@ -279,6 +292,9 @@ class TalentController extends BaseController {
                     new NotBlank(),
                     new Length(array('max' => 128))
                 )
+            ))
+            ->add('defaultAddress', 'checkbox', array(
+                'required' => false
             ))
             ->add('accept', 'checkbox', array(
                 'required' => false,
@@ -360,12 +376,18 @@ class TalentController extends BaseController {
             }
             
             // update user
+            if ($data['defaultAddress'] === true) {
+                $user->setAddrStreet($eq->getAddrStreet());
+                $user->setAddrNumber($eq->getAddrNumber());
+                $user->setAddrFlatNumber($eq->getAddrFlatNumber());
+                $user->setAddrPostcode($eq->getAddrPostcode());
+                $user->setAddrPlace($eq->getAddrPlace());
+            }
             $user->setPhonePrefix($data['phonePrefix']);
             $user->setPhone($data['phone']);
             $em->flush();
             
             // clean up
-            $session->remove('TalentAddFileArray');            
             $this->fileCount = null;
             
             return $this->redirectToRoute('talent-edit-3', array('eqid' => $id));
