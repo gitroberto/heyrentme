@@ -150,6 +150,24 @@ class User extends BaseUser
     }
     
     
+    /**
+     * @var bit
+     *     
+     * 
+     * @Assert\NotBlank(message="Please confirm your age.", groups={"Registration", "FacebookRegistration"})         
+     * 
+     */
+    protected $ageCheck;
+    
+    public function getAgeCheck()
+    {
+        return $this->ageCheck;
+    }
+
+    public function setAgeCheck($ageCheck)
+    {
+        $this->ageCheck = $ageCheck;
+    }
     
     protected $newPassword;    
     public function getNewPassword()

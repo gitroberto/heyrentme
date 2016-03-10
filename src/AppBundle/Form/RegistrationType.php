@@ -20,6 +20,9 @@ class RegistrationType extends AbstractType
         $builder->add('accept', 'checkbox', array(                
                 'required' => true,
         ));
+        $builder->add('ageCheck', 'checkbox', array(                
+                'required' => true,
+        ));
         
 //        $builder->add('facebook', 'submit', array( 
 //                "validation_groups" => array('FacebookRegistration')

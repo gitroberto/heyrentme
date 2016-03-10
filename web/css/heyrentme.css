@@ -612,3 +612,11 @@ p.how-many {
     cursor:pointer;
 }
 
+.header-loged-admin{
+    float:right;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.42857;
+    margin-right: 40%;
+    margin-top: 10px;
+}

@@ -10,6 +10,9 @@
     <div id="facebookValidation" style="color:#ff0000;display:none;">
         Bitte akzeptiere unsere AGB um fortzufahren.
     </div>
+    <div id="facebookValidationAge" style="color:#ff0000;display:none;">
+        Please confirm your age.
+    </div>
     
     {{ form_errors(form) }}
     
@@ -30,6 +33,9 @@
     <input type="submit" value="mit E-mail anmelden">
     <label class="agb">{{ form_widget(form.accept, { 'attr': { 'id' : 'acceptCheckBox' } }) }}
         <span>Ich akzeptiere die <a href="{{ path("kundeninfos_agb") }}" target="_blank">AGBs</a> von hey! sharing community</span>
+    </label>
+    <label class="agb">{{ form_widget(form.ageCheck, { 'attr': { 'id' : 'ageCheckCheckBox', 'checked': 'checked' } }) }}
+        <span>Ich bin über 18 Jahre alt.</span>
     </label>
 {{ form_end(form) }}
 
