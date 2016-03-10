@@ -9,7 +9,11 @@
     <header class="adm-header">
         <a class="adm-logo" href="{{ path('admin_area') }}"><img src="/img/logo.png" alt="hey! Vienna" class="adm-logo"></a>
         Administration
+        <div class="header-loged-admin">
+            <a href="{{ path('fos_user_security_logout') }}" >ausloggen</a>
+        </div>        
     </header>
+    
 
     <nav class="crumbs">
         <ul>
