@@ -418,13 +418,19 @@ class ProviderController extends BaseController {
     }
      
     public function validateNewPassword($data, ExecutionContextInterface $context) {
-        if ($this->formHelper != null && $this->formHelper['newPassword']->getData() != null) {
+        if ($this->formHelper != null && ($this->formHelper['newPassword']->getData() != null || $this->formHelper['password']->getData() != null)) {
             $newPassword = $this->formHelper['newPassword']->getData();
+            $oldPassword = $this->formHelper['password']->getData();
             $repeatedPassword = $this->formHelper['repeatedPassword']->getData();
             
             if ($newPassword != $repeatedPassword) {
                 $context->buildViolation('Das wiederholte Passwort muss mit dem erstem übereinstimmen. Bitte versuch es noch einmal')
                         ->atPath('repeatedPassword')->addViolation();
+            } 
+            
+            if ($newPassword == $oldPassword){
+                $context->buildViolation('Ihr neues Passwort muss anders sein als das alte Passwort')
+                        ->atPath('newPassword')->addViolation();
             }
             
             if (strlen($newPassword) < 6 ){
