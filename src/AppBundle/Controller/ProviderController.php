@@ -678,15 +678,23 @@ class ProviderController extends BaseController {
         $user = $this->getUser();
         $data = array( 
             'description' => $eq->getDescription(),
-            'street' => $eq->getAddrStreet(),
-            'number' => $eq->getAddrNumber(),
-            'postcode' => $eq->getAddrPostcode(),
-            'place' => $eq->getAddrPlace(),
             'phonePrefix' => $user->getPhonePrefix(),
             'phone' => $user->getPhone(),
             'make_sure' => $eq->getFunctional() > 0,
             'accept' => $eq->getAccept() > 0,
-        );        
+            'street' => $eq->getAddrStreet(),
+            'number' => $eq->getAddrNumber(),
+            'flatNumber' => $eq->getAddrFlatNumber(),
+            'postcode' => $eq->getAddrPostcode(),
+            'place' => $eq->getAddrPlace()
+        );
+        if (empty($eq->getAddrStreet())) {
+            $data['street'] = $user->getAddrStreet();
+            $data['number'] = $user->getAddrNumber();
+            $data['flatNumber'] = $user->getAddrFlatNumber();
+            $data['postcode'] = $user->getAddrPostcode();
+            $data['place'] = $user->getAddrPlace();      
+        }
         
         // validation form
         //<editor-fold>        
@@ -716,6 +724,12 @@ class ProviderController extends BaseController {
                     new Length(array('max' => 16))
                 )
             ))
+            ->add('flatNumber', 'text', array(
+                'required' => false,
+                'constraints' => array(
+                    new Length(array('max' => 16))
+                )
+            ))
             ->add('postcode', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
@@ -728,6 +742,9 @@ class ProviderController extends BaseController {
                     new NotBlank(),
                     new Length(array('max' => 128))
                 )
+            ))
+            ->add('defaultAddress', 'checkbox', array(
+                'required' => false
             ))
             ->add('accept', 'checkbox', array(
                 'required' => false,
@@ -770,6 +787,7 @@ class ProviderController extends BaseController {
             $eq->setDescription($data['description']);
             $eq->setAddrStreet($data['street']);
             $eq->setAddrNumber($data['number']);
+            $eq->setAddrFlatNumber($data['flatNumber']);
             $eq->setAddrPostcode($data['postcode']);
             $eq->setAddrPlace($data['place']);            
             $eq->setFunctional(intval($data['make_sure']));
@@ -781,8 +799,14 @@ class ProviderController extends BaseController {
             }
             $em->flush();
             
-            
             // update user
+            if ($data['defaultAddress'] === true) {
+                $user->setAddrStreet($eq->getAddrStreet());
+                $user->setAddrNumber($eq->getAddrNumber());
+                $user->setAddrFlatNumber($eq->getAddrFlatNumber());
+                $user->setAddrPostcode($eq->getAddrPostcode());
+                $user->setAddrPlace($eq->getAddrPlace());
+            }
             $user->setPhonePrefix($data['phonePrefix']);
             $user->setPhone($data['phone']);
             $em->flush();

@@ -75,6 +75,10 @@ class Equipment
      */
     protected $addrNumber;
     /**
+     * @ORM\Column(type="string", length=16)
+     */
+    protected $addrFlatNumber;
+    /**
      * @ORM\Column(type="string", length=4)
      */
     protected $addrPostcode;
@@ -240,7 +244,11 @@ class Equipment
     }
     
     public function getAddressAsString() {
-        return sprintf("%s %s, %s %s", $this->addrStreet, $this->addrNumber, $this->addrPostcode, $this->addrPlace);
+        $fn = '';
+        if (!empty($this->addrFlatNumber)) {
+            $fn = '/' . $this->addrFlatNumber;
+        }
+        return sprintf("%s %s%s, %s %s", $this->addrStreet, $this->addrNumber, $fn, $this->addrPostcode, $this->addrPlace);
     }
     public function getIncompleteAddressAsString() {
         return sprintf("%s, %s %s", $this->addrStreet, $this->addrPostcode, $this->addrPlace);
@@ -612,6 +620,30 @@ class Equipment
     public function setAddrNumber($addrNumber)
     {
         $this->addrNumber = $addrNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get addrNumber
+     *
+     * @return string
+     */
+    public function getAddrFlatNumber()
+    {
+        return $this->addrFlatNumber;
+    }
+
+    /**
+     * Set addrNumber
+     *
+     * @param string $addrNumber
+     *
+     * @return Equipment
+     */
+    public function setAddrFlatNumber($addrFlatNumber)
+    {
+        $this->addrFlatNumber = $addrFlatNumber;
 
         return $this;
     }

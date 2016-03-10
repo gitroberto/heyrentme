@@ -595,4 +595,146 @@ class User extends BaseUser
     {
         return $this->talents;
     }
+
+    /**
+     * @ORM\Column(type="string", length=128)
+     */
+    protected $addrStreet;
+    /**
+     * @ORM\Column(type="string", length=16)
+     */
+    protected $addrNumber;
+    /**
+     * @ORM\Column(type="string", length=16)
+     */
+    protected $addrFlatNumber;
+    /**
+     * @ORM\Column(type="string", length=4)
+     */
+    protected $addrPostcode;
+    /**
+     * @ORM\Column(type="string", length=128)
+     */
+    protected $addrPlace;    
+    
+
+    /**
+     * Set addrStreet
+     *
+     * @param string $addrStreet
+     *
+     * @return User
+     */
+    public function setAddrStreet($addrStreet)
+    {
+        $this->addrStreet = $addrStreet;
+
+        return $this;
+    }
+
+    /**
+     * Get addrStreet
+     *
+     * @return string
+     */
+    public function getAddrStreet()
+    {
+        return $this->addrStreet;
+    }
+
+    /**
+     * Set addrNumber
+     *
+     * @param string $addrNumber
+     *
+     * @return User
+     */
+    public function setAddrNumber($addrNumber)
+    {
+        $this->addrNumber = $addrNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get addrNumber
+     *
+     * @return string
+     */
+    public function getAddrNumber()
+    {
+        return $this->addrNumber;
+    }
+
+    /**
+     * Set addrFlatNumber
+     *
+     * @param string $addrFlatNumber
+     *
+     * @return User
+     */
+    public function setAddrFlatNumber($addrFlatNumber)
+    {
+        $this->addrFlatNumber = $addrFlatNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get addrFlatNumber
+     *
+     * @return string
+     */
+    public function getAddrFlatNumber()
+    {
+        return $this->addrFlatNumber;
+    }
+
+    /**
+     * Set addrPostcode
+     *
+     * @param string $addrPostcode
+     *
+     * @return User
+     */
+    public function setAddrPostcode($addrPostcode)
+    {
+        $this->addrPostcode = $addrPostcode;
+
+        return $this;
+    }
+
+    /**
+     * Get addrPostcode
+     *
+     * @return string
+     */
+    public function getAddrPostcode()
+    {
+        return $this->addrPostcode;
+    }
+
+    /**
+     * Set addrPlace
+     *
+     * @param string $addrPlace
+     *
+     * @return User
+     */
+    public function setAddrPlace($addrPlace)
+    {
+        $this->addrPlace = $addrPlace;
+
+        return $this;
+    }
+
+    /**
+     * Get addrPlace
+     *
+     * @return string
+     */
+    public function getAddrPlace()
+    {
+        return $this->addrPlace;
+    }
 }
