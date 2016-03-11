@@ -232,7 +232,7 @@ class BlogController  extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($file->getClientOriginalName());
-                $img->setExtension($file->getClientOriginalExtension());
+                $img->setExtension($ext);
                 $img->setPath('blog');
                 $img->setThumbnailPath('blog' . DIRECTORY_SEPARATOR . 'thumbnail');
                               
@@ -253,7 +253,8 @@ class BlogController  extends BaseAdminController {
                     DIRECTORY_SEPARATOR .
                     'blog' .
                     DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file2->getClientOriginalExtension());
+                $ext2 = strtolower($file2->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext2);
                 
                 $file2->move($destDir, $destFilename);
                 
@@ -261,7 +262,7 @@ class BlogController  extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($file2->getClientOriginalName());
-                $img->setExtension($file2->getClientOriginalExtension());
+                $img->setExtension($ext2);
                 $img->setPath('blog');
                               
                 $em->persist($img);
@@ -402,7 +403,7 @@ class BlogController  extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($file->getClientOriginalName());
-                $img->setExtension($file->getClientOriginalExtension());
+                $img->setExtension($ext);
                 $img->setPath('blog');
                 $img->setThumbnailPath('blog' . DIRECTORY_SEPARATOR . 'thumbnail');
                               
@@ -415,7 +416,7 @@ class BlogController  extends BaseAdminController {
                 
                 //remove old Image (both file from filesystem and entity from db)
                 $this->getDoctrineRepo('AppBundle:Image')->removeImage($blog->getBigImage(), $this->getParameter('image_storage_dir'));
-                $blog->setImage(null);
+                $blog->setBigImage(null);
                 
                 // save file
                 $uuid = Utils::getUuid();
@@ -427,7 +428,9 @@ class BlogController  extends BaseAdminController {
                         DIRECTORY_SEPARATOR .
                         'blog' .
                         DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file2->getClientOriginalExtension());
+                
+                $ext2 = strtolower($file2->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext2);
                 
                 $file2->move($destDir, $destFilename);
                 
@@ -435,7 +438,7 @@ class BlogController  extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($file2->getClientOriginalName());
-                $img->setExtension($file2->getClientOriginalExtension());
+                $img->setExtension($ext2);
                 $img->setPath('blog');
                               
                 $em->persist($img);

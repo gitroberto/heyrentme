@@ -78,7 +78,8 @@ class CategoryController extends BaseAdminController {
                     DIRECTORY_SEPARATOR .
                     'category' .
                     DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+                $ext = strtolower($file->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext);
                 
                 $file->move($destDir, $destFilename);
                 
@@ -86,7 +87,7 @@ class CategoryController extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($destFilename);
-                $img->setExtension($file->getClientOriginalExtension());
+                $img->setExtension($ext);
                 $img->setOriginalPath($file->getClientOriginalName());
                 $img->setPath('category');
                               
@@ -106,7 +107,8 @@ class CategoryController extends BaseAdminController {
                     DIRECTORY_SEPARATOR .
                     'category' .
                     DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file2->getClientOriginalExtension());
+                $ext2 = strtolower($file2->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext2);
                 
                 $file2->move($destDir, $destFilename);
                 
@@ -114,7 +116,7 @@ class CategoryController extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($destFilename);
-                $img->setExtension($file2->getClientOriginalExtension());
+                $img->setExtension($ext2);
                 $img->setOriginalPath($file2->getClientOriginalName());
                 $img->setPath('category');
                               
@@ -205,7 +207,8 @@ class CategoryController extends BaseAdminController {
                         DIRECTORY_SEPARATOR .
                         'category' .
                         DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+                $ext = strtolower($file->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext);
                 
                 $file->move($destDir, $destFilename);
                 
@@ -213,7 +216,7 @@ class CategoryController extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($destFilename);
-                $img->setExtension($file->getClientOriginalExtension());
+                $img->setExtension($ext);
                 $img->setOriginalPath($file->getClientOriginalName());
                 $img->setPath('category');
                               
@@ -241,7 +244,8 @@ class CategoryController extends BaseAdminController {
                         DIRECTORY_SEPARATOR .
                         'category' .
                         DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file2->getClientOriginalExtension());
+                $ext2 = strtolower($file2->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext2);
                 
                 $file2->move($destDir, $destFilename);
                 
@@ -249,7 +253,7 @@ class CategoryController extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($destFilename);
-                $img->setExtension($file2->getClientOriginalExtension());
+                $img->setExtension($ext2);
                 $img->setOriginalPath($file2->getClientOriginalName());
                 $img->setPath('category');
                               

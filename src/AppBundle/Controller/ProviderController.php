@@ -169,7 +169,7 @@ class ProviderController extends BaseController {
                 return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
             }            
 
-            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
+            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $ext;
             $resp = array(
                 'url' => $url,
                 'name' => $name,
@@ -258,7 +258,8 @@ class ProviderController extends BaseController {
                 DIRECTORY_SEPARATOR .
                 'user' .
                 DIRECTORY_SEPARATOR;
-            $name = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+            $ext = strtolower($file->getClientOriginalExtension());
+            $name = sprintf("%s.%s", $uuid, $ext);
             $fullPath = $path . $name;
             $file->move($path, $name);
             
@@ -268,7 +269,7 @@ class ProviderController extends BaseController {
             $img = new Image();
             $img->setUuid($uuid);
             $img->setName($file->getClientOriginalName());
-            $img->setExtension($file->getClientOriginalExtension());
+            $img->setExtension($ext);
             $img->setPath('user');            
 
             $em->persist($img);
@@ -901,7 +902,7 @@ class ProviderController extends BaseController {
                 return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
             }            
 
-            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
+            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $ext;
             $resp = array(
                 'url' => $url,
                 'name' => $name

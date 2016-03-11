@@ -198,7 +198,8 @@ class UserController extends BaseAdminController {
                             DIRECTORY_SEPARATOR .
                             'user' .
                             DIRECTORY_SEPARATOR;
-                    $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+                    $ext = strtolower($file->getClientOriginalExtension());
+                    $destFilename = sprintf("%s.%s", $uuid, $ext);
 
                     $file->move($destDir, $destFilename);
 
@@ -206,7 +207,7 @@ class UserController extends BaseAdminController {
                     $img = new Image();
                     $img->setUuid($uuid);
                     $img->setName($destFilename);
-                    $img->setExtension($file->getClientOriginalExtension());
+                    $img->setExtension($ext);
                     $img->setOriginalPath($file->getClientOriginalName());
                     $img->setPath('user');
 
@@ -347,7 +348,8 @@ class UserController extends BaseAdminController {
                             DIRECTORY_SEPARATOR .
                             'user' .
                             DIRECTORY_SEPARATOR;
-                    $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+                    $ext = strtolower($file->getClientOriginalExtension());
+                    $destFilename = sprintf("%s.%s", $uuid, $ext);
 
                     $file->move($destDir, $destFilename);
 
@@ -355,7 +357,7 @@ class UserController extends BaseAdminController {
                     $img = new Image();
                     $img->setUuid($uuid);
                     $img->setName($destFilename);
-                    $img->setExtension($file->getClientOriginalExtension());
+                    $img->setExtension($ext);
                     $img->setOriginalPath($file->getClientOriginalName());
                     $img->setPath('user');
 

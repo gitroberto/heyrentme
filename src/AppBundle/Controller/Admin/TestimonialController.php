@@ -143,7 +143,8 @@ class TestimonialController extends BaseAdminController {
                     DIRECTORY_SEPARATOR .
                     'testimonials' .
                     DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+                $ext = strtolower($file->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext);
                 
                 $file->move($destDir, $destFilename);
                 
@@ -151,7 +152,7 @@ class TestimonialController extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($file->getClientOriginalName());
-                $img->setExtension($file->getClientOriginalExtension());
+                $img->setExtension($ext);
                 $img->setPath('testimonials');
                               
                 $em->persist($img);
@@ -253,7 +254,8 @@ class TestimonialController extends BaseAdminController {
                         DIRECTORY_SEPARATOR .
                         'testimonials' .
                         DIRECTORY_SEPARATOR;
-                $destFilename = sprintf("%s.%s", $uuid, $file->getClientOriginalExtension());
+                $ext = strtolower($file->getClientOriginalExtension());
+                $destFilename = sprintf("%s.%s", $uuid, $ext);
                 
                 $file->move($destDir, $destFilename);
                 
@@ -261,7 +263,7 @@ class TestimonialController extends BaseAdminController {
                 $img = new Image();
                 $img->setUuid($uuid);
                 $img->setName($file->getClientOriginalName());
-                $img->setExtension($file->getClientOriginalExtension());
+                $img->setExtension($ext);
                 $img->setPath('testimonials');
                               
                 $em->persist($img);

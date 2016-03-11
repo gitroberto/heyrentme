@@ -598,7 +598,7 @@ class TalentController extends BaseController {
                 return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
             }            
 
-            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $file->getClientOriginalExtension();
+            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $ext;
             $resp = array(
                 'url' => $url,
                 'name' => $name
