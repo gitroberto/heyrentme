@@ -126,16 +126,15 @@ EOT;
     public function deleteUserAccount($user, $folder){
         // todo: adjust query
         $id = $user->getId();
-        $em = $this->getEntityManager();        
+        $m = $this->getEntityManager();        
         
-        $equipments = $em->getRepository('AppBundle:Equipment')->getAllByUserId($user->getId());
-        $talents = $em->getRepository('AppBundle:Talent')->getAllByUserId($user->getId());
+        $equipments = $m->getRepository('AppBundle:Equipment')->getAllByUserId($user->getId());
+        $talents = $m->getRepository('AppBundle:Talent')->getAllByUserId($user->getId());
         
-        $m = $em;
         $image = $user->getImage();
         
         $user->setImage(null);        
-        $this->RemoveAndDeleteRelatedImage($em, $image, $folder); // todo: why not Image::removeImage?
+        $this->RemoveAndDeleteRelatedImage($m, $image, $folder); // todo: why not Image::removeImage?
         $m->flush();
         
         foreach ($equipments as $eq) {
@@ -144,7 +143,7 @@ EOT;
                 $eq->removeImage($ei);                
                 $m->remove($ei);
                 $m->flush();
-                $this->RemoveAndDeleteRelatedImage($em, $i, $folder);
+                $this->RemoveAndDeleteRelatedImage($m, $i, $folder);
             }
         }
         
@@ -155,7 +154,7 @@ EOT;
                 $tal->removeImage($ti);
                 $m->remove($ti);
                 $m->flush();
-                $this->RemoveAndDeleteRelatedImage($em, $i, $folder);
+                $this->RemoveAndDeleteRelatedImage($m, $i, $folder);
                            
             }
         }
@@ -250,15 +249,15 @@ EOT;
 EOT;
         
         
-        $conn = $em->getConnection();
+        $conn = $m->getConnection();
         $conn->executeUpdate($sql);
         //$this->get('monolog.logger.artur')->debug($sql);
     }
     
-    public function RemoveAndDeleteRelatedImage($em, $image, $folder){
+    public function RemoveAndDeleteRelatedImage($manager, $image, $folder){
         if ($image){
-            $em->getRepository('AppBundle:Image')->removeImage($image, $folder);
-            $em->getRepository('AppBundle:Image')->deleteById($image->getId());
+            $manager->getRepository('AppBundle:Image')->removeImage($image, $folder);
+            $manager->getRepository('AppBundle:Image')->deleteById($image->getId());
         }    
     }
 }
