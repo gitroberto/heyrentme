@@ -34,9 +34,9 @@ $(document).ready(function(){
 
 
 function rowActions(cellvalue, options, cellobject) {
-    var s = '<a title="View user details" href="{{ path('admin-user-details', { 'id': ':ID:' }) }}"><u>details</u></a> ';
-    s += '<a title="Edit user details" href="{{ path('admin-user-edit', { 'id': ':ID:' }) }}"><u>edit</u></a> ';
-    s += '<a title="Delete" href="{{ path('admin-user-delete', { 'id': ':ID:' }) }}" onclick=\"return confirm(\'Are you sure to delete?\')\"><u>Delete</u></a>  ';
+    var s = '<a title="View user details" href="{{ path('admin-user-details', { 'id': ':ID:' }) }}"><u>details</u></a>';
+    s += '&nbsp;&nbsp;<a title="Edit user details" href="{{ path('admin-user-edit', { 'id': ':ID:' }) }}"><u>edit</u></a> ';
+    s += '&nbsp;&nbsp;<a title="Delete" href="{{ path('admin-user-delete', { 'id': ':ID:' }) }}" onclick=\"return confirm(\'Are you sure to delete?\')\"><u>delete</u></a>';
     return s.replace(/:ID:/g, options.rowId);
 }
 
