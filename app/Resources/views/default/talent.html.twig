@@ -493,43 +493,46 @@
     $(function() {
         playerWidth();
         $(window).resize(playerWidth);
-
-        $(document).on('click', "#videos-ico", function (evt) {
-            $('#videos-ico').remove();
-            $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
-            $("#player").attr("src",$iframeSRC);
-        });
-
-        $('#videos-ico').show();
-        //var containerHieght = $('#media-content').height();
-        //$("#player").css('height',containerHieght);
-        var player = $f(document.getElementById('player'));
-        var media = $('#media-list .media-img img');
-        var mediaContainer = $('#media-content');
-
-
-        $(media).on('click',function(e){
-            $("#player").remove();
-            var $n = $(this).parent().clone();
-            var $img = $n.find("img");
-            $img.on('load', function() {
-              $(mediaContainer).empty().append($n);
-              $(".product-detail .left-side .cart, .discount.discount-big").show();
+        
+        {% if not (isPreview) %}
+        
+            $(document).on('click', "#videos-ico", function (evt) {
+                $('#videos-ico').remove();
+                $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
+                $("#player").attr("src",$iframeSRC);
             });
-            $img.attr('src', $img.data('url'));                  
-        });
 
-        {% if item.video %}
-        $("#media-list .media-video").click(function() {
-            //$('#videos-ico').remove();
-            var url = $(this).data('url');
-            var tmpl = '<iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>' + 
-                        '<img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />';
-            
-            $("#media-content").empty().append($(tmpl));
-            playerWidth();
-            $(".product-detail .left-side .cart, .discount.discount-big").hide();
-        });
+            $('#videos-ico').show();
+            //var containerHieght = $('#media-content').height();
+            //$("#player").css('height',containerHieght);
+            var player = $f(document.getElementById('player'));
+            var media = $('#media-list .media-img img');
+            var mediaContainer = $('#media-content');
+
+        
+            $(media).on('click',function(e){
+                $("#player").remove();
+                var $n = $(this).parent().clone();
+                var $img = $n.find("img");
+                $img.on('load', function() {
+                  $(mediaContainer).empty().append($n);
+                  $(".product-detail .left-side .cart, .discount.discount-big").show();
+                });
+                $img.attr('src', $img.data('url'));                  
+            });
+
+            {% if item.video %}
+            $("#media-list .media-video").click(function() {
+                //$('#videos-ico').remove();
+                var url = $(this).data('url');
+                var tmpl = '<iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>' + 
+                            '<img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />';
+
+                $("#media-content").empty().append($(tmpl));
+                playerWidth();
+                $(".product-detail .left-side .cart, .discount.discount-big").hide();
+            });
+            {% endif %}    
         {% endif %}    
         
         $('#date-range').val(moment().add(1, 'days').format('DD.MM.YYYY'));
@@ -563,60 +566,62 @@
         $("#tests, #tests2").change(function() {
             updatePrice();
         });
-        $(".social.fb").off('click touchstart').on('click touchstart', function(e) {
+        {% if not (isPreview) %}
+            $(".social.fb").off('click touchstart').on('click touchstart', function(e) {
+                    e.preventDefault();
+                    FB.ui({
+                        method: 'share',
+                        href: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
+                    }, function(response){});
+                });
+            $(".social.flash").off('click touchstart').on('click touchstart', function(e) {
+                    e.preventDefault();
+                    FB.ui({
+                        method: 'send',
+                        link: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
+                    }, function(response){});
+                });
+            $(".social.tweet").off('click touchstart').on('click touchstart', function(e) {
                 e.preventDefault();
-                FB.ui({
-                    method: 'share',
-                    href: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
-                }, function(response){});
+                var title = '{{ item.name|escape('js')|escape('url') }}';
+                var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url')|escape('url') }}';
+                window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
             });
-        $(".social.flash").off('click touchstart').on('click touchstart', function(e) {
+            $(".social.email").off('click touchstart').on('click touchstart', function(e) {
                 e.preventDefault();
-                FB.ui({
-                    method: 'send',
-                    link: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
-                }, function(response){});
+                var subject = encodeURIComponent('Empfohlenes Angebot auf hey! VIENNA');
+                var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}');
+                var url = 'mailto:?subject=' + subject + '&body=' + body;
+                window.location = url;
             });
-        $(".social.tweet").off('click touchstart').on('click touchstart', function(e) {
-            e.preventDefault();
-            var title = '{{ item.name|escape('js')|escape('url') }}';
-            var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url')|escape('url') }}';
-            window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-        });
-        $(".social.email").off('click touchstart').on('click touchstart', function(e) {
-            e.preventDefault();
-            var subject = encodeURIComponent('Empfohlenes Angebot auf hey! VIENNA');
-            var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}');
-            var url = 'mailto:?subject=' + subject + '&body=' + body;
-            window.location = url;
-        });
-        $('#robert-heading').on('click', function () {
-            $('.robertcollapse').collapse('toggle');
-            if($('#fragestellenbut').is(':hidden'))
-                $('#fragestellenbut').show();
-            else
-                $('#fragestellenbut').hide();
-    
-        });
-        
-        {% if (loggedIn) %}
-            $("a.inquiry").click(inquiry);
-        {% else %}
-            $("a.inquiry").click(function(){
-                if ($("a[data-target='#login']").size() > 0) {
-                        $("a[data-target='#login']")[0].click();      
-                    }
-            });
-        {% endif %}
+            $('#robert-heading').on('click', function () {
+                $('.robertcollapse').collapse('toggle');
+                if($('#fragestellenbut').is(':hidden'))
+                    $('#fragestellenbut').show();
+                else
+                    $('#fragestellenbut').hide();
 
-        {% if (loggedIn) %}
-            $("a.question").click(question);
-        {% else %}
-            $("a.question").click(function(){
-                if ($("a[data-target='#login']").size() > 0) {
-                        $("a[data-target='#login']")[0].click();      
-                    }
             });
+        
+            {% if (loggedIn) %}
+                $("a.inquiry").click(inquiry);
+            {% else %}
+                $("a.inquiry").click(function(){
+                    if ($("a[data-target='#login']").size() > 0) {
+                            $("a[data-target='#login']")[0].click();      
+                        }
+                });
+            {% endif %}
+
+            {% if (loggedIn) %}
+                $("a.question").click(question);
+            {% else %}
+                $("a.question").click(function(){
+                    if ($("a[data-target='#login']").size() > 0) {
+                            $("a[data-target='#login']")[0].click();      
+                        }
+                });
+            {% endif %}
         {% endif %}
             
         {% if (isPreview) %}

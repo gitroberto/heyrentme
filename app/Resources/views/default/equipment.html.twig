@@ -458,17 +458,17 @@
     $(document).ready(function(){
         var media = $('#media-list .media-img img');
         var mediaContainer = $('#media-content');
-
-        $(media).on('click',function(e){
-            var $n = $(this).parent().clone();
-            var $img = $n.find("img");
-            $img.on('load', function() {
-              $(mediaContainer).empty().append($n);
-              $(".product-detail .left-side .cart, .discount.discount-big").show();
+        {% if not (isPreview) %}
+            $(media).on('click',function(e){
+                var $n = $(this).parent().clone();
+                var $img = $n.find("img");
+                $img.on('load', function() {
+                  $(mediaContainer).empty().append($n);
+                  $(".product-detail .left-side .cart, .discount.discount-big").show();
+                });
+                $img.attr('src', $img.data('url'));                  
             });
-            $img.attr('src', $img.data('url'));                  
-        });
-        
+        {% endif %}
         
         var t1 = $('#date-range').val(moment().add(1, "days").format('[AB] DD.MM.YYYY'));
         var t2 = (moment().add(2, "days").format('[BIS] DD.MM.YYYY'));
@@ -552,63 +552,68 @@
             $('#to-time').html(time1.replace('Uhrzeit bis ',''));
             $(this).parent().find('.bootstrap-select').eq(1).find('.dropdown-toggle').text($(this).val()).prepend('<span class="caret"></span>');
         });
-        $('#myVideoPlay').on('click',function(){
-            $(this).hide();
-        });
-        $(".social.fb").off('click touchstart').on('click touchstart', function(e) {
-                e.preventDefault();
-                FB.ui({
-                    method: 'share',
-                    href: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
-                }, function(response){});
-            });
-        $(".social.flash").off('click touchstart').on('click touchstart', function(e) {
-                e.preventDefault();
-                FB.ui({
-                    method: 'send',
-                    link: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
-                }, function(response){});
-            });
-        $(".social.tweet").off('click touchstart').on('click touchstart', function(e) {
-            e.preventDefault();
-            var title = '{{ item.name|escape('url') }}';
-            var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}';
-            window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-        });
-        $(".social.email").off('click touchstart').on('click touchstart', function(e) {
-            e.preventDefault();
-            var subject = encodeURIComponent('Empfohlenes Angebot auf hey! VIENNA');
-            var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}');
-            var url = 'mailto:?subject=' + subject + '&body=' + body;
-            window.location = url;
-        });
-        $('#robert-heading').on('click', function () {
-            $('.robertcollapse').collapse('toggle');
-            if($('#fragestellenbut').is(':hidden'))
-                $('#fragestellenbut').show();
-            else
-                $('#fragestellenbut').hide();
-    
-        });
         
-        {% if (loggedIn) %}
-            $("a.inquiry").click(inquiry);
-        {% else %}
-            $("a.inquiry").click(function(){
-                if ($("a[data-target='#login']").size() > 0) {
-                        $("a[data-target='#login']")[0].click();      
-                    }
+        {% if not (isPreview) %}
+            $('#myVideoPlay').on('click',function(){
+                $(this).hide();
             });
-        {% endif %}
+            $(".social.fb").off('click touchstart').on('click touchstart', function(e) {
+                    e.preventDefault();
+                    FB.ui({
+                        method: 'share',
+                        href: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
+                    }, function(response){});
+                });
+            $(".social.flash").off('click touchstart').on('click touchstart', function(e) {
+                    e.preventDefault();
+                    FB.ui({
+                        method: 'send',
+                        link: '{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}'
+                    }, function(response){});
+                });
+            $(".social.tweet").off('click touchstart').on('click touchstart', function(e) {
+                e.preventDefault();
+                var title = '{{ item.name|escape('url') }}';
+                var url = '{{ mailer_app_url_prefix|escape('url') }}{{ path('catchall', { 'content': item.urlPath })|escape('url') }}';
+                window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+            });
+            $(".social.email").off('click touchstart').on('click touchstart', function(e) {
+                e.preventDefault();
+                var subject = encodeURIComponent('Empfohlenes Angebot auf hey! VIENNA');
+                var body = encodeURIComponent('{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': item.urlPath }) }}');
+                var url = 'mailto:?subject=' + subject + '&body=' + body;
+                window.location = url;
+            });
         
-        {% if (loggedIn) %}
-            $("a.question").click(question);
-        {% else %}
-            $("a.question").click(function(){
-                if ($("a[data-target='#login']").size() > 0) {
-                        $("a[data-target='#login']")[0].click();      
-                    }
+            $('#robert-heading').on('click', function () {
+                $('.robertcollapse').collapse('toggle');
+                if($('#fragestellenbut').is(':hidden'))
+                    $('#fragestellenbut').show();
+                else
+                    $('#fragestellenbut').hide();
+
             });
+        
+            {% if (loggedIn) %}
+                $("a.inquiry").click(inquiry);
+            {% else %}
+                $("a.inquiry").click(function(){
+                    if ($("a[data-target='#login']").size() > 0) {
+                            $("a[data-target='#login']")[0].click();      
+                        }
+                });
+            {% endif %}
+        
+        
+            {% if (loggedIn) %}
+                $("a.question").click(question);
+            {% else %}
+                $("a.question").click(function(){
+                    if ($("a[data-target='#login']").size() > 0) {
+                            $("a[data-target='#login']")[0].click();      
+                        }
+                });
+            {% endif %}
         {% endif %}
             
         {% if (isPreview) %}
