@@ -260,4 +260,13 @@ class Category
     {
         return $this->type;
     }
+    
+    public function getTypeStr()
+    {
+        if ($this->getType() === Category::TYPE_EQUIPMENT){
+            return "Equipment";
+        } else {
+            return "Talent";
+        }
+    }
 }

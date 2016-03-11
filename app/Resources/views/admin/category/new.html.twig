@@ -25,6 +25,15 @@
     <div class="err-msg">{{ form_errors(form) }}</div>
     <div class="row">
         <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Type</label>
+          <div class="err-msg">{{ form_errors(form.type) }}</div>
+          <div class="col-xs-10 control-readonly">              
+                {{ form_widget(form.type) }}                
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
           <label for="form_name" class="control-label col-xs-2">Name</label>
           <div class="col-xs-10">
             <div class="err-msg">{{ form_errors(form.name) }}</div>

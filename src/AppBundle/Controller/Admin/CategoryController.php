@@ -56,6 +56,17 @@ class CategoryController extends BaseAdminController {
                         new Type(array('type' => 'integer'))
                     )
                 ))
+                ->add('type', 'choice', array(
+                    'choices' => array(                        
+                        'Equipment' => Category::TYPE_EQUIPMENT,
+                        'Talent' => Category::TYPE_TALENT
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
                 ->getForm();
         //when the form is posted this method prefills entity with data from form
         $form->handleRequest($request);
@@ -175,6 +186,17 @@ class CategoryController extends BaseAdminController {
                     'required' => false,
                     'constraints' => array(
                         new Type(array('type' => 'integer'))
+                    )
+                ))
+                ->add('type', 'choice', array(
+                    'choices' => array(                        
+                        'Equipment' => Category::TYPE_EQUIPMENT,
+                        'Talent' => Category::TYPE_TALENT
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
                     )
                 ))
                 ->getForm();
@@ -331,7 +353,8 @@ class CategoryController extends BaseAdminController {
             $cell[1] = $dataRow->getId();
             $cell[2] = $dataRow->getName();
             $cell[3] = $dataRow->getSlug();
-            $cell[4] = $dataRow->getPosition();
+            $cell[4] = $dataRow->getTypeStr();
+            $cell[5] = $dataRow->getPosition();
             $row['cell'] = $cell;
             array_push($rows, $row);
         }
