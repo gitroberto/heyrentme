@@ -402,6 +402,20 @@ EOT;
         return $fts;
     }
 
+    public function talentModified($talentId) {
+        // todo: possibly call a service to send notification
+        $talent = $this->getEntityManager()->getRepository('AppBundle:Talent')->find($talentId);
+        $status = $talent->getStatus();
+        $changed = false;
+        
+        if ($status === Talent::STATUS_APPROVED || $status === Talent::STATUS_REJECTED) {
+            $talent->setStatus(Talent::STATUS_MODIFIED);
+            $this->getEntityManager()->flush();
+            $changed = true;
+        }
+        
+        return $changed;
+    }
     /* score */
     public function addRating($talentRating) {
         $em = $this->getEntityManager();

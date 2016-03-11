@@ -168,31 +168,55 @@ class TalentController extends BaseController {
         
         $form->handleRequest($request);
         
+        $statusChanged = false; // change relevant for email notification
         if ($form->isValid()) {
+            $changed = false; // change relevant for moderation
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
 
+            // check for modaration changes
+            if ($talent->getName() !== $data['name']) {
+                $changed = true;
+            }
+            
             // map fields, TODO: consider moving to Talent's method
             //<editor-fold> map fields            
             $talent->setName($data['name']);
             $talent->setPrice($data['price']);
             $talent->setRequestPrice($data['requestPrice'] ? 1 : 0);
             //</editor-fold>
+            $em->flush();
+            
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Talent')->talentModified($id);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedTalentInfoMessage($request, $talent); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }
             
             // save to db
+            /*
             $em = $this->getDoctrine()->getManager();
             if ($talent->checkStatusOnSave()){
-                $this->sendNewModifiedTalentInfoMessage($request, $talent);
+                
             }
             $em->persist($talent);
             $em->flush();
+           */
             
-            return $this->redirectToRoute('talent-edit-2', array('id' => $id));
+            if (!$statusChanged) {            
+                return $this->redirectToRoute('talent-edit-2', array('id' => $id));
+            }
         }
         $complete = $talent->getStatus() != Talent::STATUS_INCOMPLETE;
         return $this->render('talent/talent_edit_step1.html.twig', array(
             'form' => $form->createView(),
             'complete' => $complete,
-            'id' => $id
+            'id' => $id,
+            'statusChanged' => $statusChanged
         ));
     }        
 

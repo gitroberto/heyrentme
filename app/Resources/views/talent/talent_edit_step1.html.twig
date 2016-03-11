@@ -132,7 +132,21 @@ es für deine Interessenten generell übersichtlicher ist, wenn ein Stundentarif
         </div>-->
   </section>
   </div>
-            
+
+    <div id="edit-offer" class="modal fade delete-offer" role="dialog">
+      <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+          <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+          <div class="content-modal">
+            <p class="text-bold">Das Angebot wurde bearbeitet.</p>
+            <p class="delate-info">Bitte beachte, dass dein Angebot erst von uns angesehen werden muss, bevor die Änderungen aktiv werden.</p>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block script %}
     <script>
       var fieldsChanged = false;
       var url2 = "{{ path('talent-edit-2', {'id': id}) }}";
@@ -194,6 +208,13 @@ es für deine Interessenten generell übersichtlicher ist, wenn ein Stundentarif
           $("#form_price").on('change keyup', priceChanged);
           $("#form_requestPrice").on('click change', requestPriceChanged);
           priceChanged();
+          
+        {% if statusChanged %}
+            $("#edit-offer").modal();
+            $("#edit-offer").on("hidden.bs.modal", function() {
+                window.location = '{{ path('talent-edit-2', { 'id': id }) }}';
+            });
+        {% endif %}
       });
   </script>
 {% endblock %}
