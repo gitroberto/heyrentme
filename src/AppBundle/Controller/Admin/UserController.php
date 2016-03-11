@@ -224,6 +224,19 @@ class UserController extends BaseAdminController {
         ));
     }
     /**
+     * @Route("/admin/user/delete/{id}", name="admin-user-delete")
+     */
+    public function deleteUserAction(Request $request, $id) {
+        $user = $this->getDoctrineRepo('AppBundle:User')->find($id);
+        if (!$user) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }          
+        $this->getDoctrineRepo('AppBundle:User')->deleteUserAccount($user, $this->getParameter('image_storage_dir'));
+        
+        return $this->redirectToRoute("admin_users_list");
+    }
+    
+    /**
      * @Route("/admin/user/edit/{id}", name="admin-user-edit")
      */
     public function editAction(Request $request, $id) {
