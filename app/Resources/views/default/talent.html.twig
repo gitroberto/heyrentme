@@ -494,46 +494,46 @@
         playerWidth();
         $(window).resize(playerWidth);
         
-        {% if not (isPreview) %}
         
-            $(document).on('click', "#videos-ico", function (evt) {
-                $('#videos-ico').remove();
-                $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
-                $("#player").attr("src",$iframeSRC);
-            });
-
-            $('#videos-ico').show();
-            //var containerHieght = $('#media-content').height();
-            //$("#player").css('height',containerHieght);
-            var player = $f(document.getElementById('player'));
-            var media = $('#media-list .media-img img');
-            var mediaContainer = $('#media-content');
-
         
-            $(media).on('click',function(e){
-                $("#player").remove();
-                var $n = $(this).parent().clone();
-                var $img = $n.find("img");
-                $img.on('load', function() {
-                  $(mediaContainer).empty().append($n);
-                  $(".product-detail .left-side .cart, .discount.discount-big").show();
-                });
-                $img.attr('src', $img.data('url'));                  
-            });
+        $(document).on('click', "#videos-ico", function (evt) {
+            $('#videos-ico').remove();
+            $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
+            $("#player").attr("src",$iframeSRC);
+        });
 
-            {% if item.video %}
-            $("#media-list .media-video").click(function() {
-                //$('#videos-ico').remove();
-                var url = $(this).data('url');
-                var tmpl = '<iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>' + 
-                            '<img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />';
+        $('#videos-ico').show();
+        //var containerHieght = $('#media-content').height();
+        //$("#player").css('height',containerHieght);
+        var player = $f(document.getElementById('player'));
+        var media = $('#media-list .media-img img');
+        var mediaContainer = $('#media-content');
 
-                $("#media-content").empty().append($(tmpl));
-                playerWidth();
-                $(".product-detail .left-side .cart, .discount.discount-big").hide();
+
+        $(media).on('click',function(e){
+            $("#player").remove();
+            var $n = $(this).parent().clone();
+            var $img = $n.find("img");
+            $img.on('load', function() {
+              $(mediaContainer).empty().append($n);
+              $(".product-detail .left-side .cart, .discount.discount-big").show();
             });
-            {% endif %}    
+            $img.attr('src', $img.data('url'));                  
+        });
+
+        {% if item.video %}
+        $("#media-list .media-video").click(function() {
+            //$('#videos-ico').remove();
+            var url = $(this).data('url');
+            var tmpl = '<iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>' + 
+                        '<img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />';
+
+            $("#media-content").empty().append($(tmpl));
+            playerWidth();
+            $(".product-detail .left-side .cart, .discount.discount-big").hide();
+        });
         {% endif %}    
+         
         
         $('#date-range').val(moment().add(1, 'days').format('DD.MM.YYYY'));
         updatePrice();
@@ -594,14 +594,7 @@
                 var url = 'mailto:?subject=' + subject + '&body=' + body;
                 window.location = url;
             });
-            $('#robert-heading').on('click', function () {
-                $('.robertcollapse').collapse('toggle');
-                if($('#fragestellenbut').is(':hidden'))
-                    $('#fragestellenbut').show();
-                else
-                    $('#fragestellenbut').hide();
-
-            });
+            
         
             {% if (loggedIn) %}
                 $("a.inquiry").click(inquiry);
@@ -623,6 +616,15 @@
                 });
             {% endif %}
         {% endif %}
+            
+        $('#robert-heading').on('click', function () {
+            $('.robertcollapse').collapse('toggle');
+            if($('#fragestellenbut').is(':hidden'))
+                $('#fragestellenbut').show();
+            else
+                $('#fragestellenbut').hide();
+
+        });
             
         {% if (isPreview) %}
             $('#kategorie-select').unbind("click");

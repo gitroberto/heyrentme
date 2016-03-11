@@ -458,17 +458,17 @@
     $(document).ready(function(){
         var media = $('#media-list .media-img img');
         var mediaContainer = $('#media-content');
-        {% if not (isPreview) %}
-            $(media).on('click',function(e){
-                var $n = $(this).parent().clone();
-                var $img = $n.find("img");
-                $img.on('load', function() {
-                  $(mediaContainer).empty().append($n);
-                  $(".product-detail .left-side .cart, .discount.discount-big").show();
-                });
-                $img.attr('src', $img.data('url'));                  
+        
+        $(media).on('click',function(e){
+            var $n = $(this).parent().clone();
+            var $img = $n.find("img");
+            $img.on('load', function() {
+              $(mediaContainer).empty().append($n);
+              $(".product-detail .left-side .cart, .discount.discount-big").show();
             });
-        {% endif %}
+            $img.attr('src', $img.data('url'));                  
+        });
+        
         
         var t1 = $('#date-range').val(moment().add(1, "days").format('[AB] DD.MM.YYYY'));
         var t2 = (moment().add(2, "days").format('[BIS] DD.MM.YYYY'));
@@ -585,14 +585,7 @@
                 window.location = url;
             });
         
-            $('#robert-heading').on('click', function () {
-                $('.robertcollapse').collapse('toggle');
-                if($('#fragestellenbut').is(':hidden'))
-                    $('#fragestellenbut').show();
-                else
-                    $('#fragestellenbut').hide();
-
-            });
+            
         
             {% if (loggedIn) %}
                 $("a.inquiry").click(inquiry);
@@ -615,6 +608,15 @@
                 });
             {% endif %}
         {% endif %}
+            
+        $('#robert-heading').on('click', function () {
+            $('.robertcollapse').collapse('toggle');
+            if($('#fragestellenbut').is(':hidden'))
+                $('#fragestellenbut').show();
+            else
+                $('#fragestellenbut').hide();
+
+        });
             
         {% if (isPreview) %}
             $('#kategorie-select').unbind("click");
