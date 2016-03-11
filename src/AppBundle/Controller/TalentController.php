@@ -32,7 +32,7 @@ class TalentController extends BaseController {
         $form = $this->createFormBuilder(null, array(
                 'error_bubbling' => false,
                 'constraints' => array(
-                    new Callback(array($this, 'validateStep1'))
+                    /*new Callback(array($this, 'validateStep1'))*/
                 )))
                 ->add('name', 'text', array(
                     'constraints' => array(
@@ -83,7 +83,8 @@ class TalentController extends BaseController {
         return $this->render('talent/talent_edit_step1.html.twig', array(
             'form' => $form->createView(),
             'complete' => false,
-            'id' => $subcategoryId
+            'id' => $subcategoryId,
+            'statusChanged' => false
         ));
     }
     
@@ -149,7 +150,7 @@ class TalentController extends BaseController {
         $form = $this->createFormBuilder($data, array(
                 'error_bubbling' => false,
                 'constraints' => array(
-                    new Callback(array($this, 'validateStep1'))
+                    /*new Callback(array($this, 'validateStep1'))*/
                 )))
                 ->add('name', 'text', array(
                     'constraints' => array(

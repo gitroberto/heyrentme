@@ -191,10 +191,12 @@ es für deine Interessenten generell übersichtlicher ist, wenn ein Stundentarif
           var $req = $("#form_requestPrice");
           var req = $req.prop('checked');
           if (req) {
-              $price.attr('disabled', 'disabled');
+              $price.attr('readOnly', 'true');
+              $price.css({ 'background-color': '#aaa', 'opacity': '0.5' });
           }
           else {
-              $price.removeAttr('disabled');
+              $price.removeAttr('readOnly');
+              $price.css({ 'background-color': '#fff', 'opacity': '1.0' });
           }
       }
       
@@ -207,7 +209,9 @@ es für deine Interessenten generell übersichtlicher ist, wenn ein Stundentarif
           $(".top-menu-button").click(topMenuClick);
           $("#form_price").on('change keyup', priceChanged);
           $("#form_requestPrice").on('click change', requestPriceChanged);
-          priceChanged();
+          
+        priceChanged();
+        requestPriceChanged();  
           
         {% if statusChanged %}
             $("#edit-offer").modal();

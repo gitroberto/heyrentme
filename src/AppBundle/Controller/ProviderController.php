@@ -676,7 +676,8 @@ class ProviderController extends BaseController {
         return $this->render('provider/equipment_edit_step1.html.twig', array(
             'form' => $form->createView(),
             'complete' => false,
-            'id' => $subcategoryId
+            'id' => $subcategoryId,
+            'statusChanged' => false
         ));
     }
     /**
