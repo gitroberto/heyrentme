@@ -193,17 +193,7 @@ class TalentController extends BaseController {
                 $this->sendNewModifiedTalentInfoMessage($request, $talent); 
                 // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
             }
-            
-            // save to db
-            /*
-            $em = $this->getDoctrine()->getManager();
-            if ($talent->checkStatusOnSave()){
-                
-            }
-            $em->persist($talent);
-            $em->flush();
-           */
-            
+                        
             if (!$statusChanged) {            
                 return $this->redirectToRoute('talent-edit-2', array('id' => $id));
             }
