@@ -168,31 +168,42 @@ class TalentController extends BaseController {
         
         $form->handleRequest($request);
         
+        $statusChanged = false; // change relevant for email notification
         if ($form->isValid()) {
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
 
+            // check for modaration relevant changes
+            $changed = $talent->getName() !== $data['name'];
+            
             // map fields, TODO: consider moving to Talent's method
             //<editor-fold> map fields            
             $talent->setName($data['name']);
             $talent->setPrice($data['price']);
             $talent->setRequestPrice($data['requestPrice'] ? 1 : 0);
             //</editor-fold>
-            
-            // save to db
-            $em = $this->getDoctrine()->getManager();
-            if ($talent->checkStatusOnSave()){
-                $this->sendNewModifiedTalentInfoMessage($request, $talent);
-            }
-            $em->persist($talent);
             $em->flush();
             
-            return $this->redirectToRoute('talent-edit-2', array('id' => $id));
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Talent')->talentModified($id);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedTalentInfoMessage($request, $talent); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }
+                        
+            if (!$statusChanged) {            
+                return $this->redirectToRoute('talent-edit-2', array('id' => $id));
+            }
         }
         $complete = $talent->getStatus() != Talent::STATUS_INCOMPLETE;
         return $this->render('talent/talent_edit_step1.html.twig', array(
             'form' => $form->createView(),
             'complete' => $complete,
-            'id' => $id
+            'id' => $id,
+            'statusChanged' => $statusChanged
         ));
     }        
 
@@ -330,9 +341,15 @@ class TalentController extends BaseController {
             $imagesValidation = $this->imagesValidation($images);
         }
         
+        $statusChanged = false; // change relevant for email notification
         if ($form->isValid() && $mainImageValidation === null && $imagesValidation === null) {
             // update Talent object
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+
+            // check for modaration relevant changes
+            $changed = $eq->getDescription() !== $data['description'];
+            
             // map fields
             //<editor-fold>
             $eq->setDescription($data['description']);
@@ -343,10 +360,6 @@ class TalentController extends BaseController {
             $eq->setLicence(intval($data['make_sure']));
             $eq->setAccept(intval($data['accept']));
             //</editor-fold>
-            $em = $this->getDoctrine()->getManager();
-            if ($eq->checkStatusOnSave()){
-                $this->sendNewModifiedTalentInfoMessage($request, $eq);
-            }
             $em->flush();
                         
             // handle video url
@@ -388,10 +401,21 @@ class TalentController extends BaseController {
             $user->setPhone($data['phone']);
             $em->flush();
             
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Talent')->talentModified($id);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedTalentInfoMessage($request, $eq); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }            
+            
             // clean up
             $this->fileCount = null;
             
-            return $this->redirectToRoute('talent-edit-3', array('eqid' => $id));
+            if (!$statusChanged) {
+                return $this->redirectToRoute('talent-edit-3', array('eqid' => $id));
+            }
         }
 
         // clean up
@@ -405,7 +429,8 @@ class TalentController extends BaseController {
             'mainImageValidation' => $mainImageValidation,
             'imagesValidation' => $imagesValidation,
             'complete' => $complete,
-            'id' => $id
+            'id' => $id,
+            'statusChanged' => $statusChanged
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -805,8 +830,12 @@ class TalentController extends BaseController {
         $this->formHelper = $form;
         $form->handleRequest($request);
                         
+        $statusChanged = false; // change relevant for email notification
         if ($form->isValid()) {
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
+            
             /*
             // parse params
             //<editor-fold>
@@ -837,6 +866,12 @@ class TalentController extends BaseController {
             
             $this->getDoctrineRepo('AppBundle:Talent')->saveFeatures($eqid, $features);
             */
+
+            // check for modaration relevant changes
+            $changed = $eq->getDescReference() !== $data['descReference']
+                || $eq->getDescTarget() !== $data['descTarget']
+                || $eq->getDescScope() !== $data['descScope']
+                || $eq->getDescCondition() !== $data['descCondition'];
             
             // map fields
             //<editor-fold>
@@ -853,23 +888,20 @@ class TalentController extends BaseController {
             //</editor-fold>
             
             // save
-            $em = $this->getDoctrine()->getManager();
             $em->flush();
-
-            if ($eq->getStatus() == Talent::STATUS_INCOMPLETE){   
-                #following part was added because otherwise talent status change was not save in db
-                $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($eqid);
-                if (!$eq) {
-                    return new Response(Response::HTTP_NOT_FOUND);
-                }  
-                
-                $eq->changeStatus(Talent::STATUS_NEW, null);
-                $this->sendNewModifiedTalentInfoMessage($request, $eq);
-                
-                $em->flush();
-            }         
+            
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Talent')->talentModified($eqid);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedTalentInfoMessage($request, $eq); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }            
            
-            return $this->redirectToRoute('talent-edit-4', array('id' => $eqid));
+            if (!$statusChanged) {            
+                return $this->redirectToRoute('talent-edit-4', array('id' => $eqid));
+            }
         }
 
         //$features = $this->getDoctrineRepo('AppBundle:Talent')->getFeaturesAsArray($eq->getId());
@@ -877,7 +909,8 @@ class TalentController extends BaseController {
         return $this->render('talent/talent_edit_step3.html.twig', array(
             'form' => $form->createView(),
             'complete' => $complete,
-            'id' => $eqid/*,
+            'id' => $eqid,
+            'statusChanged' => $statusChanged/*,
             'subcategory' => $eq->getSubcategory(),
             'features' => $features,
             'featureSectionRepo' => $this->getDoctrineRepo('AppBundle:FeatureSection')*/

@@ -147,6 +147,17 @@
       </div>
   </section>
   </div>
+    <div id="edit-offer" class="modal fade delete-offer" role="dialog">
+      <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+          <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+          <div class="content-modal">
+            <p class="text-bold">Das Angebot wurde bearbeitet.</p>
+            <p class="delate-info">Bitte beachte, dass dein Angebot erst von uns angesehen werden muss, bevor die Änderungen aktiv werden.</p>
+        </div>
+      </div>
+    </div>
 {#
   <script>
     $(function() {
@@ -182,6 +193,8 @@
     });
   </script>
   #}
+{% endblock %}
+{% block script %}
     <script>
       var fieldsChanged = false;
       
@@ -207,6 +220,12 @@
       }
       
       $(document).ready(function () {
+        {% if statusChanged %}
+            $("#edit-offer").modal();
+            $("#edit-offer").on("hidden.bs.modal", function() {
+                window.location = '{{ path('equipment-edit-4', { 'id': id }) }}';
+            });
+        {% endif %}
           $("form input[type='text']").on("change", function(){
               fieldsChanged = true;
           });

@@ -538,10 +538,15 @@ class ProviderController extends BaseController {
         //</editor-fold>
         
         $form->handleRequest($request);
+        $statusChanged = false; // change relevant for email notification
         
         if ($form->isValid()) {
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
             $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
+
+            // check for modaration relevant changes
+            $changed = $equipment->getName() !== $data['name'];
 
             // map fields, TODO: consider moving to Equipment's method
             //<editor-fold> map fields            
@@ -556,14 +561,20 @@ class ProviderController extends BaseController {
             //</editor-fold>
             
             // save to db
-            $em = $this->getDoctrine()->getManager();
-            if ($equipment->checkStatusOnSave()){
-                $this->sendNewModifiedEquipmentInfoMessage($request, $equipment);
-            }
-            $em->persist($equipment);
             $em->flush();
+
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Equipment')->equipmentModified($id);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedEquipmentInfoMessage($request, $equipment); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }
             
-            return $this->redirectToRoute('equipment-edit-2', array('id' => $id));
+            if (!$statusChanged) {            
+                return $this->redirectToRoute('equipment-edit-2', array('id' => $id));
+            }
         }
         
         $complete = $equipment->getStatus() != Equipment::STATUS_INCOMPLETE;
@@ -571,7 +582,8 @@ class ProviderController extends BaseController {
         return $this->render('provider/equipment_edit_step1.html.twig', array(
             'form' => $form->createView(),
             'complete' => $complete,
-            'id' => $id
+            'id' => $id,
+            'statusChanged' => $statusChanged
         ));
     }        
     /**
@@ -789,10 +801,16 @@ class ProviderController extends BaseController {
             $mainImageValidation = $this->mainImageValidation($mainImage);
             $imagesValidation = $this->imagesValidation($images);
         }
-        
+
+        $statusChanged = false; // change relevant for email notification        
         if ($form->isValid() && $mainImageValidation === null && $imagesValidation === null) {
             // update Equipment object
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
+            // check for modaration relevant changes
+            $changed = $eq->getDescription() !== $data['description'];
+            
             // map fields
             //<editor-fold>
             $eq->setDescription($data['description']);
@@ -804,10 +822,6 @@ class ProviderController extends BaseController {
             $eq->setFunctional(intval($data['make_sure']));
             $eq->setAccept(intval($data['accept']));
             //</editor-fold>
-            $em = $this->getDoctrine()->getManager();
-            if ($eq->checkStatusOnSave()){
-                $this->sendNewModifiedEquipmentInfoMessage($request, $eq);
-            }
             $em->flush();
             
             // update user
@@ -822,10 +836,21 @@ class ProviderController extends BaseController {
             $user->setPhone($data['phone']);
             $em->flush();
             
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Equipment')->equipmentModified($id);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedEquipmentInfoMessage($request, $eq); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }
+
             // clean up
             $this->fileCount = null;
             
-            return $this->redirectToRoute('equipment-edit-3', array('eqid' => $id));
+            if (!$statusChanged) {            
+                return $this->redirectToRoute('equipment-edit-3', array('eqid' => $id));
+            }
         }
         
         // clean up
@@ -841,7 +866,8 @@ class ProviderController extends BaseController {
             'mainImageValidation' => $mainImageValidation,
             'imagesValidation' => $imagesValidation,
             'complete' => $complete,
-            'id' => $id
+            'id' => $id,
+            'statusChanged' => $statusChanged
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -1113,8 +1139,11 @@ class ProviderController extends BaseController {
         $this->formHelper = $form;
         $form->handleRequest($request);
             
+        $statusChanged = false; // change relevant for email notification
         if ($form->isValid()) {
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
             /*
             // parse params
             //<editor-fold>
@@ -1146,6 +1175,11 @@ class ProviderController extends BaseController {
             $this->getDoctrineRepo('AppBundle:Equipment')->saveFeatures($eqid, $features);
             */
             
+            // check for modaration relevant changes
+            $changed = $eq->getDescType() !== $data['descType']
+                || $eq->getDescSpecial() !== $data['descSpecial']
+                || $eq->getDescCondition() !== $data['descCondition'];
+            
             // map fields
             //<editor-fold>
             $eq->setTimeMorning($data['timeMorning']);
@@ -1158,23 +1192,20 @@ class ProviderController extends BaseController {
             //</editor-fold>
             
             // save
-            $em = $this->getDoctrine()->getManager();
             $em->flush();
 
-            if ($eq->getStatus() == Equipment::STATUS_INCOMPLETE){   
-                #following part was added because otherwise equipment status change was not save in db
-                $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eqid);
-                if (!$eq) {
-                    return new Response(Response::HTTP_NOT_FOUND);
-                }  
-                
-                $eq->changeStatus(Equipment::STATUS_NEW, null);
-                $this->sendNewModifiedEquipmentInfoMessage($request, $eq);
-                
-                $em->flush();
-            }         
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Equipment')->equipmentModified($eqid);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedEquipmentInfoMessage($request, $eq); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }
            
-            return $this->redirectToRoute('equipment-edit-4', array('id' => $eqid));
+            if (!$statusChanged) {            
+                return $this->redirectToRoute('equipment-edit-4', array('id' => $eqid));
+            }
         }
 
         //$features = $this->getDoctrineRepo('AppBundle:Equipment')->getFeaturesAsArray($eq->getId());
@@ -1183,7 +1214,8 @@ class ProviderController extends BaseController {
         return $this->render('provider/equipment_edit_step3.html.twig', array(
             'form' => $form->createView(),
             'complete' => $complete,
-            'id' => $eqid/*,
+            'id' => $eqid,
+            'statusChanged' => $statusChanged/*,
             'subcategory' => $eq->getSubcategory(),
             'features' => $features,
             'featureSectionRepo' => $this->getDoctrineRepo('AppBundle:FeatureSection')*/
@@ -1249,30 +1281,44 @@ class ProviderController extends BaseController {
         $id = $request->get('id');
         $type = $request->get('type');
         $status = $request->get('status');
-        $modifiedStatus = null;
         if ($type === 'equipment') {
-            $obj = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
-            $modifiedStatus = Equipment::STATUS_MODIFIED;
+            $repo = $this->getDoctrineRepo('AppBundle:Equipment');
+            $obj = $repo->find($id);
         }
         else {
-            $obj = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
-            $modifiedStatus = Talent::STATUS_MODIFIED;
+            $repo = $this->getDoctrineRepo('AppBundle:Talent'); 
+            $obj = $repo->find($id);
         }
-        $this->sendNewModifiedEquipmentInfoMessage($request, $obj, $type);
-        
+
         // security check
         if ($this->getUser()->getId() !== $obj->getUser()->getId()) {
             return new Response($status = Response::HTTP_FORBIDDEN);
         }
         
+        // handle status
+        $oldStatus = $obj->getOfferStatus();
+        
+        $statusChanged = false;
+        if ($status !== $oldStatus) {
+            if ($type === 'equipment') {
+                $statusChanged = $repo->equipmentModified($obj->getId());
+            }
+            else {
+                $statusChanged = $repo->talentModified($obj->getId());
+            }
+        }
+        
+        if ($statusChanged) {
+            $this->sendNewModifiedEquipmentInfoMessage($request, $obj, $type);
+        }
+        
+        
         // save
         $em = $this->getDoctrine()->getManager();
         $obj->setOfferStatus($status);
-        $obj->setStatus($modifiedStatus);
-        $em->persist($obj);
         $em->flush();            
         
-        return new JsonResponse(array("status" => "ok"));
+        return new JsonResponse(array("status" => "ok", "statusChanged" => $statusChanged));
     }
     
     public function sendNewModifiedEquipmentInfoMessage(Request $request, $eq, $type="equipment")

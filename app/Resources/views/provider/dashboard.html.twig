@@ -50,20 +50,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="buttons">
-                                  <a class="button-black first-button col-xs-3" href="#" data-dismiss="modal" data-toggle="modal" data-target="#edit-offer_{{ eq.id }}" >bearbeiten</a>
-                                  <div id="edit-offer_{{ eq.id }}" class="modal fade delete-offer" role="dialog">
-                                        <div class="modal-dialog"> 
-                                          <!-- Modal content-->
-                                          <div class="modal-content">
-                                            <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
-                                            <div class="content-modal">
-                                              <p class="text-bold">Angebot “{{ eq.name }}” bearbeiten?</p>
-                                              <p class="delate-info">Bitte beachte, dass dein Angebot erst von uns angesehen werden muss, bevor die Änderungen aktiv werden.</p>
-                                              <a class="button-black backgound-yellow text-black" href="{{ path("equipment-edit-1", { "id": eq.id } ) }}">Angebot bearbeiten</a> </div>
-                                          </div>
-                                        </div>
-                                      </div>
-
+                                  <a class="button-black first-button col-xs-3" href="{{ path("equipment-edit-1", { "id": eq.id } ) }}">bearbeiten</a>
                                   <a  data-toggle="modal" data-target="#confirmDelete_{{ eq.id }}" class="button-black col-xs-3" href="#">entfernen</a>
 
                                     <div id="confirmDelete_{{ eq.id }}" class="modal fade delete-offer" role="dialog" >
@@ -200,20 +187,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="buttons">
-                                  <a class="button-black first-button col-xs-3" href="#" data-dismiss="modal" data-toggle="modal" data-target="#edit-offer_{{ tal.id }}" >bearbeiten</a>
-                                  <div id="edit-offer_{{ tal.id }}" class="modal fade delete-offer" role="dialog">
-                                        <div class="modal-dialog"> 
-                                          <!-- Modal content-->
-                                          <div class="modal-content">
-                                            <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
-                                            <div class="content-modal">
-                                              <p class="text-bold">Angebot “{{ tal.name }}” bearbeiten?</p>
-                                              <p class="delate-info">Bitte beachte, dass dein Angebot erst von uns angesehen werden muss, bevor die Änderungen aktiv werden.</p>
-                                              <a class="button-black backgound-yellow text-black" href="{{ path("talent-edit-1", { "id": tal.id } ) }}">Angebot bearbeiten</a> </div>
-                                          </div>
-                                        </div>
-                                      </div>
-
+                                  <a class="button-black first-button col-xs-3" href="{{ path("talent-edit-1", { "id": tal.id } ) }}">bearbeiten</a>
                                   <a  data-toggle="modal" data-target="#confirmDelete_{{ tal.id }}" class="button-black col-xs-3" href="#">entfernen</a>
 
                                     <div id="confirmDelete_{{ tal.id }}" class="modal fade delete-offer" role="dialog" >
@@ -354,6 +328,17 @@
         </div>
       </div>
     
+    <div id="info-box" class="modal fade delete-offer" role="dialog">
+      <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+          <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+          <div class="content-modal">
+            <p class="delate-info">Der Status wurde gespeichert.</p>
+            {#<p class="delate-info">Der Status wurde gespeichert.</p>#}
+        </div>
+      </div>
+    </div>
           
 </section>
 {% endblock %}
@@ -390,22 +375,25 @@
         var url = "{{ path('save-status') }}";
         var msg = null;
         $.post(url, params)
-                .done(function() {
-                    msg = 'Status gespeichert';
-                    //$(".itemToHide_"+id).hide();
-                    //$("#StatusMessage_"+id).show();
-                    location.reload();
+                .done(function(data) {                    
+                        
+                    $("#info-box").modal();
+                    if (data.statusChanged) {
+                        $("#info-box").on('hidden.bs.modal', function() {
+                            window.location = '{{ path('dashboard') }}';
+                        });
+                    }
                 })
                 .fail(function() {
                     msg = 'Speichern fehlgeschlagen ist, versuchen Sie es erneut';
-                })
+                }){#
                 .always(function() {
                     $box.children('ul').empty().append($('<li>').text(msg)).parent().removeClass('hidden');
                     var toid = window.setTimeout(function() {
                         $box.addClass('hidden');
                     }, 5000);
                     $box.data('toid', toid);
-                });
+                })#};
     }
 </script>
 {#<script src="/js/dashboard.js"></script>#}
