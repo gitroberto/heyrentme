@@ -584,9 +584,9 @@ class TalentController extends BaseController {
     }
 
     /**
-     * @Route("talent-image", name="talent-image")
+     * @Route("talent-main-image", name="talent-main-image")
      */
-    public function talentImageAction(Request $request) {  
+    public function talentMainImageAction(Request $request) {  
         $file = $request->files->get('upl');
         if ($file->isValid()) {
             $uuid = Utils::getUuid();
@@ -635,9 +635,9 @@ class TalentController extends BaseController {
         return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
     /**
-     * @Route("talent-image-save", name="talent-image-save")
+     * @Route("talent-main-image-save", name="talent-main-image-save")
      */
-    public function talentImageSaveAction(Request $request) { 
+    public function talentMainImageSaveAction(Request $request) { 
         $name = $request->get('name');
         $id = $request->get('id');
         $x = $request->get('x');
@@ -767,6 +767,126 @@ class TalentController extends BaseController {
         return new JsonResponse(Response::HTTP_OK);
     }
     
+    /**
+     * @Route("talent-image/{eid}", name="talent-image")
+     */
+    public function talentImageAction(Request $request, $eid) {
+        $file = $request->files->get('upl');
+        if (!$file->isValid()) {
+            return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+        $sep = DIRECTORY_SEPARATOR;
+
+        // validate
+        $uuid = Utils::getUuid();
+        $path = 
+            $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep;
+        $ext = strtolower($file->getClientOriginalExtension());
+        $origName = $file->getClientOriginalName();
+        $name = sprintf("%s.%s", $uuid, $ext);
+        $filename = $path . $sep . $name;
+
+        $file->move($path, $name);
+
+        $msg = null;
+
+        $size = getimagesize($filename);
+        $w = $size[0];
+        $h = $size[1];
+        if ($w < 750 || $h < 563) {
+            $msg = "{$origName}: das hochgeladene Bild ({$w} x {$h}) ist kleiner als erforderlich (bitte min. 750 px Breite)";
+        }
+
+        $wght = $file->getClientSize();
+        if ($wght > 5 * 1024 * 1024) { // 5 MB
+            $msg = sprintf('%s: das hochgeladene Bild (%.2f MB) darf nicht größer als 5 MB sein', $origName, $wght / 1024 / 1024);
+        }
+        $exif = exif_imagetype($filename);
+        if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+            $msg = "{$origName}: das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden";
+        }
+
+        // not valid, return error
+        if ($msg !== null) {
+            unlink($filename);
+            $resp = array('message' => $msg);
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
+        
+        // scale
+        // check and calcualte size        
+        $nw = 750;
+        $nh = $h / $w * $nw;
+        // scale image
+        $img = imagecreatefromstring(file_get_contents($filename));
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . $uuid . '.' . $ext;
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, 95);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        rename($filename, $path2);
+        
+        imagedestroy($dst);
+        // create thumbnail
+        //<editor-fold>
+        $nw = 360;
+        $nh = $h / $w * $nw;
+        
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . 'thumbnail' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path2, 85);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path2, 9);
+        }        
+        imagedestroy($dst);        
+        //</editor-fold>
+        
+        imagedestroy($img);
+
+        // store entry in database
+        //<editor-fold>
+        $em = $this->getDoctrine()->getManager();
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($eid);
+        
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($file->getClientOriginalName());
+        $img->setExtension($ext);
+        $img->setPath('talent');
+        $img->setOriginalPath('talent' . $sep . 'original');
+        $img->setThumbnailPath('talent' . $sep . 'thumbnail');
+        $em->persist($img);
+        $em->flush();
+        
+        $eimg = new TalentImage();
+        $eimg->setImage($img);
+        $eimg->setTalent($eq);
+        $eimg->setMain(0);
+        $em->persist($eimg);
+        $em->flush();        
+        //</editor-fold>
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
+            'thumbUrl' => $img->getThumbnailUrlPath($this->getParameter('image_url_prefix')),
+            'imgId' => $img->getId()
+        );
+        return new JsonResponse($resp);                
+    }
     
     /**
      * @Route("/provider/talent-edit-3/{eqid}", name="talent-edit-3")
