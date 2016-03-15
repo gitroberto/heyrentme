@@ -18,7 +18,7 @@ use Symfony\Component\Validator\ExecutionContextInterface;
 
 class UserController extends BaseAdminController {
     
-    const USER_STATUS_CHOICES = array(                        
+    protected $USER_STATUS_CHOICES = array(                        
         'OK' => User::STATUS_OK,
         'BLOCKED' => User::STATUS_BLOCKED
     );
@@ -65,7 +65,7 @@ class UserController extends BaseAdminController {
         
         $form = $this->createFormBuilder($user)
                 ->add('status', 'choice', array(
-                    'choices' => self::USER_STATUS_CHOICES,
+                    'choices' => $this->USER_STATUS_CHOICES,
                     'choices_as_values' => true,
                     'required' => true,
                     'constraints' => array(
@@ -107,7 +107,7 @@ class UserController extends BaseAdminController {
         //<editor-fold>
         $form = $this->createFormBuilder()
             ->add('status', 'choice', array(
-                'choices' => self::USER_STATUS_CHOICES,
+                'choices' => $this->USER_STATUS_CHOICES,
                 'choices_as_values' => true
             ))
             ->add('email', 'text', array(
@@ -266,7 +266,7 @@ class UserController extends BaseAdminController {
         //<editor-fold>
         $form = $this->createFormBuilder($data)
             ->add('status', 'choice', array(
-                'choices' => self::USER_STATUS_CHOICES,
+                'choices' => $this->USER_STATUS_CHOICES,
                 'choices_as_values' => true
             ))
             ->add('email', 'text', array(
