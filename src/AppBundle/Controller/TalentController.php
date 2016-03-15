@@ -842,7 +842,7 @@ class TalentController extends BaseController {
         imagedestroy($dst);
         // create thumbnail
         //<editor-fold>
-        $nw = 360;
+        $nw = 113;
         $nh = $h / $w * $nw;
         
         $dst = imagecreatetruecolor($nw, $nh);
