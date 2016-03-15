@@ -105,7 +105,7 @@
                     <div class="col-md-8 col-xs-12 product-description" id="map-sibling">
                         <p class="no-top-margin text-padding">
                             <span class="text-bold mobile-hidden">Beschreibung:</span><br class="mobile-hidden"><br class="mobile-hidden">
-                            {{ item.description }}
+                            {{ item.description|nl2br }}
                         </p>
                     </div>
                     <div class="col-md-4 col-xs-12" id="googleMap"></div>
@@ -128,19 +128,19 @@
                         <div class="panel-body">
                             {% if item.descReference %}
                                 <p class="panel-head">Abgeschlossene Ausbildungen, Zertifikate oder Referenzen</p>
-                                <p>{{ item.descReference }}</p>
+                                <p>{{ item.descReference|nl2br }}</p>
                             {% endif %}
                             {% if item.descScope %}
                                 <p class="panel-head">Angebotsumfang</p>
-                                <p>{{ item.descScope }}</p>
+                                <p>{{ item.descScope|nl2br }}</p>
                             {% endif %}
                             {% if item.descTarget %}
                                 <p class="panel-head">Für wen ist dein Angebot besonders geeignet?</p>
-                                <p>{{ item.descTarget }}</p>
+                                <p>{{ item.descTarget|nl2br }}</p>
                             {% endif %}
                             {% if item.descCondition %}
                                 <p class="panel-head">Spezielle Angebotskonditionen</p>
-                                <p>{{ item.descCondition }}</p>
+                                <p>{{ item.descCondition|nl2br }}</p>
                             {% endif %}
                         </div>
                     </div>

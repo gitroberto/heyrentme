@@ -99,7 +99,7 @@
                     <div class="col-md-8 col-xs-12 product-description" id="map-sibling">
                         <p class="no-top-margin text-padding">
                             <span class="text-bold mobile-hidden">Beschreibung:</span><br class="mobile-hidden"><br class="mobile-hidden">
-                            {{ item.description }}
+                            {{ item.description|nl2br }}
                         </p>
                     </div>
                     <div class="col-md-4 col-xs-12" id="googleMap"></div>
@@ -120,11 +120,11 @@
                     <div id="collapseQuote" class="panel-collapse collapse2 collapse">
                         <div class="panel-body">
                            <p class="panel-head">Das besondere an deinem Angebot?</p>
-                            <p>{{ item.descType }}</p>
+                            <p>{{ item.descType|nl2br }}</p>
                             <p class="panel-head">Bester Einsatzbereich?</p>
-                            <p>{{ item.descSpecial }}</p>
+                            <p>{{ item.descSpecial|nl2br }}</p>
                             <p class="panel-head">Was sollte man noch darüber wissen?</p>
-                            <p>{{ item.descCondition }}</p>
+                            <p>{{ item.descCondition|nl2br }}</p>
                         </div>
                     </div>
                 </div>
