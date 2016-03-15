@@ -48,12 +48,15 @@
             <div class="form-group">
               <label for="form_name" class="control-label col-xs-2">Images</label>
               <div class="col-xs-10 control-readonly">
-                {% for img in talent.talentImages %}
-
-                    <a class="thmb-link" href ="{{ img.image.urlPath(image_url_prefix) }}" target="_blank">
-                        <img class="thmb" src="{{ img.image.urlPath(image_url_prefix) }}"  alt=""/>
+                {% if talent.video %}
+                    <a href="{{ talent.video.originalUrl }}" target="_blank" style="float: left; margin-right: 5px;">
+                        <img id="player-thumb" src="{{ talent.video.thumbnailUrl }}" class="thumb" />
                     </a>
-                    
+                {% endif %}
+                {% for img in talent.talentImages %}
+                    <a class="thmb-link" href ="{{ img.image.urlPath(image_url_prefix) }}" target="_blank">
+                        <img class="thumb" src="{{ img.image.urlPath(image_url_prefix) }}"  alt=""/>
+                    </a>                    
                 {% endfor %}
               </div>
               <div class="clear"></div>
