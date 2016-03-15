@@ -758,7 +758,8 @@ class BookingController extends BaseController {
             $email = $provider->getEmail();
             $emailHtml = $this->renderView('Emails/mail_to_provider_confirm_cancel.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
-                'provider' => $provider
+                'provider' => $provider,
+                'inquiry' => $inq
             ));
             $message = Swift_Message::newInstance()
                 ->setSubject('Eine Buchung wurde storniert')

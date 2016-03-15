@@ -81,9 +81,10 @@
                     {% if item.video %}
                         <iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>
                         <img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />
-                    {% endif %}
-                    {% if item.talentImages|length > 0 %}
-                        <img src="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" alt="" {% if item.video %}style="display: none;"{% endif %}/>
+                    {% else %}
+                        {% if item.talentImages|length > 0 %}
+                            <img src="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" alt="" {% if item.video %}style="display: none;"{% endif %}/>
+                        {% endif %}
                     {% endif %}
               </div>
 
