@@ -17,8 +17,13 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 class UserController extends BaseAdminController {
-     /**
-     * 
+    
+    const USER_STATUS_CHOICES = array(                        
+        'OK' => User::STATUS_OK,
+        'BLOCKED' => User::STATUS_BLOCKED
+    );
+
+    /**
      * @Route("/admin/users", name="admin_users_list")
      */
     public function indexAction() {
@@ -58,11 +63,9 @@ class UserController extends BaseAdminController {
             return new Response(Response::HTTP_NOT_FOUND);
         }        
         
-        $form = $this->createFormBuilder($user)->add('status', 'choice', array(
-                    'choices' => array(                        
-                        'Ok' => User::STATUS_OK,
-                        'Blocked' => User::STATUS_BLOCKED
-                    ),
+        $form = $this->createFormBuilder($user)
+                ->add('status', 'choice', array(
+                    'choices' => self::USER_STATUS_CHOICES,
                     'choices_as_values' => true,
                     'required' => true,
                     'constraints' => array(
@@ -103,6 +106,10 @@ class UserController extends BaseAdminController {
         // build form
         //<editor-fold>
         $form = $this->createFormBuilder()
+            ->add('status', 'choice', array(
+                'choices' => self::USER_STATUS_CHOICES,
+                'choices_as_values' => true
+            ))
             ->add('email', 'text', array(
                 'required' => false,
                 'constraints' => array(
@@ -171,6 +178,7 @@ class UserController extends BaseAdminController {
                 
                 $userMgr = $this->get('fos_user.user_manager');
                 $user = $userMgr->createUser();
+                $user->setStatus($data['status']);
                 $user->setUsername($data['email']);
                 $user->setEmail($data['email']);
                 $user->setPlainPassword($data['password']);
@@ -251,11 +259,16 @@ class UserController extends BaseAdminController {
             'phone' => $user->getPhone(),
             'iban' => $user->getIban(),
             'bic' => $user->getBic(),
-            'aboutMyself' => $user->getAboutMyself()
+            'aboutMyself' => $user->getAboutMyself(),
+            'status' => $user->getStatus()
         );
         // build form
         //<editor-fold>
         $form = $this->createFormBuilder($data)
+            ->add('status', 'choice', array(
+                'choices' => self::USER_STATUS_CHOICES,
+                'choices_as_values' => true
+            ))
             ->add('email', 'text', array(
                 'required' => false,
                 'constraints' => array(
@@ -328,6 +341,7 @@ class UserController extends BaseAdminController {
                 if (!empty($data['password'])) {
                     $user->setPlainPassword($data['password']);
                 }
+                $user->setStatus($data['status']);
                 $user->setName($data['name']);
                 $user->setSurname($data['surname']);
                 $user->setPhonePrefix($data['phonePrefix']);
