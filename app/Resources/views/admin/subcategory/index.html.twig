@@ -10,9 +10,6 @@
 <h1>Subcategories for {{ category.name }}</h1>
 
 <a class="button-black backgound-yellow text-black" href="{{ path('admin_subcategory_new', { 'categoryID': category.id }) }}">New Subcategory</a>
-
-<br/>
-<br/>
 <div id="jqgrid-wrapper">
         <table id="jqgrid" class="table table-striped table-hover">
                 <tr>
@@ -47,22 +44,21 @@ if( $('#jqgrid').length > 0 ) {
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name:' ', width:80, fixed:true, editable:false, sortable:false, formatter:rowActions },
-                        { name:'Id', index:'sc.id', width:1, editable:false, sortable:false, hidden: true },
+                        { name:' ', width:90, fixed:true, editable:false, sortable:false, formatter:rowActions },
+                        { name:'Id', index:'sc.id', width:0, editable:false, sortable:false, hidden: true },
                         { name:'Category', index:'sc.category', width: 200, editable:false, sortable:true },
                         { name:'Name', index:'sc.name', width: 200, editable:false, sortable:true },
-                        { name:'Slug', index:'sc.slug', width: 100, editable:false, sortable:true },
-                        { name:'Position', index:'sc.position', align:"right", width: 100, editable:false, sortable:true},
+                        { name:'Slug', index:'sc.slug', width: 200, editable:false, sortable:true },
+                        { name:'Position', index:'sc.position', align:"right", width: 80, editable:false, sortable:true},
                 ],
-                height: 300,
-                rowNum: 10,
-                rowList: [10, 50, 200],
+                height: 500,
+                rowNum: 20,
+                rowList: [20, 50, 100],
                 pager: 'jqgrid-pager',
                 sortname: 'sc.position',
                 viewrecords: false,
                 sortorder: "asc",
-                caption: "Subcategories",
-                multiselect: false,
+                multiselect: false
         });
 }
 

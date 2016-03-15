@@ -75,9 +75,11 @@ class EquipmentRepository extends EntityRepository
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
-        $qb->select('e, u')
+        $qb->select('e, u, s, c')
             ->from('AppBundle:Equipment', 'e')
-            ->join('e.user','u');
+            ->join('e.subcategory', 's')
+            ->join('s.category', 'c')
+            ->join('e.user', 'u');
         
         if (!empty($sStatus)) {
             $qb->andWhere($qb->expr()->eq('e.status', ':status'));

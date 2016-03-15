@@ -87,3 +87,29 @@ nav.crumbs {
 .text-line-fill {
     width: 100%;
 }
+
+/* jq grid ------------------------------------------------------------------ */
+.ui-jqgrid .ui-jqgrid-btable {
+    border-collapse: collapse;
+}
+#jqgrid tr.jqgrow td{
+    white-space: nowrap;
+    overflow: hidden;
+    height: auto;
+    vertical-align: baseline;
+    padding: 4px 8px;
+    border-width: 0;
+    border-left: 1px solid #ddd;
+    color: black;
+}
+
+#jqgrid tr.jqgrow:nth-child(odd) {
+    border-width: 0;
+    background-color: #e0e0e0;
+}
+#jqgrid tr.jqgrow:nth-child(odd) td {
+    border-left: 1px solid #fff;
+}
+.ui-state-hover {
+    border-width: 0px;
+}

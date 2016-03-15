@@ -7,10 +7,6 @@
 
 {% block body %}
 <h1>Talent</h1>
-
-<br/>
-<br/>
-
 <div id="jqgrid-wrapper">
         <table id="jqgrid" class="table table-striped table-hover">
                 <tr>
@@ -46,23 +42,22 @@ if( $grid.length > 0 ) {
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
-                        { name:'Id', index:'e.id', width:1, editable:false, sortable:false, hidden: true, search: false },
-                        { name:'Name', index:'e.name', width: 100, editable:false, sortable:true, search: false },
-                        { name:'Description', index:'e.description', width: 200, editable:false, sortable:true, search: false },
-                        { name:'Price', index:'e.price', width: 100, editable:false, sortable:true, search: false },
-                        { name:'User', index:'u.username',  width: 100, editable:false, sortable:true, search: false},
+                        { name:' ', width:150, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                        { name:'Id', index:'e.id', width:0, editable:false, sortable:false, hidden: true, search: false },
+                        { name:'Category', index:'e.name', width: 250, editable:false, sortable:true, search: false },
+                        { name:'Name', index:'e.name', width: 250, editable:false, sortable:true, search: false },
+                        { name:'Price', index:'e.price', width: 80, align: "right", editable:false, sortable:true, search: false },
+                        { name:'User', index:'u.username',  width: 250, editable:false, sortable:true, search: false},
                         { name:'Status', index:'e.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: false }},
                 ],
-                height: 300,
-                rowNum: 10,
-                rowList: [10, 50, 200],
+                height: 500,
+                rowNum: 20,
+                rowList: [20, 50, 100],
                 pager: 'jqgrid-pager',
                 sortname: 'e.status',
                 viewrecords: false,
                 sortorder: "asc",
-                caption: "Posts",
-                multiselect: false,
+                multiselect: false
         });
         $grid.jqGrid('filterToolbar', {
             stringResult: false,

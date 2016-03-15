@@ -37,6 +37,10 @@ class Subcategory
     protected $category;    
 
     /**
+     * @ORM\OneToMany(targetEntity="Talent", mappedBy="subcategory")
+     */
+    protected $talents;
+    /**
      * @ORM\OneToMany(targetEntity="Equipment", mappedBy="subcategory")
      */
     protected $equipments;
@@ -297,5 +301,39 @@ class Subcategory
     public function getEmailBody()
     {
         return $this->emailBody;
+    }
+
+    /**
+     * Add talent
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     *
+     * @return Subcategory
+     */
+    public function addTalent(\AppBundle\Entity\Talent $talent)
+    {
+        $this->talents[] = $talent;
+
+        return $this;
+    }
+
+    /**
+     * Remove talent
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     */
+    public function removeTalent(\AppBundle\Entity\Talent $talent)
+    {
+        $this->talents->removeElement($talent);
+    }
+
+    /**
+     * Get talents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTalents()
+    {
+        return $this->talents;
     }
 }

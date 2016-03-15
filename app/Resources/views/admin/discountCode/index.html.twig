@@ -8,8 +8,6 @@
 {% block body %}
 <h1>Discount code</h1>
 
-<br/>
-<br/>
 <div class="selecttionPanel">
     <div class="error" id="CancelDiscountMessage"></div>
     <a id="selectAll" href="#" >select all</a>&nbsp;|&nbsp;<a id="deselectAll" href="#" >deselect all</a>&nbsp;|&nbsp;<a id="revertSelection" href="#" >revert selection</a>
@@ -70,22 +68,21 @@ if( $('#jqgrid').length > 0 ) {
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name: ' ', width:80, fixed:true, editable:false, sortable:false, formatter:rowActions },
+                        { name: ' ', width:40, fixed:true, align: "center", editable:false, sortable:false, formatter:rowActions },
                         { name:'Id', index:'dc.id', width:1, editable:false, sortable:false, hidden: true },
-                        { name:'Code', index:'dc.code', width: 200, editable:false, sortable:true },
+                        { name:'Code', index:'dc.code', width: 100, editable:false, sortable:true },
                         { name:'Status', index:'dc.status', width: 100, editable:false, sortable:true },
-                        { name:'CreationDate', index:'dc.createdAt', width: 100, editable:false, sortable:true },
-                        { name:'User', index:'u.username', width: 100, editable:false, sortable:true }                        
+                        { name:'Created', index:'dc.createdAt', width: 130, editable:false, sortable:true },
+                        { name:'User', index:'u.username', width: 250, editable:false, sortable:true }                        
                 ],
-                height: 300,
+                height: 500,
                 rowNum: 10,
-                rowList: [10, 50, 200],
+                rowList: [20, 50, 100],
                 pager: 'jqgrid-pager',
                 sortname: 'dc.createdAt',
                 viewrecords: false,
                 sortorder: "desc",
-                caption: "Posts",
-                multiselect: false,
+                multiselect: false
         });
 }
 

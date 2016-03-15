@@ -40,14 +40,17 @@ class EquipmentController extends BaseAdminController {
         
         $rows = array(); // rows as json result        
         foreach ($dataRows as $dataRow) { // build single row
+            $subcat = $dataRow->getSubcategory();
+            $cat = $subcat->getCategory();
+            
             $i=0;
             $row = array();
             $row['id'] = $dataRow->getId();
             $cell = array();
             $cell[$i++] = null;
             $cell[$i++] = $dataRow->getId();
+            $cell[$i++] = sprintf("%s | %s", $cat->getName(), $subcat->getName());
             $cell[$i++] = $dataRow->getName();
-            $cell[$i++] = $dataRow->getDescription();
             $cell[$i++] = $dataRow->getPrice();
             $cell[$i++] = $dataRow->getUser()->getUsername();
             $cell[$i++] = $dataRow->getStatusStr();

@@ -75,8 +75,10 @@ class TalentRepository extends EntityRepository
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
-        $qb->select('e, u')
+        $qb->select('e, u, s, c')
             ->from('AppBundle:Talent', 'e')
+            ->join('e.subcategory', 's')
+            ->join('s.category', 'c')
             ->join('e.user','u');
         
         if (!empty($sStatus)) {
