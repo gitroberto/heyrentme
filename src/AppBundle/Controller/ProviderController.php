@@ -125,7 +125,10 @@ class ProviderController extends BaseController {
             
         }
          */       
-        return $this->render('provider/profil.html.twig');
+        $mb = intval($this->getParameter('image_upload_max_size'));
+        return $this->render('provider/profil.html.twig', array(
+            'megabytes' => $mb
+        ));
     }
 
     /**
@@ -154,8 +157,9 @@ class ProviderController extends BaseController {
             }
             
             $w = $file->getClientSize();
-            if ($w > 5 * 1024 * 1024) { // 5 MB
-                $msg = sprintf('Die hochgeladene Bild (%.2f MB) größer ist als erlaubt  5 MB', $w / 1024 / 1024);
+            $mb = intval($this->getParameter('image_upload_max_size'));
+            if ($w > $mb * 1024 * 1024) { // 5 MB
+                $msg = sprintf("Die hochgeladene Bild (%.2f MB) größer ist als erlaubt %d MB", $w / 1024 / 1024, $mb);
             }
             $exif = exif_imagetype($filename);
             if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
@@ -210,7 +214,7 @@ class ProviderController extends BaseController {
         //$path2 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . 'original' . $sep . $uuid . '.' . $ext;
         
         if ($ext === 'jpg' || $ext == 'jpeg') {
-            imagejpeg($dst, $path1, 95);
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
         }
         else if ($ext === 'png') {
             imagepng($dst, $path1, 9);
@@ -859,6 +863,7 @@ class ProviderController extends BaseController {
         
         $complete = $eq->getStatus() != Equipment::STATUS_INCOMPLETE;
         
+        $mb = intval($this->getParameter('image_upload_max_size'));
         return $this->render('provider/equipment_edit_step2.html.twig', array(
             'form' => $form->createView(),
             'equipment' => $eq,
@@ -868,7 +873,8 @@ class ProviderController extends BaseController {
             'imagesValidation' => $imagesValidation,
             'complete' => $complete,
             'id' => $id,
-            'statusChanged' => $statusChanged
+            'statusChanged' => $statusChanged,
+            'megabytes' => $mb
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -914,8 +920,9 @@ class ProviderController extends BaseController {
             }
             
             $w = $file->getClientSize();
-            if ($w > 5 * 1024 * 1024) { // 5 MB
-                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als 5 MB sein', $w / 1024 / 1024);
+            $mb = intval($this->getParameter('image_upload_max_size'));
+            if ($w > $mb * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als %d MB sein', $w / 1024 / 1024, $mb);
             }
             $exif = exif_imagetype($filename);
             if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
@@ -992,7 +999,7 @@ class ProviderController extends BaseController {
         $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
         
         if ($ext === 'jpg' || $ext == 'jpeg') {
-            imagejpeg($dst, $path1, 95);
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
         }
         else if ($ext === 'png') {
             imagepng($dst, $path1, 9);
@@ -1119,8 +1126,9 @@ class ProviderController extends BaseController {
         }
 
         $wght = $file->getClientSize();
-        if ($wght > 5 * 1024 * 1024) { // 5 MB
-            $msg = sprintf('%s: das hochgeladene Bild (%.2f MB) darf nicht größer als 5 MB sein', $origName, $wght / 1024 / 1024);
+        $mb = intval($this->getParameter('image_upload_max_size'));
+        if ($wght > $mb * 1024 * 1024) { // 5 MB
+            $msg = sprintf('%s: das hochgeladene Bild (%.2f MB) darf nicht größer als %d MB sein', $origName, $wght / 1024 / 1024, $mb);
         }
         $exif = exif_imagetype($filename);
         if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
@@ -1147,7 +1155,7 @@ class ProviderController extends BaseController {
         $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
         
         if ($ext === 'jpg' || $ext == 'jpeg') {
-            imagejpeg($dst, $path1, 95);
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
         }
         else if ($ext === 'png') {
             imagepng($dst, $path1, 9);

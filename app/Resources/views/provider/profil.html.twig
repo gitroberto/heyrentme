@@ -38,7 +38,7 @@
 
                                 <div class="offer user-upload">
                                     <p>Profilbild</p>
-                                    <span class="user-upload-note">Schaffe Vertrauen und lade ein Profilbild hoch (max. 5MB, min. 250x250px)</span>
+                                    <span class="user-upload-note">Schaffe Vertrauen und lade ein Profilbild hoch (max. {{ megabytes }} MB, min. 250x250px)</span>
                                     <span id="profile-image" style="width: 206px; height: 206px; display: inline-block; vertical-align: middle; background: url({{ app.user.getProfilePicture(true, image_url_prefix) }}) no-repeat; background-size: cover; border-radius: 50%;"></span>
                                     {#<img src="" class="profileImage" alt=""/>                #}
                                     
