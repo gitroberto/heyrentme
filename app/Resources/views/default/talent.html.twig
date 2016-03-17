@@ -79,8 +79,9 @@
               
               <div id="media-content">
                     {% if item.video %}
-                        <iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>
-                        <img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />
+                        <iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; height: 421px; display: block;"></iframe>
+                        {#<img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%; height: 421px;" />#}
+                        <div id="player-thumb" style="width: 100%; height: 421px;"></div>
                     {% else %}
                         {% if item.talentImages|length > 0 %}
                             <img src="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" alt="" {% if item.video %}style="display: none;"{% endif %}/>
@@ -475,22 +476,28 @@
     <script src="/js/vendors/vimeo.js"></script>
   <script>
     var itemPrice = {% if item.requestPrice %}null{% else %}{{ item.activePrice|number_format(2) }}{% endif %};
+    
+    function playerWidth() {
+        var pl = document.getElementById('player');
+        var th = document.getElementById('player-thumb');
+        console.log('thumb height:' + th.offsetHeight);
+        console.log('player height:' + pl.offsetHeight);
+        var w = pl.offsetWidth;
+        var h = Math.round(w * 9 / 16);
+        var r = w / h;
+        console.log('player outer width: ' + w + ', height: ' + h + ', ratio: ' + r);
+        pl.style.height = h + 'px';
+        th.style.height = h + 'px';
+    }
+    playerWidth();
+    
       
     $(window).load(function() {
         //var containerHieght = $('#media-content').height();
         //$("#player").css('height',containerHieght);
         playerWidth();
     });
-    
-    function playerWidth() {
-        var $pl = $("#player");
-        var $th = $("#player-thumb");
-        var w = $pl.outerWidth();
-        var h = Math.round(w * 9 / 16);
-        $pl.height(h);
-        $th.height(h);
-    }
-    
+        
     $(function() {
         playerWidth();
         $(window).resize(playerWidth);
