@@ -44,11 +44,14 @@ if( $grid.length > 0 ) {
                 colModel:[
                         { name:' ', width:150, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
                         { name:'Id', index:'e.id', width:0, editable:false, sortable:false, hidden: true, search: false },
-                        { name:'Category', index:'e.name', width: 250, editable:false, sortable:true, search: false },
+                        { name:'Category', index:'concat(c.name, s.name)', width: 250, editable:false, sortable:true, search: false },
                         { name:'Name', index:'e.name', width: 250, editable:false, sortable:true, search: false },
                         { name:'Price', index:'e.price', width: 80, align: "right", editable:false, sortable:true, search: false },
                         { name:'User', index:'u.username',  width: 250, editable:false, sortable:true, search: false},
                         { name:'Status', index:'e.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: false }},
+                        { name:'Url', hidden: true },
+                        { name:'Created', index: 'e.createdAt', width: 130, sortable: true, search: false },
+                        { name:'Modified', index: 'e.modifiedAt', width: 130, sortable: true, search: false }                        
                 ],
                 height: 550,
                 rowNum: 20,

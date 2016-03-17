@@ -55,6 +55,8 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getUser()->getUsername();
             $cell[$i++] = $dataRow->getStatusStr();
             $cell[$i++] = $this->generateUrl('preview_equipment', array('uuid'=>$dataRow->getUuid()));
+            $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
+            $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');            
             
             $row['cell'] = $cell;
             array_push($rows, $row);
