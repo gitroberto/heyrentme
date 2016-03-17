@@ -57,6 +57,19 @@ function rowActions(cellvalue, options, cellobject) {
         return   "<input type='checkbox' class='CheckboxItems' value='"   +  options.rowId + "'></a>  ";
       }
     }
+function userFormatter(cellvalue, options, cellobject) {
+    if (cellobject[6] === '')
+        return '';
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[8]).replace('#NAME#', cellobject[7]);
+    return s;
+}
+function itemFormatter(cellvalue, options, cellobject) {
+    if (cellobject[9] === '')
+        return '';
+    var name = (cellobject[11].indexOf('equipment') !== -1 ? 'E-' : 'T-') + cellobject[9] + ': ' + cellobject[10];
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[11]).replace('#NAME#', name);
+    return s;
+}
 
 var $grid = $('#jqgrid');
 
@@ -68,15 +81,21 @@ if( $('#jqgrid').length > 0 ) {
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name: ' ', width:40, fixed:true, align: "center", editable:false, sortable:false, formatter:rowActions },
-                        { name:'Id', index:'dc.id', width:1, editable:false, sortable:false, hidden: true },
+                        { name: '', width:40, fixed:true, align: "center", editable:false, sortable:false, formatter:rowActions },
+                        { name:'Id', index:'dc.id', editable:false, sortable:false, hidden: true },
                         { name:'Code', index:'dc.code', width: 100, editable:false, sortable:true },
                         { name:'Status', index:'dc.status', width: 100, editable:false, sortable:true },
                         { name:'Created', index:'dc.createdAt', width: 130, editable:false, sortable:true },
-                        { name:'User', index:'u.username', width: 250, editable:false, sortable:true }                        
+                        { name:'Modified', index:'dc.modifiedAt', width: 130, editable:false, sortable:true },
+                        { name:'UserId', hidden: true },
+                        { name:'User', index:'u.username', width: 250, editable:false, sortable:true, formatter: userFormatter },
+                        { name:'UserUrl', hidden: true },
+                        { name:'ItemId', hidden: true, editable:false, sortable:false },                   
+                        { name:'Item', width: 250, editable:false, sortable:false, formatter: itemFormatter },
+                        { name:'ItemUrl', hidden: true }
                 ],
                 height: 550,
-                rowNum: 10,
+                rowNum: 20,
                 rowList: [20, 50, 100],
                 pager: 'jqgrid-pager',
                 sortname: 'dc.createdAt',

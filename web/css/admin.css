@@ -113,3 +113,6 @@ nav.crumbs {
 .ui-state-hover {
     border-width: 0px;
 }
+a, a:hover {
+    color: #008;
+}

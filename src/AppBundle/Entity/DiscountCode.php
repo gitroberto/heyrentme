@@ -47,6 +47,15 @@ class DiscountCode {
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="EquipmentBooking", mappedBy="discountCode")
+     */    
+    protected $equipmentBooking;
+    /**
+     * @ORM\OneToOne(targetEntity="TalentBooking", mappedBy="discountCode")
+     */    
+    protected $talentBooking;
 
     public function setId($id)
     {
@@ -151,5 +160,53 @@ class DiscountCode {
     public function __construct()
     {
         
+    }
+
+    /**
+     * Set equipmentBooking
+     *
+     * @param \AppBundle\Entity\EquipmentBooking $equipmentBooking
+     *
+     * @return DiscountCode
+     */
+    public function setEquipmentBooking(\AppBundle\Entity\EquipmentBooking $equipmentBooking = null)
+    {
+        $this->equipmentBooking = $equipmentBooking;
+
+        return $this;
+    }
+
+    /**
+     * Get equipmentBooking
+     *
+     * @return \AppBundle\Entity\EquipmentBooking
+     */
+    public function getEquipmentBooking()
+    {
+        return $this->equipmentBooking;
+    }
+
+    /**
+     * Set talentBooking
+     *
+     * @param \AppBundle\Entity\TalentBooking $talentBooking
+     *
+     * @return DiscountCode
+     */
+    public function setTalentBooking(\AppBundle\Entity\TalentBooking $talentBooking = null)
+    {
+        $this->talentBooking = $talentBooking;
+
+        return $this;
+    }
+
+    /**
+     * Get talentBooking
+     *
+     * @return \AppBundle\Entity\TalentBooking
+     */
+    public function getTalentBooking()
+    {
+        return $this->talentBooking;
     }
 }
