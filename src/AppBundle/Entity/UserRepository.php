@@ -178,8 +178,8 @@ EOT;
 
     delete ur
     from user_rating ur
-            inner join equipment_booking eb on ur.equipment_booking_id = eb.id
-            inner join equipment_inquiry ei on eb.equipment_inquiry_id = ei.id         
+            inner join equipment_booking eb on ur.booking_id = eb.id
+            inner join equipment_inquiry ei on eb.inquiry_id = ei.id         
             inner join equipment e on ei.equipment_id = e.id     
     where e.user_id = {$id} or ei.user_id = {$id};
 
@@ -229,9 +229,9 @@ EOT;
     
     delete ur
     from user_rating ur
-            inner join talent_booking eb on ur.talent_booking_id = eb.id
-            inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id         
-            inner join talent e on ei.talent_id = e.id     
+        inner join talent_booking eb on ur.talent_booking_id = eb.id
+        inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id         
+        inner join talent e on ei.talent_id = e.id     
     where e.user_id = {$id} or ei.user_id = {$id};
     
     delete eb
@@ -277,7 +277,6 @@ EOT;
         $conn = $m->getConnection();
         $conn->executeUpdate($sql);
         //$this->get('monolog.logger.artur')->debug($sql);
-        return $sql;
     }
     
     public function RemoveAndDeleteRelatedImage($manager, $image, $folder){
