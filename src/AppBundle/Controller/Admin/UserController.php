@@ -239,7 +239,8 @@ class UserController extends BaseAdminController {
         if (!$user) {
             return new Response(Response::HTTP_NOT_FOUND);
         }          
-        $this->getDoctrineRepo('AppBundle:User')->deleteUserAccount($user, $this->getParameter('image_storage_dir'));
+        $sql = $this->getDoctrineRepo('AppBundle:User')->deleteUserAccount($user, $this->getParameter('image_storage_dir'));
+        $this->get('monolog.logger.artur')->debug($sql);
         
         return $this->redirectToRoute("admin_users_list");
     }

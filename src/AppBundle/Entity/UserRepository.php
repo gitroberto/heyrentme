@@ -176,7 +176,14 @@ EOT;
         inner join equipment e
     where e.user_id = {$id} or ei.user_id = {$id};
 
-    delete eb
+    delete ur
+    from user_rating ur
+            inner join equipment_booking eb on ur.equipment_booking_id = eb.id
+            inner join equipment_inquiry ei on eb.equipment_inquiry_id = ei.id         
+            inner join equipment e on ei.equipment_id = e.id     
+    where e.user_id = {$id} or ei.user_id = {$id};
+
+   delete eb
     from equipment_booking eb
         inner join equipment_inquiry ei on eb.inquiry_id = ei.id
         inner join equipment e on ei.equipment_id = e.id
@@ -197,6 +204,11 @@ EOT;
         inner join equipment e on er.equipment_id = e.id
     where e.user_id = {$id};
     
+    delete eq
+    from equipment_question eq
+        inner join equipment e on eq.equipment_id = e.id
+    where e.user_id = {$id};
+    
     delete from equipment_question where user_id = {$id};
     
     delete from equipment where user_id = {$id};
@@ -213,6 +225,13 @@ EOT;
         inner join talent_booking eb on er.booking_id = eb.id
         inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
         inner join talent e
+    where e.user_id = {$id} or ei.user_id = {$id};
+    
+    delete ur
+    from user_rating ur
+            inner join talent_booking eb on ur.talent_booking_id = eb.id
+            inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id         
+            inner join talent e on ei.talent_id = e.id     
     where e.user_id = {$id} or ei.user_id = {$id};
     
     delete eb
@@ -236,8 +255,14 @@ EOT;
         inner join talent e on er.talent_id = e.id
     where e.user_id = {$id};
     
+    delete tq
+    from talent_question tq
+        inner join talent tal on tq.talent_id = tal.id
+    where tal.user_id = {$id};
+    
     delete from talent_question where user_id = {$id};
-    delete from talent where user_id = {$id};
+
+   delete from talent where user_id = {$id};
     
     delete from equipment_booking_cancel where user_id = {$id};
     delete from talent_booking_cancel where user_id = {$id};
@@ -252,6 +277,7 @@ EOT;
         $conn = $m->getConnection();
         $conn->executeUpdate($sql);
         //$this->get('monolog.logger.artur')->debug($sql);
+        return $sql;
     }
     
     public function RemoveAndDeleteRelatedImage($manager, $image, $folder){
