@@ -153,17 +153,17 @@ class ProviderController extends BaseController {
 
             $size = getimagesize($filename);
             if ($size[0] < 250 || $size[1] < 250) {
-                $msg = "Die hochgeladene Bild ({$size[0]} x {$size[1]}) kleiner ist als erforderlich 250 x 250";
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderliche 250x250px";
             }
             
             $w = $file->getClientSize();
             $mb = intval($this->getParameter('image_upload_max_size'));
             if ($w > $mb * 1024 * 1024) { // 5 MB
-                $msg = sprintf("Die hochgeladene Bild (%.2f MB) größer ist als erlaubt %d MB", $w / 1024 / 1024, $mb);
+                $msg = sprintf("Das hochgeladene Bild (%.2f MB) darf nicht größer als max. %d MB sein", $w / 1024 / 1024, $mb);
             }
             $exif = exif_imagetype($filename);
             if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
-                $msg = 'Die hochgeladene Bild ist weder JPG noch PNG';
+                $msg = 'Das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden';
             }
             
 
