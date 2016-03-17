@@ -44,15 +44,23 @@
     </div>
           
     <div class="page" >
+        {% if talent.video %}
+            <div class="row">
+                <div class="form-group">
+                  <label for="form_name" class="control-label col-xs-2">Video</label>
+                  <div class="col-xs-10 control-readonly">
+                        <a href="{{ talent.video.originalUrl }}" target="_blank">
+                            <img id="player-thumb" src="{{ talent.video.thumbnailUrl }}" class="thumb" /><br/>{{ talent.video.originalUrl }}
+                        </a>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+            </div>
+        {% endif %}
         <div class="row">
             <div class="form-group">
               <label for="form_name" class="control-label col-xs-2">Images</label>
               <div class="col-xs-10 control-readonly">
-                {% if talent.video %}
-                    <a href="{{ talent.video.originalUrl }}" target="_blank" style="float: left; margin-right: 5px;">
-                        <img id="player-thumb" src="{{ talent.video.thumbnailUrl }}" class="thumb" />
-                    </a>
-                {% endif %}
                 {% for img in talent.talentImages %}
                     <a class="thmb-link" href ="{{ img.image.urlPath(image_url_prefix) }}" target="_blank">
                         <img class="thumb" src="{{ img.image.urlPath(image_url_prefix) }}"  alt=""/>
