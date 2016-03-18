@@ -477,33 +477,34 @@
   <script>
     var itemPrice = {% if item.requestPrice %}null{% else %}{{ item.activePrice|number_format(2) }}{% endif %};
     
-    function playerWidth() {
-        var pl = document.getElementById('player');
-        var th = document.getElementById('player-thumb');
-        console.log('thumb height:' + th.offsetHeight);
-        console.log('player height:' + pl.offsetHeight);
-        var w = pl.offsetWidth;
-        var h = Math.round(w * 9 / 16);
-        var r = w / h;
-        console.log('player outer width: ' + w + ', height: ' + h + ', ratio: ' + r);
-        pl.style.height = h + 'px';
-        th.style.height = h + 'px';
-    }
-    playerWidth();
+    {% if item.video %}
+        function playerWidth() {
+            var pl = document.getElementById('player');
+            var th = document.getElementById('player-thumb');
+            var w = pl.offsetWidth;
+            var h = Math.round(w * 9 / 16);
+            var r = w / h;
+            pl.style.height = h + 'px';
+            th.style.height = h + 'px';
+        }
+        playerWidth();
+    {% endif %}
     
       
-    $(window).load(function() {
-        //var containerHieght = $('#media-content').height();
-        //$("#player").css('height',containerHieght);
-        playerWidth();
-    });
+    {% if item.video %}
+        $(window).load(function() {
+            //var containerHieght = $('#media-content').height();
+            //$("#player").css('height',containerHieght);
+            playerWidth();
+        });
+    {% endif %}
         
     $(function() {
-        playerWidth();
-        $(window).resize(playerWidth);
-        
-        
-        
+        {% if item.video %}
+            playerWidth();
+            $(window).resize(playerWidth);
+        {% endif %}
+                
         $(document).on('click', "#videos-ico", function (evt) {
             $('#videos-ico').remove();
             $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";
