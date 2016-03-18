@@ -1129,8 +1129,8 @@ class ProviderController extends BaseController {
         $size = getimagesize($filename);
         $w = $size[0];
         $h = $size[1];
-        if ($w < 750 || $h < 563) {
-            $msg = "{$origName}: das hochgeladene Bild ({$w} x {$h}) ist kleiner als erforderlich (bitte min. 750 px Breite)";
+        if ($w < 600) {
+            $msg = "{$origName}: das hochgeladene Bild ({$w} x {$h}) ist kleiner als erforderlich (bitte min. 600 px Breite)";
         }
 
         $wght = $file->getClientSize();
@@ -1151,8 +1151,8 @@ class ProviderController extends BaseController {
         }
         
         // scale
-        // check and calcualte size        
-        $nw = 750;
+        // check and calcualte size
+        $nw = $w > 750 ? 750 : $w;
         $nh = $h / $w * $nw;
         // scale image
         $img = imagecreatefromstring(file_get_contents($filename));
