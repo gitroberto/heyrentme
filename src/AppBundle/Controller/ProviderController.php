@@ -874,7 +874,8 @@ class ProviderController extends BaseController {
             'complete' => $complete,
             'id' => $id,
             'statusChanged' => $statusChanged,
-            'megabytes' => $mb
+            'megabytes' => $mb,
+            'max_num_images' => $this->getParameter('equipment_max_num_images')
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -891,7 +892,8 @@ class ProviderController extends BaseController {
         return $mainImage !== null ? null : 'Bitte lade zumindest ein Bild hoch';
     }
     public function imagesValidation($images) {
-        return count($images) <= Equipment::MAX_NUM_IMAGES ? null : sprintf('Bitte lade max. %s Bilder hoch', Equipment::MAX_NUM_IMAGES);
+        $max = $this->getParameter('equipment_max_num_images');
+        return count($images) <= $max ? null : sprintf('Bitte lade max. %s Bilder hoch', $max);
     }
     
     /**
@@ -1103,9 +1105,15 @@ class ProviderController extends BaseController {
             return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         
-        $sep = DIRECTORY_SEPARATOR;
+        $imgcnt = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentButMainImageCount($eid);
+        $max = $this->getParameter('equipment_max_num_images');
+        if ($imgcnt >= $max) {
+            $resp = array('message' => "Bitte lade max. {$max} Bilder hoch");
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
 
         // validate
+        $sep = DIRECTORY_SEPARATOR;
         $uuid = Utils::getUuid();
         $path = 
             $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep;

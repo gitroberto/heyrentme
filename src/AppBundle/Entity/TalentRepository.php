@@ -152,6 +152,16 @@ class TalentRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+    public function getTalentButMainImageCount($talentId) { // all except main
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('count(ei.image)')
+            ->from('AppBundle:TalentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.talent = {$talentId}")
+            ->andWhere('ei.main = 0');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
     public function getTalentImages($talentId) {
         // main first
         $qb = $this->getEntityManager()->createQueryBuilder();

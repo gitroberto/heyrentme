@@ -21,8 +21,6 @@ class Equipment
     const STATUS_REJECTED = 4;  
     const STATUS_INCOMPLETE = 5;
     
-    const MAX_NUM_IMAGES = 8;
-    
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id

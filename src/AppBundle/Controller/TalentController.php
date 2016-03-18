@@ -433,7 +433,8 @@ class TalentController extends BaseController {
             'complete' => $complete,
             'id' => $id,
             'statusChanged' => $statusChanged,
-            'megabytes' => $mb
+            'megabytes' => $mb,
+            'max_num_images' => $this->getParameter('talent_max_num_images')
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -490,7 +491,8 @@ class TalentController extends BaseController {
         return $mainImage !== null ? null : 'Bitte lade zumindest ein Bild hoch';
     }
     public function imagesValidation($images) {
-        return count($images) <= Talent::MAX_NUM_IMAGES ? null : sprintf('Bitte lade max. %s Bilder hoch', Talent::MAX_NUM_IMAGES);
+        $max = $this->getParameter('talent_max_num_images');
+        return count($images) <= $max ? null : sprintf('Bitte lade max. %s Bilder hoch', $max);
     }
     
     private $imageCount = null; // num of existing images; necessary for image validation
@@ -779,9 +781,15 @@ class TalentController extends BaseController {
             return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         
-        $sep = DIRECTORY_SEPARATOR;
+        $imgcnt = $this->getDoctrineRepo('AppBundle:Talent')->getTalentButMainImageCount($eid);
+        $max = $this->getParameter('talent_max_num_images');
+        if ($imgcnt >= $max) {
+            $resp = array('message' => "Bitte lade max. {$max} Bilder hoch");
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
 
         // validate
+        $sep = DIRECTORY_SEPARATOR;
         $uuid = Utils::getUuid();
         $path = 
             $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep;

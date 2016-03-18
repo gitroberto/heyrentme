@@ -32,3 +32,6 @@ parameters:
     jpeg_compression_value: 75
     # NOTE: image_upload_max_size in megabytes
     image_upload_max_size: 10
+    # maximum number of images allowed
+    equipment_max_num_images: 10
+    talent_max_num_images: 10

@@ -152,6 +152,15 @@ class EquipmentRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+    public function getEquipmentButMainImageCount($equipmentId) { // all except main
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('count(ei.image)')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->andWhere('ei.main = 0');
+        return $qb->getQuery()->getSingleScalarResult();
+    }
     public function getEquipmentImages($equipmentId) {
         // main first
         $qb = $this->getEntityManager()->createQueryBuilder();
