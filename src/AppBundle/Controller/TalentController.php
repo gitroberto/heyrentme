@@ -805,8 +805,8 @@ class TalentController extends BaseController {
         $size = getimagesize($filename);
         $w = $size[0];
         $h = $size[1];
-        if ($w < 600) {
-            $msg = "{$origName}: das hochgeladene Bild ({$w} x {$h}) ist kleiner als erforderlich (bitte min. 600 px Breite)";
+        if ($w < 650) {
+            $msg = "{$origName}: das hochgeladene Bild ({$w} x {$h}) ist kleiner als erforderlich (bitte min. 650 px Breite)";
         }
 
         $wght = $file->getClientSize();
