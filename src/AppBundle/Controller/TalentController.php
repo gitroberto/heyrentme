@@ -235,6 +235,7 @@ class TalentController extends BaseController {
             'description' => $eq->getDescription(),
             'videoUrl' => $eq->getVideo() !== null ? $eq->getVideo()->getOriginalUrl() : null,
             'street' => $eq->getAddrStreet(),
+            'flatNumber' => $eq->getAddrFlatNumber(),
             'number' => $eq->getAddrNumber(),
             'postcode' => $eq->getAddrPostcode(),
             'place' => $eq->getAddrPlace(),
@@ -356,6 +357,7 @@ class TalentController extends BaseController {
             $eq->setDescription($data['description']);
             $eq->setAddrStreet($data['street']);
             $eq->setAddrNumber($data['number']);
+            $eq->setAddrFlatNumber($data['flatNumber']);
             $eq->setAddrPostcode($data['postcode']);
             $eq->setAddrPlace($data['place']);   
             $eq->setLicence(intval($data['make_sure']));
