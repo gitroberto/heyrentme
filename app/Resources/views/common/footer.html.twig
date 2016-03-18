@@ -182,7 +182,7 @@
             
             $("#emailConfirmedButton").click();            
         } else if (getUrlParameter("register")) {
-            $("a[data-target='#reg-modal']")[0].click();
+            $("a[data-target='#reg-modal']")[0].rclick();
         }
         $("#emailConfirmed .close").unbind("click");
         $("#emailConfirmed .close").click(function(e){
@@ -195,9 +195,5 @@
   <script src="/js/owl.carousel.min.js"></script>
   <script src="/js/vendors/bootstrap.min.js"></script>
   <script src="/js/vendors/bootstrap-select.min.js"></script>
-  <script src="/js/vendors/moment.min.js"></script>
-  <script src="/js/vendors/bootstrap-datetimepicker.min.js"></script>
   <script src="/js/vendors/slidebars.min.js"></script>
-  <script src="/js/vendors/ion.rangeSlider.min.js"></script>
   <script src="/js/build.js"></script>
-  <script src="/js/vendors/jquery.raty.js"></script>

@@ -8,6 +8,8 @@
         {% if item.talentImages|length > 0 %}
             <meta property="og:image"         content="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" />    
         {% endif %}
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker.min.css" />
 {% endblock %}
 
 {% block home_header %}
@@ -473,6 +475,8 @@
 {% block script %}
   <script src="http://maps.googleapis.com/maps/api/js?language=de"></script>
   <script src="http://malsup.github.com/jquery.form.js"></script> 
+  <script src="/js/vendors/moment.min.js"></script>
+  <script src="/js/vendors/bootstrap-datetimepicker.min.js"></script>
     <script src="/js/vendors/vimeo.js"></script>
   <script>
     var itemPrice = {% if item.requestPrice %}null{% else %}{{ item.activePrice|number_format(2) }}{% endif %};
