@@ -10,13 +10,8 @@ $(function(){
             };
 
             $.ajax(options).done(function (data) {    
-                var $target = $("#formRegister");
-                var $newHtml = $(data);        
-                $target.replaceWith($newHtml);                                
-                                
-                if (data.indexOf("User_Is_Registered") != -1){                                                      
-                   $("#confirmationDiv").show();                   
-                }
+                $("#reg-modal").modal('hide');
+                $("#reg-sent").modal();
             });
 
             return false;
