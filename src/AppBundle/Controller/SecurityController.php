@@ -2,18 +2,18 @@
 
 namespace AppBundle\Controller;
 
-use FOS\UserBundle\Controller\SecurityController as BaseSecurityController;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
-
 use AppBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\UserBundle\Controller\SecurityController as BaseSecurityController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class SecurityController extends BaseSecurityController
 {
@@ -41,6 +41,12 @@ class SecurityController extends BaseSecurityController
             $error = null;
         }
 
+        $message = null;
+        
+        if ($error instanceof UnsupportedUserException) {
+            $message = "Die Facebook-Konto hat keine E-Mail-Adresse zugeordnet ist. Bitte fahren Sie mit E-Mail-basierte Registrierung.";
+        }
+        
         if (!$error instanceof AuthenticationException) {
             $error = null; // The value does not come from the security component.
         }
@@ -64,7 +70,6 @@ class SecurityController extends BaseSecurityController
             return $this->userIsLoggedAction();
         }
         
-        $message = null;
         if ($session->has('logged_out_message')) {
             $message = $session->get('logged_out_message');            
             $session->set('logged_out_message', null);            
@@ -108,11 +113,11 @@ class SecurityController extends BaseSecurityController
     }
     
     public function getMessage($user) {
-        $message = "Something went wrong";
+        $message = "An error occurred. Please try again or contact the website administrator.";
         if ($user->getStatus() == User::STATUS_BLOCKED){
-            $message = "Your user was blocked.";
+            $message = "Your user account has been blocked. Please contact the website administrator.";
         } else {
-            $message = "Invalid credentials";
+            $message = "Authentication failed.";
         }
         return $message;
     }
@@ -127,7 +132,7 @@ class SecurityController extends BaseSecurityController
         }            
         $tokenStorage->setToken($anonToken);
     }
-    
+        
      /**
      * @Route("/loggedIn", name="loggedin")
      */
