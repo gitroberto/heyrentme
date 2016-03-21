@@ -298,10 +298,12 @@ class ProviderController extends BaseController {
     public function einstellungenAction(Request $request) {
         
         $user = $this->getUser();
+        $facebook = null !== $user->getFacebookID();
         
         //$form = $this->createForm(EinstellungenType::class, $user);
-        $form = $this->createFormBuilder(null)
-                ->add('password', 'password', array( 'required'=>false, 'constraints' => array(
+        $builder = $this->createFormBuilder(null);
+        if (!$facebook) {
+            $builder->add('password', 'password', array( 'required'=>false, 'constraints' => array(
                             new Callback(array($this, 'validateOldPassword'))
                         ) ))
                 ->add('newPassword', 'password', array( 'required'=>false, 'constraints' => array(
@@ -309,8 +311,9 @@ class ProviderController extends BaseController {
                         ) ))
                 ->add('repeatedPassword', 'password', array('required' => false))
                 ->add('name', 'text', array('max_length' => 255 , 'data' => $user->getName() ))
-                ->add('surname', 'text', array('max_length' => 255 , 'data' => $user->getSurname() ))
-                ->add('phone', 'text', array(
+                ->add('surname', 'text', array('max_length' => 255 , 'data' => $user->getSurname() ));
+        }
+        $builder->add('phone', 'text', array(
                     'required' => false,
                     'attr' => array(
                         'pattern' => '^[0-9]{1,10}$'),
@@ -330,22 +333,25 @@ class ProviderController extends BaseController {
                             'constraints' => array(
                                 new Regex(array('pattern' => '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$$/', 'message' => 'BIC-Code ist nicht korrekt.'))
                                 )
-                ))
-                ->getForm();
+                ));
+        
+        $form = $builder->getForm();
         $this->formHelper = $form;        
         $form->handleRequest($request);      
         $saved = false;
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $newPassword = $form['newPassword']->getData();
-            if ($newPassword != null && $newPassword != ""){
-                $encoder_service = $this->get('security.encoder_factory');
-                $encoder = $encoder_service->getEncoder($user);                            
-                $user->setPassword($encoder->encodePassword($newPassword, $user->getSalt()));
+            if (!$facebook) {
+                $newPassword = $form['newPassword']->getData();
+                if ($newPassword != null && $newPassword != ""){
+                    $encoder_service = $this->get('security.encoder_factory');
+                    $encoder = $encoder_service->getEncoder($user);                            
+                    $user->setPassword($encoder->encodePassword($newPassword, $user->getSalt()));
+                }
+
+                $user->setName($form['name']->getData());
+                $user->setSurname($form['surname']->getData());
             }
-            
-            $user->setName($form['name']->getData());
-            $user->setSurname($form['surname']->getData());
             
             $user->setPhone($form['phone']->getData());
             $user->setPhonePrefix($form['phonePrefix']->getData());
@@ -360,7 +366,8 @@ class ProviderController extends BaseController {
       
         return $this->render('provider/einstellungen.html.twig', array(  
             'form' => $form->createView(),
-            'saved' => $saved
+            'saved' => $saved,
+            'facebook' => $facebook
         ));
     }        
     
