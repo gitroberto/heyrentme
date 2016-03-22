@@ -16,14 +16,8 @@ class GeneralMailer {
         $this->doctrine = $doctrine;
     }
     
-    public function SendWelcomeEmail(User $user, $withDiscountCode)
-    {
-        $code = null;
-        if ($withDiscountCode) {
-            $codeRepo = $this->doctrine->getRepository('AppBundle:DiscountCode');
-            $code = $codeRepo->assignToUser($user);
-        }
-        
+    public function SendWelcomeEmail(User $user, $discountCode)
+    {        
         $from = $this->parameters['mailer_fromEmail'];        
         #$username = 'seba';
         $username = $user->getName(). " ". $user->getSurname();
@@ -40,7 +34,7 @@ class GeneralMailer {
                 array(
                     'name' => $username, 
                     'mailer_app_url_prefix' => $this->parameters['mailer_app_url_prefix'],
-                    'discountCode' => $code
+                    'discountCode' => $discountCode
                 )
             ),
             'text/html'

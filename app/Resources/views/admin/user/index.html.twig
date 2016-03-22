@@ -21,16 +21,36 @@
         <div id="jqgrid-pager"></div>
 </div>
 
+    {% if code %}
+        <div id="question-modal" class="modal fade delete-offer" role="dialog">
+            <div class="modal-dialog">
+            <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                        <div class="content-modal">
+                            <p class="delate-info">
+                                User <b>{{ code.user.email }}</b> has been created.
+                            </p>
+                            <p class="delate-info">
+                                User's discount code is <b>{{ code.code }}</b>.
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  {% endif %}
 
 {% endblock %}
 
-{% block footer %}
-    {{ include('admin/common/admin.footer.html.twig') }}
+{% block script %}
 <script>    
 $(document).ready(function(){    
-//*******************************************
-/*	JQGRID INIT
-/********************************************/
+    {% if code %}
+        $("#question-modal").modal();                
+    {% endif %}            
 
 
 function rowActions(cellvalue, options, cellobject) {
@@ -78,4 +98,3 @@ if($grid.length > 0 ) {
 </script>    
     
 {% endblock %}
-

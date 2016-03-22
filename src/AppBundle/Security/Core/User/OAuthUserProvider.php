@@ -60,7 +60,10 @@ class OAuthUserProvider extends BaseClass
             $this->userManager->updateUser($user);
             if ($isNewUser){
                 global $kernel;
-                $kernel->getContainer()->get('app.general_mailer')->SendWelcomeEmail($user, true);
+                $em = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+                $repo = $em->getRepository('AppBundle:DiscountCode');
+                $code = $repo->assignToUser($user);
+                $kernel->getContainer()->get('app.general_mailer')->SendWelcomeEmail($user, $code);
             }
         } else {
             //and then login the user

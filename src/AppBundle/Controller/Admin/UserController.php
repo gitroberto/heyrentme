@@ -26,8 +26,19 @@ class UserController extends BaseAdminController {
     /**
      * @Route("/admin/users", name="admin_users_list")
      */
-    public function indexAction() {
-        return $this->render('admin/user/index.html.twig');
+    public function indexAction(Request $request) {
+        $code = null;
+        
+        $session = $request->getSession();
+        if ($session->has('AdminNewUserCodeId')) {
+            $id = $session->get('AdminNewUserCodeId');
+            $code = $this->getDoctrineRepo('AppBundle:DiscountCode')->find($id);
+            $session->remove('AdminNewUserCodeId');
+        }
+        
+        return $this->render('admin/user/index.html.twig', array(
+            'code' => $code
+        ));
     }
     
     public function sendUserBlockedMessage(Request $request, User $user)
@@ -169,6 +180,9 @@ class UserController extends BaseAdminController {
                     new Regex(array('pattern' => '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$$/', 'message' => 'BIC-Code ist nicht korrekt.'))
                 )
             ))
+            ->add('discount', 'checkbox', array(
+                'required' => false
+            ))
             ->getForm();
         //</editor-fold>
         
@@ -223,6 +237,12 @@ class UserController extends BaseAdminController {
                     $user->setImage($img);
                 }
                 $em->flush();
+                
+                $code = null;
+                if ($data['discount']) {
+                    $code = $this->getDoctrineRepo('AppBundle:DiscountCode')->assignToUser($user);
+                    $request->getSession()->set('AdminNewUserCodeId', $code->getId());
+                }                
                 
                 return $this->redirectToRoute("admin_users_list");
             }

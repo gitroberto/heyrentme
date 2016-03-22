@@ -95,8 +95,6 @@ class RegistrationController extends BaseRegistrationController
 
         $userManager->updateUser($user);
         
-        #$codeRepo = $this->getDoctrine()->getRepository('AppBundle:DiscountCode');
-        #$code = $codeRepo->assignToUser($user);
         $this->getDoctrine()->getRepository('AppBundle:EquipmentInquiry')->updateInquiries($user);
 
         if (null === $response = $event->getResponse()) {
@@ -105,7 +103,10 @@ class RegistrationController extends BaseRegistrationController
         }
 
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));                
-        $this->get("app.general_mailer")->SendWelcomeEmail($user, true);
+        
+        $repo = $this->getDoctrine()->getRepository('AppBundle:DiscountCode');
+        $code = $repo->assignToUser($user);
+        $this->get("app.general_mailer")->SendWelcomeEmail($user, $code);
         
         return $response;
     }
