@@ -105,18 +105,31 @@ class DiscountCodeController extends BaseAdminController {
                 $cell[$i++] = "";
             }
             $eb = $dataRow->getEquipmentBooking();
-            $tb = $dataRow->getTalentBooking();
+            $tb = $dataRow->getTalentBooking();            
+            $provider = null;
             if ($eb !== null) {
                 $eq = $eb->getInquiry()->getEquipment();
+                $provider = $eq->getUser();
                 $cell[$i++] = $eq->getId();
                 $cell[$i++] = $eq->getName();
                 $cell[$i++] = $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));
             }
             else if ($tb !== null) {
                 $tal = $tb->getInquiry()->getTalent();
+                $provider = $tal->getUser();
                 $cell[$i++] = $tal->getId();
                 $cell[$i++] = $tal->getName();
                 $cell[$i++] = $this->generateUrl('admin_talent_moderate', array('id' => $tal->getId()));
+            }
+            else {
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+            }
+            if ($provider !== null) {
+                $cell[$i++] = $provider->getId();
+                $cell[$i++] = $provider->getEmail();
+                $cell[$i++] = $this->generateUrl('admin-user-details', array('id' => $provider->getId()));
             }
             else {
                 $cell[$i++] = "";

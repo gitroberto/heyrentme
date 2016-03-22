@@ -11,7 +11,7 @@
 <div class="selecttionPanel">
     <div class="error" id="CancelDiscountMessage"></div>
     <a id="selectAll" href="#" >select all</a>&nbsp;|&nbsp;<a id="deselectAll" href="#" >deselect all</a>&nbsp;|&nbsp;<a id="revertSelection" href="#" >revert selection</a>
-    <div id="DivCancel" class="redButtonAdmin" data-target="{{ path("admin_cancel_discount_code" ) }}" >Cancel status</div>
+    <div id="DivCancel" class="redButtonAdmin" data-target="{{ path("admin_cancel_discount_code" ) }}" title="Cancel selected codes" >Cancel</div>
 </div>
 <div id="jqgrid-wrapper">
         <table id="jqgrid" class="table table-striped table-hover">
@@ -50,8 +50,8 @@ $(document).ready(function(){
 
 
 function rowActions(cellvalue, options, cellobject) {
-      
-      if (cellobject[3] == "cancelled"){
+      var s = cellobject[3];
+      if (s === "cancelled" || s === 'assigned'){
         return "";  
       } else {
         return   "<input type='checkbox' class='CheckboxItems' value='"   +  options.rowId + "'></a>  ";
@@ -70,6 +70,13 @@ function itemFormatter(cellvalue, options, cellobject) {
     var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[11]).replace('#NAME#', name);
     return s;
 }
+function providerFormatter(cellvalue, options, cellobject) {
+    if (cellobject[12] === '')
+        return '';
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[14]).replace('#NAME#', cellobject[13]);
+    return s;
+}
+
 
 var $grid = $('#jqgrid');
 
@@ -88,11 +95,14 @@ if( $('#jqgrid').length > 0 ) {
                         { name:'Created', index:'dc.createdAt', width: 130, editable:false, sortable:true },
                         { name:'Modified', index:'dc.modifiedAt', width: 130, editable:false, sortable:true },
                         { name:'UserId', hidden: true },
-                        { name:'User', index:'u.username', width: 250, editable:false, sortable:true, formatter: userFormatter },
+                        { name:'User', index:'u.username', width: 200, editable:false, sortable:true, formatter: userFormatter },
                         { name:'UserUrl', hidden: true },
                         { name:'ItemId', hidden: true, editable:false, sortable:false },                   
-                        { name:'Item', width: 250, editable:false, sortable:false, formatter: itemFormatter },
-                        { name:'ItemUrl', hidden: true }
+                        { name:'Item', width: 200, editable:false, sortable:false, formatter: itemFormatter },
+                        { name:'ItemUrl', hidden: true },
+                        { name:'ProviderId', hidden: true, editable:false, sortable:false },                   
+                        { name:'Provider', width: 200, editable:false, sortable:false, formatter: providerFormatter },
+                        { name:'ProviderUrl', hidden: true }
                 ],
                 height: 550,
                 rowNum: 20,
