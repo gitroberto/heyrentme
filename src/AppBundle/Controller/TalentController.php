@@ -611,7 +611,7 @@ class TalentController extends BaseController {
 
             $size = getimagesize($filename);
             if ($size[0] < 750 || $size[1] < 563) {
-                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 px Breite)";
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 x 563 px)";
             }
             
             $w = $file->getClientSize();
@@ -1003,10 +1003,13 @@ class TalentController extends BaseController {
             */
 
             // check for modaration relevant changes
-            $changed = $eq->getDescReference() !== $data['descReference']
+            $status = $eq->getStatus();
+            $changed = $status !== Talent::STATUS_INCOMPLETE && (
+                $eq->getDescReference() !== $data['descReference']
                 || $eq->getDescTarget() !== $data['descTarget']
                 || $eq->getDescScope() !== $data['descScope']
-                || $eq->getDescCondition() !== $data['descCondition'];
+                || $eq->getDescCondition() !== $data['descCondition']
+            );
             
             // map fields
             //<editor-fold>
@@ -1026,6 +1029,11 @@ class TalentController extends BaseController {
             $em->flush();
             
             // handle status change and notification
+            if ($status === Talent::STATUS_INCOMPLETE) {
+                $eq->setStatus(Talent::STATUS_NEW);
+                $em->flush();
+                $statusChanged = true;
+            }
             if ($changed) {
                 $statusChanged = $this->getDoctrineRepo('AppBundle:Talent')->talentModified($eqid);
             }

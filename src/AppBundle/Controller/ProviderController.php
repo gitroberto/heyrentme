@@ -925,7 +925,7 @@ class ProviderController extends BaseController {
 
             $size = getimagesize($filename);
             if ($size[0] < 750 || $size[1] < 563) {
-                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 px Breite)";
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 x 563 px)";
             }
             
             $w = $file->getClientSize();
@@ -1322,9 +1322,12 @@ class ProviderController extends BaseController {
             */
             
             // check for modaration relevant changes
-            $changed = $eq->getDescType() !== $data['descType']
+            $status = $eq->getStatus();
+            $changed = $status !== Equipment::STATUS_INCOMPLETE && (
+                $eq->getDescType() !== $data['descType']
                 || $eq->getDescSpecial() !== $data['descSpecial']
-                || $eq->getDescCondition() !== $data['descCondition'];
+                || $eq->getDescCondition() !== $data['descCondition']
+            );
             
             // map fields
             //<editor-fold>
@@ -1341,6 +1344,11 @@ class ProviderController extends BaseController {
             $em->flush();
 
             // handle status change and notification
+            if ($status === Equipment::STATUS_INCOMPLETE) {
+                $eq->setStatus(Equipment::STATUS_NEW);
+                $em->flush();
+                $statusChanged = true;
+            }
             if ($changed) {
                 $statusChanged = $this->getDoctrineRepo('AppBundle:Equipment')->equipmentModified($eqid);
             }
