@@ -6,17 +6,11 @@
 {% endblock %}
 
 {% block body %}
-<h1>Equipment</h1>
-<div id="jqgrid-wrapper">
-        <table id="jqgrid" class="table table-striped table-hover">
-                <tr>
-                        <td></td>
-                </tr>
-        </table>
+    <h1>Equipment</h1>
+    <div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover"></table>
         <div id="jqgrid-pager"></div>
-</div>
-
-
+    </div>
 {% endblock %}
 
 {% block footer %}
@@ -56,9 +50,9 @@ if( $grid.length > 0 ) {
                 height: 550,
                 rowNum: 20,
                 rowList: [20, 50, 100],
-                pager: 'jqgrid-pager',
+                pager: '#jqgrid-pager',
                 sortname: 'e.status',
-                viewrecords: false,
+                viewrecords: true,
                 sortorder: "asc",
                 multiselect: false
         });
