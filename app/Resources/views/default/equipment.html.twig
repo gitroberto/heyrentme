@@ -195,7 +195,7 @@
                 <div class="panel panel-default einzelstunden">
                     <div class="panel-heading" id="robert-heading">
                         <p class="panel-title">
-                           PREIS PRO TAG: {{ item.activePrice|number_format(2, ',') }} € 
+                           PREIS PRO TAG: ab {{ item.activePrice|number_format(2, ',') }} € 
                             <span class="pull-right">
                                 <a>
                                     <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
@@ -290,7 +290,7 @@
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
                     <p>
-                        {{ item.activePrice|number_format(2, ',') }} € pro Tag
+                        ab {{ item.activePrice|number_format(2, ',') }} € pro Tag
                     </p>
                   </div>
                     {#
