@@ -66,7 +66,7 @@
                             {% endif %}
                       </ul>
                   </form>
-                  <p class="how-many">Querformat / min. 750 px Breite / max. {{ megabytes }} MB / JPG oder PNG</p>
+                  <p class="how-many">Querformat / min. 750 px Breite / max. {{ megabytes }} MB / JPG oder PNG / Keine Werbefotos</p>
                   <a href="{{ path('tutorial-photo') }}" target="_blank"><span class="tutorial">tutorial</span></a>
                   {% if mainImageValidation %}
                         <br />
@@ -88,7 +88,7 @@
                                 </li>{% endfor %}
                       </ul>
                   </form>
-                  <p class="how-many">Quer- oder Hochformat / min. 650 px Breite / max. {{ megabytes }} MB / JPG oder PNG</p>
+                  <p class="how-many">Quer- oder Hochformat / min. 650 px Breite / max. {{ megabytes }} MB / JPG oder PNG / Keine Werbefotos</p>
                   {% if imagesValidation %}
                          <br />
                       <div class="err-msg"><ul><li>{{ imagesValidation }}</li></ul></div>
@@ -106,7 +106,7 @@
                                   {{ form_widget(form.description, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
                                  <div class="chbox-holder">
                                       {{ form_widget(form.make_sure) }}
-                                      <label for="form_make_sure"><span></span>Ich bin berechtigt, dass beschriebene Angebot auszuüben*</label>
+                                      <label for="form_make_sure"><span></span>Ich bin berechtigt, das beschriebene Angebot auszuüben*</label>
                                   </div>
                                     <div class="err-msg">{{ form_errors(form.make_sure) }}</div>
                               </div>
