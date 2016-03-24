@@ -73,41 +73,43 @@ class TalentRepository extends EntityRepository
     }
     
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus) {
+        // count
         $qb = $this->getEntityManager()->createQueryBuilder();
-        // build query
+        $qb->select('count(e.id)')
+            ->from('AppBundle:Talent', 'e');
+        $this->gridOverviewParams($qb, $sStatus);
+        $count = $qb->getQuery()->getSingleScalarResult();
+        
+        // result
+        $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('e, u, s, c')
             ->from('AppBundle:Talent', 'e')
-            ->join('e.subcategory', 's')
-            ->join('s.category', 'c')
-            ->join('e.user','u');
-        
-        if (!empty($sStatus)) {
-            $qb->andWhere($qb->expr()->eq('e.status', ':status'));
-        }
+            ->leftJoin('e.subcategory', 's')
+            ->leftJoin('s.category', 'c')
+            ->leftJoin('e.user', 'u');
+        $this->gridOverviewParams($qb, $sStatus);
         
         // sort by
         if (!empty($sortColumn)) {
-            if (!empty($sortDirection)) {
-                $qb->orderBy($sortColumn, $sortDirection);
-            }
-            else {
-                $qb->orderBy($sortColumn);
-            }
+            $qb->orderBy($sortColumn, $sortDirection);
         }
 
-        $q = $qb->getQuery();
-        if (!empty($sStatus)) {
-            $q->setParameter(':status', $sStatus);
-        }
-        
         // page and page size
         if (!empty($pageSize)) {
-            $q->setMaxResults($pageSize);
+            $qb->setMaxResults($pageSize);
         }
         if (!empty($page) && $page != 1) {
-            $q->setFirstResult(($page - 1) * $pageSize);
+            $qb->setFirstResult(($page - 1) * $pageSize);
         }
-        return $q->getResult();        
+        $rows = $qb->getQuery()->getResult();
+        
+        return array('count' => $count, 'rows' => $rows);
+    }
+    private function gridOverviewParams($qb, $sStatus) {
+        if (!empty($sStatus)) {
+            $qb->andWhere($qb->expr()->eq('e.status', ':status'));
+            $qb->setParameter('status', $sStatus);
+        }
     }
     
     public function countAll() {

@@ -34,16 +34,18 @@ class EquipmentController extends BaseAdminController {
         
         
         $repo = $this->getDoctrineRepo('AppBundle:Equipment');        
-        $dataRows = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus);
-        $rowsCount = $repo->countAll();
+        $res = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus);
+        $dataRows = $res['rows'];
+        $rowsCount = $res['count'];//$repo->countAll();
         $pagesCount = ceil($rowsCount / $pageSize);
         
         $rows = array(); // rows as json result        
         foreach ($dataRows as $dataRow) { // build single row
             $subcat = $dataRow->getSubcategory();
             $cat = $subcat->getCategory();
+            $user = $dataRow->getUser();
             
-            $i=0;
+            $i = 0;
             $row = array();
             $row['id'] = $dataRow->getId();
             $cell = array();
@@ -52,7 +54,7 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = sprintf("%s | %s", $cat->getName(), $subcat->getName());
             $cell[$i++] = $dataRow->getName();
             $cell[$i++] = $dataRow->getPrice();
-            $cell[$i++] = $dataRow->getUser()->getUsername();
+            $cell[$i++] = $user !== null ? $user->getUsername() : '';
             $cell[$i++] = $dataRow->getStatusStr();
             $cell[$i++] = $this->generateUrl('preview_equipment', array('uuid'=>$dataRow->getUuid()));
             $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');

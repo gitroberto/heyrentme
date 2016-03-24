@@ -480,13 +480,12 @@ class UserController extends BaseAdminController {
         $name = $request->get('u_name');
         $surname = $request->get('u_surname');
         $status = $request->get('u_status');        
-        $createdAt = $request->get('u_createdAt');
-        $modifiedAt = $request->get('u_modifiedAt');
         
         $repo = $this->getDoctrineRepo('AppBundle:User');
-        $dataRows = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, 
-                $email, $name, $surname, $status, $createdAt, $createdAt, $modifiedAt);
-        $rowsCount = $repo->countAll();
+        $res = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, 
+                $email, $name, $surname, $status);
+        $dataRows = $res['rows'];
+        $rowsCount = $res['count'];//$repo->countAll();
         $pagesCount = ceil($rowsCount / $pageSize);
         
         $rows = array(); // rows as json result
