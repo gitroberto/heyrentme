@@ -64,7 +64,7 @@
                             {% endif %}
                       </ul>
                   </form>
-                  <p class="how-many">Querformat / min. 750 px Breite / max. {{ megabytes }} MB / JPG oder PNG</p>
+                  <p class="how-many">Querformat / min. 750 px Breite / max. {{ megabytes }} MB / JPG oder PNG / Keine Werbefotos</p>
                   <a href="{{ path('tutorial-photo') }}" target="_blank"><span class="tutorial">tutorial</span></a>                  
                   {% if mainImageValidation %}
                         <br />
@@ -86,7 +86,7 @@
                                 </li>{% endfor %}
                       </ul>
                   </form>
-                  <p class="how-many">Quer- oder Hochformat / min. 650 px Breite / max. {{ megabytes }} MB / JPG oder PNG</p>
+                  <p class="how-many">Quer- oder Hochformat / min. 650 px Breite / max. {{ megabytes }} MB / JPG oder PNG / Keine Werbefotos</p>
                   
                   {% if imagesValidation %}
                          <br />
@@ -118,7 +118,7 @@
                                   <div class="chbox-holder">
                                       {# <input type="checkbox" id="c2hx"> #}
                                       {{ form_widget(form.make_sure) }}
-                                      <label for="form_make_sure"><span></span>Bitte versichere, dass dein Equipment zum Zeitpunkt der Buchung funktionstüchtig und
+                                      <label for="form_make_sure"><span></span>Bitte versichere, dass du aktuelle Originalfotos verwendest und dein Equipment zum Zeitpunkt der Buchung funktionstüchtig und
       einsatzbereit ist.*</label>
                                   </div>
                                   <div class="err-msg">{{ form_errors(form.make_sure) }}</div>
