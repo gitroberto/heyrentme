@@ -308,7 +308,7 @@
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
                     <p>
-                        {% if item.requestPrice %}Kosten auf Anfr.{% else %}{{ item.activePrice|number_format(2, ',') }} € pro Stunde{% endif %}
+                        {% if item.requestPrice %}Kosten auf Anfr.{% else %}ab {{ item.activePrice|number_format(2, ',') }} € pro Stunde{% endif %}
                     </p>
                   </div>
                     {#
