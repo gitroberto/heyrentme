@@ -92,6 +92,7 @@ nav.crumbs {
 .ui-jqgrid .ui-jqgrid-btable {
     border-collapse: collapse;
 }
+/*
 #jqgrid tr.jqgrow td{
     white-space: nowrap;
     overflow: hidden;
@@ -115,4 +116,8 @@ nav.crumbs {
 }
 a, a:hover {
     color: #008;
+}
+*/
+.ui-icon {
+    display: block;
 }
