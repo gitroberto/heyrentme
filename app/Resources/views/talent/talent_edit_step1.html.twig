@@ -54,7 +54,7 @@
                                   <div class="err-msg">{{ form_errors(form.name) }}</div>
                               </div>
                                <div class="col-sm-5">
-                                  <label for="form[price]">Preis pro Stunde:*</label>
+                                  <label for="form[price]">Preis pro Stunde (ab):*</label>
                                   {#<input type="number" name="name2" placeholder="0" class="small-input " id="preis_pro_tag" min="10" max="500" required>#}
                                   {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '500' }}) }}EUR
                                   <div class="err-msg">{{ form_errors(form.price) }}</div>
