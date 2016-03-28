@@ -44,7 +44,7 @@ class SecurityController extends BaseSecurityController
         $message = null;
         
         if ($error instanceof UnsupportedUserException) {
-            $message = "Ups, ein Login mit deinem Facebook-Account ist derzeit nicht möglich. Bitte registriere dich mit einer Email";
+            $message = "Ups, eine Registrierung mit deinem Facebook-Account ist derzeit nicht möglich. Bitte registriere dich mit einer Email";
         }
         
         if (!$error instanceof AuthenticationException) {
