@@ -44,7 +44,7 @@ class SecurityController extends BaseSecurityController
         $message = null;
         
         if ($error instanceof UnsupportedUserException) {
-            $message = "Die Facebook-Konto hat keine E-Mail-Adresse zugeordnet ist. Bitte fahren Sie mit E-Mail-basierte Registrierung.";
+            $message = "Ups, ein Login mit deinem Facebook-Account ist derzeit nicht möglich. Bitte registriere dich mit einer Email";
         }
         
         if (!$error instanceof AuthenticationException) {
@@ -113,9 +113,9 @@ class SecurityController extends BaseSecurityController
     }
     
     public function getMessage($user) {
-        $message = "An error occurred. Please try again or contact the website administrator.";
+        $message = "Ups, ein Fehler ist aufgetreten. Bitte versuche es noch einmal, oder wende dich an support@heysharing.com";
         if ($user->getStatus() == User::STATUS_BLOCKED){
-            $message = "Your user account has been blocked. Please contact the website administrator.";
+            $message = "Ups, es gibt ein Problem mit deinem User Account. Bitte wende dich an support@heysharing.com";
         } else {
             $message = "Authentication failed.";
         }
