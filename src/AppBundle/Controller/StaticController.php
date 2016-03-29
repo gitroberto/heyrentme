@@ -97,6 +97,13 @@ class StaticController extends BaseController {
     public function kundeninfosPresseAgbAction(Request $request) {               
         return $this->render('static/clientInfo/kundeninfos_presse.html.twig');
     }
+	
+	/**
+     * @Route("/kundeninfos/partner", name="kundeninfos_partner")
+     */
+    public function kundeninfosPartnerAction(Request $request) {               
+        return $this->render('static/clientInfo/kundeninfos_partner.html.twig');
+    }
     
     /**
      * @Route("/kundeninfos/kontakt", name="kundeninfos_kontakt")

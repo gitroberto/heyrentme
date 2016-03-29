@@ -17,6 +17,9 @@ background-color: #34b437 !important
     text-align: center;
 }
 
+.rpartner-description {
+width:70%
+}
 
 #passwordRecovery .modal-title, #feedback-modal .modal-title, #reg-modal .modal-title, #login .modal-title, #passwordRecovery .modal-title, #passwordReset .modal-title, #emailConfirmed .modal-title, #question-modal .modal-title, #inquiry-modal .modal-title, #melden .modal-title {
 font-weight: normal!important;

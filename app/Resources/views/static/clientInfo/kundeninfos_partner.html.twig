@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="main-header "> 
+        <img src="/img/allgemein-final/kundeninfos.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/> 
+        <img src="/img/allgemein-final/kundeninfos_small.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+      <div class="container rent-heading help-heading">
+        <div class="row">
+          <div class="col-sm-8 text-white">
+            <h1>Kundeninfos</h1>
+            <br>
+            <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos mitmachen!</a>
+        </div>
+      </div>
+    </div>
+    </div>
+    </header>
+    <section>
+    <div class="container background-white rent-container">
+      {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_presse", "pageNameShort":"Presse" } )) }}
+      <span class="clearfix"></span> 
+      <!-- Left nav -->
+      <div class="row help-page">
+        {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_presse" } )) }}
+        <div class="col-md-9 content">
+          <div style="margin-top:0" class="presse">
+            <div> <span><a href="http://www.blueminds-company.com/" target="_blank"><img src="/img/partner/blueminds.png" alt="The Blue Minds Company"/></a></span>
+              <p class="rpartner-description">
+              <strong><a href="#" target="_blank">The Blue Minds Company</a></strong><br>
+              Driving the Energy Transition oder die Kunst Wert zu schaffen. THE BLUE MINDS COMPANY ist Wiens neue Adresse für Geschäftsmodelle rund um die Energietransformation. Mit Research, Consulting und Communications arbeiten wir für und mit Unternehmen an den Herausforderungen des 21. Jahrhunderts. Als Startup Inkubator finden, fordern und fördern wir Startups als kreative Architekten.<br><br> In Südost-Europa, der Türkei und der MENA Region sind wir durch langjährige Erfahrung vor Ort bestens vernetzt. In Tel Aviv betreiben wir mit Blue Minds Israel Ltd. ein Tochterunternehmen, das Software im Bereich digitaler Energiedienstleistungen entwickelt. Wir reagieren damit auf den Trend der Konvergenz von Energie, Internet und Telekommunikation. 
+              </p>
+            </div>
+        </div>
+      </div>
+      </section>
+      <span class="add-margin mobile-hidden"></span> </div>
+{% endblock %}
