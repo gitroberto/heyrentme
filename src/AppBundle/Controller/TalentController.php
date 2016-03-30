@@ -1193,13 +1193,26 @@ class TalentController extends BaseController {
         return $resp;        
     }    
 
-    public function sendNewModifiedTalentInfoMessage(Request $request, Talent $eq)
-    {      
-                        
+    public function sendNewModifiedTalentInfoMessage(Request $request, Talent $eq) {                              
         $to = $this->getParameter('admin_email');
         $template = 'Emails\talent\new_modified_item.html.twig';        
+        $parts = array();
         
         $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));        
+        // subject parts
+        if ($eq->getStatus() === Talent::STATUS_NEW) {
+            array_push($parts, "New");
+        }
+        else {
+            array_push($parts, "Modified");
+        }
+        array_push($parts, "talent in");
+
+        $subcat = $eq->getSubcategory();
+        $cat = $subcat->getCategory();
+        array_push($parts, "{$cat->getName()} / {$subcat->getName()}"); 
+
+        $subject = join(" ", $parts);
         
         $emailHtml = $this->renderView($template, array(                                    
             'talent' => $eq,
@@ -1209,7 +1222,7 @@ class TalentController extends BaseController {
         
         $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
         $message = Swift_Message::newInstance()
-            ->setSubject('New/modified talent notification.')
+            ->setSubject($subject)
             ->setFrom($from)
             ->setTo($to)
             ->setBody($emailHtml, 'text/html');

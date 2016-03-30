@@ -1475,15 +1475,28 @@ class ProviderController extends BaseController {
         return new JsonResponse(array("status" => "ok", "statusChanged" => $statusChanged));
     }
     
-    public function sendNewModifiedEquipmentInfoMessage(Request $request, $eq, $type="equipment")
-    {      
-                        
+    public function sendNewModifiedEquipmentInfoMessage(Request $request, $eq, $type="equipment") {                        
         $to = $this->getParameter('admin_email');
         $emailHtml = null;
-        $url = "";        
+        $url = "";
+        $parts = array();
+        
         if ($type === 'equipment') {
-            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));                    
-            $subject = 'New/modified equipment notification.';
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));
+            
+            // subject parts
+            if ($eq->getStatus() === Equipment::STATUS_NEW) {
+                array_push($parts, "New");
+            }
+            else {
+                array_push($parts, "Modified");
+            }
+            array_push($parts, "equipment in");
+            
+            $subcat = $eq->getSubcategory();
+            $cat = $subcat->getCategory();
+            array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
+            
             
             $emailHtml = $this->renderView('Emails/Equipment/new_modified_item.html.twig', array(                                    
                 'equipment' => $eq,
@@ -1492,8 +1505,20 @@ class ProviderController extends BaseController {
             ));
             
         } else {
-            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));                    
-            $subject = 'New/modified talent notification.';
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));
+
+            // subject parts
+            if ($eq->getStatus() === Equipment::STATUS_NEW) {
+                array_push($parts, "New");
+            }
+            else {
+                array_push($parts, "Modified");
+            }
+            array_push($parts, "equipment in");
+            
+            $subcat = $eq->getSubcategory();
+            $cat = $subcat->getCategory();
+            array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
             
             $emailHtml = $this->renderView('Emails/talent/new_modified_item.html.twig', array(                                    
                 'talent' => $eq,
@@ -1502,6 +1527,8 @@ class ProviderController extends BaseController {
             ));
         }
         
+        $subject = join(" ", $parts);
+        
         $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
         $message = Swift_Message::newInstance()
             ->setSubject($subject)
@@ -1509,7 +1536,6 @@ class ProviderController extends BaseController {
             ->setTo($to)
             ->setBody($emailHtml, 'text/html');
         $this->get('mailer')->send($message);
-        
     }
 
     
