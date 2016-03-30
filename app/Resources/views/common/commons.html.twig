@@ -45,12 +45,12 @@
         <p class="delate-info">Bitte wähle eine Haupt- und Detailkategorie,
           damit wir dein Angebot zuordnen können.</p>
         <form action="provider_upload_equipment_mieten_step1.php">
-          <select name="choose-cat" id="category-dropdown" class="selectpicker" title="Hauptkategorie">
+          <select name="choose-cat" id="category-dropdown" class="" title="Hauptkategorie">
             {% for cat in categories %}
                 <option value="{{ cat.id }}">{{ cat.name }}</option>
             {% endfor %}
           </select>
-          <select id="subcategory-dropdown" name="choose-cat" class="selectpicker" title="Detailkategorie" disabled="disabled">
+          <select id="subcategory-dropdown" name="choose-cat" class="" title="Detailkategorie" disabled="disabled">
           </select>
           <input type="button" id="anleitung-button" class="button-black backgound-yellow text-black" value="Anleitung schicken">
           <input type="button" id="weiter-button" class="green-big-button" value="Weiter">
@@ -124,9 +124,10 @@
     
     $(function() {
         
-        
-        
-        
+        $("#category-dropdown, #subcategory-dropdown").selectpicker({
+            style: 'btn-info',
+            size: 9
+        });
         
         $("#category-dropdown").change(function() {
             var id = $("#category-dropdown").val();
