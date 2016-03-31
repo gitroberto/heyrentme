@@ -100,6 +100,20 @@ EOT;
                 
         return $qb->getQuery()->getResult();        
     }
+    public function getAllForDropdown() {
+        $qb = $this->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.status = :status')                
+            ->setParameter('status', User::STATUS_OK)
+            ->addOrderBy('u.email');
+        $rows = $qb->getQuery()->getResult();
+        
+        $arr = array();
+        foreach($rows as $u) {
+            $arr[$u->getId()] = "{$u->getEmail()} ({$u->getName()} {$u->getSurname()})";
+        }
+        return $arr;
+    }
     
     public function deleteUserAccount($user, $folder){
         // todo: adjust query

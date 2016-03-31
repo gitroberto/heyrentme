@@ -71,6 +71,23 @@ class SubcategoryRepository extends \Doctrine\ORM\EntityRepository
         
         return $arr;
     }
+    public function getAllForDropdown2($type) {
+        $qb = $this->createQueryBuilder('sc')
+            ->select('sc', 'c')
+            ->join('sc.category', 'c')
+            ->where('c.type = :type')
+            ->setParameter('type', $type)
+            ->addOrderBy('c.name')
+            ->addOrderBy('sc.name');
+        $rows = $qb->getQuery()->getResult();
+        
+        $arr = array();
+        foreach($rows as $sc) {
+            $c = $sc->getCategory();
+            $arr[$sc->getId()] = "{$c->getName()} | {$sc->getName()}";
+        }
+        return $arr;
+    }
     public function getGridOverview($categoryID, $sortColumn, $sortDirection, $pageSize, $page) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
