@@ -388,13 +388,13 @@ einsatzbereit ist.</label>
                     });
         }
         function refreshCtrl() {
-            if ($("#upld ul li").length >= {{ max_num_images }}) {
+            if ($("#img-list li").length >= {{ max_num_images }}) {
                 $("#drop").addClass('disabled');
             }
             else {
                 $("#drop").removeClass('disabled');
             }
-            if ($("#upld-main ul li").length >= 1) {
+            if ($("#img-list-main li").length >= 1) {
                 $("#drop-main").addClass('disabled');
             }
             else {
@@ -436,14 +436,14 @@ einsatzbereit ist.</label>
             $("li.thumb a.remove").click(deleteImage);
             
             $('#drop a').click(function(){
-                if ($("#upld ul li").length >= {{ max_num_images }})
+                if ($("#img-list li").length >= {{ max_num_images }})
                     return;
                 // Simulate a click on the file input button
                 // to show the file browser dialog
                 $(this).parent().find('input').click();
             });
             $('#drop-main a').click(function(){
-                if ($("#upld-main ul li").length >= 1)
+                if ($("#img-list-main li").length >= 1)
                     return;
                 // Simulate a click on the file input button
                 // to show the file browser dialog
@@ -480,9 +480,9 @@ einsatzbereit ist.</label>
                         
                         var $html = $(tmpl);
                         if (main)
-                            $("#upld-main ul").append($html);
+                            $("#img-list-main").append($html);
                         else
-                            $("#upld ul").append($html);
+                            $("#img-list").append($html);
                         $html.find("a.remove").click(deleteImage);
                     })
                     .fail(function(data) {
@@ -503,7 +503,7 @@ einsatzbereit ist.</label>
                 add: function (e, data) {
                     var tmpl = '<li class="thumb process"><div class="gauge"><input class="knob" type="text" value=""/></div><div class="status">0%</div></li>';
                     var $html = $(tmpl);
-                    $(this).find("ul").append($html);
+                    $(this).find("#img-list-main").append($html);
                     data.context = $html;
                     $html.find('input').knob({
                         width: 48,
@@ -567,7 +567,7 @@ einsatzbereit ist.</label>
                 add: function (e, data) {
                     var tmpl = '<li class="thumb process"><div class="gauge"><input class="knob" type="text" value=""/></div><div class="status">0%</div></li>';
                     var $html = $(tmpl);
-                    $(this).find("ul").append($html);
+                    $(this).find("#img-list").append($html);
                     data.context = $html;
                     $html.find('input').knob({
                         width: 48,
@@ -610,7 +610,7 @@ einsatzbereit ist.</label>
                     
                     data.context.remove();
 
-                    $("#upld ul").append($html);
+                    $("#img-list").append($html);
                     $html.find("a.remove").click(deleteImage);
                     refreshCtrl();
                 },
