@@ -450,9 +450,20 @@ class EquipmentController extends BaseAdminController {
             
         }
         
-        
-        return $this->render('admin/equipment/edit.html.twig', array(
-            'form' => $form->createView()
+        $mb = intval($this->getParameter('image_upload_max_size'));
+        return $this->render('admin/equipment/edit.html.twig', array(            
+            'equipment' => $equipment,
+            'form' => $form->createView(),            
+            'id' => $id,
+            'statusChanged' => $statusChanged,
+            'mainImage' => $mainImage,
+            'images' => $images,
+            'mainImageValidation' => $mainImageValidation,
+            'imagesValidation' => $imagesValidation,
+            'megabytes' => $mb,
+            'max_num_images' => $this->getParameter('equipment_max_num_images')
+                
+                
         ));
     }
     
