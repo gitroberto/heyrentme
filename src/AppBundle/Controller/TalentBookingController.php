@@ -758,7 +758,8 @@ class TalentBookingController extends BaseController {
             $emailHtml = $this->renderView('Emails/talent/mail_to_user_cancel.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
-                'inquiry' => $inq
+                'inquiry' => $inq,
+                'talent' => $eq
             ));
             $message = Swift_Message::newInstance()
                 ->setSubject('Eine Buchung wurde storniert')
@@ -770,7 +771,8 @@ class TalentBookingController extends BaseController {
             $email = $provider->getEmail();
             $emailHtml = $this->renderView('Emails/talent/mail_to_provider_confirm_cancel.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
-                'provider' => $provider
+                'provider' => $provider,
+                'talent' => $eq
             ));
             $message = Swift_Message::newInstance()
                 ->setSubject('Eine Buchung wurde storniert')
@@ -778,7 +780,6 @@ class TalentBookingController extends BaseController {
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
             $this->get('mailer')->send($message);
-
             //</editor-fold>
             
             

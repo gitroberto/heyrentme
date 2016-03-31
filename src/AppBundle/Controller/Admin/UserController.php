@@ -17,12 +17,28 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 class UserController extends BaseAdminController {
-     /**
-     * 
+    
+    protected $USER_STATUS_CHOICES = array(                        
+        'OK' => User::STATUS_OK,
+        'BLOCKED' => User::STATUS_BLOCKED
+    );
+
+    /**
      * @Route("/admin/users", name="admin_users_list")
      */
-    public function indexAction() {
-        return $this->render('admin/user/index.html.twig');
+    public function indexAction(Request $request) {
+        $code = null;
+        
+        $session = $request->getSession();
+        if ($session->has('AdminNewUserCodeId')) {
+            $id = $session->get('AdminNewUserCodeId');
+            $code = $this->getDoctrineRepo('AppBundle:DiscountCode')->find($id);
+            $session->remove('AdminNewUserCodeId');
+        }
+        
+        return $this->render('admin/user/index.html.twig', array(
+            'code' => $code
+        ));
     }
     
     public function sendUserBlockedMessage(Request $request, User $user)
@@ -58,11 +74,9 @@ class UserController extends BaseAdminController {
             return new Response(Response::HTTP_NOT_FOUND);
         }        
         
-        $form = $this->createFormBuilder($user)->add('status', 'choice', array(
-                    'choices' => array(                        
-                        'Ok' => User::STATUS_OK,
-                        'Blocked' => User::STATUS_BLOCKED
-                    ),
+        $form = $this->createFormBuilder($user)
+                ->add('status', 'choice', array(
+                    'choices' => $this->USER_STATUS_CHOICES,
                     'choices_as_values' => true,
                     'required' => true,
                     'constraints' => array(
@@ -103,6 +117,10 @@ class UserController extends BaseAdminController {
         // build form
         //<editor-fold>
         $form = $this->createFormBuilder()
+            ->add('status', 'choice', array(
+                'choices' => $this->USER_STATUS_CHOICES,
+                'choices_as_values' => true
+            ))
             ->add('email', 'text', array(
                 'required' => false,
                 'constraints' => array(
@@ -162,6 +180,9 @@ class UserController extends BaseAdminController {
                     new Regex(array('pattern' => '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$$/', 'message' => 'BIC-Code ist nicht korrekt.'))
                 )
             ))
+            ->add('discount', 'checkbox', array(
+                'required' => false
+            ))
             ->getForm();
         //</editor-fold>
         
@@ -171,6 +192,7 @@ class UserController extends BaseAdminController {
                 
                 $userMgr = $this->get('fos_user.user_manager');
                 $user = $userMgr->createUser();
+                $user->setStatus($data['status']);
                 $user->setUsername($data['email']);
                 $user->setEmail($data['email']);
                 $user->setPlainPassword($data['password']);
@@ -216,6 +238,12 @@ class UserController extends BaseAdminController {
                 }
                 $em->flush();
                 
+                $code = null;
+                if ($data['discount']) {
+                    $code = $this->getDoctrineRepo('AppBundle:DiscountCode')->assignToUser($user);
+                    $request->getSession()->set('AdminNewUserCodeId', $code->getId());
+                }                
+                
                 return $this->redirectToRoute("admin_users_list");
             }
         
@@ -251,11 +279,16 @@ class UserController extends BaseAdminController {
             'phone' => $user->getPhone(),
             'iban' => $user->getIban(),
             'bic' => $user->getBic(),
-            'aboutMyself' => $user->getAboutMyself()
+            'aboutMyself' => $user->getAboutMyself(),
+            'status' => $user->getStatus()
         );
         // build form
         //<editor-fold>
         $form = $this->createFormBuilder($data)
+            ->add('status', 'choice', array(
+                'choices' => $this->USER_STATUS_CHOICES,
+                'choices_as_values' => true
+            ))
             ->add('email', 'text', array(
                 'required' => false,
                 'constraints' => array(
@@ -328,6 +361,7 @@ class UserController extends BaseAdminController {
                 if (!empty($data['password'])) {
                     $user->setPlainPassword($data['password']);
                 }
+                $user->setStatus($data['status']);
                 $user->setName($data['name']);
                 $user->setSurname($data['surname']);
                 $user->setPhonePrefix($data['phonePrefix']);
@@ -446,13 +480,12 @@ class UserController extends BaseAdminController {
         $name = $request->get('u_name');
         $surname = $request->get('u_surname');
         $status = $request->get('u_status');        
-        $createdAt = $request->get('u_createdAt');
-        $modifiedAt = $request->get('u_modifiedAt');
         
         $repo = $this->getDoctrineRepo('AppBundle:User');
-        $dataRows = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, 
-                $email, $name, $surname, $status, $createdAt, $createdAt, $modifiedAt);
-        $rowsCount = $repo->countAll();
+        $res = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, 
+                $email, $name, $surname, $status);
+        $dataRows = $res['rows'];
+        $rowsCount = $res['count'];//$repo->countAll();
         $pagesCount = ceil($rowsCount / $pageSize);
         
         $rows = array(); // rows as json result

@@ -26,4 +26,12 @@ parameters:
     mailer_fromemail: test.app@hey-buyme.com
     mailer_fromname: Hey! Rent Me (TEST)
     mailer_app_url_prefix: http://test.hey-buyme.com
-    admin_email: sebastian.bera@dantesoft.com
+    # email to be notified about talent/equipment modification
+    admin_email: artur@dantesoft.com
+    # jpeg compression ratio (0 - 100)
+    jpeg_compression_value: 75
+    # NOTE: image_upload_max_size in megabytes
+    image_upload_max_size: 10
+    # maximum number of images allowed
+    equipment_max_num_images: 10
+    talent_max_num_images: 10

@@ -7,6 +7,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserChecker;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 /**
  * Class OAuthUserProvider
  * @package AppBundle\Security\Core\User
@@ -21,6 +22,10 @@ class OAuthUserProvider extends BaseClass
         $socialID = $response->getUsername();
         $user = $this->userManager->findUserBy(array($this->getProperty($response)=>$socialID));
         $email = $response->getEmail();
+        
+        if (null === $email) {
+            throw new UnsupportedUserException("Unsupported user: no email address");
+        }
         
         $data = $response->getResponse();
         
@@ -55,7 +60,10 @@ class OAuthUserProvider extends BaseClass
             $this->userManager->updateUser($user);
             if ($isNewUser){
                 global $kernel;
-                $kernel->getContainer()->get('app.general_mailer')->SendWelcomeEmail($user, true);
+                $em = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+                $repo = $em->getRepository('AppBundle:DiscountCode');
+                $code = $repo->assignToUser($user);
+                $kernel->getContainer()->get('app.general_mailer')->SendWelcomeEmail($user, $code);
             }
         } else {
             //and then login the user

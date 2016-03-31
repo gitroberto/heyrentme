@@ -235,6 +235,7 @@ class TalentController extends BaseController {
             'description' => $eq->getDescription(),
             'videoUrl' => $eq->getVideo() !== null ? $eq->getVideo()->getOriginalUrl() : null,
             'street' => $eq->getAddrStreet(),
+            'flatNumber' => $eq->getAddrFlatNumber(),
             'number' => $eq->getAddrNumber(),
             'postcode' => $eq->getAddrPostcode(),
             'place' => $eq->getAddrPlace(),
@@ -356,6 +357,7 @@ class TalentController extends BaseController {
             $eq->setDescription($data['description']);
             $eq->setAddrStreet($data['street']);
             $eq->setAddrNumber($data['number']);
+            $eq->setAddrFlatNumber($data['flatNumber']);
             $eq->setAddrPostcode($data['postcode']);
             $eq->setAddrPlace($data['place']);   
             $eq->setLicence(intval($data['make_sure']));
@@ -422,6 +424,7 @@ class TalentController extends BaseController {
         // clean up
         $this->fileCount = null;
         $complete = $eq->getStatus() != Talent::STATUS_INCOMPLETE;
+        $mb = intval($this->getParameter('image_upload_max_size'));
         return $this->render('talent/talent_edit_step2.html.twig', array(
             'form' => $form->createView(),
             'talent' => $eq,
@@ -431,7 +434,9 @@ class TalentController extends BaseController {
             'imagesValidation' => $imagesValidation,
             'complete' => $complete,
             'id' => $id,
-            'statusChanged' => $statusChanged
+            'statusChanged' => $statusChanged,
+            'megabytes' => $mb,
+            'max_num_images' => $this->getParameter('talent_max_num_images')
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -488,7 +493,8 @@ class TalentController extends BaseController {
         return $mainImage !== null ? null : 'Bitte lade zumindest ein Bild hoch';
     }
     public function imagesValidation($images) {
-        return count($images) <= Talent::MAX_NUM_IMAGES ? null : sprintf('Bitte lade max. %s Bilder hoch', Talent::MAX_NUM_IMAGES);
+        $max = $this->getParameter('talent_max_num_images');
+        return count($images) <= $max ? null : sprintf('Bitte lade max. %s Bilder hoch', $max);
     }
     
     private $imageCount = null; // num of existing images; necessary for image validation
@@ -560,7 +566,7 @@ class TalentController extends BaseController {
                     imagepng($sc, $imgFullPath);
                 }
                 else {
-                    imagejpeg($sc, $imgFullPath);
+                    imagejpeg($sc, $imgFullPath, intval($this->getParameter('jpeg_compression_value')));
                 }
             }
             else {
@@ -584,9 +590,9 @@ class TalentController extends BaseController {
     }
 
     /**
-     * @Route("talent-image", name="talent-image")
+     * @Route("talent-main-image", name="talent-main-image")
      */
-    public function talentImageAction(Request $request) {  
+    public function talentMainImageAction(Request $request) {  
         $file = $request->files->get('upl');
         if ($file->isValid()) {
             $uuid = Utils::getUuid();
@@ -605,12 +611,13 @@ class TalentController extends BaseController {
 
             $size = getimagesize($filename);
             if ($size[0] < 750 || $size[1] < 563) {
-                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 px Breite)";
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 x 563 px)";
             }
             
             $w = $file->getClientSize();
-            if ($w > 5 * 1024 * 1024) { // 5 MB
-                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als 5 MB sein', $w / 1024 / 1024);
+            $mb = intval($this->getParameter('image_upload_max_size'));
+            if ($w > $mb * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als %d MB sein', $w / 1024 / 1024, $mb);
             }
             $exif = exif_imagetype($filename);
             if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
@@ -635,9 +642,9 @@ class TalentController extends BaseController {
         return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
     /**
-     * @Route("talent-image-save", name="talent-image-save")
+     * @Route("talent-main-image-save", name="talent-main-image-save")
      */
-    public function talentImageSaveAction(Request $request) { 
+    public function talentMainImageSaveAction(Request $request) { 
         $name = $request->get('name');
         $id = $request->get('id');
         $x = $request->get('x');
@@ -686,7 +693,7 @@ class TalentController extends BaseController {
         $path2 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . 'original' . $sep . $uuid . '.' . $ext;
         
         if ($ext === 'jpg' || $ext == 'jpeg') {
-            imagejpeg($dst, $path1, 95);
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
         }
         else if ($ext === 'png') {
             imagepng($dst, $path1, 9);
@@ -712,7 +719,7 @@ class TalentController extends BaseController {
         $path2 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . 'thumbnail' . $sep . $uuid . '.' . $ext;
         
         if ($ext === 'jpg' || $ext == 'jpeg') {
-            imagejpeg($dst, $path2, 85);
+            imagejpeg($dst, $path2, intval($this->getParameter('jpeg_compression_value')));
         }
         else if ($ext === 'png') {
             imagepng($dst, $path2, 9);
@@ -767,6 +774,133 @@ class TalentController extends BaseController {
         return new JsonResponse(Response::HTTP_OK);
     }
     
+    /**
+     * @Route("talent-image/{eid}", name="talent-image")
+     */
+    public function talentImageAction(Request $request, $eid) {
+        $file = $request->files->get('upl');
+        if (!$file->isValid()) {
+            return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+        $imgcnt = $this->getDoctrineRepo('AppBundle:Talent')->getTalentButMainImageCount($eid);
+        $max = $this->getParameter('talent_max_num_images');
+        if ($imgcnt >= $max) {
+            $resp = array('message' => "Bitte lade max. {$max} Bilder hoch");
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
+
+        // validate
+        $sep = DIRECTORY_SEPARATOR;
+        $uuid = Utils::getUuid();
+        $path = 
+            $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep;
+        $ext = strtolower($file->getClientOriginalExtension());
+        $origName = $file->getClientOriginalName();
+        $name = sprintf("%s.%s", $uuid, $ext);
+        $filename = $path . $sep . $name;
+
+        $file->move($path, $name);
+
+        $msg = null;
+
+        $size = getimagesize($filename);
+        $w = $size[0];
+        $h = $size[1];
+        if ($w < 650) {
+            $msg = "{$origName}: das hochgeladene Bild ({$w} x {$h}) ist kleiner als erforderlich (bitte min. 650 px Breite)";
+        }
+
+        $wght = $file->getClientSize();
+        $mb = intval($this->getParameter('image_upload_max_size'));
+        if ($wght > $mb * 1024 * 1024) { // 5 MB
+            $msg = sprintf('%s: das hochgeladene Bild (%.2f MB) darf nicht größer als %d MB sein', $origName, $wght / 1024 / 1024, $mb);
+        }
+        $exif = exif_imagetype($filename);
+        if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+            $msg = "{$origName}: das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden";
+        }
+
+        // not valid, return error
+        if ($msg !== null) {
+            unlink($filename);
+            $resp = array('message' => $msg);
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
+        
+        // scale
+        // check and calcualte size        
+        $nw = $w > 750 ? 750 : $w;
+        $nh = $h / $w * $nw;
+        // scale image
+        $img = imagecreatefromstring(file_get_contents($filename));
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . $uuid . '.' . $ext;
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        rename($filename, $path2);
+        
+        imagedestroy($dst);
+        // create thumbnail
+        //<editor-fold>
+        $nw = 113;
+        $nh = $h / $w * $nw;
+        
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'talent' . $sep . 'thumbnail' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path2, intval($this->getParameter('jpeg_compression_value')));
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path2, 9);
+        }        
+        imagedestroy($dst);        
+        //</editor-fold>
+        
+        imagedestroy($img);
+
+        // store entry in database
+        //<editor-fold>
+        $em = $this->getDoctrine()->getManager();
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($eid);
+        
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($file->getClientOriginalName());
+        $img->setExtension($ext);
+        $img->setPath('talent');
+        $img->setOriginalPath('talent' . $sep . 'original');
+        $img->setThumbnailPath('talent' . $sep . 'thumbnail');
+        $em->persist($img);
+        $em->flush();
+        
+        $eimg = new TalentImage();
+        $eimg->setImage($img);
+        $eimg->setTalent($eq);
+        $eimg->setMain(0);
+        $em->persist($eimg);
+        $em->flush();        
+        //</editor-fold>
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
+            'thumbUrl' => $img->getThumbnailUrlPath($this->getParameter('image_url_prefix')),
+            'imgId' => $img->getId()
+        );
+        return new JsonResponse($resp);                
+    }
     
     /**
      * @Route("/provider/talent-edit-3/{eqid}", name="talent-edit-3")
@@ -869,10 +1003,13 @@ class TalentController extends BaseController {
             */
 
             // check for modaration relevant changes
-            $changed = $eq->getDescReference() !== $data['descReference']
+            $status = $eq->getStatus();
+            $changed = $status !== Talent::STATUS_INCOMPLETE && (
+                $eq->getDescReference() !== $data['descReference']
                 || $eq->getDescTarget() !== $data['descTarget']
                 || $eq->getDescScope() !== $data['descScope']
-                || $eq->getDescCondition() !== $data['descCondition'];
+                || $eq->getDescCondition() !== $data['descCondition']
+            );
             
             // map fields
             //<editor-fold>
@@ -892,6 +1029,11 @@ class TalentController extends BaseController {
             $em->flush();
             
             // handle status change and notification
+            if ($status === Talent::STATUS_INCOMPLETE) {
+                $eq->setStatus(Talent::STATUS_NEW);
+                $em->flush();
+                $statusChanged = true;
+            }
             if ($changed) {
                 $statusChanged = $this->getDoctrineRepo('AppBundle:Talent')->talentModified($eqid);
             }
@@ -1051,13 +1193,26 @@ class TalentController extends BaseController {
         return $resp;        
     }    
 
-    public function sendNewModifiedTalentInfoMessage(Request $request, Talent $eq)
-    {      
-                        
+    public function sendNewModifiedTalentInfoMessage(Request $request, Talent $eq) {                              
         $to = $this->getParameter('admin_email');
         $template = 'Emails\talent\new_modified_item.html.twig';        
+        $parts = array();
         
         $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));        
+        // subject parts
+        if ($eq->getStatus() === Talent::STATUS_NEW) {
+            array_push($parts, "New");
+        }
+        else {
+            array_push($parts, "Modified");
+        }
+        array_push($parts, "talent in");
+
+        $subcat = $eq->getSubcategory();
+        $cat = $subcat->getCategory();
+        array_push($parts, "{$cat->getName()} / {$subcat->getName()}"); 
+
+        $subject = join(" ", $parts);
         
         $emailHtml = $this->renderView($template, array(                                    
             'talent' => $eq,
@@ -1067,7 +1222,7 @@ class TalentController extends BaseController {
         
         $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
         $message = Swift_Message::newInstance()
-            ->setSubject('New/modified talent notification.')
+            ->setSubject($subject)
             ->setFrom($from)
             ->setTo($to)
             ->setBody($emailHtml, 'text/html');

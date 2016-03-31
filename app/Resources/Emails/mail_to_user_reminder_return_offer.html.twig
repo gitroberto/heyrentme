@@ -33,7 +33,7 @@
     </tr>
     <tr>
         <td style="padding: 20px;padding-top: 10px;">
-		    <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;"> <span style="font-weight: bold;">Angebotsname:</span> {{ equipment.name }}</p>
+		    <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;"> <span style="font-weight: bold;">Angebotsname:</span> {{ item.name }}</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 5px;"><span style="font-weight: bold;">Zeitpunkt Rückgabe:</span> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</span></p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> {{ item.addressAsString }}</p>
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Anbieter Kontakt:</span> +43 {{ item.user.fullPhone }}</p>

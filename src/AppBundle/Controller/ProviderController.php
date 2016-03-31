@@ -125,7 +125,10 @@ class ProviderController extends BaseController {
             
         }
          */       
-        return $this->render('provider/profil.html.twig');
+        $mb = intval($this->getParameter('image_upload_max_size'));
+        return $this->render('provider/profil.html.twig', array(
+            'megabytes' => $mb
+        ));
     }
 
     /**
@@ -150,16 +153,17 @@ class ProviderController extends BaseController {
 
             $size = getimagesize($filename);
             if ($size[0] < 250 || $size[1] < 250) {
-                $msg = "Die hochgeladene Bild ({$size[0]} x {$size[1]}) kleiner ist als erforderlich 250 x 250";
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderliche 250x250px";
             }
             
             $w = $file->getClientSize();
-            if ($w > 5 * 1024 * 1024) { // 5 MB
-                $msg = sprintf('Die hochgeladene Bild (%.2f MB) größer ist als erlaubt  5 MB', $w / 1024 / 1024);
+            $mb = intval($this->getParameter('image_upload_max_size'));
+            if ($w > $mb * 1024 * 1024) { // 5 MB
+                $msg = sprintf("Das hochgeladene Bild (%.2f MB) darf nicht größer als max. %d MB sein", $w / 1024 / 1024, $mb);
             }
             $exif = exif_imagetype($filename);
             if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
-                $msg = 'Die hochgeladene Bild ist weder JPG noch PNG';
+                $msg = 'Das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden';
             }
             
 
@@ -210,7 +214,7 @@ class ProviderController extends BaseController {
         //$path2 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . 'original' . $sep . $uuid . '.' . $ext;
         
         if ($ext === 'jpg' || $ext == 'jpeg') {
-            imagejpeg($dst, $path1, 95);
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
         }
         else if ($ext === 'png') {
             imagepng($dst, $path1, 9);
@@ -294,10 +298,12 @@ class ProviderController extends BaseController {
     public function einstellungenAction(Request $request) {
         
         $user = $this->getUser();
+        $facebook = null !== $user->getFacebookID();
         
         //$form = $this->createForm(EinstellungenType::class, $user);
-        $form = $this->createFormBuilder(null)
-                ->add('password', 'password', array( 'required'=>false, 'constraints' => array(
+        $builder = $this->createFormBuilder(null);
+        if (!$facebook) {
+            $builder->add('password', 'password', array( 'required'=>false, 'constraints' => array(
                             new Callback(array($this, 'validateOldPassword'))
                         ) ))
                 ->add('newPassword', 'password', array( 'required'=>false, 'constraints' => array(
@@ -305,8 +311,9 @@ class ProviderController extends BaseController {
                         ) ))
                 ->add('repeatedPassword', 'password', array('required' => false))
                 ->add('name', 'text', array('max_length' => 255 , 'data' => $user->getName() ))
-                ->add('surname', 'text', array('max_length' => 255 , 'data' => $user->getSurname() ))
-                ->add('phone', 'text', array(
+                ->add('surname', 'text', array('max_length' => 255 , 'data' => $user->getSurname() ));
+        }
+        $builder->add('phone', 'text', array(
                     'required' => false,
                     'attr' => array(
                         'pattern' => '^[0-9]{1,10}$'),
@@ -326,22 +333,25 @@ class ProviderController extends BaseController {
                             'constraints' => array(
                                 new Regex(array('pattern' => '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$$/', 'message' => 'BIC-Code ist nicht korrekt.'))
                                 )
-                ))
-                ->getForm();
+                ));
+        
+        $form = $builder->getForm();
         $this->formHelper = $form;        
         $form->handleRequest($request);      
         $saved = false;
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $newPassword = $form['newPassword']->getData();
-            if ($newPassword != null && $newPassword != ""){
-                $encoder_service = $this->get('security.encoder_factory');
-                $encoder = $encoder_service->getEncoder($user);                            
-                $user->setPassword($encoder->encodePassword($newPassword, $user->getSalt()));
+            if (!$facebook) {
+                $newPassword = $form['newPassword']->getData();
+                if ($newPassword != null && $newPassword != ""){
+                    $encoder_service = $this->get('security.encoder_factory');
+                    $encoder = $encoder_service->getEncoder($user);                            
+                    $user->setPassword($encoder->encodePassword($newPassword, $user->getSalt()));
+                }
+
+                $user->setName($form['name']->getData());
+                $user->setSurname($form['surname']->getData());
             }
-            
-            $user->setName($form['name']->getData());
-            $user->setSurname($form['surname']->getData());
             
             $user->setPhone($form['phone']->getData());
             $user->setPhonePrefix($form['phonePrefix']->getData());
@@ -356,7 +366,8 @@ class ProviderController extends BaseController {
       
         return $this->render('provider/einstellungen.html.twig', array(  
             'form' => $form->createView(),
-            'saved' => $saved
+            'saved' => $saved,
+            'facebook' => $facebook
         ));
     }        
     
@@ -859,6 +870,7 @@ class ProviderController extends BaseController {
         
         $complete = $eq->getStatus() != Equipment::STATUS_INCOMPLETE;
         
+        $mb = intval($this->getParameter('image_upload_max_size'));
         return $this->render('provider/equipment_edit_step2.html.twig', array(
             'form' => $form->createView(),
             'equipment' => $eq,
@@ -868,7 +880,9 @@ class ProviderController extends BaseController {
             'imagesValidation' => $imagesValidation,
             'complete' => $complete,
             'id' => $id,
-            'statusChanged' => $statusChanged
+            'statusChanged' => $statusChanged,
+            'megabytes' => $mb,
+            'max_num_images' => $this->getParameter('equipment_max_num_images')
         ));
     }
     public function validateAccept($value, ExecutionContextInterface $context) {
@@ -885,13 +899,14 @@ class ProviderController extends BaseController {
         return $mainImage !== null ? null : 'Bitte lade zumindest ein Bild hoch';
     }
     public function imagesValidation($images) {
-        return count($images) <= Equipment::MAX_NUM_IMAGES ? null : sprintf('Bitte lade max. %s Bilder hoch', Equipment::MAX_NUM_IMAGES);
+        $max = $this->getParameter('equipment_max_num_images');
+        return count($images) <= $max ? null : sprintf('Bitte lade max. %s Bilder hoch', $max);
     }
     
     /**
-     * @Route("equipment-image", name="equipment-image")
+     * @Route("equipment-main-image", name="equipment-main-image")
      */
-    public function equipmentImageAction(Request $request) {  
+    public function equipmentMainImageAction(Request $request) {  
         $file = $request->files->get('upl');
         if ($file->isValid()) {
             $uuid = Utils::getUuid();
@@ -910,12 +925,13 @@ class ProviderController extends BaseController {
 
             $size = getimagesize($filename);
             if ($size[0] < 750 || $size[1] < 563) {
-                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 px Breite)";
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 x 563 px)";
             }
             
             $w = $file->getClientSize();
-            if ($w > 5 * 1024 * 1024) { // 5 MB
-                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als 5 MB sein', $w / 1024 / 1024);
+            $mb = intval($this->getParameter('image_upload_max_size'));
+            if ($w > $mb * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als %d MB sein', $w / 1024 / 1024, $mb);
             }
             $exif = exif_imagetype($filename);
             if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
@@ -940,9 +956,9 @@ class ProviderController extends BaseController {
         return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
     /**
-     * @Route("equipment-image-save", name="equipment-image-save")
+     * @Route("equipment-main-image-save", name="equipment-main-image-save")
      */
-    public function equipmentImageSaveAction(Request $request) { 
+    public function equipmentMainImageSaveAction(Request $request) { 
         $name = $request->get('name');
         $id = $request->get('id');
         $x = $request->get('x');
@@ -992,7 +1008,7 @@ class ProviderController extends BaseController {
         $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
         
         if ($ext === 'jpg' || $ext == 'jpeg') {
-            imagejpeg($dst, $path1, 95);
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
         }
         else if ($ext === 'png') {
             imagepng($dst, $path1, 9);
@@ -1088,6 +1104,135 @@ class ProviderController extends BaseController {
     }
     
     /**
+     * @Route("equipment-image/{eid}", name="equipment-image")
+     */
+    public function equipmentImageAction(Request $request, $eid) {
+        $file = $request->files->get('upl');
+        if (!$file->isValid()) {
+            return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+        $imgcnt = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentButMainImageCount($eid);
+        $max = $this->getParameter('equipment_max_num_images');
+        if ($imgcnt >= $max) {
+            $resp = array('message' => "Bitte lade max. {$max} Bilder hoch");
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
+
+        // validate
+        $sep = DIRECTORY_SEPARATOR;
+        $uuid = Utils::getUuid();
+        $path = 
+            $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep;
+        $ext = strtolower($file->getClientOriginalExtension());
+        $origName = $file->getClientOriginalName();
+        $name = sprintf("%s.%s", $uuid, $ext);
+        $filename = $path . $sep . $name;
+
+        $file->move($path, $name);
+
+        $msg = null;
+
+        $size = getimagesize($filename);
+        $w = $size[0];
+        $h = $size[1];
+        if ($w < 650) {
+            $msg = "{$origName}: das hochgeladene Bild ({$w} x {$h}) ist kleiner als erforderlich (bitte min. 650 px Breite)";
+        }
+
+        $wght = $file->getClientSize();
+        $mb = intval($this->getParameter('image_upload_max_size'));
+        if ($wght > $mb * 1024 * 1024) { // 5 MB
+            $msg = sprintf('%s: das hochgeladene Bild (%.2f MB) darf nicht größer als %d MB sein', $origName, $wght / 1024 / 1024, $mb);
+        }
+        $exif = exif_imagetype($filename);
+        if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+            $msg = "{$origName}: das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden";
+        }
+
+        // not valid, return error
+        if ($msg !== null) {
+            unlink($filename);
+            $resp = array('message' => $msg);
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
+        
+        // scale
+        // check and calcualte size
+        $nw = $w > 750 ? 750 : $w;
+        $nh = $h / $w * $nw;
+        // scale image
+        $img = imagecreatefromstring(file_get_contents($filename));
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . $uuid . '.' . $ext;
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        rename($filename, $path2);
+        
+        imagedestroy($dst);
+        // create thumbnail
+        //<editor-fold>
+        $nw = 113;
+        $nh = $h / $w * $nw;
+        
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'thumbnail' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path2, 85);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path2, 9);
+        }        
+        imagedestroy($dst);        
+        //</editor-fold>
+        
+        imagedestroy($img);
+
+        // store entry in database
+        //<editor-fold>
+        $em = $this->getDoctrine()->getManager();
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
+        
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($file->getClientOriginalName());
+        $img->setExtension($ext);
+        $img->setPath('equipment');
+        $img->setOriginalPath('equipment' . $sep . 'original');
+        $img->setThumbnailPath('equipment' . $sep . 'thumbnail');
+        $em->persist($img);
+        $em->flush();
+        
+        $eimg = new EquipmentImage();
+        $eimg->setImage($img);
+        $eimg->setEquipment($eq);
+        $eimg->setMain(0);
+        $em->persist($eimg);
+        $em->flush();        
+        //</editor-fold>
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
+            'thumbUrl' => $img->getThumbnailUrlPath($this->getParameter('image_url_prefix')),
+            'imgId' => $img->getId()
+        );
+        return new JsonResponse($resp);                
+    }
+    
+    
+    /**
      * @Route("/provider/equipment-edit-3/{eqid}", name="equipment-edit-3")
      */
     public function equipmentEdit3Action(Request $request, $eqid) {
@@ -1177,9 +1322,12 @@ class ProviderController extends BaseController {
             */
             
             // check for modaration relevant changes
-            $changed = $eq->getDescType() !== $data['descType']
+            $status = $eq->getStatus();
+            $changed = $status !== Equipment::STATUS_INCOMPLETE && (
+                $eq->getDescType() !== $data['descType']
                 || $eq->getDescSpecial() !== $data['descSpecial']
-                || $eq->getDescCondition() !== $data['descCondition'];
+                || $eq->getDescCondition() !== $data['descCondition']
+            );
             
             // map fields
             //<editor-fold>
@@ -1196,6 +1344,11 @@ class ProviderController extends BaseController {
             $em->flush();
 
             // handle status change and notification
+            if ($status === Equipment::STATUS_INCOMPLETE) {
+                $eq->setStatus(Equipment::STATUS_NEW);
+                $em->flush();
+                $statusChanged = true;
+            }
             if ($changed) {
                 $statusChanged = $this->getDoctrineRepo('AppBundle:Equipment')->equipmentModified($eqid);
             }
@@ -1322,15 +1475,28 @@ class ProviderController extends BaseController {
         return new JsonResponse(array("status" => "ok", "statusChanged" => $statusChanged));
     }
     
-    public function sendNewModifiedEquipmentInfoMessage(Request $request, $eq, $type="equipment")
-    {      
-                        
+    public function sendNewModifiedEquipmentInfoMessage(Request $request, $eq, $type="equipment") {                        
         $to = $this->getParameter('admin_email');
         $emailHtml = null;
-        $url = "";        
+        $url = "";
+        $parts = array();
+        
         if ($type === 'equipment') {
-            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));                    
-            $subject = 'New/modified equipment notification.';
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));
+            
+            // subject parts
+            if ($eq->getStatus() === Equipment::STATUS_NEW) {
+                array_push($parts, "New");
+            }
+            else {
+                array_push($parts, "Modified");
+            }
+            array_push($parts, "equipment in");
+            
+            $subcat = $eq->getSubcategory();
+            $cat = $subcat->getCategory();
+            array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
+            
             
             $emailHtml = $this->renderView('Emails/Equipment/new_modified_item.html.twig', array(                                    
                 'equipment' => $eq,
@@ -1339,8 +1505,20 @@ class ProviderController extends BaseController {
             ));
             
         } else {
-            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));                    
-            $subject = 'New/modified talent notification.';
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('admin_talent_moderate', array('id' => $eq->getId()));
+
+            // subject parts
+            if ($eq->getStatus() === Equipment::STATUS_NEW) {
+                array_push($parts, "New");
+            }
+            else {
+                array_push($parts, "Modified");
+            }
+            array_push($parts, "equipment in");
+            
+            $subcat = $eq->getSubcategory();
+            $cat = $subcat->getCategory();
+            array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
             
             $emailHtml = $this->renderView('Emails/talent/new_modified_item.html.twig', array(                                    
                 'talent' => $eq,
@@ -1349,6 +1527,8 @@ class ProviderController extends BaseController {
             ));
         }
         
+        $subject = join(" ", $parts);
+        
         $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
         $message = Swift_Message::newInstance()
             ->setSubject($subject)
@@ -1356,7 +1536,6 @@ class ProviderController extends BaseController {
             ->setTo($to)
             ->setBody($emailHtml, 'text/html');
         $this->get('mailer')->send($message);
-        
     }
 
     

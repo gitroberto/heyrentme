@@ -73,39 +73,43 @@ class EquipmentRepository extends EntityRepository
     }
     
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus) {
+        // count
         $qb = $this->getEntityManager()->createQueryBuilder();
-        // build query
-        $qb->select('e, u')
-            ->from('AppBundle:Equipment', 'e')
-            ->join('e.user','u');
+        $qb->select('count(e.id)')
+            ->from('AppBundle:Equipment', 'e');
+        $this->gridOverviewParams($qb, $sStatus);
+        $count = $qb->getQuery()->getSingleScalarResult();
         
-        if (!empty($sStatus)) {
-            $qb->andWhere($qb->expr()->eq('e.status', ':status'));
-        }
+        // result
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('e, u, s, c')
+            ->from('AppBundle:Equipment', 'e')
+            ->leftJoin('e.subcategory', 's')
+            ->leftJoin('s.category', 'c')
+            ->leftJoin('e.user', 'u');
+        $this->gridOverviewParams($qb, $sStatus);
         
         // sort by
         if (!empty($sortColumn)) {
-            if (!empty($sortDirection)) {
-                $qb->orderBy($sortColumn, $sortDirection);
-            }
-            else {
-                $qb->orderBy($sortColumn);
-            }
+            $qb->orderBy($sortColumn, $sortDirection);
         }
 
-        $q = $qb->getQuery();
-        if (!empty($sStatus)) {
-            $q->setParameter(':status', $sStatus);
-        }
-        
         // page and page size
         if (!empty($pageSize)) {
-            $q->setMaxResults($pageSize);
+            $qb->setMaxResults($pageSize);
         }
         if (!empty($page) && $page != 1) {
-            $q->setFirstResult(($page - 1) * $pageSize);
+            $qb->setFirstResult(($page - 1) * $pageSize);
         }
-        return $q->getResult();        
+        $rows = $qb->getQuery()->getResult();
+        
+        return array('count' => $count, 'rows' => $rows);
+    }
+    private function gridOverviewParams($qb, $sStatus) {
+        if (!empty($sStatus)) {
+            $qb->andWhere($qb->expr()->eq('e.status', ':status'));
+            $qb->setParameter('status', $sStatus);
+        }
     }
     
     public function countAll() {
@@ -149,6 +153,15 @@ class EquipmentRepository extends EntityRepository
             ->addOrderBy('i.id');
 
         return $qb->getQuery()->getResult();
+    }
+    public function getEquipmentButMainImageCount($equipmentId) { // all except main
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('count(ei.image)')
+            ->from('AppBundle:EquipmentImage', 'ei')
+            ->join('ei.image', 'i')
+            ->andWhere("ei.equipment = {$equipmentId}")
+            ->andWhere('ei.main = 0');
+        return $qb->getQuery()->getSingleScalarResult();
     }
     public function getEquipmentImages($equipmentId) {
         // main first

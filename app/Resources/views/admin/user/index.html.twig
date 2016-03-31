@@ -13,7 +13,7 @@
 <br/>
 
 <div id="jqgrid-wrapper">
-        <table id="jqgrid" class="table table-striped table-hover">
+        <table id="jqgrid" class="table table-striped">
                 <tr>
                         <td></td>
                 </tr>
@@ -21,16 +21,36 @@
         <div id="jqgrid-pager"></div>
 </div>
 
+    {% if code %}
+        <div id="question-modal" class="modal fade delete-offer" role="dialog">
+            <div class="modal-dialog">
+            <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
+                        <div class="content-modal">
+                            <p class="delate-info">
+                                User <b>{{ code.user.email }}</b> has been created.
+                            </p>
+                            <p class="delate-info">
+                                User's discount code is <b>{{ code.code }}</b>.
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  {% endif %}
 
 {% endblock %}
 
-{% block footer %}
-    {{ include('admin/common/admin.footer.html.twig') }}
+{% block script %}
 <script>    
 $(document).ready(function(){    
-//*******************************************
-/*	JQGRID INIT
-/********************************************/
+    {% if code %}
+        $("#question-modal").modal();                
+    {% endif %}            
 
 
 function rowActions(cellvalue, options, cellobject) {
@@ -43,30 +63,29 @@ function rowActions(cellvalue, options, cellobject) {
 var $grid = $('#jqgrid');
 
 if($grid.length > 0 ) {
-        var optionsStr = ":All;1:ok;2:blocked;3:deleted";
+        var optionsStr = ":ALL;1:OK;2:BLOCKED";
         $grid.jqGrid({
                 url: '{{ path('admin_users_jsondata') }}',
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
-                        { name:'Id', index:'u.id', width:1, editable:false, sortable:false, hidden: true, search: false },
-                        { name:'Username', index:'u.email', width: 200, editable:false, sortable:true },
-                        { name:'Name', index:'u.name', width: 200, editable:false, sortable:true },
-                        { name:'Surname', index:'u.surname', width: 200, editable:false, sortable:true },
+                        { name:' ', width: 150, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                        { name:'Id', index:'u.id', width:0, editable:false, sortable:false, hidden: true, search: false },
+                        { name:'Username/Email', index:'u.email', width: 250, editable:false, sortable:true },
+                        { name:'Name', index:'u.name', width: 150, editable:false, sortable:true },
+                        { name:'Surname', index:'u.surname', width: 150, editable:false, sortable:true },
                         { name:'Status', index:'u.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: true } },
-                        { name:'CreationDate', index:'u.createdAt', width: 120, editable:false, sortable:true, search: false },
-                        { name:'ModificationDate', index:'u.modifiedAt', width: 120, editable:false, sortable:true, search: false },                        
+                        { name:'Created', index:'u.createdAt', width: 130, editable:false, sortable:true, search: false },
+                        { name:'Modified', index:'u.modifiedAt', width: 130, editable:false, sortable:true, search: false }             
                 ],
-                height: 500,
-                rowNum: 50,
-                rowList: [20, 50, 200],
+                height: 550,
+                rowNum: 20,
+                rowList: [20, 50, 100],
                 pager: 'jqgrid-pager',
                 sortname: 'u.username',
-                viewrecords: false,
+                viewrecords: true,
                 sortorder: "asc",
-                caption: "Users",
-                multiselect: false,
+                multiselect: false
         });
         $grid.jqGrid('filterToolbar', {
             stringResult: false,
@@ -79,4 +98,3 @@ if($grid.length > 0 ) {
 </script>    
     
 {% endblock %}
-

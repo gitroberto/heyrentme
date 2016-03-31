@@ -10,79 +10,57 @@ namespace AppBundle\Entity;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $email, $name, $surname, $status, $createdAt, $modifiedAt) {
+    public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $email, $name, $surname, $status) {
+        // count
         $qb = $this->getEntityManager()->createQueryBuilder();
-        // build query
+        $qb->select('count(u.id)')
+            ->from('AppBundle:User', 'u');
+        $this->gridOverviewParams($qb, $email, $name, $surname, $status);
+        $count = $qb->getQuery()->getSingleScalarResult();
+        
+        // rows
+        $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('u')
             ->from('AppBundle:User', 'u');   
         // where
-        if (!empty($email)) {
-            $qb->andWhere($qb->expr()->like('u.username', ':email'));
-        }
-        if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like('u.name', ':name'));
-        }
-        if (!empty($surname)) {
-            $qb->andWhere($qb->expr()->like('u.surname', ':surname'));
-        }
-        
-        if (!empty($status)) {
-            $qb->andWhere($qb->expr()->eq('u.status', ':status'));
-        }
-        
-        if (!empty($createdAt)) {
-            $qb->andWhere($qb->expr()->like('u.createdAt', ':createdAt'));
-        }
-        
-        if (!empty($modifiedAt)) {
-            $qb->andWhere($qb->expr()->like('u.modifiedAt', ':modifiedAt'));
-        }
+        $this->gridOverviewParams($qb, $email, $name, $surname, $status);
         
         // sort by
         if (!empty($sortColumn)) {
-            if (!empty($sortDirection)) {
-                $qb->orderBy($sortColumn, $sortDirection);
-            }
-            else {
-                $qb->orderBy($sortColumn);
-            }
+            $qb->orderBy($sortColumn, $sortDirection);
         }
-
-        $q = $qb->getQuery();
-        // set params
-        
-        
-        if (!empty($email)) {
-            $q->setParameter(':email', "%{$email}%");
-        }
-        if (!empty($name)) {
-            $q->setParameter(':name', "%{$name}%");
-        }
-        if (!empty($surname)) {
-            $q->setParameter(':surname', "%{$surname}%");
-        }
-        if (!empty($status)) {
-            $q->setParameter(':status', $status);
-        }
-        if (!empty($createdAt)) {
-            $q->setParameter(':createdAt', "%{$createdAt}%");
-        }
-        if (!empty($modifiedAt)) {
-            $q->setParameter(':modifiedAt', "%{$modifiedAt}%");
-        }
-        
-        
-        
         
         // page and page size
         if (!empty($pageSize)) {
-            $q->setMaxResults($pageSize);
+            $qb->setMaxResults($pageSize);
         }
         if (!empty($page) && $page != 1) {
-            $q->setFirstResult(($page - 1) * $pageSize);
+            $qb->setFirstResult(($page - 1) * $pageSize);
         }
-        return $q->getResult();        
+        $rows = $qb->getQuery()->getResult();
+        
+        return array('count' => $count, 'rows' => $rows);
     }
+    private function gridOverviewParams($qb, $email, $name, $surname, $status) {
+        if (!empty($email)) {
+            $qb->andWhere($qb->expr()->like('u.username', ':email'));
+            $qb->setParameter(':email', "%{$email}%");
+        }
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like('u.name', ':name'));
+            $qb->setParameter(':name', "%{$name}%");
+        }
+        if (!empty($surname)) {
+            $qb->andWhere($qb->expr()->like('u.surname', ':surname'));
+            $qb->setParameter(':surname', "%{$surname}%");
+        }        
+        if (!empty($status)) {
+            $qb->andWhere($qb->expr()->eq('u.status', ':status'));
+            $qb->setParameter(':status', $status);
+        }
+    }
+    
+    
     public function countAll() {
         return $this->createQueryBuilder('u')
             ->select('count(u.id)')
@@ -176,7 +154,14 @@ EOT;
         inner join equipment e
     where e.user_id = {$id} or ei.user_id = {$id};
 
-    delete eb
+    delete ur
+    from user_rating ur
+            inner join equipment_booking eb on ur.booking_id = eb.id
+            inner join equipment_inquiry ei on eb.inquiry_id = ei.id         
+            inner join equipment e on ei.equipment_id = e.id     
+    where e.user_id = {$id} or ei.user_id = {$id};
+
+   delete eb
     from equipment_booking eb
         inner join equipment_inquiry ei on eb.inquiry_id = ei.id
         inner join equipment e on ei.equipment_id = e.id
@@ -197,6 +182,11 @@ EOT;
         inner join equipment e on er.equipment_id = e.id
     where e.user_id = {$id};
     
+    delete eq
+    from equipment_question eq
+        inner join equipment e on eq.equipment_id = e.id
+    where e.user_id = {$id};
+    
     delete from equipment_question where user_id = {$id};
     
     delete from equipment where user_id = {$id};
@@ -213,6 +203,13 @@ EOT;
         inner join talent_booking eb on er.booking_id = eb.id
         inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
         inner join talent e
+    where e.user_id = {$id} or ei.user_id = {$id};
+    
+    delete ur
+    from user_rating ur
+        inner join talent_booking eb on ur.talent_booking_id = eb.id
+        inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id         
+        inner join talent e on ei.talent_id = e.id     
     where e.user_id = {$id} or ei.user_id = {$id};
     
     delete eb
@@ -236,8 +233,14 @@ EOT;
         inner join talent e on er.talent_id = e.id
     where e.user_id = {$id};
     
+    delete tq
+    from talent_question tq
+        inner join talent tal on tq.talent_id = tal.id
+    where tal.user_id = {$id};
+    
     delete from talent_question where user_id = {$id};
-    delete from talent where user_id = {$id};
+
+   delete from talent where user_id = {$id};
     
     delete from equipment_booking_cancel where user_id = {$id};
     delete from talent_booking_cancel where user_id = {$id};

@@ -91,8 +91,51 @@ class DiscountCodeController extends BaseAdminController {
             $cell[$i++] = $dataRow->getId();
             $cell[$i++] = $dataRow->getCode();
             $cell[$i++] = $dataRow->getStatusStr();
-            $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');            
-            $cell[$i++] = $dataRow->getUser() ? $dataRow->getUser()->getUsername() : ""; 
+            $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');  
+            $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');  
+            $user = $dataRow->getUser();
+            if ($user !== null) {
+                $cell[$i++] = $user->getId();
+                $cell[$i++] = $user->getUsername(); 
+                $cell[$i++] = $this->generateUrl('admin-user-details', array('id' => $user->getId()));
+            }
+            else {
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+            }
+            $eb = $dataRow->getEquipmentBooking();
+            $tb = $dataRow->getTalentBooking();            
+            $provider = null;
+            if ($eb !== null) {
+                $eq = $eb->getInquiry()->getEquipment();
+                $provider = $eq->getUser();
+                $cell[$i++] = $eq->getId();
+                $cell[$i++] = $eq->getName();
+                $cell[$i++] = $this->generateUrl('admin_equipment_moderate', array('id' => $eq->getId()));
+            }
+            else if ($tb !== null) {
+                $tal = $tb->getInquiry()->getTalent();
+                $provider = $tal->getUser();
+                $cell[$i++] = $tal->getId();
+                $cell[$i++] = $tal->getName();
+                $cell[$i++] = $this->generateUrl('admin_talent_moderate', array('id' => $tal->getId()));
+            }
+            else {
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+            }
+            if ($provider !== null) {
+                $cell[$i++] = $provider->getId();
+                $cell[$i++] = $provider->getEmail();
+                $cell[$i++] = $this->generateUrl('admin-user-details', array('id' => $provider->getId()));
+            }
+            else {
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+            }
             
             $row['cell'] = $cell;
             array_push($rows, $row);

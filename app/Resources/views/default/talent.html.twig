@@ -8,6 +8,8 @@
         {% if item.talentImages|length > 0 %}
             <meta property="og:image"         content="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" />    
         {% endif %}
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker.min.css" />
 {% endblock %}
 
 {% block home_header %}
@@ -79,11 +81,13 @@
               
               <div id="media-content">
                     {% if item.video %}
-                        <iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; display: block;"></iframe>
-                        <img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%;" />
-                    {% endif %}
-                    {% if item.talentImages|length > 0 %}
-                        <img src="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" alt="" {% if item.video %}style="display: none;"{% endif %}/>
+                        <iframe id="player" src="{{ item.video.embedUrl }}" width="100%" style="width: 100%; height: 421px; display: block;"></iframe>
+                        {#<img id="player-thumb" src="{{ item.video.thumbnailUrl }}" style="width: 100%; height: 421px;" />#}
+                        <div id="player-thumb" style="width: 100%; height: 421px;"></div>
+                    {% else %}
+                        {% if item.talentImages|length > 0 %}
+                            <img src="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" alt="" {% if item.video %}style="display: none;"{% endif %}/>
+                        {% endif %}
                     {% endif %}
               </div>
 
@@ -104,7 +108,7 @@
                     <div class="col-md-8 col-xs-12 product-description" id="map-sibling">
                         <p class="no-top-margin text-padding">
                             <span class="text-bold mobile-hidden">Beschreibung:</span><br class="mobile-hidden"><br class="mobile-hidden">
-                            {{ item.description }}
+                            {{ item.description|nl2br }}
                         </p>
                     </div>
                     <div class="col-md-4 col-xs-12" id="googleMap"></div>
@@ -127,19 +131,19 @@
                         <div class="panel-body">
                             {% if item.descReference %}
                                 <p class="panel-head">Abgeschlossene Ausbildungen, Zertifikate oder Referenzen</p>
-                                <p>{{ item.descReference }}</p>
+                                <p>{{ item.descReference|nl2br }}</p>
                             {% endif %}
                             {% if item.descScope %}
                                 <p class="panel-head">Angebotsumfang</p>
-                                <p>{{ item.descScope }}</p>
+                                <p>{{ item.descScope|nl2br }}</p>
                             {% endif %}
                             {% if item.descTarget %}
                                 <p class="panel-head">Für wen ist dein Angebot besonders geeignet?</p>
-                                <p>{{ item.descTarget }}</p>
+                                <p>{{ item.descTarget|nl2br }}</p>
                             {% endif %}
                             {% if item.descCondition %}
                                 <p class="panel-head">Spezielle Angebotskonditionen</p>
-                                <p>{{ item.descCondition }}</p>
+                                <p>{{ item.descCondition|nl2br }}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -304,7 +308,7 @@
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
                     <p>
-                        {% if item.requestPrice %}Kosten auf Anfr.{% else %}{{ item.activePrice|number_format(2, ',') }} € pro Stunde{% endif %}
+                        {% if item.requestPrice %}Kosten auf Anfr.{% else %}ab {{ item.activePrice|number_format(2, ',') }} € pro Stunde{% endif %}
                     </p>
                   </div>
                     {#
@@ -471,31 +475,40 @@
 {% block script %}
   <script src="http://maps.googleapis.com/maps/api/js?language=de"></script>
   <script src="http://malsup.github.com/jquery.form.js"></script> 
+  <script src="/js/vendors/moment.min.js"></script>
+  <script src="/js/vendors/bootstrap-datetimepicker.min.js"></script>
     <script src="/js/vendors/vimeo.js"></script>
   <script>
     var itemPrice = {% if item.requestPrice %}null{% else %}{{ item.activePrice|number_format(2) }}{% endif %};
+    
+    {% if item.video %}
+        function playerWidth() {
+            var pl = document.getElementById('player');
+            var th = document.getElementById('player-thumb');
+            var w = pl.offsetWidth;
+            var h = Math.round(w * 9 / 16);
+            var r = w / h;
+            pl.style.height = h + 'px';
+            th.style.height = h + 'px';
+        }
+        playerWidth();
+    {% endif %}
+    
       
-    $(window).load(function() {
-        //var containerHieght = $('#media-content').height();
-        //$("#player").css('height',containerHieght);
-        playerWidth();
-    });
-    
-    function playerWidth() {
-        var $pl = $("#player");
-        var $th = $("#player-thumb");
-        var w = $pl.outerWidth();
-        var h = Math.round(w * 9 / 16);
-        $pl.height(h);
-        $th.height(h);
-    }
-    
+    {% if item.video %}
+        $(window).load(function() {
+            //var containerHieght = $('#media-content').height();
+            //$("#player").css('height',containerHieght);
+            playerWidth();
+        });
+    {% endif %}
+        
     $(function() {
-        playerWidth();
-        $(window).resize(playerWidth);
-        
-        
-        
+        {% if item.video %}
+            playerWidth();
+            $(window).resize(playerWidth);
+        {% endif %}
+                
         $(document).on('click', "#videos-ico", function (evt) {
             $('#videos-ico').remove();
             $iframeSRC = "http://player.vimeo.com/video/133739188?api=1&player_id=player";

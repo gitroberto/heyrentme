@@ -31,20 +31,23 @@
                                 {{ form_start(form, {'method': 'post', 'action': path('einstellungen'), 'attr': { 'class': 'user-profil-form', 'accept-charset': 'utf-8'}}) }}    
                                       
                                         {{ form_errors(form) }}
-                                        {{ form_errors(form.password) }}
-                                        {{ form_errors(form.newPassword) }}
-                                        {{ form_errors(form.repeatedPassword) }}
-                                        {{ form_errors(form.name) }}
-                                        {{ form_errors(form.surname) }}
+                                        {% if not facebook %}
+                                            {{ form_errors(form.password) }}
+                                            {{ form_errors(form.newPassword) }}
+                                            {{ form_errors(form.repeatedPassword) }}
+                                            {{ form_errors(form.name) }}
+                                            {{ form_errors(form.surname) }}
+                                        {% endif %}
                                         {{ form_errors(form.phonePrefix) }}
                                         {{ form_errors(form.phone) }}
                                         {{ form_errors(form.iban) }}
                                         {{ form_errors(form.bic) }}
                                         
+                                        {% if not facebook %}
+                                            {{ form_widget(form.password, {'attr': {'placeholder': 'aktuelles passwort', 'id': 'actual-pass'}}) }}
+                                            {{ form_widget(form.newPassword, {'attr': {'placeholder': 'neues passwort', 'id': 'new-pass'}}) }}
+                                            {{ form_widget(form.repeatedPassword, {'attr': {'placeholder': 'neues passwort wiederholen', 'id': 'repeat-pass'}}) }}
                                         
-                                        {{ form_widget(form.password, {'attr': {'placeholder': 'aktuelles passwort', 'id': 'actual-pass'}}) }}
-                                        {{ form_widget(form.newPassword, {'attr': {'placeholder': 'neues passwort', 'id': 'new-pass'}}) }}
-                                        {{ form_widget(form.repeatedPassword, {'attr': {'placeholder': 'neues passwort wiederholen', 'id': 'repeat-pass'}}) }}
                                     
                                         
                                   <div class="row user-names">
@@ -55,6 +58,7 @@
                                           {{ form_widget(form.surname, {'attr': {'placeholder': 'nachname', 'id': 'lastname-pass'}}) }}
                                         </div>
                                   </div>
+                                {% endif %}
                                   <div class="phone-numer">
                                     <h3>Telefon Nr. für User-Rückfragen</h3>
                                     <div class="phone-inputs">
@@ -136,7 +140,7 @@
       <div class="content-modal">
         
                 <p class="text-bold">Vielen Dank,</p>
-                <p class="delate-info">Ihre neuen Einstellungen wurden gespeichert.</p>
+                <p class="delate-info">Deine neuen Einstellungen wurden gespeichert.</p>
 		 
               </div>
           </div>

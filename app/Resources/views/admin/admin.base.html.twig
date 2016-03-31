@@ -4,6 +4,7 @@
 {% block head %}
     {{ include('admin/common/admin.head.html.twig') }}
     <script src="/js/admin.js"></script>
+    <script src="/js/vendors/bootstrap.min.js"></script>
 {% endblock %}
 </head>
 <body>
@@ -29,6 +30,8 @@
     {% block footer %}
         {{ include('admin/common/admin.footer.html.twig') }}
     {% endblock %}
+    
+    {% block script %}{% endblock %}
 </body>
 </html>
 

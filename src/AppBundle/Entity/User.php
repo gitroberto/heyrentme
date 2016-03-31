@@ -96,8 +96,8 @@ class User extends BaseUser
     
     public function getStatusStr() {
         switch ($this->status) {
-            case self::STATUS_OK: return "ok";
-            case self::STATUS_BLOCKED: return "blocked";            
+            case self::STATUS_OK: return "OK";
+            case self::STATUS_BLOCKED: return "BLOCKED";            
             default:
                 throw new RuntimeException("User status corrupt!");
         }

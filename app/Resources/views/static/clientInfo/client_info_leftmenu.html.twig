@@ -1,12 +1,10 @@
-<script>
-    var page = "{{ pageName }}";
-</script>
-<script src="/js/leftmenu.js"></script>
 <div class="col-sm-3 sidebar mobile-hidden">
     <nav>
         <ul>
             <li><a id="kundeninfos_presse" class="leftmenu {% if pageName == "kundeninfos_presse" %}active-link{% endif %}" href="{{ path("kundeninfos_presse") }}">
                     Presse</a></li>
+            <li><a id="kundeninfos_partner" class="leftmenu {% if pageName == "kundeninfos_partner" %}active-link{% endif %}" href="{{ path("kundeninfos_partner") }}">
+                    Partner</a></li>
             <li><a id="kundeninfos_kontakt" class="leftmenu {% if pageName == "kundeninfos_kontakt" %}active-link{% endif %}" href="{{ path("kundeninfos_kontakt") }}">
                     Kontakt</a></li>
             <li><a id="kundeninfos_impressum" class="leftmenu {% if pageName == "kundeninfos_impressum" %}active-link{% endif %}" href="{{ path("kundeninfos_impressum") }}">

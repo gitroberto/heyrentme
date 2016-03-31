@@ -6,21 +6,11 @@
 {% endblock %}
 
 {% block body %}
-<h1>Equipment</h1>
-
-<br/>
-<br/>
-
-<div id="jqgrid-wrapper">
-        <table id="jqgrid" class="table table-striped table-hover">
-                <tr>
-                        <td></td>
-                </tr>
-        </table>
+    <h1>Equipment</h1>
+    <div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover"></table>
         <div id="jqgrid-pager"></div>
-</div>
-
-
+    </div>
 {% endblock %}
 
 {% block footer %}
@@ -47,23 +37,25 @@ if( $grid.length > 0 ) {
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
-                        { name:'Id', index:'e.id', width:1, editable:false, sortable:false, hidden: true, search: false },
-                        { name:'Name', index:'e.name', width: 100, editable:false, sortable:true, search: false },
-                        { name:'Description', index:'e.description', width: 200, editable:false, sortable:true, search: false },
-                        { name:'Price', index:'e.price', width: 100, editable:false, sortable:true, search: false },
-                        { name:'User', index:'u.username',  width: 100, editable:false, sortable:true, search: false},
+                        { name:' ', width:150, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                        { name:'Id', index:'e.id', width:0, editable:false, sortable:false, hidden: true, search: false },
+                        { name:'Category', index:'concat(c.name, s.name)', width: 250, editable:false, sortable:true, search: false },
+                        { name:'Name', index:'e.name', width: 250, editable:false, sortable:true, search: false },
+                        { name:'Price', index:'e.price', width: 80, align: "right", editable:false, sortable:true, search: false },
+                        { name:'User', index:'u.username',  width: 250, editable:false, sortable:true, search: false},
                         { name:'Status', index:'e.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: false }},
+                        { name:'Url', hidden: true },
+                        { name:'Created', index: 'e.createdAt', width: 130, sortable: true, search: false },
+                        { name:'Modified', index: 'e.modifiedAt', width: 130, sortable: true, search: false }                        
                 ],
-                height: 300,
-                rowNum: 10,
-                rowList: [10, 50, 200],
-                pager: 'jqgrid-pager',
+                height: 550,
+                rowNum: 20,
+                rowList: [20, 50, 100],
+                pager: '#jqgrid-pager',
                 sortname: 'e.status',
-                viewrecords: false,
+                viewrecords: true,
                 sortorder: "asc",
-                caption: "Posts",
-                multiselect: false,
+                multiselect: false
         });
         $grid.jqGrid('filterToolbar', {
             stringResult: false,

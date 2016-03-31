@@ -9,8 +9,6 @@
 <h1>Testimonials</h1>
 
 <a class="button-black backgound-yellow text-black" href="{{ path('admin_testimonials_new') }}">New testimonial</a>
-<br/>
-<br/>
 
 <div id="jqgrid-wrapper">
         <table id="jqgrid" class="table table-striped table-hover">
@@ -46,23 +44,22 @@ if( $('#jqgrid').length > 0 ) {
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions },
-                        { name:'Id', index:'t.id', width:1, editable:false, sortable:false, hidden: true },
-                        { name:'Name', index:'t.name', width: 200, editable:false, sortable:true },
-                        { name:'Age', index:'t.age', width: 100, editable:false, sortable:true },
-                        { name:'Place', index:'t.place', width: 200, editable:false, sortable:true },
+                        { name:' ', width:120, fixed:true, editable:false, sortable:false, formatter:rowActions },
+                        { name:'Id', index:'t.id', width:0, editable:false, sortable:false, hidden: true },
+                        { name:'Name', index:'t.name', width: 150, editable:false, sortable:true },
+                        { name:'Age', index:'t.age', width: 80, align: "right", editable:false, sortable:true },
+                        { name:'Place', index:'t.place', width: 150, editable:false, sortable:true },
                         { name:'Type', index:'t.type', width: 100, editable:false, sortable:true },
-                        { name:'Position', index:'t.position', align:"right", width: 100, editable:false, sortable:true},
+                        { name:'Position', index:'t.position', align:"right", width: 80, editable:false, sortable:true}
                 ],
-                height: 300,
-                rowNum: 10,
-                rowList: [10, 50, 200],
+                height: 550,
+                rowNum: 20,
+                rowList: [20, 50, 100],
                 pager: 'jqgrid-pager',
                 sortname: 't.position',
-                viewrecords: false,
+                viewrecords: true,
                 sortorder: "asc",
-                caption: "Posts",
-                multiselect: false,
+                multiselect: false
         });
 }
 
