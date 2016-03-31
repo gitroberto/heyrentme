@@ -419,14 +419,14 @@ class EquipmentController extends BaseAdminController {
             //</editor-fold>
             
             //EDIT 2
-            $eq->setDescription($data['description']);
-            $eq->setAddrStreet($data['street']);
-            $eq->setAddrNumber($data['number']);
-            $eq->setAddrFlatNumber($data['flatNumber']);
-            $eq->setAddrPostcode($data['postcode']);
-            $eq->setAddrPlace($data['place']);            
-            $eq->setFunctional(intval($data['make_sure']));
-            $eq->setAccept(intval($data['accept']));
+            $equipment->setDescription($data['description']);
+            $equipment->setAddrStreet($data['street']);
+            $equipment->setAddrNumber($data['number']);
+            $equipment->setAddrFlatNumber($data['flatNumber']);
+            $equipment->setAddrPostcode($data['postcode']);
+            $equipment->setAddrPlace($data['place']);            
+            $equipment->setFunctional(intval($data['make_sure']));
+            $equipment->setAccept(intval($data['accept']));
             //</editor-fold>
             $em->flush();
             
@@ -472,7 +472,7 @@ class EquipmentController extends BaseAdminController {
             //}
             
             //if (!$statusChanged) {            
-            //    return $this->redirectToRoute('admin_equipment_list');
+            return $this->redirectToRoute('admin_equipment_list');
             //}
         }
         
@@ -810,5 +810,21 @@ class EquipmentController extends BaseAdminController {
             'imgId' => $img->getId()
         );
         return new JsonResponse($resp);                
+    public function validateTime($data, ExecutionContextInterface $context) {
+        if (!$data['timeMorning'] && !$data['timeAfternoon'] && !$data['timeEvening'] && !$data['timeWeekend'] ) {
+            $context->buildViolation('Bitte wähle zumindest einen Zeitpunkt an dem du verfügbar sein kannst')->addViolation();
+        }
+    }
+    
+    public function validateMakeSure($value, ExecutionContextInterface $context) {
+        if (!$value) {
+            $context->buildViolation('Bitte Checkbox bestätigen')->atPath('make_sure')->addViolation();
+        }            
+    }
+    
+    public function validateAccept($value, ExecutionContextInterface $context) {
+        if (!$value) {
+            $context->buildViolation('Bitte Checkbox bestätigen')->atPath('accept')->addViolation();
+        }            
     }
 }

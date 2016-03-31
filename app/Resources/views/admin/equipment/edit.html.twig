@@ -68,6 +68,8 @@
 </div>
     
 {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+    {{ form_errors(form) }}
+<div class="container form">
     <div class="row">
         <div class="col-xs-2">
             <label for="form[name]">angebotsname:</label>
@@ -158,7 +160,7 @@
             <label >beschreibe dein angebot</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.description, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+            {{ form_widget(form.description, {  'attr': { 'class': 'admin-edit-area', 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
         </div>                    
         <div class="err-msg">{{ form_errors(form.description) }}</div>
     </div>
@@ -180,7 +182,7 @@ einsatzbereit ist.</label>
             <label >strasse</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse*' } }) }}                        
+            {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse' } }) }}                        
         </div>                                        
     </div>
         
@@ -189,7 +191,7 @@ einsatzbereit ist.</label>
             <label >ort</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort*' } }) }}                        
+            {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort' } }) }}                        
         </div>                                        
     </div>
 
@@ -199,7 +201,7 @@ einsatzbereit ist.</label>
             <label >hausnr</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.*', 'class': 'security' } }) }}
+            {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.', 'class': 'security' } }) }}
         </div>                                        
         <div class="err-msg">{{ form_errors(form.number, { 'attr': { 'class': 'err-msg' } }) }}</div>
     </div>
@@ -221,7 +223,7 @@ einsatzbereit ist.</label>
             <label >plz</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ*' } }) }}
+            {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ' } }) }}
         </div>                                        
         <div class="err-msg">{{ form_errors(form.postcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
     </div>
@@ -245,7 +247,7 @@ einsatzbereit ist.</label>
             {{ form_widget(form.phonePrefix, { 'attr': { 'class': 'text-line-fill short', 'placeholder': 'phone prefix' }}) }}
             <div class="err-msg">{{ form_errors(form.phonePrefix, { 'attr': { 'class': 'err-msg' } }) }}</div>
         </div>
-        <div class="col-xs-4">            
+        <div class="col-xs-2">            
             {{ form_widget(form.phone, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'phone number' }}) }}
             <div class="err-msg">{{ form_errors(form.phone, { 'attr': { 'class': 'err-msg' } }) }}</div>
         </div>        
@@ -260,7 +262,7 @@ einsatzbereit ist.</label>
         <div class="col-xs-6">                        
             {{ form_widget(form.accept) }}
             <label for="form_accept"><span></span>
-                  ich habe die <a href="{{ path('kundeninfos_agb') }}" target="_blank">AGB</a> gelesen und stimme diesen zu.*
+                  ich habe die <a href="{{ path('kundeninfos_agb') }}" target="_blank">AGB</a> gelesen und stimme diesen zu.
             </label>
         </div>
         <div class="err-msg">{{ form_errors(form.accept) }}</div>
@@ -274,19 +276,19 @@ einsatzbereit ist.</label>
         <div class="col-xs-2">
             <label ></label>
         </div>
-        <div class="col-xs-1">                        
+        <div class="col-xs-2">                        
             {{ form_widget(form.timeMorning) }}
             <label for="form_timeMorning"><span></span>vormittags</label>
         </div>
-        <div class="col-xs-1">                        
+        <div class="col-xs-2">                        
             {{ form_widget(form.timeAfternoon) }}
             <label for="form_timeAfternoon"><span></span>nachmittags</label>
         </div>                    
-        <div class="col-xs-1"> 
+        <div class="col-xs-2"> 
             {{ form_widget(form.timeEvening) }}
             <label for="form_timeEvening"><span></span>abends</label>
         </div>
-        <div class="col-xs-1"> 
+        <div class="col-xs-3"> 
             {{ form_widget(form.timeWeekend) }}
             <label for="form_timeWeekend"><span></span>wochenende</label>
         </div>
@@ -299,7 +301,7 @@ einsatzbereit ist.</label>
             <label >genauer admin-equipment-typ</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.descType, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}                        
+            {{ form_widget(form.descType, { 'attr': { 'class': 'admin-edit-area', 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}                        
         </div>        
         <div class="err-msg">{{ form_errors(form.descType) }}</div>
     </div>
@@ -327,9 +329,9 @@ einsatzbereit ist.</label>
                 
                 
             
-<input type="submit" class="button-black backgound-yellow text-black" value="Add">
+<input type="submit" class="button-black backgound-yellow text-black" value="Save">
 <a class="button-black backgound-yellow text-black" href="{{ path('admin_users_list') }}">Cancel</a>
-
+</div>
 {{ form_end(form) }}
             
   <div id="cropper-modal" class="modal fade">
