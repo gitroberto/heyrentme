@@ -68,8 +68,10 @@
 </div>
     
 {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-    {{ form_errors(form) }}
 <div class="container form">
+    <div class="row">
+        <div class="col-xs-12 err-msg">{{ form_errors(form) }}</div>
+    </div>
     <div class="row">
         <div class="col-xs-2">
             <label for="form[name]">angebotsname:</label>
