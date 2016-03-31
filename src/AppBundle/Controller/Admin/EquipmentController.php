@@ -395,8 +395,12 @@ class EquipmentController extends BaseAdminController {
         $mainImageValidation = null;
         $imagesValidation = null;
         $statusChanged = false; // change relevant for email notification
+        if ($request->getMethod() === 'POST') {
+            $mainImageValidation = $this->mainImageValidation($mainImage);
+            $imagesValidation = $this->imagesValidation($images);
+        }
         
-        if ($form->isValid()) {
+        if ($form->isValid()  && $mainImageValidation === null && $imagesValidation === null) {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
@@ -465,6 +469,14 @@ class EquipmentController extends BaseAdminController {
                 
                 
         ));
+    }
+    
+    public function mainImageValidation($mainImage) {
+        return $mainImage !== null ? null : 'Bitte lade zumindest ein Bild hoch';
+    }
+    public function imagesValidation($images) {
+        $max = $this->getParameter('equipment_max_num_images');
+        return count($images) <= $max ? null : sprintf('Bitte lade max. %s Bilder hoch', $max);
     }
     
     /**
