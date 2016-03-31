@@ -5,13 +5,17 @@ use AppBundle\Entity\Equipment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Entity\EquipmentImage;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\ExecutionContextInterface;
+use AppBundle\Utils\Utils;
+use AppBundle\Entity\Image;
 
 class EquipmentController extends BaseAdminController {
     /**
@@ -189,10 +193,13 @@ class EquipmentController extends BaseAdminController {
      * @Route("/admin/equipment/edit/{id}", name="admin_equipment_edit")     
      */
     public function equipmentEditAction(Request $request, $id) {
-        $equipment = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        $eqRepo = $this->getDoctrineRepo('AppBundle:Equipment');
+        $equipment = $eqRepo->find($id);
+        $mainImage = $eqRepo->getEquipmentMainImage($id);
+        $images = $eqRepo->getEquipmentButMainImages($id);
         if (!$equipment) {
             return new Response(Response::HTTP_NOT_FOUND);
-        }        
+        }
         // security check
         //if ($this->getUser()->getId() !== $equipment->getUser()->getId()) {
         //    return new Response($status = Response::HTTP_FORBIDDEN);
@@ -385,6 +392,8 @@ class EquipmentController extends BaseAdminController {
         //</editor-fold>
         
         $form->handleRequest($request);
+        $mainImageValidation = null;
+        $imagesValidation = null;
         $statusChanged = false; // change relevant for email notification
         
         if ($form->isValid()) {
@@ -469,14 +478,337 @@ class EquipmentController extends BaseAdminController {
         
         $complete = $equipment->getStatus() != Equipment::STATUS_INCOMPLETE;
         
+        $mb = intval($this->getParameter('image_upload_max_size'));
         return $this->render('admin/equipment/edit.html.twig', array(
+            'equipment' => $equipment,
             'form' => $form->createView(),
             'complete' => $complete,
             'id' => $id,
-            'statusChanged' => $statusChanged
-            
+            'statusChanged' => $statusChanged,
+            'mainImage' => $mainImage,
+            'images' => $images,
+            'mainImageValidation' => $mainImageValidation,
+            'imagesValidation' => $imagesValidation,
+            'megabytes' => $mb,
+            'max_num_images' => $this->getParameter('equipment_max_num_images')
         ));
     }
     
+    /**
+     * @Route("admin-equipment-main-image", name="admin-equipment-main-image")
+     */
+    public function equipmentMainImageAction(Request $request) {  
+        $file = $request->files->get('upl');
+        if ($file->isValid()) {
+            $uuid = Utils::getUuid();
+            $path = 
+                $this->getParameter('image_storage_dir') .
+                DIRECTORY_SEPARATOR .
+                'temp' .
+                DIRECTORY_SEPARATOR;
+            $ext = strtolower($file->getClientOriginalExtension());
+            $name = sprintf("%s.%s", $uuid, $ext);
+            $filename = $path . DIRECTORY_SEPARATOR . $name;
+
+            $file->move($path, $name);
+
+            $msg = null;
+
+            $size = getimagesize($filename);
+            if ($size[0] < 750 || $size[1] < 563) {
+                $msg = "Das hochgeladene Bild ({$size[0]} x {$size[1]}) ist kleiner als erforderlich (bitte min. 750 x 563 px)";
+            }
+            
+            $w = $file->getClientSize();
+            $mb = intval($this->getParameter('image_upload_max_size'));
+            if ($w > $mb * 1024 * 1024) { // 5 MB
+                $msg = sprintf('Das hochgeladene Bild (%.2f MB) darf nicht größer als %d MB sein', $w / 1024 / 1024, $mb);
+            }
+            $exif = exif_imagetype($filename);
+            if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+                $msg = 'Das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden';
+            }
+            
+
+            if ($msg !== null) {
+                unlink($filename);
+                $resp = array('message' => $msg);
+                return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+            }            
+
+            $url = $this->getParameter('image_url_prefix') . 'temp/' . $uuid . '.' . $ext;
+            $resp = array(
+                'url' => $url,
+                'name' => $name
+            );
+            return new JsonResponse($resp);
+        }
+                
+        return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+    /**
+     * @Route("admin-equipment-main-image-save", name="admin-equipment-main-image-save")
+     */
+    public function equipmentMainImageSaveAction(Request $request) { 
+        $name = $request->get('name');
+        $id = $request->get('id');
+        $x = $request->get('x');
+        $x2 = $request->get('x2');
+        $y = $request->get('y');
+        $y2 = $request->get('y2');
+        $main = strtolower($request->get('main')) === 'true';
+        $w = round($x2 - $x);
+        $h = round($y2 - $y);
+        
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        // check security
+        /*
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }        
+        */
+        // init vars 
+        $sep = DIRECTORY_SEPARATOR;
+        $path = $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep . $name;
+        $arr = explode('.', $name);
+        $uuid = $arr[0];
+        $ext = $arr[1];
+
+        // scale image
+        // <editor-fold>
+        // check and calcualte size
+        if ($w === 0 || $h == 0) {
+            $size = getimagesize($path);
+            $w = $size[0];
+            $h = $size[1];
+        }
+        
+        $nw = 750;
+        if ($main) {
+            $nh = 563;
+        }
+        else {
+            $nh = $h / $w * $nw;
+        }        
+        
+        // scale image
+        $img = imagecreatefromstring(file_get_contents($path));
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, $nw, $nh, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . $uuid . '.' . $ext;
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        rename($path, $path2);
+        
+        imagedestroy($dst);
+        // </editor-fold>
+        
+        // create thumbnail
+        //<editor-fold>
+        $nw = 360;
+        if ($main) {
+            $nh = 270;
+        }
+        else {
+            $nh = $h / $w * $nw;
+        }
+        
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, $x, $y, $nw, $nh, $w, $h);
+
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'thumbnail' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path2, 85);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path2, 9);
+        }        
+        imagedestroy($dst);        
+        //</editor-fold>
+        
+        imagedestroy($img);
+
+        // store entry in database
+        //<editor-fold>
+        $em = $this->getDoctrine()->getManager();
+        $cnt = $this->getDoctrineRepo('AppBundle:Equipment')->getImageCount($id);        
+        
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($uuid);
+        $img->setExtension($ext);
+        $img->setPath('equipment');
+        $img->setOriginalPath('equipment' . $sep . 'original');
+        $img->setThumbnailPath('equipment' . $sep . 'thumbnail');
+        $em->persist($img);
+        $em->flush();
+        
+        $eimg = new EquipmentImage();
+        $eimg->setImage($img);
+        $eimg->setEquipment($eq);
+        $eimg->setMain($main ? 1 : 0);
+        $em->persist($eimg);
+        $em->flush();        
+        //</editor-fold>
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
+            'imgId' => $img->getId(),
+            'main' => $eimg->getMain()
+        );
+        return new JsonResponse($resp);
+    }
+    /**
+     * @Route("admin-equipment-image-delete/{eid}/{iid}", name="admin-equipment-image-delete")
+     */
+    public function equipmentImageDeleteAction(Request $request, $eid, $iid) {
+        // check security
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
+        /*
+        if ($this->getUser()->getId() !== $eq->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        } 
+         */       
+
+        $eimg = $this->getDoctrineRepo('AppBundle:Equipment')->removeImage($eid, $iid, $this->getParameter('image_storage_dir'));
+        
+        return new JsonResponse(Response::HTTP_OK);
+    }
     
+    /**
+     * @Route("admin-equipment-image/{eid}", name="admin-equipment-image")
+     */
+    public function equipmentImageAction(Request $request, $eid) {
+        $file = $request->files->get('upl');
+        if (!$file->isValid()) {
+            return new JsonResponse(array('message' => 'Es gab einen Fehler beim Hochladen der Bilder. Bitte versuch es noch einmal'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+        $imgcnt = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentButMainImageCount($eid);
+        $max = $this->getParameter('equipment_max_num_images');
+        if ($imgcnt >= $max) {
+            $resp = array('message' => "Bitte lade max. {$max} Bilder hoch");
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
+
+        // validate
+        $sep = DIRECTORY_SEPARATOR;
+        $uuid = Utils::getUuid();
+        $path = 
+            $this->getParameter('image_storage_dir') . $sep . 'temp' . $sep;
+        $ext = strtolower($file->getClientOriginalExtension());
+        $origName = $file->getClientOriginalName();
+        $name = sprintf("%s.%s", $uuid, $ext);
+        $filename = $path . $sep . $name;
+
+        $file->move($path, $name);
+
+        $msg = null;
+
+        $size = getimagesize($filename);
+        $w = $size[0];
+        $h = $size[1];
+        if ($w < 650) {
+            $msg = "{$origName}: das hochgeladene Bild ({$w} x {$h}) ist kleiner als erforderlich (bitte min. 650 px Breite)";
+        }
+
+        $wght = $file->getClientSize();
+        $mb = intval($this->getParameter('image_upload_max_size'));
+        if ($wght > $mb * 1024 * 1024) { // 5 MB
+            $msg = sprintf('%s: das hochgeladene Bild (%.2f MB) darf nicht größer als %d MB sein', $origName, $wght / 1024 / 1024, $mb);
+        }
+        $exif = exif_imagetype($filename);
+        if ($exif != IMAGETYPE_JPEG && $exif != IMAGETYPE_PNG) {
+            $msg = "{$origName}: das hochgeladene Bildformat wurde nicht erkannt. Bitte nur die Bildformate JPG oder PNG verwenden";
+        }
+
+        // not valid, return error
+        if ($msg !== null) {
+            unlink($filename);
+            $resp = array('message' => $msg);
+            return new JsonResponse($resp, Response::HTTP_NOT_ACCEPTABLE);
+        }
+        
+        // scale
+        // check and calcualte size
+        $nw = $w > 750 ? 750 : $w;
+        $nh = $h / $w * $nw;
+        // scale image
+        $img = imagecreatefromstring(file_get_contents($filename));
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+
+        $path1 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . $uuid . '.' . $ext;
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        rename($filename, $path2);
+        
+        imagedestroy($dst);
+        // create thumbnail
+        //<editor-fold>
+        $nw = 113;
+        $nh = $h / $w * $nw;
+        
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+
+        $path2 = $this->getParameter('image_storage_dir') . $sep . 'equipment' . $sep . 'thumbnail' . $sep . $uuid . '.' . $ext;
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path2, 85);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path2, 9);
+        }        
+        imagedestroy($dst);        
+        //</editor-fold>
+        
+        imagedestroy($img);
+
+        // store entry in database
+        //<editor-fold>
+        $em = $this->getDoctrine()->getManager();
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($eid);
+        
+        $img = new Image();
+        $img->setUuid($uuid);
+        $img->setName($file->getClientOriginalName());
+        $img->setExtension($ext);
+        $img->setPath('equipment');
+        $img->setOriginalPath('equipment' . $sep . 'original');
+        $img->setThumbnailPath('equipment' . $sep . 'thumbnail');
+        $em->persist($img);
+        $em->flush();
+        
+        $eimg = new EquipmentImage();
+        $eimg->setImage($img);
+        $eimg->setEquipment($eq);
+        $eimg->setMain(0);
+        $em->persist($eimg);
+        $em->flush();        
+        //</editor-fold>
+        
+        $resp = array(
+            'url' => $img->getUrlPath($this->getParameter('image_url_prefix')),
+            'thumbUrl' => $img->getThumbnailUrlPath($this->getParameter('image_url_prefix')),
+            'imgId' => $img->getId()
+        );
+        return new JsonResponse($resp);                
+    }
 }
