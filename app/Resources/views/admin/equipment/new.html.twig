@@ -1,13 +1,12 @@
 {% extends 'admin/admin.base.html.twig' %}
 
-
 {% block breadcrumb %}
     {{ parent() }}
     <li><a href="{{ path('admin_equipment_list') }}" class="active">Equipment</a></li>
 {% endblock %}
 
 {% block body %}
-<h1>Equipment edit</h1>
+<h1>Equipment add</h1>
     
 {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
     {{ form_errors(form) }}
@@ -72,8 +71,7 @@
             <label ></label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.invoice) }}
-            <label for="form_invoice"><span></span>original-rechnung ist vorhanden</label>
+            {{ form_widget(form.invoice) }}<label for="form_invoice"><span></span>original-rechnung ist vorhanden</label>
         </div>                    
     </div>
 
