@@ -620,3 +620,8 @@ p.how-many {
     margin-right: 40%;
     margin-top: 10px;
 }
+
+.admin-edit-area {
+    width: 500px;
+    height: 50px;
+}

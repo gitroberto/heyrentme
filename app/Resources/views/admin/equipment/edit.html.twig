@@ -1,0 +1,278 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_equipment_list') }}" class="active">Equipment</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Equipment edit</h1>
+    
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+    <div class="row">
+        <div class="col-xs-2">
+            <label for="form[name]">angebotsname:</label>
+        </div>
+        <div class="col-xs-6">
+            {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
+            {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 22 Zeichen', 'class': 'normal-input' } }) }}
+        </div>
+        <div class="err-msg">{{ form_errors(form.name) }}</div>
+    </div>
+                
+    <div class="row">
+        <div class="col-xs-2">
+            <label for="form[price]">preis pro tag:</label>
+        </div>
+        <div class="col-xs-6">
+            {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
+            {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }}EUR 
+        </div>
+        <div class="err-msg">{{ form_errors(form.price) }}</div>
+    </div>
+                
+    <div class="row">
+        <div class="col-xs-2">
+            <label >original-wert (ca.)</label>
+        </div>
+        <div class="col-xs-6">
+            {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
+            {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }}EUR 
+        </div>
+        <div class="err-msg">{{ form_errors(form.value) }}</div>
+    </div>
+                
+                
+    <div class="row">
+        <div class="col-xs-2">
+            <label >alter (ca.)</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.ageId, { 'attr': { 'class': '', 'title': 'Alter (ca.)' }}) }}
+        </div>
+        <div class="err-msg">{{ form_errors(form.ageId) }}</div>
+    </div>
+                
+    <div class="row">
+        <div class="col-xs-2">
+            <label >kaution</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '1000' }}) }}EUR 
+        </div>
+        <div class="err-msg">{{ form_errors(form.deposit) }}</div>
+    </div>
+                
+                
+    <div class="row">
+        <div class="col-xs-2">
+            <label ></label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.invoice) }}<label for="form_invoice"><span></span>original-rechnung ist vorhanden</label>
+        </div>                    
+    </div>
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label >verkaufspreis bei kauf</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }}EUR 
+        </div>
+        <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label ></label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.industrial) }}
+            <label for="form_industrial"><span></span>gewerbliches angebot</label>
+        </div>                    
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label >beschreibe dein angebot</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.description, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+        </div>                    
+        <div class="err-msg">{{ form_errors(form.description) }}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label ></label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.make_sure) }}
+            <label for="form_make_sure"><span></span>bitte versichere, dass dein equipment zum zeitpunkt der buchung funktionstüchtig und
+einsatzbereit ist.</label>
+        </div>                                        
+    </div>
+                        
+                        
+    <div class="row">
+        <div class="col-xs-2">
+            <label >strasse</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse*' } }) }}                        
+        </div>                                        
+    </div>
+        
+    <div class="row">
+        <div class="col-xs-2">
+            <label >ort</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort*' } }) }}                        
+        </div>                                        
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label >hausnr</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.*', 'class': 'security' } }) }}
+        </div>                                        
+        <div class="err-msg">{{ form_errors(form.number, { 'attr': { 'class': 'err-msg' } }) }}</div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label >türnr</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.flatNumber, { 'attr': { 'placeholder': 'Türnr.', 'class': 'security' } }) }}
+        </div>                                        
+        <div class="err-msg">{{ form_errors(form.flatNumber, { 'attr': { 'class': 'err-msg' } }) }}</div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label >plz</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ*' } }) }}
+        </div>                                        
+        <div class="err-msg">{{ form_errors(form.postcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label ></label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.defaultAddress) }}
+            <label for="form_defaultAddress"><span></span>als standardadresse für weitere angebote speichern</label>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label>phone</label>
+        </div>        
+        <div class="col-xs-2">
+            {{ form_widget(form.phonePrefix, { 'attr': { 'class': 'text-line-fill short', 'placeholder': 'phone prefix' }}) }}
+            <div class="err-msg">{{ form_errors(form.phonePrefix, { 'attr': { 'class': 'err-msg' } }) }}</div>
+        </div>
+        <div class="col-xs-4">            
+            {{ form_widget(form.phone, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'phone number' }}) }}
+            <div class="err-msg">{{ form_errors(form.phone, { 'attr': { 'class': 'err-msg' } }) }}</div>
+        </div>        
+        
+    </div>
+
+    
+    <div class="row">
+        <div class="col-xs-2">
+            <label ></label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.accept) }}
+            <label for="form_accept"><span></span>
+                  ich habe die <a href="{{ path('kundeninfos_agb') }}" target="_blank">AGB</a> gelesen und stimme diesen zu.*
+            </label>
+        </div>
+        <div class="err-msg">{{ form_errors(form.accept) }}</div>
+    </div>
+
+
+
+
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label ></label>
+        </div>
+        <div class="col-xs-1">                        
+            {{ form_widget(form.timeMorning) }}
+            <label for="form_timeMorning"><span></span>vormittags</label>
+        </div>
+        <div class="col-xs-1">                        
+            {{ form_widget(form.timeAfternoon) }}
+            <label for="form_timeAfternoon"><span></span>nachmittags</label>
+        </div>                    
+        <div class="col-xs-1"> 
+            {{ form_widget(form.timeEvening) }}
+            <label for="form_timeEvening"><span></span>abends</label>
+        </div>
+        <div class="col-xs-1"> 
+            {{ form_widget(form.timeWeekend) }}
+            <label for="form_timeWeekend"><span></span>wochenende</label>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label >genauer equipment-typ</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.descType, { 'attr': { 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}                        
+        </div>        
+        <div class="err-msg">{{ form_errors(form.descType) }}</div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label >Besondere auststattung, extras</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.descSpecial, { 'attr': { 'class': 'admin-edit-area', 'placeholder': 'Maximal 500 Zeichen verfügbar' } }) }}
+        </div>        
+        <div class="err-msg">{{ form_errors(form.descSpecial) }}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label >spezielle angebotskonditionen</label>
+        </div>
+        <div class="col-xs-6">                        
+            {{ form_widget(form.descCondition, { 'attr': { 'class': 'admin-edit-area',  'placeholder': 'Schreib hier, falls du dein Angebot zu speziellen Geschäftsbedingungen anbieten möchtest. Maximal 1000 Zeichen verfügbar' } }) }}
+        </div>        
+        <div class="err-msg">{{ form_errors(form.descCondition) }}</div>
+    </div>
+                
+                
+            
+<input type="submit" class="button-black backgound-yellow text-black" value="Add">
+<a class="button-black backgound-yellow text-black" href="{{ path('admin_users_list') }}">Cancel</a>
+
+{{ form_end(form) }}
+            
+        
+{% endblock %}
