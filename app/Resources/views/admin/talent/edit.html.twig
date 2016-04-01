@@ -78,7 +78,7 @@
             <label >angebotsname</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 32 Zeichen', 'class': 'normal-input', 'maxlength': '32' } }) }}
+            {{ form_widget(form.name, { 'attr': {  'placeholder': 'Maximal 32 Zeichen', 'class': 'text-line-fill normal-input', 'maxlength': '32' } }) }}
         </div>        
         <div class="err-msg">{{ form_errors(form.name) }}</div>
     </div>
@@ -88,7 +88,7 @@
             <label >preis pro stunde (ab)</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '500' }}) }}EUR
+            {{ form_widget(form.price, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '10', 'max': '500' }}) }}EUR
         </div>        
         <div class="err-msg">{{ form_errors(form.price) }}</div>
     </div>
@@ -139,7 +139,7 @@
             <label >strasse</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse' } }) }}                        
+            {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse', 'class': 'text-line-fill' } }) }}                        
         </div>                                        
     </div>
         
@@ -148,7 +148,7 @@
             <label >ort</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort' } }) }}                        
+            {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort', 'class': 'text-line-fill' } }) }}                        
         </div>                                        
     </div>
 
@@ -158,7 +158,7 @@
             <label >hausnr</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.', 'class': 'security' } }) }}
+            {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.', 'class': 'security  text-box short' } }) }}
         </div>                                        
         <div class="err-msg">{{ form_errors(form.number, { 'attr': { 'class': 'err-msg' } }) }}</div>
     </div>
@@ -169,7 +169,7 @@
             <label >türnr</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.flatNumber, { 'attr': { 'placeholder': 'Türnr.', 'class': 'security' } }) }}
+            {{ form_widget(form.flatNumber, { 'attr': { 'placeholder': 'Türnr.', 'class': 'security  text-box short' } }) }}
         </div>                                        
         <div class="err-msg">{{ form_errors(form.flatNumber, { 'attr': { 'class': 'err-msg' } }) }}</div>
     </div>
@@ -180,7 +180,7 @@
             <label >plz</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ' } }) }}
+            {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ', 'class':'text-box short' } }) }}
         </div>                                        
         <div class="err-msg">{{ form_errors(form.postcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
     </div>
@@ -200,10 +200,10 @@
             <label>phone</label>
         </div>        
         <div class="col-xs-2">
-            {{ form_widget(form.phonePrefix, { 'attr': { 'class': 'text-line-fill short', 'placeholder': 'phone prefix' }}) }}
+            {{ form_widget(form.phonePrefix, { 'attr': { 'class': 'text-line-fill  text-box short', 'placeholder': 'phone prefix' }}) }}
             <div class="err-msg">{{ form_errors(form.phonePrefix, { 'attr': { 'class': 'err-msg' } }) }}</div>
         </div>
-        <div class="col-xs-2">            
+        <div class="col-xs-4">            
             {{ form_widget(form.phone, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'phone number' }}) }}
             <div class="err-msg">{{ form_errors(form.phone, { 'attr': { 'class': 'err-msg' } }) }}</div>
         </div>        
@@ -406,7 +406,43 @@
             });
         }
         
+        function priceChanged() {
+            var $price = $("#form_price");
+            var price = parseInt($price.val());
+            var $req = $("#form_requestPrice");
+            var $reqHold = $req.parent(".chbox-holder");
+            if (price >= 35) {
+                $req.removeAttr('disabled');
+                $reqHold.removeClass('rdisable');
+            }
+            else {
+                $req.prop('checked', false);
+                $req.attr('disabled', 'disabled');
+                $reqHold.addClass('rdisable');
+            }
+        }
+        function requestPriceChanged() {
+            var $price = $("#form_price");
+            var price = parseInt($price.val());
+            var $req = $("#form_requestPrice");
+            var req = $req.prop('checked');
+            if (req) {
+                $price.attr('readOnly', 'true');
+                $price.css({ 'background-color': '#aaa', 'opacity': '0.5' });
+            }
+            else {
+                $price.removeAttr('readOnly');
+                $price.css({ 'background-color': '#fff', 'opacity': '1.0' });
+            }
+        }
+        
         $(function() {
+            
+            $("#form_price").on('change keyup', priceChanged);
+            $("#form_requestPrice").on('click change', requestPriceChanged);
+          
+            priceChanged();
+            requestPriceChanged();  
             
             var ul = $('#upld ul');
             refreshCtrl();
@@ -612,3 +648,4 @@
         });
     </script>
 {% endblock %}
+

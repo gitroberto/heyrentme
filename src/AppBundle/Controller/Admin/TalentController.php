@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentImage;
@@ -449,6 +450,14 @@ class TalentController extends BaseAdminController {
             $owner->setPhonePrefix($data['phonePrefix']);
             $owner->setPhone($data['phone']);
             
+            if ($data['defaultAddress'] === true) {
+                $owner->setAddrStreet($talent->getAddrStreet());
+                $owner->setAddrNumber($talent->getAddrNumber());
+                $owner->setAddrFlatNumber($talent->getAddrFlatNumber());
+                $owner->setAddrPostcode($talent->getAddrPostcode());
+                $owner->setAddrPlace($talent->getAddrPlace());
+            }
+            
             //</editor-fold>
             $em->flush();
             
@@ -469,6 +478,66 @@ class TalentController extends BaseAdminController {
             'max_num_images' => $this->getParameter('equipment_max_num_images')
         ));
     }     
+    
+    /**
+     * @Route("/admin/talent/new", name="admin_talent_new")     
+     */
+    public function talentAddAction(Request $request) {                
+        $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown2(Category::TYPE_TALENT);
+        $users = $this->getDoctrineRepo('AppBundle:User')->getAllForDropdown();
+        // build form
+        //<editor-fold>
+        $form = $this->createFormBuilder()                                
+            ->add('subcategoryId', 'choice', array(
+                'choices' => $subcats,
+                'choices_as_values' => false,
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+            ->add('userId', 'choice', array(
+                'choices' => $users,
+                'choices_as_values' => false,
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+            ->getForm();
+        //</editor-fold>
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
+            $user = $this->getDoctrineRepo('AppBundle:User')->find($data['userId']);
+            
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $talent = new Talent();
+            $talent->setUser($user);
+            $talent->setSubcategory($subcat);
+            $talent->setStatus(Talent::STATUS_INCOMPLETE);         
+            $talent->setName('');
+            $talent->setUuid(Utils::getUuid());
+            $talent->setAddrStreet($user->getAddrStreet());
+            $talent->setAddrNumber($user->getAddrNumber());
+            $talent->setAddrFlatNumber($user->getAddrFlatNumber());
+            $talent->setAddrPostcode($user->getAddrPostcode());
+            $talent->setAddrPlace($user->getAddrPlace());
+            
+            $em->persist($talent);
+            $em->flush();
+  
+            return $this->redirectToRoute('admin_talent_edit', array('id' => $talent->getId()));            
+        }
+        
+        
+        return $this->render('admin/talent/new.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
     
     public function mainImageValidation($mainImage) {
         return $mainImage !== null ? null : 'Bitte lade zumindest ein Bild hoch';

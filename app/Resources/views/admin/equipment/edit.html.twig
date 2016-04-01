@@ -78,7 +78,7 @@
         </div>
         <div class="col-xs-6">
             {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
-            {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 22 Zeichen', 'class': 'normal-input' } }) }}
+            {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 22 Zeichen', 'class': 'text-line-fill normal-input' } }) }}
         </div>
         <div class="err-msg">{{ form_errors(form.name) }}</div>
     </div>
@@ -89,7 +89,7 @@
         </div>
         <div class="col-xs-6">
             {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
-            {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }}EUR 
+            {{ form_widget(form.price, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }}EUR 
         </div>
         <div class="err-msg">{{ form_errors(form.price) }}</div>
     </div>
@@ -100,7 +100,7 @@
         </div>
         <div class="col-xs-6">
             {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
-            {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }}EUR 
+            {{ form_widget(form.value, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }}EUR 
         </div>
         <div class="err-msg">{{ form_errors(form.value) }}</div>
     </div>
@@ -111,7 +111,7 @@
             <label >alter (ca.)</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.ageId, { 'attr': { 'class': '', 'title': 'Alter (ca.)' }}) }}
+            {{ form_widget(form.ageId, { 'attr': { 'class': 'small-input text-box short', 'title': 'Alter (ca.)' }}) }}
         </div>
         <div class="err-msg">{{ form_errors(form.ageId) }}</div>
     </div>
@@ -121,7 +121,7 @@
             <label >kaution</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '1000' }}) }}EUR 
+            {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '0', 'max': '1000' }}) }}EUR 
         </div>
         <div class="err-msg">{{ form_errors(form.deposit) }}</div>
     </div>
@@ -142,7 +142,7 @@
             <label >verkaufspreis bei kauf</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }}EUR 
+            {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }}EUR 
         </div>
         <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
     </div>
@@ -176,7 +176,8 @@
             {{ form_widget(form.make_sure) }}
             <label for="form_make_sure"><span></span>bitte versichere, dass dein equipment zum zeitpunkt der buchung funktionstüchtig und
 einsatzbereit ist.</label>
-        </div>                                        
+        </div>  
+        <div class="err-msg">{{ form_errors(form.make_sure) }}</div>
     </div>
                         
                         
@@ -185,7 +186,7 @@ einsatzbereit ist.</label>
             <label >strasse</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse' } }) }}                        
+            {{ form_widget(form.street, { 'attr': { 'placeholder': 'Strasse', 'class':'text-line-fill normal-input' } }) }}                        
         </div>                                        
     </div>
         
@@ -194,7 +195,7 @@ einsatzbereit ist.</label>
             <label >ort</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort' } }) }}                        
+            {{ form_widget(form.place, { 'attr': { 'placeholder': 'Ort', 'class':'text-line-fill normal-input' } }) }}                        
         </div>                                        
     </div>
 
@@ -204,7 +205,7 @@ einsatzbereit ist.</label>
             <label >hausnr</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.', 'class': 'security' } }) }}
+            {{ form_widget(form.number, { 'attr': { 'placeholder': 'Hausnr.', 'class': 'security text-box short' } }) }}
         </div>                                        
         <div class="err-msg">{{ form_errors(form.number, { 'attr': { 'class': 'err-msg' } }) }}</div>
     </div>
@@ -215,7 +216,7 @@ einsatzbereit ist.</label>
             <label >türnr</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.flatNumber, { 'attr': { 'placeholder': 'Türnr.', 'class': 'security' } }) }}
+            {{ form_widget(form.flatNumber, { 'attr': { 'placeholder': 'Türnr.', 'class': 'security text-box short' } }) }}
         </div>                                        
         <div class="err-msg">{{ form_errors(form.flatNumber, { 'attr': { 'class': 'err-msg' } }) }}</div>
     </div>
@@ -226,7 +227,7 @@ einsatzbereit ist.</label>
             <label >plz</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ' } }) }}
+            {{ form_widget(form.postcode, { 'attr': { 'placeholder': 'PLZ', 'class':'text-box short' } }) }}
         </div>                                        
         <div class="err-msg">{{ form_errors(form.postcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
     </div>
@@ -250,7 +251,7 @@ einsatzbereit ist.</label>
             {{ form_widget(form.phonePrefix, { 'attr': { 'class': 'text-line-fill short', 'placeholder': 'phone prefix' }}) }}
             <div class="err-msg">{{ form_errors(form.phonePrefix, { 'attr': { 'class': 'err-msg' } }) }}</div>
         </div>
-        <div class="col-xs-2">            
+        <div class="col-xs-4">            
             {{ form_widget(form.phone, { 'attr': { 'class': 'text-line-fill', 'placeholder': 'phone number' }}) }}
             <div class="err-msg">{{ form_errors(form.phone, { 'attr': { 'class': 'err-msg' } }) }}</div>
         </div>        

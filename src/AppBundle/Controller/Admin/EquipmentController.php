@@ -448,6 +448,14 @@ class EquipmentController extends BaseAdminController {
             $owner->setPhonePrefix($data['phonePrefix']);
             $owner->setPhone($data['phone']);
             
+            if ($data['defaultAddress'] === true) {
+                $owner->setAddrStreet($equipment->getAddrStreet());
+                $owner->setAddrNumber($equipment->getAddrNumber());
+                $owner->setAddrFlatNumber($equipment->getAddrFlatNumber());
+                $owner->setAddrPostcode($equipment->getAddrPostcode());
+                $owner->setAddrPlace($equipment->getAddrPlace());
+            }
+            
             // save to db
             $em->flush();
    
