@@ -1,11 +1,14 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Equipment;
+use AppBundle\Entity\EquipmentImage;
+use AppBundle\Entity\Image;
+use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Entity\EquipmentImage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Callback;
@@ -14,8 +17,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\ExecutionContextInterface;
-use AppBundle\Utils\Utils;
-use AppBundle\Entity\Image;
 
 class EquipmentController extends BaseAdminController {
     /**
@@ -481,243 +482,67 @@ class EquipmentController extends BaseAdminController {
     /**
      * @Route("/admin/equipment/new", name="admin_equipment_new")     
      */
-    public function equipmentAddAction(Request $request) {        
-        //Get eq owner
-        //$owner = $equipment->getUser();
-        
+    public function equipmentAddAction(Request $request) {                
+        $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown2(Category::TYPE_EQUIPMENT);
+        $users = $this->getDoctrineRepo('AppBundle:User')->getAllForDropdown();
         // build form
         //<editor-fold>
-        $ageArr = $this->getDoctrineRepo('AppBundle:EquipmentAge')->getAllForDropdown();        
-        $form = $this->createFormBuilder(null, array('constraints' => array(
-                            new Callback(array($this, 'validateTime'))
-                        ) )                
-                
+        $form = $this->createFormBuilder()                                
+            ->add('subcategoryId', 'choice', array(
+                'choices' => $subcats,
+                'choices_as_values' => false,
+                'constraints' => array(
+                    new NotBlank()
                 )
-                
-                //edit 1                
-                ->add('name', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 256))
-                    )
-                ))
-                ->add('price', 'integer', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 2500))
-                    )
-                ))
-                ->add('deposit', 'integer', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 0, 'max' => 1000))
-                    )
-                ))
-                ->add('value', 'integer', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 50, 'max' => 2000))
-                    )
-                ))
-                ->add('priceBuy', 'integer', array(
-                    'required' => false,
-                    'constraints' => array(
-                        new Range(array('min' => 0, 'max' => 20000))
-                    )
-                ))
-                ->add('ageId', 'choice', array(
-                    'choices' => $ageArr,
-                    'choices_as_values' => false,
-                    'constraints' => array(
-                        new NotBlank()
-                    )
-                ))
-                ->add('invoice', 'checkbox', array('required' => false))
-                ->add('industrial', 'checkbox', array('required' => false))
-                
-                
-                //edit 2
-                ->add('description', 'textarea', array(
-                    'attr' => array('maxlength' => 500),
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 500))
-                    )
-                ))
-                ->add('make_sure', 'checkbox', array(
-                    'required' => false,
-                    'constraints' => array(
-                        new Callback(array($this, 'validateMakeSure'))                    
-                    )
-                ))
-                ->add('street', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 128))
-                    )
-                ))
-                ->add('number', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 16))
-                    )
-                ))
-                ->add('flatNumber', 'text', array(
-                    'required' => false,
-                    'constraints' => array(
-                        new Length(array('max' => 16))
-                    )
-                ))
-                ->add('postcode', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 4)),
-                        new Regex(array('pattern' => '/^\d{4}$/', 'message' => 'Bitte gib hier eine gültige PLZ ein'))
-                    )
-                ))
-                ->add('place', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 128))
-                    )
-                ))
-                ->add('defaultAddress', 'checkbox', array(
-                    'required' => false
-                ))
-                ->add('accept', 'checkbox', array(
-                    'required' => false,
-                    'constraints' => array(
-                        new Callback(array($this, 'validateAccept'))
-                    )
-                ))
-                ->add('phone', 'text', array(
-                    'required' => true,
-                    'attr' => array(
-                        'maxlength' => 10, 
-                        'pattern' => '^[0-9]{1,10}$'),
-                    'constraints' => array(
-                        new Regex(array('pattern' => '/^\d{1,10}$/', 'message' => 'Bitte gib hier eine gültige Telefonnummer ein'))
-                    )
-                ))
-                ->add('phonePrefix', 'text', array(
-                    'required' => true, 
-                    'attr' => array('maxlength' => 3, 'pattern' => '^[0-9]{1,3}$'),
-                    'constraints' => array(
-                        new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Bitte gib hier eine gültige Vorwahl ein'))
-                    )
-                ))
-
-                //edit 3
-                ->add('timeMorning', 'checkbox', array('required' => false))
-                ->add('timeAfternoon', 'checkbox', array('required' => false))
-                ->add('timeEvening', 'checkbox', array('required' => false))
-                ->add('timeWeekend', 'checkbox', array('required' => false))
-                ->add('descType', 'textarea', array(
-                    'required' => false,
-                    'attr' => array('maxlength' => 500),
-                    'constraints' => array(new Length(array('max' => 500)))
-                ))    
-                ->add('descSpecial', 'textarea', array(
-                    'required' => false,
-                    'attr' => array('maxlength' => 500),
-                    'constraints' => array(new Length(array('max' => 500)))
-                ))    
-                ->add('descCondition', 'textarea', array(
-                    'required' => false,
-                    'attr' => array('maxlength' => 1000),
-                    'constraints' => array(new Length(array('max' => 1000)))
-                ))              
-                
-                ->getForm();
+            ))
+            ->add('userId', 'choice', array(
+                'choices' => $users,
+                'choices_as_values' => false,
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+            ->getForm();
         //</editor-fold>
         
         $form->handleRequest($request);
-        $statusChanged = false; // change relevant for email notification
         
         if ($form->isValid()) {
             $data = $form->getData();
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
+            $user = $this->getDoctrineRepo('AppBundle:User')->find($data['userId']);
+            $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find(1);
+            
+            
             $em = $this->getDoctrine()->getManager();
-            $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
-
-            // check for modaration relevant changes
-            $changed = $equipment->getName() !== $data['name'];
-
-            // map fields, TODO: consider moving to Equipment's method
-            //<editor-fold> map fields            
             
-            $equipment = new Equipment();
+            $eq = new Equipment();
+            $eq->setUser($user);
+            $eq->setSubcategory($subcat);
+            $eq->setName('');
+            $eq->setPrice(0);
+            $eq->setValue(0);
+            $eq->setDeposit(0);
+            $eq->setStatus(Equipment::STATUS_INCOMPLETE);
+            $eq->setInvoice(0);
+            $eq->setIndustrial(0);
+            $eq->setAge($age);
+            $eq->setUuid(Utils::getUuid());
+            $eq->setAddrStreet($user->getAddrStreet());
+            $eq->setAddrNumber($user->getAddrNumber());
+            $eq->setAddrFlatNumber($user->getAddrFlatNumber());
+            $eq->setAddrPostcode($user->getAddrPostcode());
+            $eq->setAddrPlace($user->getAddrPlace());
             
-            //EDIT 1
-            $equipment->setName($data['name']);
-            $equipment->setPrice($data['price']);
-            $equipment->setValue($data['value']);
-            $equipment->setDeposit($data['deposit']);
-            $equipment->setPriceBuy($data['priceBuy']);
-            $equipment->setInvoice($data['invoice']);
-            $equipment->setIndustrial($data['industrial']);
-            $equipment->setAge($age);
-            //</editor-fold>
-            
-            //EDIT 2
-            $equipment->setDescription($data['description']);
-            $equipment->setAddrStreet($data['street']);
-            $equipment->setAddrNumber($data['number']);
-            $equipment->setAddrFlatNumber($data['flatNumber']);
-            $equipment->setAddrPostcode($data['postcode']);
-            $equipment->setAddrPlace($data['place']);            
-            $equipment->setFunctional(intval($data['make_sure']));
-            $equipment->setAccept(intval($data['accept']));
-            //</editor-fold>
-            //$em->flush();
-            
-            // update user
-            //if ($data['defaultAddress'] === true) {
-            //    $user->setAddrStreet($eq->getAddrStreet());
-            //    $user->setAddrNumber($eq->getAddrNumber());
-            //    $user->setAddrFlatNumber($eq->getAddrFlatNumber());
-            //    $user->setAddrPostcode($eq->getAddrPostcode());
-            //    $user->setAddrPlace($eq->getAddrPlace());
-            //}
-            //$user->setPhonePrefix($data['phonePrefix']);
-            //$user->setPhone($data['phone']);
-            
-            
-            //EDIT 3
-           
-            // map fields
-            //<editor-fold>
-            $equipment->setTimeMorning($data['timeMorning']);
-            $equipment->setTimeAfternoon($data['timeAfternoon']);
-            $equipment->setTimeEvening($data['timeEvening']);
-            $equipment->setTimeWeekend($data['timeWeekend']);
-            $equipment->setDescType($data['descType']);
-            $equipment->setDescSpecial($data['descSpecial']);
-            $equipment->setDescCondition($data['descCondition']);
-            
-            
-            
-            // save to db
+            $em->persist($eq);
             $em->flush();
   
-            return $this->redirectToRoute('admin_equipment_list');
-            
+            return $this->redirectToRoute('admin_equipment_edit', array('id' => $eq->getId()));            
         }
         
         
-        $mb = intval($this->getParameter('image_upload_max_size'));
-        return $this->render('admin/equipment/edit.html.twig', array(
-
-            'equipment' => $equipment,
-            'form' => $form->createView(),
-            'complete' => $complete,
-            'id' => $id,
-            'statusChanged' => $statusChanged,
-            'mainImage' => $mainImage,
-            'images' => $images,
-            'mainImageValidation' => $mainImageValidation,
-            'imagesValidation' => $imagesValidation,
-            'megabytes' => $mb,
-            'max_num_images' => $this->getParameter('equipment_max_num_images')
+        return $this->render('admin/equipment/new.html.twig', array(
+            'form' => $form->createView()
         ));
     }
     

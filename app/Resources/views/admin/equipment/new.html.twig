@@ -1,0 +1,35 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_equipment_list') }}" class="active">Equipment</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Equipment add</h1>
+    
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+<div class="container form">
+    <div class="row">
+        <div class="col-xs-2"><label for="form_subcategoryId" class="control-label">Subcategory</label></div>
+        <div class="col-xs-6">            
+            {{ form_widget(form.subcategoryId, { 'attr': { 'title': '' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.subcategoryId) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><label for="form_userId" class="control-label">User</label></div>
+        <div class="col-xs-6">            
+            {{ form_widget(form.userId, { 'attr': { 'title': '' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.userId) }}</div>
+    </div>
+</div>
+<br/>
+<input type="submit" class="button-black backgound-yellow text-black" value="Add">
+<a class="button-black backgound-yellow text-black" href="{{ path('admin_users_list') }}">Cancel</a>
+
+{{ form_end(form) }}
+
+{% endblock %}
