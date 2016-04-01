@@ -393,8 +393,7 @@ class EquipmentController extends BaseAdminController {
         
         $form->handleRequest($request);
         $mainImageValidation = null;
-        $imagesValidation = null;
-        $statusChanged = false; // change relevant for email notification
+        $imagesValidation = null;        
         if ($request->getMethod() === 'POST') {
             $mainImageValidation = $this->mainImageValidation($mainImage);
             $imagesValidation = $this->imagesValidation($images);
@@ -445,7 +444,8 @@ class EquipmentController extends BaseAdminController {
             $equipment->setDescSpecial($data['descSpecial']);
             $equipment->setDescCondition($data['descCondition']);
             
-            
+            $owner->setPhonePrefix($data['phonePrefix']);
+            $owner->setPhone($data['phone']);
             
             // save to db
             $em->flush();
@@ -459,7 +459,6 @@ class EquipmentController extends BaseAdminController {
             'equipment' => $equipment,
             'form' => $form->createView(),            
             'id' => $id,
-            'statusChanged' => $statusChanged,
             'mainImage' => $mainImage,
             'images' => $images,
             'mainImageValidation' => $mainImageValidation,

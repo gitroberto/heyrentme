@@ -30,7 +30,8 @@ $(document).ready(function(){
 
 function rowActions(cellvalue, options, cellobject) {
       return   "<a title='Moderate'             href='talent/moderate/"   +  options.rowId + "'><u>moderate</u></a>  "+
-              "<a title='Preview'  target='_blank' href='"   +  cellobject[7] + "'><u>preview</u></a>  ";
+              "<a title='Preview'  target='_blank' href='"   +  cellobject[7] + "'><u>preview</u></a>  "+
+              "<a title='Edit'  href='"   +  cellobject[10] + "'><u>edit</u></a>  ";
   }
 
 var $grid = $('#jqgrid');
