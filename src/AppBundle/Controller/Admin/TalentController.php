@@ -22,11 +22,51 @@ use Symfony\Component\Validator\ExecutionContextInterface;
 
 
 class TalentController extends BaseAdminController {
+
+    const NEW_TALENT_IDS = 'AppBundle\Controller\Admin\TalentController\NewTalentIds';
+    
+    private function addNewId(Request $request, $id) {
+        $session = $request->getSession();
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());
+        array_push($ids, $id);
+        $session->set(TalentController::NEW_TALENT_IDS, $ids);
+    }
+    private function removeNewId(Request $request, $id) {
+        $session = $request->getSession();
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());
+        $key = array_search($id, $ids);
+        if ($key !== FALSE)
+            unset($ids[$key]);
+        $session->set(TalentController::NEW_TALENT_IDS, $ids);
+    }
+    private function clearNewIds($request) {
+        // remove "hanging" equipments (new but not saved)
+        $session = $request->getSession();
+
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());        
+        if (count($ids) === 0)
+            return;
+        
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrineRepo('AppBundle:Talent');
+        
+        foreach($ids as $id) {
+            $eq = $repo->find($id);
+            if ($eq !== null)
+                $em->remove($eq);
+        }
+        $em->flush();
+        
+        $session->set(TalentController::NEW_TALENT_IDS, array()); // clear session var
+    }
+    
+    
+    
     /**
-     * 
      * @Route("/admin/talent", name="admin_talent_list")
      */
-    public function indexAction() {
+    public function indexAction(Request $request) {
+        $this->clearNewIds($request);
         return $this->render('admin/talent/index.html.twig');
     }
     
@@ -460,6 +500,7 @@ class TalentController extends BaseAdminController {
             
             //</editor-fold>
             $em->flush();
+            $this->removeNewId($request, $id);
             
             return $this->redirectToRoute('admin_talent_list', array('id' => $id));
             
@@ -529,6 +570,8 @@ class TalentController extends BaseAdminController {
             
             $em->persist($talent);
             $em->flush();
+            
+            $this->addNewId($request, $talent->getId());            
   
             return $this->redirectToRoute('admin_talent_edit', array('id' => $talent->getId()));            
         }

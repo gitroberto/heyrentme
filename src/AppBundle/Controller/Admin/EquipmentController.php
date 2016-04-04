@@ -19,11 +19,50 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 class EquipmentController extends BaseAdminController {
+    
+    const NEW_EQUIPMENT_IDS = 'AppBundle\Controller\Admin\EquipmentController\NewEquipmentIds';
+    
+    private function addNewId(Request $request, $id) {
+        $session = $request->getSession();
+        $ids = $session->get(EquipmentController::NEW_EQUIPMENT_IDS, array());
+        array_push($ids, $id);
+        $session->set(EquipmentController::NEW_EQUIPMENT_IDS, $ids);
+    }
+    private function removeNewId(Request $request, $id) {
+        $session = $request->getSession();
+        $ids = $session->get(EquipmentController::NEW_EQUIPMENT_IDS, array());
+        $key = array_search($id, $ids);
+        if ($key !== FALSE)
+            unset($ids[$key]);
+        $session->set(EquipmentController::NEW_EQUIPMENT_IDS, $ids);
+    }
+    private function clearNewIds($request) {
+        // remove "hanging" equipments (new but not saved)
+        $session = $request->getSession();
+
+        $ids = $session->get(EquipmentController::NEW_EQUIPMENT_IDS, array());        
+        if (count($ids) === 0)
+            return;
+        
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrineRepo('AppBundle:Equipment');
+        
+        foreach($ids as $id) {
+            $eq = $repo->find($id);
+            if ($eq !== null)
+                $em->remove($eq);
+        }
+        $em->flush();
+        
+        $session->set(EquipmentController::NEW_EQUIPMENT_IDS, array()); // clear session var
+    }
+    
     /**
      * 
      * @Route("/admin/equipment", name="admin_equipment_list")
      */
-    public function indexAction() {
+    public function indexAction(Request $request) {        
+        $this->clearNewIds($request);
         return $this->render('admin/equipment/index.html.twig');
     }
     
@@ -458,6 +497,8 @@ class EquipmentController extends BaseAdminController {
             
             // save to db
             $em->flush();
+            
+            $this->removeNewId($request, $id);
    
             return $this->redirectToRoute('admin_equipment_list');
             
@@ -544,6 +585,8 @@ class EquipmentController extends BaseAdminController {
             
             $em->persist($eq);
             $em->flush();
+            
+            $this->addNewId($request, $eq->getId());            
   
             return $this->redirectToRoute('admin_equipment_edit', array('id' => $eq->getId()));            
         }
