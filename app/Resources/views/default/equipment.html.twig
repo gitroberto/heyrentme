@@ -526,6 +526,8 @@
 
                 var c = ( b - a );
                 var d = c / (1000 * 60 * 60 * 24);
+                if (d < 1)
+                    d = 1;
 
                 var p = Math.round(d) * {{ item.activePrice|number_format(2, '.', '') }};
                 $('.price-calc').html(p.toFixed(2).replace('.', ','));
