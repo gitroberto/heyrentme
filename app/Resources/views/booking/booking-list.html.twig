@@ -55,7 +55,7 @@
                             {{ item.addressAsString }}
                         </p>
                     </div>
-					 <div class="col-sm-4 col-sm-push-4 margin-ort">
+                    <div class="col-sm-4 col-sm-push-4 margin-ort">
                         {% if booking.status == constant('STATUS_BOOKED', booking) %}
                             <button data-id="{{ booking.id }}" data-type="{% if booking.inquiry.equipment is defined %}equipment{% else %}talent{% endif %}" class="rabat-button">Buchung bearbeiten</button>
                         {% else %}
@@ -117,6 +117,13 @@
                         <p class="dont-transform">
                             {{ item.addressAsString }}
                         </p>
+                    </div>
+                    <div class="col-sm-4 col-sm-push-4 margin-ort">
+                        {% if booking.status == constant('STATUS_BOOKED', booking) %}
+                            <button data-id="{{ booking.id }}" data-type="{% if booking.inquiry.equipment is defined %}equipment{% else %}talent{% endif %}" class="rabat-button">Buchung bearbeiten</button>
+                        {% else %}
+                            Status: {{ booking.statusAsString }}
+                       {% endif %}
                     </div>
                 </div>
             </div>
