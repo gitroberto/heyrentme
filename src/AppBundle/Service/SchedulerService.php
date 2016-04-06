@@ -221,7 +221,8 @@ class SchedulerService {
                 $email = $provider->getEmail();
                 $emailHtml = $this->templating->render($tmpl, array(
                     'mailer_app_url_prefix' => $this->appUrlPrefix,
-                    'provider' => $provider
+                    'provider' => $provider,
+                    'inquiry' => $inq
                 ));
                 $message = Swift_Message::newInstance()
 
