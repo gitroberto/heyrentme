@@ -79,7 +79,7 @@
         <div class="form-group">
           <label for="form_name" class="control-label col-xs-2">Last login</label>
           <div class="col-xs-10 control-readonly">              
-            {{ user.lastlogin.format('Y-m-d H:i') }}
+            {% if user.lastlogin %}{{ user.lastlogin.format('Y-m-d H:i') }}{% endif %}
           </div>
         </div>
     </div>
