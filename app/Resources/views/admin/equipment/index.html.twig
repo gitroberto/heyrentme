@@ -28,9 +28,15 @@ $(document).ready(function(){
 
 
 function rowActions(cellvalue, options, cellobject) {
-      return   "<a title='Moderate'             href='equipment/moderate/"   +  options.rowId + "'><u>moderate</u></a>  "+
-               "<a title='Preview' target='_blank' href='"   +  cellobject[7] + "'><u>preview</u></a>  "+
-               "<a title='Edit'             href='equipment/edit/"   +  options.rowId + "'><u>edit</u></a>  ";
+    return '<a class="grid-icon" title="Moderate" href="' + cellobject[11] + '"><span class="glyphicon glyphicon-ok-circle"></span></a>' + 
+            '<a class="grid-icon" title="Edit" href="' + cellobject[10] + '"><span class="glyphicon glyphicon-edit"></span></a>' +
+            '<a class="grid-icon" title="Preview" href="' + cellobject[7] + '" target="_blank"><span class="glyphicon glyphicon-picture"></span></a>' +
+            '<a class="grid-icon" title="Log" href="' + cellobject[12] + '" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a>';
+/*      return   "<a title='Moderate'             href='equipment/moderate/"   +  options.rowId + "'><span class=""></span></a>  "+
+               "<a title='Preview' target='_blank' href='"   +  cellobject[7] + "'><u>P</u></a>  "+
+               "<a title='Edit'             href='equipment/edit/"   +  options.rowId + "'><u>E</u></a>  " + 
+               "<a title='Log'             href='equipment/log/"   +  options.rowId + "'><u>L</u></a>  ";
+               */
   }
 
 var $grid = $('#jqgrid');
@@ -42,7 +48,7 @@ if( $grid.length > 0 ) {
                 mtype: 'GET',
                 datatype: 'jsonp',
                 colModel:[
-                        { name:' ', width:150, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                        { name:' ', width:120, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
                         { name:'Id', index:'e.id', width:0, editable:false, sortable:false, hidden: true, search: false },
                         { name:'Category', index:'concat(c.name, s.name)', width: 250, editable:false, sortable:true, search: false },
                         { name:'Name', index:'e.name', width: 250, editable:false, sortable:true, search: false },

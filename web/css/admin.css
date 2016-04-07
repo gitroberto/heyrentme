@@ -60,7 +60,12 @@ nav.crumbs {
     max-width: 200px;
     max-height: 100px;
 }
-
+a.grid-icon {
+    font-size: 16px;
+}
+a.grid-icon .glyphicon {
+    padding: 0 4px;
+}
 
 .ui-jqgrid .ui-jqgrid-sortable {
     height: auto;
@@ -120,4 +125,52 @@ a, a:hover {
 */
 .ui-icon {
     display: block;
+}
+
+/* log classes -------------------------------------------------------------- */
+div.inquiry-header {
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 2px;
+    padding-top: 2px;
+}
+div.inquiry-header.booking {
+    background-color: #efe;    
+}
+div.inquiry-header.question {
+    background-color: #eef;
+}
+div.inquiry-header span {
+    display: inline-block;
+    margin: 0 4px;
+    overflow: hidden;
+}
+div.inquiry-header span.date {
+    width: 100px;   
+}
+div.inquiry-header span.name {
+    width: 70px;   
+    text-transform: uppercase;
+}
+div.inquiry-header span.desc {
+}
+
+div.event-grid.collapsed {
+    display: none;
+}
+div.event-grid {
+    padding-left: 32px;
+}
+div.event-grid td {
+    padding: 1px 8px;
+    font-size: 12px;
+    vertical-align: top;
+}
+.toolbar {
+    margin: 8px 0;
+}
+.toolbar .glyphicon {
+    font-size: 24px;
+    cursor: pointer;
 }

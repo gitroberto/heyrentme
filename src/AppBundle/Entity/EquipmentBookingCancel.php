@@ -16,7 +16,7 @@ class EquipmentBookingCancel {
      */
     protected $id;
     /**
-     * @ORM\ManyToOne(targetEntity="EquipmentBooking")
+     * @ORM\ManyToOne(targetEntity="EquipmentBooking", inversedBy="cancels")
      */
     protected $booking;
     /**

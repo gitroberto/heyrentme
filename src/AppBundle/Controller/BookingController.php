@@ -218,7 +218,7 @@ class BookingController extends BaseController {
                 $email = $inq->getEmail();
             }
             $url = null;
-            if ($acc > 0) {
+            if ($inq->getAccepted() > 0) {
                 $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('booking-confirmation', array('uuid' => $inq->getUuid()));
             }

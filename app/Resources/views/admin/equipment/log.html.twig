@@ -1,0 +1,64 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_equipment_list') }}" class="active">Equipment</a></li>
+{% endblock %}
+
+{% block body %}
+    <h1>Equipment log</h1>
+    <strong>{{ equipment.name }}</strong> (id: {{ equipment.id }}), provided by <strong>{{ equipment.user.email }}</strong> ({{ equipment.user.name }} {{ equipment.user.surname }}, id: {{ equipment.user.id }})
+    
+    
+    <div class="toolbar">
+        <span title="Expand all" class="glyphicon glyphicon-collapse-down"></span>
+        <span title="Collapse all" class="glyphicon glyphicon-collapse-up"></span>
+    </div>
+
+    {% for node in inquiries %}
+        <div class="inquiry-header {{ node.name|lower }}">
+            <span class="date">{{ node.lastDate|localizeddate('none', 'none', 'de_AT', null, 'yyyy.MM.dd HH:mm') }}</span>
+            <span class="name">{{ node.name }}</span>
+            <span class="desc">{{ node.desc|raw }}</span>
+        </div>
+        <div class="event-grid collapsed">
+            <table>
+                {% for ev in node.events %}
+                    <tr>
+                        <td>{{ ev.date|localizeddate('none', 'none', 'de_AT', null, 'yyyy.MM.dd HH:mm') }}</td>
+                        <td>{{ ev.status }}</td>
+                        <td>{{ ev.desc1|nl2br }}</td>
+                        <td>{{ ev.desc2|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+        
+{% endblock %}
+
+{% block script %}  
+    <script>
+        $(function() {
+            $("div.inquiry-header").click(headerClick);
+            $(".toolbar .glyphicon-collapse-down").click(function() {
+                setAll(false);
+            });
+            $(".toolbar .glyphicon-collapse-up").click(function() {
+                setAll(true);
+            });
+        });
+        
+        function headerClick() {
+            var $h = $(this);
+            $h.next().toggleClass('collapsed');
+        }
+        function setAll(collapse) {
+            if (collapse)
+                $("div.inquiry-header").next().addClass('collapsed');
+            else
+                $("div.inquiry-header").next().removeClass('collapsed');
+        }
+    </script>
+{% endblock %}

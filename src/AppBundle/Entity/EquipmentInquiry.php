@@ -86,6 +86,12 @@ class EquipmentInquiry {
      * @ORM\OneToOne(targetEntity="EquipmentBooking", mappedBy="inquiry")
      */
     private $booking;    
+    
+    public function getDescAsStr() {
+        $from = $this->fromAt->format('Y-m-d H:i');
+        $to = $this->toAt->format('Y-m-d H:i');
+        return sprintf("from: %s\nto: %s\nprice: %.2f\nmessage: %s", $from, $to, $this->getPrice(), $this->getMessage());
+    }
 
     /**
      * Get id

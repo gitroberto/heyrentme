@@ -21,7 +21,7 @@ class UserRating {
      */
     protected $user;
     /**
-     * @ORM\OneToOne(targetEntity="EquipmentBooking")
+     * @ORM\OneToOne(targetEntity="EquipmentBooking", inversedBy="userRating")
      */
     protected $booking;
     /**

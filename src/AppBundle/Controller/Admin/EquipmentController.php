@@ -104,7 +104,10 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getStatusStr();
             $cell[$i++] = $this->generateUrl('preview_equipment', array('uuid'=>$dataRow->getUuid()));
             $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
-            $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');            
+            $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');
+            $cell[$i++] = $this->generateUrl('admin_equipment_edit', array('id' => $dataRow->getId()));
+            $cell[$i++] = $this->generateUrl('admin_equipment_moderate', array('id' => $dataRow->getId()));
+            $cell[$i++] = $this->generateUrl('admin-equipment-log', array('id' => $dataRow->getId()));
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -932,4 +935,18 @@ class EquipmentController extends BaseAdminController {
             $context->buildViolation('Bitte Checkbox bestätigen')->atPath('accept')->addViolation();
         }            
     }
+
+    /**
+     * @Route("admin-equipment-log/{id}", name="admin-equipment-log")
+     */
+    public function logAction(Request $request, $id) {
+        $repo = $this->getDoctrineRepo('AppBundle:Equipment');
+        $inqs = $repo->getEquipmentLog($id);
+        $eq = $repo->find($id);
+        
+        return $this->render('admin/equipment/log.html.twig', array(
+            'inquiries' => $inqs,
+            'equipment' => $eq
+        ));
+    }    
 }
