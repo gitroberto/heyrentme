@@ -541,7 +541,7 @@ EOT;
                 }
                 
                 $userRating = $bk->getUserRating();
-                if ($rating !== null) {
+                if ($userRating !== null) {
                     $ev = new LogEvent();
                     $ev->date = $rating->getCreatedAt();
                     $ev->status = "User rating";
