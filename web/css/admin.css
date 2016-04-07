@@ -136,10 +136,10 @@ div.inquiry-header {
     padding-top: 2px;
 }
 div.inquiry-header.booking {
-    background-color: #efe;    
+    background-color: #dfd;    
 }
 div.inquiry-header.question {
-    background-color: #eef;
+    background-color: #ddf;
 }
 div.inquiry-header span {
     display: inline-block;
