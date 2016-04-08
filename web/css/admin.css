@@ -133,13 +133,24 @@ div.inquiry-header {
     font-weight: bold;
     cursor: pointer;
     margin-top: 2px;
-    padding-top: 2px;
 }
-div.inquiry-header.booking {
-    background-color: #dfd;    
+div.inquiry-header.booked {
+    background-color: #afa;    
 }
 div.inquiry-header.question {
-    background-color: #ddf;
+    background-color: #aff;
+}
+div.inquiry-header.inquiry {
+    background-color: #ddd;
+}
+div.inquiry-header.accepted {
+    background-color: #efe;
+}
+div.inquiry-header.rejected {
+    background-color: #fee;
+}
+div.inquiry-header.cancelled {
+    background-color: #faa;
 }
 div.inquiry-header span {
     display: inline-block;

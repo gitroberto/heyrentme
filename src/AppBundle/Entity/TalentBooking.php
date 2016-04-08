@@ -87,7 +87,18 @@ class TalentBooking {
      * @ORM\JoinColumn(name="discount_code_id", referencedColumnName="id")
      */    
     private $discountCode;
-    
+    /**
+     * @ORM\OneToMany(targetEntity="TalentBookingCancel", mappedBy="talentBooking")
+     */    
+    private $cancels;
+    /**
+     * @ORM\OneToOne(targetEntity="TalentRating", mappedBy="booking")
+     */    
+    private $rating;
+    /**
+     * @ORM\OneToOne(targetEntity="UserRating", mappedBy="talentBooking")
+     */    
+    private $userRating;    
     
     public function getStatusAsString() {
         switch ($this->status) {
@@ -516,5 +527,94 @@ class TalentBooking {
     public function getDiscountCode()
     {
         return $this->discountCode;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->cancels = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add cancel
+     *
+     * @param \AppBundle\Entity\TalentBookingCancel $cancel
+     *
+     * @return TalentBooking
+     */
+    public function addCancel(\AppBundle\Entity\TalentBookingCancel $cancel)
+    {
+        $this->cancels[] = $cancel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cancel
+     *
+     * @param \AppBundle\Entity\TalentBookingCancel $cancel
+     */
+    public function removeCancel(\AppBundle\Entity\TalentBookingCancel $cancel)
+    {
+        $this->cancels->removeElement($cancel);
+    }
+
+    /**
+     * Get cancels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCancels()
+    {
+        return $this->cancels;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param \AppBundle\Entity\TalentRating $rating
+     *
+     * @return TalentBooking
+     */
+    public function setRating(\AppBundle\Entity\TalentRating $rating = null)
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return \AppBundle\Entity\TalentRating
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * Set userRating
+     *
+     * @param \AppBundle\Entity\UserRating $userRating
+     *
+     * @return TalentBooking
+     */
+    public function setUserRating(\AppBundle\Entity\UserRating $userRating = null)
+    {
+        $this->userRating = $userRating;
+
+        return $this;
+    }
+
+    /**
+     * Get userRating
+     *
+     * @return \AppBundle\Entity\UserRating
+     */
+    public function getUserRating()
+    {
+        return $this->userRating;
     }
 }

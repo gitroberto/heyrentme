@@ -26,57 +26,80 @@
 
 {% block footer %}
     {{ include('admin/common/admin.footer.html.twig') }}
-<script>    
-$(document).ready(function(){    
-//*******************************************
-/*	JQGRID INIT
-/********************************************/
 
+<script>   
+    function rowActions(cellvalue, options, cellobject) {
+        return '<a class="grid-icon" title="Moderate" href="' + cellobject[18] + '"><span class="glyphicon glyphicon-ok-circle"></span></a>' + 
+            '<a class="grid-icon" title="Edit" href="' + cellobject[10] + '"><span class="glyphicon glyphicon-edit"></span></a>' +
+            '<a class="grid-icon" title="Preview" href="' + cellobject[7] + '" target="_blank"><span class="glyphicon glyphicon-picture"></span></a>' +
+            '<a class="grid-icon" title="Log" href="' + cellobject[17] + '" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a>' +
+            '<a class="grid-icon delete" title="Delete" href="#" data-href="' + cellobject[16] + '"><span class="glyphicon glyphicon-remove"></span></a>';
+    }
+    function gridComplete() {
+        $('a.delete').on('click', deleteClick);
+    }
+    function deleteClick(e) {
+        e.preventDefault();
+        var ok = confirm('Are you sure you want to delete this item?');
+        if (!ok)
+            return;
+        
+        var url = $(this).data('href');
+        $.get(url)
+                .done(function() {
+                    $("#jqgrid").trigger('reloadGrid');
+                })
+                .fail(function() {
+                    alert('Unexpeted error occurred. Please try again or contact an administrator.');
+                });
+    }
+    
+    
+    $(function() {    
+        var $grid = $('#jqgrid');
 
-function rowActions(cellvalue, options, cellobject) {
-      return   "<a title='Moderate'             href='talent/moderate/"   +  options.rowId + "'><u>moderate</u></a>  "+
-              "<a title='Preview'  target='_blank' href='"   +  cellobject[7] + "'><u>preview</u></a>  "+
-              "<a title='Edit'  href='"   +  cellobject[10] + "'><u>edit</u></a>  ";
-  }
-
-var $grid = $('#jqgrid');
-
-if( $grid.length > 0 ) {
-        var optionsStr = ":All;1:New;2:Modified;3:Approved;4:Rejected;5:Incomplete";
-        $grid.jqGrid({
-                url: '{{ path('admin_talent_jsondata') }}',
-                mtype: 'GET',
-                datatype: 'jsonp',
-                colModel:[
-                        { name:' ', width:150, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
-                        { name:'Id', index:'e.id', width:0, editable:false, sortable:false, hidden: true, search: false },
-                        { name:'Category', index:'concat(c.name, s.name)', width: 250, editable:false, sortable:true, search: false },
-                        { name:'Name', index:'e.name', width: 250, editable:false, sortable:true, search: false },
-                        { name:'Price', index:'e.price', width: 80, align: "right", editable:false, sortable:true, search: false },
-                        { name:'User', index:'u.username',  width: 250, editable:false, sortable:true, search: false},
-                        { name:'Status', index:'e.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: false }},
-                        { name:'Url', hidden: true },
-                        { name:'Created', index: 'e.createdAt', width: 130, sortable: true, search: false },
-                        { name:'Modified', index: 'e.modifiedAt', width: 130, sortable: true, search: false }                        
-                ],
-                height: 550,
-                rowNum: 20,
-                rowList: [20, 50, 100],
-                pager: 'jqgrid-pager',
-                sortname: 'e.status',
-                viewrecords: true,
-                sortorder: "asc",
-                multiselect: false
-        });
-        $grid.jqGrid('filterToolbar', {
-            stringResult: false,
-            searchOnEnter: false,
-            defaultSearch: 'e',
-            clearSearch: false
-        });
-}
-
-}); // end ready function
+        if( $grid.length > 0 ) {
+            var optionsStr = ":All;1:New;2:Modified;3:Approved;4:Rejected;5:Incomplete";
+            $grid.jqGrid({
+                    url: '{{ path('admin_talent_jsondata') }}',
+                    mtype: 'GET',
+                    datatype: 'jsonp',
+                    colModel:[
+                            { name:' ', width:130, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
+                            { name:'Id', index:'e.id', width:0, editable:false, sortable:false, hidden: true, search: false },
+                            { name:'Category', index:'concat(c.name, s.name)', width: 250, editable:false, sortable:true, search: false },
+                            { name:'Name', index:'e.name', width: 250, editable:false, sortable:true, search: false },
+                            { name:'Price', index:'e.price', width: 80, align: "right", editable:false, sortable:true, search: false },
+                            { name:'User', index:'u.username',  width: 250, editable:false, sortable:true, search: false},
+                            { name:'Status', index:'e.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: false }},
+                            { name:'Url', hidden: true },
+                            { name:'Created', index: 'e.createdAt', width: 130, sortable: true, search: false },
+                            { name:'Modified', index: 'e.modifiedAt', width: 130, sortable: true, search: false },
+                            { name: '', hidden: true },
+                            { name: 'Q', width: 40, align: 'right', sortable: false, search: false },
+                            { name: 'B', width: 40, align: 'right', sortable: false, search: false },
+                            { name: 'C', width: 40, align: 'right', sortable: false, search: false },
+                            { name: 'R', width: 70, align: 'right', sortable: false, search: false },
+                            { name: 'D', width: 50, align: 'right', sortable: false, search: false }
+                    ],
+                    height: 550,
+                    rowNum: 20,
+                    rowList: [20, 50, 100],
+                    pager: 'jqgrid-pager',
+                    sortname: 'e.status',
+                    viewrecords: true,
+                    sortorder: "asc",
+                    multiselect: false,
+                    gridComplete: gridComplete
+            });
+            $grid.jqGrid('filterToolbar', {
+                stringResult: false,
+                searchOnEnter: false,
+                defaultSearch: 'e',
+                clearSearch: false
+            });
+        }
+    });
 </script>    
     
 {% endblock %}

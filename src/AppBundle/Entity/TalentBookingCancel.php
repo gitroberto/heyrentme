@@ -16,7 +16,7 @@ class TalentBookingCancel {
      */
     protected $id;
     /**
-     * @ORM\ManyToOne(targetEntity="TalentBooking")
+     * @ORM\ManyToOne(targetEntity="TalentBooking", inversedBy="cancels")
      */
     protected $talentBooking;
     /**
@@ -193,5 +193,29 @@ class TalentBookingCancel {
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set talentBooking
+     *
+     * @param \AppBundle\Entity\TalentBooking $talentBooking
+     *
+     * @return TalentBookingCancel
+     */
+    public function setTalentBooking(\AppBundle\Entity\TalentBooking $talentBooking = null)
+    {
+        $this->talentBooking = $talentBooking;
+
+        return $this;
+    }
+
+    /**
+     * Get talentBooking
+     *
+     * @return \AppBundle\Entity\TalentBooking
+     */
+    public function getTalentBooking()
+    {
+        return $this->talentBooking;
     }
 }

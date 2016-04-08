@@ -563,7 +563,7 @@ EOT;
         foreach ($rows as $inq) {
             $user = $inq->getUser();
             $node = new EventNode();
-            $node->name = "Booking";
+            $node->name = "Inquiry";
             $node->desc = sprintf("%s (%s %s, id: %d)", $user->getEmail(), $user->getName(), $user->getSurname(), $user->getid());
             
             $ev = new LogEvent();
@@ -578,6 +578,7 @@ EOT;
                 $ev->status = "Resp. " . ($inq->getAccepted() ? "Accept" : "Reject");
                 $ev->desc1 = $inq->getResponse();
                 $node->addEvent($ev);
+                $node->name =  $inq->getAccepted() ? "Accepted" : "Rejected";
             }
             
             $bk = $inq->getBooking();
@@ -592,6 +593,7 @@ EOT;
                 else
                     $ev->desc1 = "Discount code: -";
                 $node->addEvent($ev);
+                $node->name = "Booked";
                 
                 $cancels = $bk->getCancels();
                 
@@ -601,6 +603,7 @@ EOT;
                     $ev->status = $cancel->getProvider() === 1 ? 'Cancelled by provider' : 'Cancelled by user';
                     $ev->desc1 = "{$cancel->getReason()}: {$cancel->getDescription()}";
                     $node->addEvent($ev);
+                    $node->name = "Cancelled";
                 }
                 
                 $rating = $bk->getRating();

@@ -87,6 +87,7 @@ class TalentController extends BaseAdminController {
         $res = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus);
         $dataRows = $res['rows'];
         $rowsCount = $res['count'];//$repo->countAll();
+        $stats = $res['stats'];
         $pagesCount = ceil($rowsCount / $pageSize);
         
         $rows = array(); // rows as json result        
@@ -94,8 +95,9 @@ class TalentController extends BaseAdminController {
             $subcat = $dataRow->getSubcategory();
             $cat = $subcat->getCategory();
             $user = $dataRow->getUser();
+            $stat = $stats[$dataRow->getId()];
 
-            $i=0;
+            $i = 0;
             $row = array();
             $row['id'] = $dataRow->getId();
             $cell = array();
@@ -110,6 +112,14 @@ class TalentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
             $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');            
             $cell[$i++] = $this->generateUrl('admin_talent_edit', array('id'=>$dataRow->getId()));
+            $cell[$i++] = $stat['questions'];
+            $cell[$i++] = $stat['bookings'];
+            $cell[$i++] = $stat['cancels'];
+            $cell[$i++] = $stat['revenue'];
+            $cell[$i++] = $stat['discount'];
+            $cell[$i++] = $this->generateUrl('admin-talent-delete', array('id' => $dataRow->getId()));
+            $cell[$i++] = $this->generateUrl('admin-talent-log', array('id' => $dataRow->getId()));
+            $cell[$i++] = $this->generateUrl('admin_talent_moderate', array('id' => $dataRow->getId()));
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -246,9 +256,12 @@ class TalentController extends BaseAdminController {
             return new Response(Response::HTTP_NOT_FOUND);
         }        
         $owner = $talent->getUser();
+        $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown2(Category::TYPE_TALENT);
+        
         // map fields, TODO: consider moving to Talent's method
         //<editor-fold> map fields            
         $data = array(
+            'subcategoryId' => $talent->getSubcategory()->getId(),
             'name' => $talent->getName(),
             'price' => $talent->getPrice(),
             'requestPrice' => $talent->getRequestPrice() > 0,
@@ -295,6 +308,13 @@ class TalentController extends BaseAdminController {
                 'constraints' => array(
                     new Callback(array($this, 'validateTime'))
                 )))
+                ->add('subcategoryId', 'choice', array(
+                    'choices' => $subcats,
+                    'choices_as_values' => false,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
                 ->add('name', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
@@ -427,6 +447,7 @@ class TalentController extends BaseAdminController {
         if ($form->isValid()   && $mainImageValidation === null && $imagesValidation === null ) {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
             
 
             // check for modaration relevant changes
@@ -434,6 +455,7 @@ class TalentController extends BaseAdminController {
             
             // map fields, TODO: consider moving to Talent's method
             //<editor-fold> map fields            
+            $talent->setSubcategory($subcat);
             $talent->setName($data['name']);
             $talent->setPrice($data['price']);
             $talent->setRequestPrice($data['requestPrice'] ? 1 : 0);
@@ -967,5 +989,25 @@ class TalentController extends BaseAdminController {
         return new JsonResponse($resp);    
     }
     
-    
+    /**
+     * @Route("admin-talent-log/{id}", name="admin-talent-log")
+     */
+    public function logAction(Request $request, $id) {
+        $repo = $this->getDoctrineRepo('AppBundle:Talent');
+        $inqs = $repo->getTalentLog($id);
+        $eq = $repo->find($id);
+        
+        return $this->render('admin/talent/log.html.twig', array(
+            'inquiries' => $inqs,
+            'talent' => $eq
+        ));
+    }    
+    /**
+     * @Route("admin-talent-delete/{id}", name="admin-talent-delete")
+     */
+    public function deleteAction(Request $request, $id) {                
+        $dir = $this->getParameter('image_storage_dir');
+        $this->getDoctrineRepo('AppBundle:Talent')->delete($id, $dir);
+        return new JsonResponse("ok");
+    }    
 }

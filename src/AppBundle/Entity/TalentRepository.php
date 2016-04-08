@@ -5,6 +5,8 @@ namespace AppBundle\Entity;
 use AppBundle\Utils\SearchParams;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
+use AppBundle\ViewModel\Admin\EventNode;
+use AppBundle\ViewModel\Admin\LogEvent;
 
 /**
  * TalentRepository
@@ -103,7 +105,10 @@ class TalentRepository extends EntityRepository
         }
         $rows = $qb->getQuery()->getResult();
         
-        return array('count' => $count, 'rows' => $rows);
+        // add stats
+        $stats = $this->gridOverviewStats($rows);
+        
+        return array('count' => $count, 'rows' => $rows, 'stats' => $stats);
     }
     private function gridOverviewParams($qb, $sStatus) {
         if (!empty($sStatus)) {
@@ -111,7 +116,67 @@ class TalentRepository extends EntityRepository
             $qb->setParameter('status', $sStatus);
         }
     }
-    
+    private function gridOverviewStats($talents) {
+        $ids = array();
+        foreach ($talents as $eq) {
+            array_push($ids, $eq->getId());
+        }
+        
+        // query
+        //<editor-fold>
+        $sql = <<<EOT
+select e.id, t1.questions, t2.bookings, t3.cancels, t4.revenue, t5.discount
+from
+	talent e
+	left join (
+		select talent_id, count(*) as questions
+		from talent_question
+		group by talent_id
+	) as t1 on e.id = t1.talent_id
+	left join (
+		select ei.talent_id, count(*) as bookings
+		from talent_booking eb
+			inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+		group by ei.talent_id
+	) as t2 on e.id = t2.talent_id
+	left join (
+		select ei.talent_id, count(*) as cancels
+		from talent_booking_cancel ebc
+			inner join talent_booking eb on ebc.talent_booking_id = eb.id
+			inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+		group by ei.talent_id
+	) as t3 on e.id = t3.talent_id
+	left join (
+		select ei.talent_id, sum(ei.price) as revenue
+		from talent_booking eb
+			inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+		where eb.status not in (2, 3) -- not cancelled
+		group by ei.talent_id
+	) as t4 on e.id = t4.talent_id
+	left join (
+		select ei.talent_id, count(*) * 5.0 as discount
+		from talent_booking eb
+			inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+		where eb.status not in (2, 3) -- not cancelled
+			and eb.discount_code_id is not null
+		group by ei.talent_id
+	) as t5 on e.id = t5.talent_id
+where e.id in (#IDS#)
+EOT;
+        $sql = str_replace("#IDS#", implode(", ", $ids), $sql);
+        //</editor-fold>
+        
+        $conn = $this->getEntityManager()->getConnection();
+        $rows = $conn->executeQuery($sql)->fetchAll();
+        
+        $result = array();
+        foreach ($rows as $row) {
+            $id = $row['id'];
+            $result[$id] = $row;
+        }
+
+        return $result;
+    }    
     public function countAll() {
         return $this->createQueryBuilder('e')
             ->select('count(e.id)')
@@ -470,4 +535,187 @@ EOT;
 EOT;
         return $this->getEntityManager()->createQuery($sql)->getResult();
     }
+
+    public function getTalentLog($talentId) {
+
+        $eventNodes = array();
+        
+        // inquiries
+        //<editor-fold>        
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('i', 'b', 'u', 'c', 'r', 'ur', 'dc')
+            ->from('AppBundle:TalentInquiry', 'i')
+            ->leftJoin('i.booking', 'b')
+            ->leftJoin('i.user', 'u')
+            ->leftJoin('b.cancels', 'c')
+            ->leftJoin('b.rating', 'r')
+            ->leftJoin('b.userRating', 'ur')
+            ->leftJoin('b.discountCode', 'dc')
+            ->where('i.talent = :talentId')
+            ->setParameter('talentId', $talentId);
+        
+        $rows = $qb->getQuery()->getResult();
+        
+        
+        foreach ($rows as $inq) {
+            $user = $inq->getUser();
+            $node = new EventNode();
+            $node->name = "Inquiry";
+            $node->desc = sprintf("%s (%s %s, id: %d)", $user->getEmail(), $user->getName(), $user->getSurname(), $user->getid());
+            
+            $ev = new LogEvent();
+            $ev->date = $inq->getCreatedAt();
+            $ev->status = "Inquiry";
+            $ev->desc1 = $inq->getDescAsStr();
+            $node->addEvent($ev);
+            
+            if ($inq->getResponse() !== null) {
+                $ev = new LogEvent();
+                $ev->date = $inq->getModifiedAt();                
+                $ev->status = "Resp. " . ($inq->getAccepted() ? "Accept" : "Reject");
+                $ev->desc1 = $inq->getResponse();
+                $node->addEvent($ev);
+                $node->name =  $inq->getAccepted() ? "Accepted" : "Rejected";
+            }
+            
+            $bk = $inq->getBooking();
+            if ($bk !== null) {
+                $dc = $bk->getDiscountCode();
+                
+                $ev = new LogEvent();
+                $ev->date = $bk->getCreatedAt();
+                $ev->status = "Booking";
+                if ($dc !== null)
+                    $ev->desc1 = "Discount code: <span style=\"background-color: #faa; padding: 0 4px;\">{$dc->getCode()} (id: {$dc->getId()})</span>";
+                else
+                    $ev->desc1 = "Discount code: -";
+                $node->addEvent($ev);
+                $node->name = "Booked";
+                
+                $cancels = $bk->getCancels();
+                
+                foreach ($cancels as $cancel) {
+                    $ev = new LogEvent();
+                    $ev->date = $cancel->getCreatedAt();
+                    $ev->status = $cancel->getProvider() === 1 ? 'Cancelled by provider' : 'Cancelled by user';
+                    $ev->desc1 = "{$cancel->getReason()}: {$cancel->getDescription()}";
+                    $node->addEvent($ev);
+                    $node->name = "Cancelled";
+                }
+                
+                $rating = $bk->getRating();
+                if ($rating !== null) {
+                    $ev = new LogEvent();
+                    $ev->date = $rating->getCreatedAt();
+                    $ev->status = "Equip. rating";
+                    $ev->desc1 = sprintf("%.1f: %s", $rating->getRating(), $rating->getOpinion());
+                    $node->addEvent($ev);
+                }
+                
+                $userRating = $bk->getUserRating();
+                if ($userRating !== null) {
+                    $ev = new LogEvent();
+                    $ev->date = $userRating->getCreatedAt();
+                    $ev->status = "User rating";
+                    $ev->desc1 = sprintf("%.1f: %s", $userRating->getRating(), $userRating->getOpinion());
+                    $node->addEvent($ev);
+                }
+            }            
+                        
+            array_push($eventNodes, $node);
+        }
+        //</editor-fold>
+        
+        // questions
+        //<editor-fold>        
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('q', 'u')
+            ->from('AppBundle:TalentQuestion', 'q')
+            ->leftJoin('q.user', 'u')
+            ->where('q.talent = :talentId')
+            ->setParameter('talentId', $talentId);
+        
+        $rows = $qb->getQuery()->getResult();
+                
+        foreach ($rows as $quest) {
+            $user = $quest->getUser();
+            $node = new EventNode();
+            $node->name = "Question";
+            $node->desc = sprintf("%s (%s %s, id: %d)", $user->getEmail(), $user->getName(), $user->getSurname(), $user->getid());
+            
+            $ev = new LogEvent();
+            $ev->date = $quest->getCreatedAt();
+            $ev->status = "Question";
+            $ev->desc1 = $quest->getMessage();
+            $node->addEvent($ev);
+            
+            if ($quest->getReply() !== null) {
+                $ev = new LogEvent();
+                $ev->date = $quest->getModifiedAt();                
+                $ev->status = "Reply";
+                $ev->desc1 = $quest->getReply();
+                $node->addEvent($ev);
+            }
+                        
+            array_push($eventNodes, $node);
+        }
+        //</editor-fold>
+        
+        usort($eventNodes, "AppBundle\\ViewModel\\Admin\\EventNode::cmp");
+        $eventNodes = array_reverse($eventNodes);
+        
+        return $eventNodes;
+    }
+
+    public function delete($id, $imageStorageDir) {
+        $em = $this->getEntityManager();
+        $eq = $em->find('AppBundle:Talent', $id);
+
+        // remove images
+        //<editor-fold>
+        $imgRepo = $em->getRepository('AppBundle:Image');
+        
+        $eimgs = $eq->getImages();
+        foreach ($eimgs as $eimg) {
+            $img = $eimg->getImage();
+            $eq->removeImage($eimg);
+            $em->remove($eimg);
+            $imgRepo->removeImage($img, $imageStorageDir);
+        }
+        $em->flush();
+        //</editor-fold>
+
+        // remove related objects and equipment itself
+        //<editor-fold>        
+        $sql = <<<EOT
+    delete ebc
+    from talent_booking_cancel ebc
+        inner join talent_booking eb on ebc.talent_booking_id = eb.id
+        inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+    where ei.talent_id = {$id};
+
+    delete from talent_rating where talent_id = {$id};
+
+    delete ur
+    from user_rating ur
+        inner join talent_booking eb on ur.talent_booking_id = eb.id
+        inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id         
+    where ei.talent_id = {$id};
+
+    delete eb
+    from talent_booking eb
+        inner join talent_inquiry ei on eb.talent_inquiry_id = ei.id
+    where ei.talent_id = {$id};
+    
+    delete from talent_inquiry where talent_id = {$id};
+        
+    delete from talent_question where talent_id = {$id};
+        
+    delete from talent where id = {$id};        
+EOT;
+    
+        $em->getConnection()->executeUpdate($sql);
+        //</editor-fold>
+    }
 }
+
