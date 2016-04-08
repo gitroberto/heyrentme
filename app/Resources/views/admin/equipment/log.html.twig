@@ -28,8 +28,8 @@
                     <tr>
                         <td>{{ ev.date|localizeddate('none', 'none', 'de_AT', null, 'yyyy.MM.dd HH:mm') }}</td>
                         <td>{{ ev.status }}</td>
-                        <td>{{ ev.desc1|nl2br }}</td>
-                        <td>{{ ev.desc2|nl2br }}</td>
+                        <td>{{ ev.desc1|raw|nl2br }}</td>
+                        <td>{{ ev.desc2|raw|nl2br }}</td>
                     </tr>
                 {% endfor %}
             </table>

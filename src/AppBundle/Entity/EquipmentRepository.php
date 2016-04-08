@@ -546,13 +546,14 @@ EOT;
         // inquiries
         //<editor-fold>        
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('i', 'b', 'u', 'c', 'r', 'ur')
+        $qb->select('i', 'b', 'u', 'c', 'r', 'ur', 'dc')
             ->from('AppBundle:EquipmentInquiry', 'i')
             ->leftJoin('i.booking', 'b')
             ->leftJoin('i.user', 'u')
             ->leftJoin('b.cancels', 'c')
             ->leftJoin('b.rating', 'r')
             ->leftJoin('b.userRating', 'ur')
+            ->leftJoin('b.discountCode', 'dc')
             ->where('i.equipment = :equipmentId')
             ->setParameter('equipmentId', $equipmentId);
         
@@ -581,9 +582,15 @@ EOT;
             
             $bk = $inq->getBooking();
             if ($bk !== null) {
+                $dc = $bk->getDiscountCode();
+                
                 $ev = new LogEvent();
                 $ev->date = $bk->getCreatedAt();
                 $ev->status = "Booking";
+                if ($dc !== null)
+                    $ev->desc1 = "Discount code: <span style=\"background-color: #faa; padding: 0 4px;\">{$dc->getCode()} (id: {$dc->getId()})</span>";
+                else
+                    $ev->desc1 = "Discount code: -";
                 $node->addEvent($ev);
                 
                 $cancels = $bk->getCancels();
