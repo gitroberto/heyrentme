@@ -660,4 +660,54 @@ EOT;
         return $eventNodes;
     }
     
+    public function delete($id, $imageStorageDir) {
+        $em = $this->getEntityManager();
+        $eq = $em->find('AppBundle:Equipment', $id);
+
+        // remove images
+        //<editor-fold>
+        $imgRepo = $em->getRepository('AppBundle:Image');
+        
+        $eimgs = $eq->getImages();
+        foreach ($eimgs as $eimg) {
+            $img = $eimg->getImage();
+            $eq->removeImage($eimg);
+            $em->remove($eimg);
+            $imgRepo->removeImage($img, $imageStorageDir);
+        }
+        $em->flush();
+        //</editor-fold>
+
+        // remove related objects and equipment itself
+        //<editor-fold>        
+        $sql = <<<EOT
+    delete ebc
+    from equipment_booking_cancel ebc
+        inner join equipment_booking eb on ebc.booking_id = eb.id
+        inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+    where ei.equipment_id = {$id};
+
+    delete from equipment_rating where equipment_id = {$id};
+
+    delete ur
+    from user_rating ur
+            inner join equipment_booking eb on ur.booking_id = eb.id
+            inner join equipment_inquiry ei on eb.inquiry_id = ei.id         
+    where ei.equipment_id = {$id};
+
+    delete eb
+    from equipment_booking eb
+        inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+    where ei.equipment_id = {$id};
+    
+    delete from equipment_inquiry where equipment_id = {$id};
+        
+    delete from equipment_question where equipment_id = {$id};
+        
+    delete from equipment where id = {$id};        
+EOT;
+    
+        $em->getConnection()->executeUpdate($sql);
+        //</editor-fold>
+    }
 }

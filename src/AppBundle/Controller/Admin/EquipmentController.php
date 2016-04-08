@@ -115,6 +115,7 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $stat['cancels'];
             $cell[$i++] = $stat['revenue'];
             $cell[$i++] = $stat['discount'];            
+            $cell[$i++] = $this->generateUrl('admin-equipment-delete', array('id' => $dataRow->getId()));
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -955,5 +956,13 @@ class EquipmentController extends BaseAdminController {
             'inquiries' => $inqs,
             'equipment' => $eq
         ));
+    }    
+    /**
+     * @Route("admin-equipment-delete/{id}", name="admin-equipment-delete")
+     */
+    public function deleteAction(Request $request, $id) {                
+        $dir = $this->getParameter('image_storage_dir');
+        $this->getDoctrineRepo('AppBundle:Equipment')->delete($id, $dir);
+        return new JsonResponse("ok");
     }    
 }
