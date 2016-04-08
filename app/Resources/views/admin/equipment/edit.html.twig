@@ -73,6 +73,13 @@
         <div class="col-xs-12 err-msg">{{ form_errors(form) }}</div>
     </div>
     <div class="row">
+        <div class="col-xs-2"><label for="form_subcategoryId" class="control-label">Subcategory</label></div>
+        <div class="col-xs-6">            
+            {{ form_widget(form.subcategoryId, { 'attr': { 'title': '' }}) }}
+        </div>
+        <div class="col-xs-4 err-msg">{{ form_errors(form.subcategoryId) }}</div>
+    </div>
+    <div class="row">
         <div class="col-xs-2">
             <label for="form[name]">angebotsname:</label>
         </div>

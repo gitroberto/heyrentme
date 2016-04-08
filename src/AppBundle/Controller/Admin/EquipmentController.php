@@ -258,10 +258,13 @@ class EquipmentController extends BaseAdminController {
         
         //Get eq owner
         $owner = $equipment->getUser();
+        $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown2(Category::TYPE_EQUIPMENT);
         
         // map fields, TODO: consider moving to Equipment's method
         //<editor-fold> map fields            
         $data = array(
+            'subcategoryId' => $equipment->getSubcategory()->getId(),
+            
             //edit 1
             'name' => $equipment->getName(),
             'price' => $equipment->getPrice(),
@@ -304,6 +307,13 @@ class EquipmentController extends BaseAdminController {
                         ) )                
                 
                 )
+                ->add('subcategoryId', 'choice', array(
+                    'choices' => $subcats,
+                    'choices_as_values' => false,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
                 
                 //edit 1                
                 ->add('name', 'text', array(
@@ -454,12 +464,14 @@ class EquipmentController extends BaseAdminController {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
 
             // check for modaration relevant changes
             $changed = $equipment->getName() !== $data['name'];
 
             // map fields, TODO: consider moving to Equipment's method
-            //<editor-fold> map fields            
+            //<editor-fold> map fields           
+            $equipment->setSubcategory($subcat);
             
             //EDIT 1
             $equipment->setName($data['name']);
