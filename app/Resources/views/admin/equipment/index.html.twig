@@ -57,7 +57,15 @@ if( $grid.length > 0 ) {
                         { name:'Status', index:'e.status', width: 100, editable:false, sortable:true, stype: 'select', searchoptions:{ sopt:['eq'], value: optionsStr, clearSearch: false }},
                         { name:'Url', hidden: true },
                         { name:'Created', index: 'e.createdAt', width: 130, sortable: true, search: false },
-                        { name:'Modified', index: 'e.modifiedAt', width: 130, sortable: true, search: false }                        
+                        { name:'Modified', index: 'e.modifiedAt', width: 130, sortable: true, search: false },
+                        { name: '', hidden: true },
+                        { name: '', hidden: true },
+                        { name: '', hidden: true },
+                        { name: 'Q', width: 50, align: 'right', sortable: false, search: false },
+                        { name: 'B', width: 50, align: 'right', sortable: false, search: false },
+                        { name: 'C', width: 50, align: 'right', sortable: false, search: false },
+                        { name: 'R', width: 50, align: 'right', sortable: false, search: false },
+                        { name: 'D', width: 50, align: 'right', sortable: false, search: false }
                 ],
                 height: 550,
                 rowNum: 20,

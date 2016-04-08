@@ -107,13 +107,78 @@ class EquipmentRepository extends EntityRepository {
         }
         $rows = $qb->getQuery()->getResult();
         
-        return array('count' => $count, 'rows' => $rows);
+        
+        // add stats
+        $stats = $this->gridOverviewStats($rows);
+        
+        return array('count' => $count, 'rows' => $rows, 'stats' => $stats);
     }
     private function gridOverviewParams($qb, $sStatus) {
         if (!empty($sStatus)) {
             $qb->andWhere($qb->expr()->eq('e.status', ':status'));
             $qb->setParameter('status', $sStatus);
         }
+    }
+    private function gridOverviewStats($equipments) {
+        $ids = array();
+        foreach ($equipments as $eq) {
+            array_push($ids, $eq->getId());
+        }
+        
+        // query
+        //<editor-fold>
+        $sql = <<<EOT
+select e.id, t1.questions, t2.bookings, t3.cancels, t4.revenue, t5.discount
+from
+	equipment e
+	left join (
+		select equipment_id, count(*) as questions
+		from equipment_question
+		group by equipment_id
+	) as t1 on e.id = t1.equipment_id
+	left join (
+		select ei.equipment_id, count(*) as bookings
+		from equipment_booking eb
+			inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+		group by ei.equipment_id
+	) as t2 on e.id = t2.equipment_id
+	left join (
+		select ei.equipment_id, count(*) as cancels
+		from equipment_booking_cancel ebc
+			inner join equipment_booking eb on ebc.booking_id = eb.id
+			inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+		group by ei.equipment_id
+	) as t3 on e.id = t3.equipment_id
+	left join (
+		select ei.equipment_id, sum(ei.price) as revenue
+		from equipment_booking eb
+			inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+		where eb.status not in (2, 3) -- not cancelled
+		group by ei.equipment_id
+	) as t4 on e.id = t4.equipment_id
+	left join (
+		select ei.equipment_id, count(*) * 5.0 as discount
+		from equipment_booking eb
+			inner join equipment_inquiry ei on eb.inquiry_id = ei.id
+		where eb.status not in (2, 3) -- not cancelled
+			and eb.discount_code_id is not null
+		group by ei.equipment_id
+	) as t5 on e.id = t5.equipment_id
+where e.id in (#IDS#)
+EOT;
+        $sql = str_replace("#IDS#", implode(", ", $ids), $sql);
+        //</editor-fold>
+        
+        $conn = $this->getEntityManager()->getConnection();
+        $rows = $conn->executeQuery($sql)->fetchAll();
+        
+        $result = array();
+        foreach ($rows as $row) {
+            $id = $row['id'];
+            $result[$id] = $row;
+        }
+
+        return $result;
     }
     
     public function countAll() {

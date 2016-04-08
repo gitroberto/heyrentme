@@ -83,6 +83,7 @@ class EquipmentController extends BaseAdminController {
         $res = $repo->getGridOverview($sortColumn, $sortDirection, $pageSize, $page, $sStatus);
         $dataRows = $res['rows'];
         $rowsCount = $res['count'];//$repo->countAll();
+        $stats = $res['stats'];
         $pagesCount = ceil($rowsCount / $pageSize);
         
         $rows = array(); // rows as json result        
@@ -90,6 +91,7 @@ class EquipmentController extends BaseAdminController {
             $subcat = $dataRow->getSubcategory();
             $cat = $subcat->getCategory();
             $user = $dataRow->getUser();
+            $stat = $stats[$dataRow->getId()];
             
             $i = 0;
             $row = array();
@@ -108,6 +110,11 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $this->generateUrl('admin_equipment_edit', array('id' => $dataRow->getId()));
             $cell[$i++] = $this->generateUrl('admin_equipment_moderate', array('id' => $dataRow->getId()));
             $cell[$i++] = $this->generateUrl('admin-equipment-log', array('id' => $dataRow->getId()));
+            $cell[$i++] = $stat['questions'];
+            $cell[$i++] = $stat['bookings'];
+            $cell[$i++] = $stat['cancels'];
+            $cell[$i++] = $stat['revenue'];
+            $cell[$i++] = $stat['discount'];            
             
             $row['cell'] = $cell;
             array_push($rows, $row);
