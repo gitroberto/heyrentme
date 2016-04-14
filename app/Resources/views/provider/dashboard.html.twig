@@ -75,7 +75,10 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                  
+                                  {% if (eq.status != constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
+                                      <a class="button-black first-button col-xs-3" target="_blank" href="{{ path("preview_equipment", { "uuid": eq.uuid } ) }}">vorschau</a>
+                                  {% endif %}
 
                                   {% if (eq.status == constant('AppBundle\\Entity\\Equipment::STATUS_APPROVED')) %}
                                     <a class="button-black background-facebook col-xs-3" data-href="{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': eq.urlPath }) }}" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
@@ -212,7 +215,9 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                  {% if (tal.status != constant('AppBundle\\Entity\\Talent::STATUS_APPROVED')) %}
+                                      <a class="button-black first-button col-xs-3" target="_blank" href="{{ path("preview_talent", { "uuid": tal.uuid } ) }}">vorschau</a>
+                                  {% endif %}
 
                                   {% if (tal.status == constant('AppBundle\\Entity\\Talent::STATUS_APPROVED')) %}
                                     <a class="button-black background-facebook col-xs-3" data-href="{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': tal.urlPath }) }}" href="#"><img src="/img/icons/fb-new.png" /> Teilen</a>
