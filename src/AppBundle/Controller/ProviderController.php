@@ -467,11 +467,8 @@ class ProviderController extends BaseController {
             return new Response(Response::HTTP_NOT_FOUND);
         }
         
-        $this->getDoctrineRepo('AppBundle:Image')->removeAllImages($equipment, $this->getParameter('image_storage_dir'));
+        $this->getDoctrineRepo('AppBundle:Equipment')->delete($equipment->getId(), $this->getParameter('image_storage_dir'));
                 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($equipment);
-        $em->flush();
         return $this->redirectToRoute("dashboard");
     }
     

@@ -115,11 +115,8 @@ class TalentController extends BaseController {
             return new Response(Response::HTTP_NOT_FOUND);
         }
         
-        $this->getDoctrineRepo('AppBundle:Image')->removeAllImages($talent, $this->getParameter('image_storage_dir'));
+        $this->getDoctrineRepo('AppBundle:Talent')->delete($talent->getId(), $this->getParameter('image_storage_dir'));
                 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($talent);
-        $em->flush();
         return $this->redirectToRoute("dashboard");
     }
     
