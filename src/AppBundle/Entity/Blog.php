@@ -57,6 +57,25 @@ class Blog
      * @ORM\JoinColumn(name="big_image_id", referencedColumnName="id")
      */
     protected $bigImage;
+    
+    /**
+     * @ORM\Column(type="string", length=36)
+     */
+    protected $uuid;
+    
+    
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
 
     public function setId($id)
     {

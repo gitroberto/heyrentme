@@ -512,6 +512,7 @@ class BlogController  extends BaseAdminController {
             $cell[3] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
             $cell[4] = $dataRow->getModifiedAt()->format('Y-m-d H:i');
             $cell[5] = $dataRow->getPosition();
+            $cell[6] = $this->generateUrl('blog_preview', array('uuid'=>$dataRow->getUuid()));
             
             $row['cell'] = $cell;
             array_push($rows, $row);

@@ -105,4 +105,38 @@ class BlogRepository extends EntityRepository
 EOT;
         return $this->getEntityManager()->createQuery($dql)->getResult();
     }
+    
+    public function getOneByUuid($uuid) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        /*
+         * Please not this query uses "fetch join".
+         * It fetches images and discounts (associated with equipments) immediately 
+         * (instead of lazy loading them later).
+         * Keep for optimum performance.
+         */        
+        $qb->select('b') // this line forces fetch join
+            ->from('AppBundle:Blog', 'b');
+        
+        //$qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
+        //$qb->andWhere('u.status = '. User::STATUS_OK);
+        $qb->andWhere($qb->expr()->eq('b.uuid', ':uuid'));
+        
+        $b = null;
+        try {
+            $q = $qb->getQuery();
+            $q->setParameter(':uuid', "{$uuid}");
+            $b = $q->getSingleResult();
+        } catch (NoResultException $e) {}
+       
+        return $b;
+    }
+    public function getAllWithoutUuid() {
+        $sql = <<<EOT
+            select b
+            from AppBundle:Blog b
+            where b.uuid is null
+EOT;
+        return $this->getEntityManager()->createQuery($sql)->getResult();
+    }
 }
