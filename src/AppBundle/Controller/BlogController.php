@@ -15,11 +15,7 @@ class BlogController extends BaseController {
     public function indexAction(Request $request) {
         $posts = $this->getDoctrineRepo('AppBundle:Blog')->getAllOrderedByPosition();
         
-        $ids = array();
-        foreach ($posts as $post) {
-            array_push($ids, $post->getId());
-        }
-        $request->getSession()->set('BlogsList', $ids);
+        $this->createSessionBlogList($request, $posts);
         
         return $this->render('blog/blog.html.twig', array(
             'posts' => $posts
@@ -47,23 +43,22 @@ class BlogController extends BaseController {
         foreach ($post->getRelatedBlogs() as $rp){
             $posts[count($posts)] = $rp->getRelatedBlog();
         }
-        $session = $request->getSession();
-        if ($session->has('BlogsList')) {
-            $ids = $session->get('BlogsList');
-            $i = array_search($post->getId(), $ids);
-            if ($i !== null) {
-                $repo = $this->getDoctrineRepo('AppBundle:Blog');
-                if ($i > 0) {
-                    $prevPost = $repo->find($ids[$i - 1]);
-                } else {
-                    $prevPost = $repo->find($ids[count($ids) - 1]);
-                }
-                
-                if ($i < count($ids) - 1) {
-                    $nextPost = $repo->find($ids[$i + 1]);
-                } else {
-                    $nextPost = $repo->find($ids[0]);
-                }
+        
+        // determine prev/next post for navigation
+        $ids = $this->getSessionBlogList($request);
+        $i = array_search($post->getId(), $ids);
+        if ($i !== null) {
+            $repo = $this->getDoctrineRepo('AppBundle:Blog');
+            if ($i > 0) {
+                $prevPost = $repo->find($ids[$i - 1]);
+            } else {
+                $prevPost = $repo->find($ids[count($ids) - 1]);
+            }
+
+            if ($i < count($ids) - 1) {
+                $nextPost = $repo->find($ids[$i + 1]);
+            } else {
+                $nextPost = $repo->find($ids[0]);
             }
         }
         
@@ -77,5 +72,20 @@ class BlogController extends BaseController {
     
     }
     
-  
+    private function createSessionBlogList(Request $request, $posts) {
+        $ids = array();
+        foreach ($posts as $post)
+            array_push($ids, $post->getId());
+
+        $session = $request->getSession();
+        $session->set('BlogsList', $ids);        
+    }
+    private function getSessionBlogList(Request $request) {
+        $session = $request->getSession();
+        if (!$session->has('BlogList')) {
+            $posts = $this->getDoctrineRepo('AppBundle:Blog')->getAllOrderedByPosition();
+            $this->createSessionBlogList($request, $posts);
+        }
+        return $session->get('BlogsList');
+    }
 }
