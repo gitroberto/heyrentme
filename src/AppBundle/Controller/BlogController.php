@@ -14,7 +14,13 @@ class BlogController extends BaseController {
      */
     public function indexAction(Request $request) {
         $posts = $this->getDoctrineRepo('AppBundle:Blog')->getAllOrderedByPosition();
-       
+        
+        $ids = array();
+        foreach ($posts as $post) {
+            array_push($ids, $post->getId());
+        }
+        $request->getSession()->set('BlogsList', $ids);
+        
         return $this->render('blog/blog.html.twig', array(
             'posts' => $posts
         ));
@@ -25,7 +31,7 @@ class BlogController extends BaseController {
      */
     public function detailAction(Request $request, $slug) {
         $post = $this->getDoctrineRepo('AppBundle:Blog')->getBySlug($slug);        
-        return $this->display($post, false);
+        return $this->display($request, $post, false);
     }
     
     /**
@@ -33,18 +39,33 @@ class BlogController extends BaseController {
      */
     public function previewAction(Request $request, $uuid) {
         $post = $this->getDoctrineRepo('AppBundle:Blog')->getOneByUuid($uuid);
-        return $this->display($post, true);
+        return $this->display($request, $post, true);
     }
     
-    protected function display($post, $isPreview){
+    protected function display(Request $request, $post, $isPreview){
         $posts = array();          
         foreach ($post->getRelatedBlogs() as $rp){
             $posts[count($posts)] = $rp->getRelatedBlog();
         }
-        
-        $nextPost = $this->getDoctrineRepo('AppBundle:Blog')->getByPosition($post->getPosition() + 1);
-        $prevPost = $this->getDoctrineRepo('AppBundle:Blog')->getByPosition($post->getPosition() - 1);
-        
+        $session = $request->getSession();
+        if ($session->has('BlogsList')) {
+            $ids = $session->get('BlogsList');
+            $i = array_search($post->getId(), $ids);
+            if ($i !== null) {
+                $repo = $this->getDoctrineRepo('AppBundle:Blog');
+                if ($i > 0) {
+                    $prevPost = $repo->find($ids[$i - 1]);
+                } else {
+                    $prevPost = $repo->find($ids[count($ids) - 1]);
+                }
+                
+                if ($i < count($ids) - 1) {
+                    $nextPost = $repo->find($ids[$i + 1]);
+                } else {
+                    $nextPost = $repo->find($ids[0]);
+                }
+            }
+        }
         
         return $this->render('blog/blog_detail.html.twig', array(
             'post' => $post,

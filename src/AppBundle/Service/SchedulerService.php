@@ -46,41 +46,25 @@ class SchedulerService {
         $this->sendAllOkReminders($now);
         $this->sendReturnReminders($now);
         $this->sendRateReminders($now);
-        //$this->deleteTempImages($now);
-        //$this->sendWelcomeEmails($now);
-    }
-                    
-    protected function IsBookingCancelled($bk){
-        if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
-            $userCancelledStatus = \AppBundle\Entity\EquipmentBooking::STATUS_USER_CANCELLED;
-            $providerCancelledStatus = \AppBundle\Entity\EquipmentBooking::STATUS_USER_CANCELLED;
-        } else {
-            $userCancelledStatus = \AppBundle\Entity\TalentBooking::STATUS_USER_CANCELLED;
-            $providerCancelledStatus = \AppBundle\Entity\TalentBooking::STATUS_USER_CANCELLED;
-        }
-        return $bk->getStatus() == $userCancelledStatus || $bk->getStatus() == $providerCancelledStatus;
+        $this->deleteTempImages($now);
+        $this->sendWelcomeEmails($now);
     }
     
     protected function sendRentReminders(DateTime $datetime) {  
         // users
         $this->logger->debug('sending RENT reminders for USERS');
         $es = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForRentUserReminder($datetime);        
-        $ts = $this->em->getRepository('AppBundle:TalentBooking')->getAllForRentUserReminder($datetime);        
+        $ts = $this->em->getRepository('AppBundle:TalentBooking')->getAllForRentUserReminder($datetime);                
         $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
                 
-                if ($this->IsBookingCancelled($bk)) {
-                    continue;
-                }
-                
                 $inq = $bk->getInquiry();
                 if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
-                    
                     $tmpl = 'Emails\mail_to_user_reminder_start_booking.html.twig';
                     $eq = $inq->getEquipment();
                 }
-                else {
+                else {                    
                     $tmpl = 'Emails\talent\mail_to_user_reminder_start_booking.html.twig';
                     $eq = $inq->getTalent();
                 }
@@ -128,9 +112,6 @@ class SchedulerService {
         $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
-                if ($this->IsBookingCancelled($bk)) {
-                    continue;
-                }
                 
                 $inq = $bk->getInquiry();
                 if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
@@ -181,9 +162,6 @@ class SchedulerService {
         $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
-                if ($this->IsBookingCancelled($bk)) {
-                    continue;
-                }
                 
                 $inq = $bk->getInquiry();
 
@@ -232,9 +210,6 @@ class SchedulerService {
         $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
-                if ($this->IsBookingCancelled($bk)) {
-                    continue;
-                }
                 
                 $inq = $bk->getInquiry();
                 if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
@@ -279,9 +254,6 @@ class SchedulerService {
         $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForReturnUserReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
-                if ($this->IsBookingCancelled($bk)) {
-                    continue;
-                }
                 
                 $inq = $bk->getInquiry();
                 $eq = $inq->getEquipment();
@@ -326,9 +298,6 @@ class SchedulerService {
         $bookings = $this->em->getRepository('AppBundle:EquipmentBooking')->getAllForReturnProviderReminder($datetime);        
         foreach ($bookings as $bk) {
             try {
-                if ($this->IsBookingCancelled($bk)) {
-                    continue;
-                }
                 
                 $inq = $bk->getInquiry();
                 $eq = $inq->getEquipment();
@@ -371,9 +340,6 @@ class SchedulerService {
         $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
-                if ($this->IsBookingCancelled($bk)) {
-                    continue;
-                }
                 
                 $inq = $bk->getInquiry();
                 if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {
@@ -436,9 +402,6 @@ class SchedulerService {
         $bookings = array_merge($es, $ts);
         foreach ($bookings as $bk) {
             try {
-                if ($this->IsBookingCancelled($bk)) {
-                    continue;
-                }
                 
                 $inq = $bk->getInquiry();
                 if (get_class($bk) === 'AppBundle\\Entity\\EquipmentBooking') {

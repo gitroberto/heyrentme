@@ -63,6 +63,8 @@ EOT;
         $t = clone $datetime;
         $t->add($delta);
         $tStr = $t->format('Y-m-d H:i:s');
+        $userCanceled = TalentBooking::STATUS_USER_CANCELLED;
+        $providerCanceled = TalentBooking::STATUS_PROVIDER_CANCELLED;
         
         $dql = <<<EOT
                 select b, i, e
@@ -71,9 +73,14 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeRentUserAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.fromAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", EquipmentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", EquipmentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForRentProviderReminder(DateTime $datetime) {
@@ -92,9 +99,14 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeRentProviderAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.fromAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", EquipmentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", EquipmentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForReturnUserReminder(DateTime $datetime) {
@@ -113,9 +125,14 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeReturnUserAt is null
-                    and i.toAt < '{$tStr}'
+                    and i.toAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", EquipmentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", EquipmentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForReturnProviderReminder(DateTime $datetime) {
@@ -134,9 +151,14 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeReturnProviderAt is null
-                    and i.toAt < '{$tStr}'
+                    and i.toAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", EquipmentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", EquipmentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForAllOkUserReminder(DateTime $datetime) {
@@ -155,9 +177,14 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeAllOkUserAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.fromAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", EquipmentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", EquipmentBooking::STATUS_PROVIDER_CANCELLED);        
         return $q->getResult();
     }
     public function getAllForAllOkProviderReminder(DateTime $datetime) {
@@ -176,9 +203,16 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeAllOkProviderAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.fromAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", EquipmentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", EquipmentBooking::STATUS_PROVIDER_CANCELLED);
+        
         return $q->getResult();
     }
     public function getAllForRateUserReminder(DateTime $datetime) {
@@ -188,7 +222,7 @@ EOT;
         $delta = new DateInterval('PT3H0M0S'); // 3 hrs
         $t = clone $datetime;
         $t->sub($delta);
-        $tStr = $t->format('Y-m-d H:i:s');
+        $tStr = $t->format('Y-m-d H:i:s');        
         
         $dql = <<<EOT
                 select b, i, e
@@ -197,9 +231,16 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeRateUserAt is null
-                    and i.toAt < '{$tStr}'
+                    and i.toAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", EquipmentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", EquipmentBooking::STATUS_PROVIDER_CANCELLED);
+        
         return $q->getResult();
     }
     public function getAllForRateProviderReminder(DateTime $datetime) {
@@ -218,9 +259,16 @@ EOT;
                     join i.equipment e
                 where
                     b.noticeRateProviderAt is null
-                    and i.toAt < '{$tStr}'
+                    and i.toAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", EquipmentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", EquipmentBooking::STATUS_PROVIDER_CANCELLED);
+        
         return $q->getResult();
     }
 }
