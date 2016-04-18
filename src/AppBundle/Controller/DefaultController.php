@@ -237,21 +237,27 @@ class DefaultController extends BaseController {
             $id = $tal->getId();
             $type = ReportOffer::OFFER_TYPE_TALENT;
         }
-        
-        $session = $request->getSession();
+                
         $prev = null;
         $next = null;
-        if ($session->has('SearchList')) {
-            $ids = $session->get('SearchList');
-            $i = array_search($id, $ids);
-            if ($i !== null) {
-                $repo = $this->getDoctrineRepo($repo);
-                if ($i > 0) {
-                    $prev = $repo->find($ids[$i - 1]);
+        if (!$isPreview) {
+            $ids = $this->getSessionSearchList($request, $repo, $subcat->getCategory()->getId());
+            if (count($ids) > 1){
+                $i = array_search($id, $ids);
+                if ($i !== null) {            
+                    $itemRepo = $repo = $this->getDoctrineRepo($repo);
+                    if ($i > 0) {
+                        $prev = $itemRepo->find($ids[$i - 1]);
+                    } else {
+                        $prev = $itemRepo->find($ids[count($ids) - 1]);
+                    }
+
+                    if ($i < count($ids) - 1) {
+                        $next = $itemRepo->find($ids[$i + 1]);
+                    } else {
+                        $next = $itemRepo->find($ids[0]);
+                    }
                 }
-                if ($i < count($ids) - 1) {
-                    $next = $repo->find($ids[$i + 1]);
-                }        
             }
         }
         //</editor-fold>
@@ -278,6 +284,28 @@ class DefaultController extends BaseController {
             'isPreview' => $isPreview
         ));
     }
+    
+    private function createSessionSearchList(Request $request, $items) {
+        $ids = array();
+        foreach ($items as $item)
+            array_push($ids, $item->getId());
+
+        $session = $request->getSession();
+        $session->set('SearchList', $ids);        
+    }
+    
+    private function getSessionSearchList(Request $request, $repo, $catId) {
+        $session = $request->getSession();
+        if (!$session->has('SearchList')) {
+            $sp = $this->getSearchParams($request);            
+            if (!$sp->getCategoryId()){
+                $sp->setCategoryId($catId);
+            }
+            $items = $this->getDoctrineRepo($repo)->getAll($sp);
+            $this->createSessionSearchList($request, $items);
+        }
+        return $session->get('SearchList');
+    }
 
     /**
      * @Route("/equipment-list", name="equipment-list")
@@ -295,13 +323,8 @@ class DefaultController extends BaseController {
             $items = $this->getDoctrineRepo('AppBundle:Talent')->getAll($sp);
             $tmpl = 'default/talent-list.html.twig';
         }
-        
         // store id list in session (for prev/next traversal)
-        $ids = array();
-        foreach ($items as $item) {
-            array_push($ids, $item->getId());
-        }
-        $request->getSession()->set('SearchList', $ids);
+        $this->createSessionSearchList($request, $items);
         
         return $this->render($tmpl, array(
             'items' => $items
