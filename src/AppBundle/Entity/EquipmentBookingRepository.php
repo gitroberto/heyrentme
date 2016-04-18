@@ -63,8 +63,6 @@ EOT;
         $t = clone $datetime;
         $t->add($delta);
         $tStr = $t->format('Y-m-d H:i:s');
-        $userCanceled = TalentBooking::STATUS_USER_CANCELLED;
-        $providerCanceled = TalentBooking::STATUS_PROVIDER_CANCELLED;
         
         $dql = <<<EOT
                 select b, i, e
