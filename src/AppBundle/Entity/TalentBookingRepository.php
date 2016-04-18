@@ -71,9 +71,15 @@ EOT;
                     join i.talent e
                 where
                     b.noticeRentUserAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.fromAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
+                        
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", TalentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", TalentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForRentProviderReminder(DateTime $datetime) {
@@ -92,9 +98,14 @@ EOT;
                     join i.talent e
                 where
                     b.noticeRentProviderAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.fromAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", TalentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", TalentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForAllOkUserReminder(DateTime $datetime) {
@@ -113,9 +124,14 @@ EOT;
                     join i.talent e
                 where
                     b.noticeAllOkUserAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.fromAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", TalentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", TalentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForAllOkProviderReminder(DateTime $datetime) {
@@ -134,9 +150,14 @@ EOT;
                     join i.talent e
                 where
                     b.noticeAllOkProviderAt is null
-                    and i.fromAt < '{$tStr}'
+                    and i.fromAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", TalentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", TalentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForRateUserReminder(DateTime $datetime) {
@@ -155,9 +176,14 @@ EOT;
                     join i.talent e
                 where
                     b.noticeRateUserAt is null
-                    and i.toAt < '{$tStr}'
+                    and i.toAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", TalentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", TalentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
     public function getAllForRateProviderReminder(DateTime $datetime) {
@@ -176,9 +202,14 @@ EOT;
                     join i.talent e
                 where
                     b.noticeRateProviderAt is null
-                    and i.toAt < '{$tStr}'
+                    and i.toAt < :tStr
+                    and b.status != :userCanceled 
+                    and b.status != :providerCanceled 
 EOT;
         $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":tStr", $tStr);
+        $q->setParameter(":userCanceled", TalentBooking::STATUS_USER_CANCELLED);
+        $q->setParameter(":providerCanceled", TalentBooking::STATUS_PROVIDER_CANCELLED);
         return $q->getResult();
     }
 }
