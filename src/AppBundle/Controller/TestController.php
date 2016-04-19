@@ -57,4 +57,46 @@ class TestController extends BaseController {
             'form' => $form->createView()
         ));
     }
+    /**
+     * @Route("/test-pdf", name="test-pdf")
+     */
+    public function testPdfAction(Request $request) {
+        $pdf = $this->get("white_october.tcpdf")->create(
+            'LANDSCAPE',
+            PDF_UNIT,
+            PDF_PAGE_FORMAT,
+            true,
+            'UTF-8',
+            false
+        );
+        $pdf->SetAuthor('Hey Sharing');
+        $pdf->SetTitle('TCPDF try');
+        $pdf->SetSubject('Your client');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->setFontSubsetting(true);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->AddPage();
+
+        $html = '<h1>Working on Symfony</h1>';
+
+        $pdf->writeHTMLCell(
+            $w = 0,
+            $h = 0,
+            $x = '',
+            $y = '',
+            $html,
+            $border = 0,
+            $ln = 1,
+            $fill = 0,
+            $reseth = true,
+            $align = '',
+            $autopadding = true
+        );
+        
+        return new \Symfony\Component\HttpFoundation\StreamedResponse(function() use ($pdf) {
+            $pdf->Output("symfony.pdf");
+        });
+    }
+    
 }
