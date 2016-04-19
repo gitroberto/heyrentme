@@ -14,7 +14,8 @@ class DiscountCode {
     const STATUS_NEW = 1;
     const STATUS_ASSIGNED = 2;
     const STATUS_USED = 3;
-    const STATUS_CANCELLED = 4;        
+    const STATUS_CANCELLED = 4;
+    const STATUS_EXPIRED = 5;
     
     /**
      * @ORM\Column(type="integer")
@@ -41,6 +42,15 @@ class DiscountCode {
      * @ORM\Column(type="datetime")
      */
     protected $modifiedAt;    
+    
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $expiresAt;    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $value;  
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="discountCodes")
@@ -86,9 +96,22 @@ class DiscountCode {
             case self::STATUS_ASSIGNED: return "assigned";
             case self::STATUS_USED: return "used";
             case self::STATUS_CANCELLED: return "cancelled";
+            case self::STATUS_EXPIRED: return "expired";
             default:
                 throw new RuntimeException("DiscountCode status corrupt!");
         }
+    }
+    
+    public function setValue($value)
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+    
+    public function getValue()
+    {
+        return $this->value;
     }
     
     const dicount_code_length = 8;
@@ -141,6 +164,19 @@ class DiscountCode {
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+    
+    public function setExpiresAt($expiresAt)
+    {
+        $this->expiresAt = $expiresAt;
+
+        return $this;
+    }
+
+  
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
     }
 
   

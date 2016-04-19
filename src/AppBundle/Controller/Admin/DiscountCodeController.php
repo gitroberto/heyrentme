@@ -3,10 +3,15 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\DiscountCode;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 class DiscountCodeController extends BaseAdminController {
     /**
@@ -19,24 +24,74 @@ class DiscountCodeController extends BaseAdminController {
     
     /**
      * 
-     * @Route("/admin/generate-discount-code/{numberOfCodesToGenerate}", name="admin_genetate_discount_code")
+     * @Route("/admin/generate-discount-code", name="admin_generate_discount_code")
      */
-    public function generateDiscountCodeAction(Request $request, $numberOfCodesToGenerate) {
-        $number = (integer)$numberOfCodesToGenerate;
-        $em = $this->getDoctrine()->getManager();
+    public function generateDiscountCodeAction(Request $request) {
         
-        $chars = array_merge(range('A','Z'), range('a','z'), range('0','9'));
+        $form = $this->createFormBuilder()
+                ->add('value', 'choice', array(
+                    'choices' => array(
+                        'select value' => null,
+                        '5 €' => 5,
+                        '10 €' => 10,
+                        '15 €' => 15,
+                        '20 €' => 20
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
+                
+                ->add('number', 'integer', array(
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
+                
+                ->add('expirationDate', 'date', array(
+                    'required' => false,
+                    'input'  => 'string',
+                    'widget' => 'single_text',
+                    'format' => 'dd.MM.yyyy'
+                ))
+               
+                ->getForm();
+        //when the form is posted this method prefills entity with data from form
+        $form->handleRequest($request);
         
-        for($i = 0; $i < $number; $i++){
-            $dc = new DiscountCode();
-            $dc->setStatus(DiscountCode::STATUS_NEW);
-            $dc->setCode(DiscountCode::generateCode($chars));            
-            $em->persist($dc);
+        if ($form->isValid()) {
+            
+            $number = $form['number']->getData();
+            $value = $form['value']->getData();
+            $expirationDateStr = $form['expirationDate']->getData();
+            
+            if (empty($expirationDateStr)){
+                $expirationDate = null;
+            } else {
+                $expirationDateStr = $expirationDateStr. " 00:00";
+                $expirationDate = DateTime::createFromFormat('Y-m-d H:i', $expirationDateStr);
+            }
+            
+            $em = $this->getDoctrine()->getManager();        
+            $chars = array_merge(range('A','Z'), range('a','z'), range('0','9'));        
+            for($i = 0; $i < $number; $i++){
+                $dc = new DiscountCode();
+                $dc->setStatus(DiscountCode::STATUS_NEW);
+                $dc->setCode(DiscountCode::generateCode($chars));    
+                $dc->setValue($value);
+                $dc->setExpiresAt($expirationDate);
+                $em->persist($dc);
+            }
+            $em->flush();
+                        
+            return $this->redirectToRoute("admin_discount_code_list");
         }
-        $em->flush();
         
-        return $this->redirectToRoute("admin_discount_code_list");
-        //$this->render('admin/discountCode/index.html.twig');
+        return $this->render('admin/discountCode/generate.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
     
     /**

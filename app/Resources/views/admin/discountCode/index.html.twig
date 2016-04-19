@@ -7,7 +7,9 @@
 
 {% block body %}
 <h1>Discount code</h1>
-
+<a class="button-black backgound-yellow text-black" href="{{ path('admin_generate_discount_code') }}">Generate discount code</a>
+<br/>
+<br/>
 <div class="selecttionPanel">
     <div class="error" id="CancelDiscountMessage"></div>
     <a id="selectAll" href="#" >select all</a>&nbsp;|&nbsp;<a id="deselectAll" href="#" >deselect all</a>&nbsp;|&nbsp;<a id="revertSelection" href="#" >revert selection</a>
@@ -22,16 +24,6 @@
         <div id="jqgrid-pager"></div>
 </div>
 
-
-
-<div class="generatePanel">
-    <h1>Generate new dicount codes:</h1>
-    <div>
-        <div class="error" id ="ValidationMessage" ></div>
-        <label>Number of codes:</label><input id="NumberOfCodes" type="number" />
-        <div id="DivGenerate" class="redButtonAdmin" data-target="{{ path("admin_genetate_discount_code", { "numberOfCodesToGenerate" : "0" }  ) }}" >Generate</div>
-    </div>
-</div>
 
 {% endblock %}
 
@@ -123,6 +115,5 @@ $("#jqgrid_").html(html + buttons);
 
 }); // end ready function
 </script>    
-<script src="/js/discountCode.js"></script>
 {% endblock %}
 

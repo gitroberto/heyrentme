@@ -39,7 +39,8 @@ class SchedulerService {
         // common params
         $this->from = array($this->parameters['mailer_fromemail'] => $this->parameters['mailer_fromname']);
         $this->appUrlPrefix = $this->parameters['mailer_app_url_prefix'];
-
+        
+        date_default_timezone_set('Europe/Warsaw');
         $now = new DateTime();
         $this->logger->debug("now: " . $now->format('Y-m-d H:i:s'));
         $this->sendRentReminders($now);
@@ -48,6 +49,7 @@ class SchedulerService {
         $this->sendRateReminders($now);
         $this->deleteTempImages($now);
         $this->sendWelcomeEmails($now);
+        $this->checkDiscountCodes($now);
     }
     
     protected function sendRentReminders(DateTime $datetime) {  
@@ -542,6 +544,11 @@ class SchedulerService {
             ->setTo($usr->getEmail())
             ->setBody($s, 'text/plain');
         $this->mailer->send($msg);
+    }
+    
+    protected function checkDiscountCodes(DateTime $datetime) {  
+        $this->logger->debug('updating discount codes status if expired');
+        $this->em->getRepository('AppBundle:DiscountCode')->updateDiscountCodesStatusIfExpired($datetime);                
     }
 }
 

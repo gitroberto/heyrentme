@@ -625,3 +625,8 @@ p.how-many {
     width: 370px;
     height: 90px;
 }
+
+.date-selector {
+    background-position: right;
+    background-repeat: no-repeat;
+}

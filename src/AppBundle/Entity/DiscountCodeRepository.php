@@ -54,6 +54,19 @@ class DiscountCodeRepository extends EntityRepository
         }
         return $q->getResult();        
     }
+    
+    public function updateDiscountCodesStatusIfExpired($now){        
+        
+        $tStr = $now->format('Y-m-d H:i:s');
+        
+        $dql = 'update AppBundle:DiscountCode dc set dc.status = :expired where (dc.status = :new or dc.status = :assigned) and dc.expiresAt is not null and dc.expiresAt < :now';        
+        $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(':new', DiscountCode::STATUS_NEW);
+        $q->setParameter(':assigned', DiscountCode::STATUS_ASSIGNED);        
+        $q->setParameter(':expired', DiscountCode::STATUS_EXPIRED);        
+        $q->setParameter(':now', $tStr);        
+        return $q->execute();
+    }
  
     public function assignToUser($user) {
         // find a free discount code

@@ -111,7 +111,7 @@
                         .replace(':CODE', dcode);
                 $.get(url, function(data, status) {
                     if (status === 'success' && data.result === 'ok') {
-                        var newPrice = price - 5;                    
+                        var newPrice = price - data.value;                    
                         var $price = $("#price");
                         $price.text(newPrice);
                         $price.parent().css({ 'background-color': '#f0c814' });                    

@@ -408,6 +408,13 @@ class BookingController extends BaseController {
          * so it's not impossible to brute-force-hack discount codes
          */
         $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($code);
+        //first check if code doesn't expire
+        if ($dcode !== null && Utils::checkExpiresDateOfDiscountCode($dcode)) {
+            $em = $this->getDoctrine()->getManager();
+            $dcode->setStatus(DiscountCode::STATUS_EXPIRED);
+            $em->flush();
+        }
+        
         if ($dcode === null || $dcode->getStatus() !== DiscountCode::STATUS_ASSIGNED) {
             return new Response('', Response::HTTP_FORBIDDEN);
         }
@@ -419,7 +426,7 @@ class BookingController extends BaseController {
         if ($user === null || $user->getId() !== $dcode->getUser()->getId()) {
             return new Response('', Response::HTTP_FORBIDDEN);
         }
-        return new JsonResponse(array('result' => 'ok'));
+        return new JsonResponse(array('result' => 'ok', 'value' => $dcode->getValue()));
     }
  
     /** 
