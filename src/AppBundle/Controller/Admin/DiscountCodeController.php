@@ -148,6 +148,12 @@ class DiscountCodeController extends BaseAdminController {
             $cell[$i++] = $dataRow->getStatusStr();
             $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');  
             $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');  
+            if ($dataRow->getExpiresAt() !== null){
+                $cell[$i++] =  $dataRow->getExpiresAt()->format('Y-m-d H:i');  
+            } else {
+                $cell[$i++] =  "";
+            }
+            $cell[$i++] = $dataRow->getValue();  
             $user = $dataRow->getUser();
             if ($user !== null) {
                 $cell[$i++] = $user->getId();

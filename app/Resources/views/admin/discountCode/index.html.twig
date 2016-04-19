@@ -43,29 +43,29 @@ $(document).ready(function(){
 
 function rowActions(cellvalue, options, cellobject) {
       var s = cellobject[3];
-      if (s === "cancelled" || s === 'assigned'){
+      if (s === "cancelled" || s === 'assigned' || s === 'expired'){
         return "";  
       } else {
         return   "<input type='checkbox' class='CheckboxItems' value='"   +  options.rowId + "'></a>  ";
       }
     }
 function userFormatter(cellvalue, options, cellobject) {
-    if (cellobject[6] === '')
+    if (cellobject[8] === '')
         return '';
-    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[8]).replace('#NAME#', cellobject[7]);
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[10]).replace('#NAME#', cellobject[9]);
     return s;
 }
 function itemFormatter(cellvalue, options, cellobject) {
-    if (cellobject[9] === '')
+    if (cellobject[11] === '')
         return '';
-    var name = (cellobject[11].indexOf('equipment') !== -1 ? 'E-' : 'T-') + cellobject[9] + ': ' + cellobject[10];
-    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[11]).replace('#NAME#', name);
+    var name = (cellobject[13].indexOf('equipment') !== -1 ? 'E-' : 'T-') + cellobject[11] + ': ' + cellobject[12];
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[13]).replace('#NAME#', name);
     return s;
 }
 function providerFormatter(cellvalue, options, cellobject) {
-    if (cellobject[12] === '')
+    if (cellobject[14] === '')
         return '';
-    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[14]).replace('#NAME#', cellobject[13]);
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[16]).replace('#NAME#', cellobject[15]);
     return s;
 }
 
@@ -86,6 +86,8 @@ if( $('#jqgrid').length > 0 ) {
                         { name:'Status', index:'dc.status', width: 100, editable:false, sortable:true },
                         { name:'Created', index:'dc.createdAt', width: 130, editable:false, sortable:true },
                         { name:'Modified', index:'dc.modifiedAt', width: 130, editable:false, sortable:true },
+                        { name:'Expires', index:'dc.expiresAt', width: 130, editable:false, sortable:true },
+                        { name:'Value', index:'dc.value', width: 130, editable:false, sortable:true },
                         { name:'UserId', hidden: true },
                         { name:'User', index:'u.username', width: 200, editable:false, sortable:true, formatter: userFormatter },
                         { name:'UserUrl', hidden: true },
