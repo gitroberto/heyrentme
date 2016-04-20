@@ -87,7 +87,7 @@ if( $('#jqgrid').length > 0 ) {
                         { name:'Created', index:'dc.createdAt', width: 130, editable:false, sortable:true },
                         { name:'Modified', index:'dc.modifiedAt', width: 130, editable:false, sortable:true },
                         { name:'Expires', index:'dc.expiresAt', width: 130, editable:false, sortable:true },
-                        { name:'Value', index:'dc.value', width: 130, editable:false, sortable:true },
+                        { name:'Value', index:'dc.value', width: 130, align: "right", editable:false, sortable:true },
                         { name:'UserId', hidden: true },
                         { name:'User', index:'u.username', width: 200, editable:false, sortable:true, formatter: userFormatter },
                         { name:'UserUrl', hidden: true },
