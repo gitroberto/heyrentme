@@ -81,8 +81,8 @@ class DiscountCodeController extends BaseAdminController {
                 $dc->setValue($value);
                 $dc->setExpiresAt($expirationDate);
                 $em->persist($dc);
+                $em->flush();
             }
-            $em->flush();
                         
             return $this->redirectToRoute("admin_discount_code_list");
         }
