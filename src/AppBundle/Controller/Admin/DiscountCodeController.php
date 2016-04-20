@@ -68,12 +68,16 @@ class DiscountCodeController extends BaseAdminController {
                 $expirationDate = DateTime::createFromFormat('Y-m-d H:i', $expirationDateStr);
             }
             
+            $repo = $this->getDoctrineRepo("AppBundle:DiscountCode");
             $em = $this->getDoctrine()->getManager();        
-            $chars = array_merge(range('A','Z'), range('a','z'), range('0','9'));        
+            $chars = array_merge(range('A','Z'), range('a','z'), range('0','9'));                    
             for($i = 0; $i < $number; $i++){
                 $dc = new DiscountCode();
                 $dc->setStatus(DiscountCode::STATUS_NEW);
-                $dc->setCode(DiscountCode::generateCode($chars));    
+                do {
+                    $newCode = DiscountCode::generateCode($chars);                        
+                } while (!$repo->isCodeUnique($newCode));                 
+                $dc->setCode($newCode);    
                 $dc->setValue($value);
                 $dc->setExpiresAt($expirationDate);
                 $em->persist($dc);
@@ -86,7 +90,7 @@ class DiscountCodeController extends BaseAdminController {
         return $this->render('admin/discountCode/generate.html.twig', array(
             'form' => $form->createView()
         ));
-    }
+    }    
     
     public function validateValue($data, ExecutionContextInterface $context) {
         if (!ctype_digit($data)){

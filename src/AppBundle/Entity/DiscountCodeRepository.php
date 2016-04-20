@@ -88,4 +88,12 @@ class DiscountCodeRepository extends EntityRepository
         
         return $code;
     }
+    
+    public function isCodeUnique($code) {        
+        $dql = "select dc from AppBundle:DiscountCode dc where dc.code = :code";
+        $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter(":code", $code);
+        $code = $q->getOneOrNullResult();
+        return $code == null;
+    }
 }
