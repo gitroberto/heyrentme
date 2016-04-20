@@ -22,13 +22,6 @@ class Utils {
         return self::$slugifier->slugify($s);
     }
     
-    public static function checkExpiresDateOfDiscountCode($dcode){
-        $now = new DateTime();
-        $expiresDate = $dcode->getExpiresAt();
-        $interval = $now->diff($expiresDate);
-        //invert = 1 if value is negative, otherwise invert = 0;
-        return $interval->invert === 1; 
-    }
 }
 
 Utils::init();

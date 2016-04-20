@@ -630,3 +630,8 @@ p.how-many {
     background-position: right;
     background-repeat: no-repeat;
 }
+
+.correctPosition {
+    left:15px !important;
+    width: 200px !important;
+}

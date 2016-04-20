@@ -548,7 +548,7 @@ class SchedulerService {
     
     protected function checkDiscountCodes(DateTime $datetime) {  
         $this->logger->debug('updating discount codes status if expired');
-        $this->em->getRepository('AppBundle:DiscountCode')->updateDiscountCodesStatusIfExpired($datetime);                
+        $this->em->getRepository('AppBundle:DiscountCode')->updateStatusIfExpired($datetime);                
     }
 }
 

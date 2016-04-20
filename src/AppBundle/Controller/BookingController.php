@@ -409,7 +409,7 @@ class BookingController extends BaseController {
          */
         $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($code);
         //first check if code doesn't expire
-        if ($dcode !== null && Utils::checkExpiresDateOfDiscountCode($dcode)) {
+        if ($dcode !== null && $dcode->isExpired()) {
             $em = $this->getDoctrine()->getManager();
             $dcode->setStatus(DiscountCode::STATUS_EXPIRED);
             $em->flush();

@@ -16,7 +16,7 @@
 <h1>Generate discount code</h1>
     
 {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-<div class="form-horizontal">
+<div class="container form">
     <div class="err-msg">{{ form_errors(form) }}</div>
 
     <div class="row">
@@ -24,7 +24,13 @@
           <label for="form_name" class="control-label col-xs-2">Value</label>
           <div class="col-xs-10">
               <div class="err-msg">{{ form_errors(form.value) }}</div>
-            {{ form_widget(form.value, { 'attr': { 'class': 'text-box single-line' }}) }}
+            {{ form_widget(form.value, { 'attr': { 'class': 'text-box single-line', 'list': 'value-list' }}) }}            
+            <datalist id="value-list">
+                <option value="5">5 &euro;</option>
+                <option value="10">10 &euro;</option>
+                <option value="15">15 &euro;</option>
+                <option value="20">20 &euro;</option>
+            </datalist> 
           </div>
         </div>
     </div>
@@ -42,9 +48,9 @@
           <label for="form_name" class="control-label col-xs-2">Expiration date</label>
           <div class="col-xs-10 date-container">
               
-              <div class="input-group date" id="datetimepicker">
+              <div class="" id="datetimepicker">
                   <div class="err-msg">{{ form_errors(form.expirationDate) }}</div>
-                    {{ form_widget(form.expirationDate, { 'attr': { 'id': 'expirationDate' , 'class': 'text-box single-line date-selector', }}) }}
+                    {{ form_widget(form.expirationDate, { 'attr': { 'id': 'expirationDate' , 'style': 'background-color:#f0c814;' ,  'class': 'text-box single-line date-selector calendar-icon-hover', }}) }}
               </div>
           </div>
         </div>
@@ -84,6 +90,7 @@
                 showShortcuts: false,
                 showTopbar: false,
                 singleDate: true,
+                extraClass: 'correctPosition',                
                 setValue: function(date) {
                     $('#form_expirationDate').val(date);
                     
@@ -91,12 +98,7 @@
                 }
             };
             
-            $('#datetimepicker').dateRangePicker(configObject).bind('datepicker-open',function()  {
-                $(this).children('input').css('background-color','#f0c814').css('color','white').addClass('calendar-icon-hover');
-            }).bind('datepicker-closed',function()
-            {
-                $(this).children('input').css('background-color','white').css('color','black').removeClass('calendar-icon-hover');
-            });
+            $('#form_expirationDate').dateRangePicker(configObject);
             
         });
     </script>

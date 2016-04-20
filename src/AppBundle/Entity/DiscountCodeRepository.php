@@ -55,7 +55,7 @@ class DiscountCodeRepository extends EntityRepository
         return $q->getResult();        
     }
     
-    public function updateDiscountCodesStatusIfExpired($now){        
+    public function updateStatusIfExpired($now){        
         
         $tStr = $now->format('Y-m-d H:i:s');
         

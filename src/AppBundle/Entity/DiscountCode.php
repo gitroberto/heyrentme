@@ -245,4 +245,11 @@ class DiscountCode {
     {
         return $this->talentBooking;
     }
+    
+    public function isExpired(){
+        $now = new DateTime();        
+        $interval = $now->diff($this->expiresAt);
+        //invert = 1 if value is negative, otherwise invert = 0;
+        return $interval->invert === 1; 
+    }
 }

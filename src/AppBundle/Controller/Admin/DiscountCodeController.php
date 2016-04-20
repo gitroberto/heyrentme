@@ -24,29 +24,23 @@ class DiscountCodeController extends BaseAdminController {
     
     /**
      * 
-     * @Route("/admin/generate-discount-code", name="admin_generate_discount_code")
+     * @Route("/admin/discount-code/generate", name="admin_discount_code_generate")
      */
-    public function generateDiscountCodeAction(Request $request) {
+    public function generateAction(Request $request) {
         
         $form = $this->createFormBuilder()
-                ->add('value', 'choice', array(
-                    'choices' => array(
-                        'select value' => null,
-                        '5 €' => 5,
-                        '10 €' => 10,
-                        '15 €' => 15,
-                        '20 €' => 20
-                    ),
-                    'choices_as_values' => true,
+                ->add('value', 'text', array(
                     'required' => true,
                     'constraints' => array(
-                        new NotBlank()
+                        new NotBlank(),
+                        new Callback(array($this, 'validateValue'))
                     )
                 ))
                 
                 ->add('number', 'integer', array(
                     'constraints' => array(
                         new NotBlank()
+                        
                     )
                 ))
                 
@@ -92,6 +86,13 @@ class DiscountCodeController extends BaseAdminController {
         return $this->render('admin/discountCode/generate.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+    
+    public function validateValue($data, ExecutionContextInterface $context) {
+        if (!ctype_digit($data)){
+            $context->buildViolation('Value should be an integer.')->atPath('value')->addViolation();
+        }
+        
     }
     
     /**
