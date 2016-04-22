@@ -188,6 +188,14 @@ class Equipment
      * @ORM\Column(type="string", length=36)
      */
     protected $uuid;
+    /**
+     * @ORM\Column(type="decimal", scale=2, precision=10)
+     */
+    protected $priceWeek;
+    /**
+     * @ORM\Column(type="decimal", scale=2, precision=10)
+     */
+    protected $priceMonth;
     
     
     public function setUuid($uuid)
@@ -267,6 +275,58 @@ class Equipment
     }
     public function getIncompleteAddressAsString() {
         return sprintf("%s, %s %s", $this->addrStreet, $this->addrPostcode, $this->addrPlace);
+    }
+    
+    public function getPricesLine() {
+        $arr = array();
+        array_push($arr, sprintf("%d", $this->getPrice()));
+        $p = $this->getPriceWeek();
+        if ($p !== null && $p > 0)
+            array_push($arr, sprintf("%d", $p));
+        $p = $this->getPriceMonth();
+        if ($p !== null && $p > 0)
+            array_push($arr, sprintf("%d", $p));
+        return implode("/", $arr);
+    }
+    public function getPricesDesc() {
+        $arr = array();
+        array_push($arr, "T");
+        $p = $this->getPriceWeek();
+        if ($p !== null && $p > 0)
+            array_push($arr, "W");
+        $p = $this->getPriceMonth();
+        if ($p !== null && $p > 0)
+            array_push($arr, "M");
+        return implode("/", $arr);
+    }
+    public function getDetailPricesLine() {
+        $arr = array();
+        
+        $s = sprintf("T&nbsp;%.2f", $this->getPrice());
+        $s = str_replace('.', ',', $s);
+        array_push($arr, $s);
+        $p = $this->getPriceWeek();
+        if ($p !== null && $p > 0) {
+            $s = sprintf("W&nbsp;%.2f", $p);
+            $s = str_replace('.', ',', $s);
+            array_push($arr, $s);
+        }
+        $p = $this->getPriceMonth();
+        if ($p !== null && $p > 0) {
+            $s = sprintf("M&nbsp;%.2f", $p);
+            $s = str_replace('.', ',', $s);
+            array_push($arr, $s);
+        }
+    return implode("&nbsp;/&nbsp;", $arr);
+    }
+    public function calculatePrice($days) {
+        $pm = $this->priceMonth;
+        if ($days >= 30 && $pm !== null && $pm > 0)
+            return $days * $pm / 30.0;
+        $pw = $this->priceWeek;
+        if ($days >= 7 && $pw !== null && $pw > 0)
+            return $days * $pw / 7.0;
+        return $days * $this->price;
     }
     
     /**
@@ -1222,5 +1282,53 @@ class Equipment
     public function getAccept()
     {
         return $this->accept;
+    }
+
+    /**
+     * Set priceWeek
+     *
+     * @param string $priceWeek
+     *
+     * @return Equipment
+     */
+    public function setPriceWeek($priceWeek)
+    {
+        $this->priceWeek = $priceWeek;
+
+        return $this;
+    }
+
+    /**
+     * Get priceWeek
+     *
+     * @return string
+     */
+    public function getPriceWeek()
+    {
+        return $this->priceWeek;
+    }
+
+    /**
+     * Set priceMonth
+     *
+     * @param string $priceMonth
+     *
+     * @return Equipment
+     */
+    public function setPriceMonth($priceMonth)
+    {
+        $this->priceMonth = $priceMonth;
+
+        return $this;
+    }
+
+    /**
+     * Get priceMonth
+     *
+     * @return string
+     */
+    public function getPriceMonth()
+    {
+        return $this->priceMonth;
     }
 }

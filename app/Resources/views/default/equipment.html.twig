@@ -195,7 +195,7 @@
                 <div class="panel panel-default einzelstunden">
                     <div class="panel-heading" id="robert-heading">
                         <p class="panel-title">
-                           PREIS PRO TAG: ab {{ item.activePrice|number_format(2, ',') }} € 
+                           Ab {{ item.detailPricesLine|raw }} € 
                             <span class="pull-right">
                                 <a>
                                     <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
@@ -459,6 +459,18 @@
         var date = data.replace('AB', '');
         $(tag).html(date);
     };
+    function calculatePrice(days) {
+        var pd = {{ item.price }};
+        var pw = {% if item.priceWeek %}{{ item.priceWeek|number_format(2, '.', '') }}{% else %}null{% endif %};
+        var pm = {% if item.priceMonth %}{{ item.priceMonth|number_format(2, '.', '') }}{% else %}null{% endif %};
+        
+        if (days >= 30 && pm !== null)
+            return pm / 30.0 * days;
+        if (days >= 7 && pw !== null)
+            return pw / 7.0 * days;
+        return days * pd;
+        
+    }
     $(document).ready(function(){
         var media = $('#media-list .media-img img');
         var mediaContainer = $('#media-content');
@@ -528,6 +540,7 @@
                 var d = c / (1000 * 60 * 60 * 24);
 
                 var p = (Math.round(d) + 1) * {{ item.activePrice|number_format(2, '.', '') }};
+                p = calculatePrice(Math.round(d) + 1);
                 $('.price-calc').html(p.toFixed(2).replace('.', ','));
                 $('#date-range').val('AB '+ s1 + ' BIS '+s2);
             }

@@ -268,6 +268,8 @@ class EquipmentController extends BaseAdminController {
             //edit 1
             'name' => $equipment->getName(),
             'price' => $equipment->getPrice(),
+            'priceWeek' => $equipment->getPriceWeek(),
+            'priceMonth' => $equipment->getPriceMonth(),
             'deposit' => $equipment->getDeposit(),
             'value' => $equipment->getValue(),
             'priceBuy' => $equipment->getPriceBuy(),
@@ -326,6 +328,18 @@ class EquipmentController extends BaseAdminController {
                     'constraints' => array(
                         new NotBlank(),
                         new Range(array('min' => 10, 'max' => 2500))
+                    )
+                ))
+                ->add('priceWeek', 'integer', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Range(array('min' => 35, 'max' => 5000))
+                    )
+                ))
+                ->add('priceMonth', 'integer', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Range(array('min' => 100, 'max' => 10000))
                     )
                 ))
                 ->add('deposit', 'integer', array(
@@ -476,6 +490,8 @@ class EquipmentController extends BaseAdminController {
             //EDIT 1
             $equipment->setName($data['name']);
             $equipment->setPrice($data['price']);
+            $equipment->setPriceWeek($data['priceWeek']);
+            $equipment->setPriceMonth($data['priceMonth']);
             $equipment->setValue($data['value']);
             $equipment->setDeposit($data['deposit']);
             $equipment->setPriceBuy($data['priceBuy']);

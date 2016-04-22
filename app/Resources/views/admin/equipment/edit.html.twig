@@ -95,10 +95,28 @@
             <label for="form[price]">preis pro tag:</label>
         </div>
         <div class="col-xs-6">
-            {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
             {{ form_widget(form.price, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }}EUR 
         </div>
         <div class="err-msg">{{ form_errors(form.price) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+            <label for="form[priceWeek]">preis pro woche:</label>
+        </div>
+        <div class="col-xs-6">
+            {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
+            {{ form_widget(form.priceWeek, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '35', 'max': '5000' }}) }}EUR 
+        </div>
+        <div class="err-msg">{{ form_errors(form.priceWeek) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+            <label for="form[priceMonth]">preis pro monat / 30 tage:</label>
+        </div>
+        <div class="col-xs-6">
+            {{ form_widget(form.priceMonth, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '100', 'max': '10000' }}) }}EUR 
+        </div>
+        <div class="err-msg">{{ form_errors(form.priceMonth) }}</div>
     </div>
                 
     <div class="row">

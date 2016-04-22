@@ -61,6 +61,21 @@
                                   <label class="chbox"><input type="checkbox"> <span> Keine Angabe</span></label>
                               </div>-->
                           </div>
+                          <div class="row">
+                              <div class="col-sm-5">
+                                  <label for="form[priceWeek]">Preis pro Woche (ab):</label>
+                                  {{ form_widget(form.priceWeek, { 'attr': { 'placeholder': '0', 'class': 'small-input' } }) }}
+                                  <div class="err-msg">{{ form_errors(form.priceWeek) }}</div>
+                              </div>
+                               <div class="col-sm-7">
+                                  <label for="form[priceMonth]">Preis pro Monat / 30 Tage (ab):</label>
+                                  {{ form_widget(form.priceMonth, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }}EUR
+                                  <div class="err-msg">{{ form_errors(form.priceMonth) }}</div>
+                              </div>
+                              <!--<div class="col-sm-6 text-right">
+                                  <label class="chbox"><input type="checkbox"> <span> Keine Angabe</span></label>
+                              </div>-->
+                          </div>
                       </div>                      
                   </div>
                   <div class="col-xs-12 border-bottom-white form-head smaller-form">

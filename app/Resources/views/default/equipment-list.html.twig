@@ -33,10 +33,10 @@
                     </div>
                     <div class="col-xs-5">
                         <p class="price">
-                            {{ eq.activePrice|number_format(2, ',') }} &#8364;
+                            {{ eq.pricesLine }}&nbsp;&#8364;
                         </p>
                         <p class="tag">
-                            pro {% if eq.subcategory.category.type == constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') %}Tag{% else %}Stunde{% endif %}
+                            Pr. ab: {{ eq.pricesDesc }}
                         </p>
                     </div>
                 </div>
