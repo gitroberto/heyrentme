@@ -641,7 +641,10 @@ EOT;
             $user = $quest->getUser();
             $node = new EventNode();
             $node->name = "Question";
-            $node->desc = sprintf("%s (%s %s, id: %d)", $user->getEmail(), $user->getName(), $user->getSurname(), $user->getid());
+            if ($user !== null)
+                $node->desc = sprintf("%s (%s %s, id: %d)", $user->getEmail(), $user->getName(), $user->getSurname(), $user->getid());
+            else 
+                $node->desc = sprintf("%s (%s)", $quest->getEmail(), $quest->getName());
             
             $ev = new LogEvent();
             $ev->date = $quest->getCreatedAt();
