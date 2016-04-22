@@ -31,6 +31,14 @@ class EquipmentQuestion {
      * @ORM\Column(type="datetime")
      */
     private $modifiedAt;
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $name;
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $email;
     
     /**
      * @ORM\ManyToOne(targetEntity="User")
@@ -196,5 +204,53 @@ class EquipmentQuestion {
     public function getEquipment()
     {
         return $this->equipment;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return EquipmentQuestion
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return EquipmentQuestion
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

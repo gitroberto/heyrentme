@@ -84,6 +84,8 @@ div.err-msg  ul  li {
 #reg-modal textarea,
 #login textarea,
 #inquiry-modal input[type="text"],
+#question-modal input[type="text"],
+#question-modal input[type="email"],
 #inquiry-modal input[type="email"],
 #inquiry-modal textarea,
 #question-modal textarea,

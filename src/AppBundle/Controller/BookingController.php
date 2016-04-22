@@ -789,7 +789,7 @@ class BookingController extends BaseController {
     }
 
     /**
-     * @Route("/booking/question/{id}", name="booking-question")
+     * @Route("/equipment/question/{id}", name="equipment-question")
      */
     public function questionAction(Request $request, $id) {
         $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
@@ -799,17 +799,30 @@ class BookingController extends BaseController {
                 
         // build form
         //<editor-fold>
-        $url = $this->generateUrl('booking-question', array(
+        $url = $this->generateUrl('equipment-question', array(
             'id' => $id
         ));
         
         $builder = $this->createFormBuilder()
-            ->setAction($url)
-            ->add('message', 'textarea', array(
+            ->setAction($url);
+        if (!$loggedIn) {
+            $builder->add('name', 'text', array(
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+            ->add('email', 'email', array(
                 'constraints' => array(
                     new NotBlank(),
-                 )
+                    new Email(array('checkHost' => true))
+                )
             ));
+        }
+        $builder->add('message', 'textarea', array(
+            'constraints' => array(
+                new NotBlank(),
+             )
+        ));
         $form = $builder->getForm();
         //</editor-fold>
        
@@ -821,7 +834,12 @@ class BookingController extends BaseController {
             $q = new EquipmentQuestion();
             $q->setEquipment($eq);
             $q->setMessage($data['message']);
-            $q->setUser($user);
+            if ($loggedIn)
+                $q->setUser($user);
+            else {
+                $q->setName($data['name']);
+                $q->setEmail($data['email']);
+            }
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($q);
@@ -831,7 +849,7 @@ class BookingController extends BaseController {
             // prepare params
             $provider = $eq->getUser();
             $url = $request->getSchemeAndHttpHost() .
-                    $this->generateUrl('booking-reply', array('id' => $q->getId()));
+                    $this->generateUrl('equipment-reply', array('id' => $q->getId()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             $emailHtml = $this->renderView('Emails/mail_to_provider_question.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
@@ -860,7 +878,7 @@ class BookingController extends BaseController {
     }
 
     /**
-     * @Route("/booking/reply/{id}", name="booking-reply")
+     * @Route("/equipment/reply/{id}", name="equipment-reply")
      */
     public function replyAction(Request $request, $id) {
         $q = $this->getDoctrineRepo('AppBundle:EquipmentQuestion')->find($id);
@@ -906,12 +924,15 @@ class BookingController extends BaseController {
                 'asker' => $asker,
                 'provider' => $provider,
                 'question' => $q,
-                'url' => $url
+                'url' => $url,
+                'askerName' => $asker !== null ? $asker->getName() : $q->getName(),
+                'equipment' => $eq
             ));
+            $email = $asker !== null ? $asker->getEmail() : $q->getEmail();
             $message = Swift_Message::newInstance()
                 ->setSubject('Du hast soeben eine Anfrage erhalten!')
                 ->setFrom($from)
-                ->setTo($asker->getEmail())
+                ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
             $this->get('mailer')->send($message);
             //</editor-fold>
@@ -924,7 +945,8 @@ class BookingController extends BaseController {
             'provider' => $provider,
             'form' => $form->createView(),
             'question' => $q,
-            'saved' => $saved
+            'saved' => $saved,
+            'askerName' => $asker !== null ? $asker->getName() : $q->getName()
         ));
     }
 }

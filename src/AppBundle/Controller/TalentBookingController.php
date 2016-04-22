@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
@@ -800,7 +801,7 @@ class TalentBookingController extends BaseController {
     }
     
     /**
-     * @Route("/talent/question/{id}", name="talent-question")
+     * @Route("/talent-booking/question/{id}", name="talent-booking-question")
      */
     public function questionAction(Request $request, $id) {
         $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
@@ -810,17 +811,30 @@ class TalentBookingController extends BaseController {
                 
         // build form
         //<editor-fold>
-        $url = $this->generateUrl('talent-question', array(
+        $url = $this->generateUrl('talent-booking-question', array(
             'id' => $id
         ));
         
         $builder = $this->createFormBuilder()
-            ->setAction($url)
-            ->add('message', 'textarea', array(
+            ->setAction($url);
+        if (!$loggedIn) {
+            $builder->add('name', 'text', array(
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+            ->add('email', 'email', array(
                 'constraints' => array(
                     new NotBlank(),
-                 )
+                    new Email(array('checkHost' => true))
+                )
             ));
+        }
+        $builder->add('message', 'textarea', array(
+            'constraints' => array(
+                new NotBlank(),
+             )
+        ));
         $form = $builder->getForm();
         //</editor-fold>
        
@@ -832,7 +846,12 @@ class TalentBookingController extends BaseController {
             $q = new TalentQuestion();
             $q->setTalent($eq);
             $q->setMessage($data['message']);
-            $q->setUser($user);
+            if ($loggedIn)
+                $q->setUser($user);
+            else {
+                $q->setName($data['name']);
+                $q->setEmail($data['email']);
+            }
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($q);
@@ -842,7 +861,7 @@ class TalentBookingController extends BaseController {
             // prepare params
             $provider = $eq->getUser();
             $url = $request->getSchemeAndHttpHost() .
-                    $this->generateUrl('talent-reply', array('id' => $q->getId()));
+                    $this->generateUrl('talent-booking-reply', array('id' => $q->getId()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             $emailHtml = $this->renderView('Emails/talent/mail_to_provider_question.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
@@ -871,7 +890,7 @@ class TalentBookingController extends BaseController {
     }
 
     /**
-     * @Route("/talent/reply/{id}", name="talent-reply")
+     * @Route("/talent-booking/reply/{id}", name="talent-booking-reply")
      */
     public function replyAction(Request $request, $id) {
         $q = $this->getDoctrineRepo('AppBundle:TalentQuestion')->find($id);
@@ -917,12 +936,15 @@ class TalentBookingController extends BaseController {
                 'asker' => $asker,
                 'provider' => $provider,
                 'question' => $q,
-                'url' => $url
+                'url' => $url,
+                'askerName' => $asker !== null ? $asker->getName() : $q->getName(),
+                'talent' => $eq
             ));
+            $email = $asker !== null ? $asker->getEmail() : $q->getEmail();
             $message = Swift_Message::newInstance()
                 ->setSubject('Du hast soeben eine Anfrage erhalten!')
                 ->setFrom($from)
-                ->setTo($asker->getEmail())
+                ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
             $this->get('mailer')->send($message);
             //</editor-fold>
@@ -935,7 +957,8 @@ class TalentBookingController extends BaseController {
             'provider' => $provider,
             'form' => $form->createView(),
             'question' => $q,
-            'saved' => $saved
+            'saved' => $saved,
+            'askerName' => $asker !== null ? $asker->getName() : $q->getName()
         ));
     }
 }

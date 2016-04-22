@@ -619,15 +619,7 @@
                 });
             {% endif %}
 
-            {% if (loggedIn) %}
-                $("a.question").click(question);
-            {% else %}
-                $("a.question").click(function(){
-                    if ($("a[data-target='#login']").size() > 0) {
-                            $("a[data-target='#login']")[0].click();      
-                        }
-                });
-            {% endif %}
+            $("a.question").click(question);
         {% endif %}
             
         $('#robert-heading').on('click', function () {
@@ -653,7 +645,7 @@
         e.preventDefault();
         
         // assemble params
-        var url = '{{ path('talent-question', { 'id': item.id }) }}';
+        var url = '{{ path('talent-booking-question', { 'id': item.id }) }}';
                 
         $("#question-modal .modal-dialog").load(url, function(data) {
             $("#question-modal").modal();

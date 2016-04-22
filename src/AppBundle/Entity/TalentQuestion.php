@@ -31,6 +31,14 @@ class TalentQuestion {
      * @ORM\Column(type="datetime")
      */
     private $modifiedAt;
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $name;
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $email;
     
     /**
      * @ORM\ManyToOne(targetEntity="User")
@@ -196,5 +204,53 @@ class TalentQuestion {
     public function getTalent()
     {
         return $this->talent;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return TalentQuestion
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return TalentQuestion
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }
