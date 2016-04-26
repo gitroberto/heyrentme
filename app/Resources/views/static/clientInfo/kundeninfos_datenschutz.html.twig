@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="main-header "> 
+        <img src="/img/allgemein-final/kundeninfos.jpg" alt="rent me heading." class="img-responsive max-1600 max-320"/> 
+        <img src="/img/allgemein-final/kundeninfos_small.jpg" alt="rent me heading." class="img-responsive max-1600 min-320"/>
+      <div class="container rent-heading help-heading">
+        <div class="row">
+          <div class="col-sm-8 text-white">
+            <h1>Kundeninfos</h1>
+            <br>
+            <a data-toggle="modal" data-target="#reg-modal" href="#" class="button-black backgound-yellow text-black">Jetzt kostenlos mitmachen!</a>
+        </div>
+      </div>
+    </div>
+    </div>
+    </header>
+    <section>
+    <div class="container background-white rent-container">
+   <!--   <select class="mobile-menu-select desktop-hide" name="forma" onchange="location = this.options[this.selectedIndex].value;">
+        <option selected="selected" value="kundeninfos_presse.php">Presse</option>
+        <option value="kundeninfos_kontakt.php">Kontakt</option>
+        <option value="kundeninfos_impressum.php">Impressum</option>
+        <option value="kundeninfos_agb.php">AGB</option>
+      </select>  -->
+      {{ render(controller('AppBundle:Static:clientInfoBreadcrumb', { "pageName":"kundeninfos_datenschutz", "pageNameShort":"Datenschutz" } )) }}
+      <span class="clearfix"></span> 
+      <!-- Left nav -->
+      <div class="row help-page">
+        {{ render(controller('AppBundle:Static:clientInfoLeftmenu', { "pageName":"kundeninfos_datenschutz" } )) }}
+        <div class="col-md-9 content">
+            <p class="text-bold">Datenschutz</p>
+            <p>
+                Wir erheben, verarbeiten und nutzen Ihre Daten nur im Rahmen der gesetzlichen Bestimmungen und zur Abwicklung der gebuchten Leistungen sowie zur Kundenbetreuung. Diese Datenschutzerklärung gilt ausschließlich für die Nutzung der von uns angebotenen Webseiten. Sie gilt nicht für die Webseiten anderer Dienstanbieter, auf die wir lediglich durch einen Link verweisen. Bei der Nutzung unserer Webseiten bleiben Sie anonym, solange Sie uns nicht von sich aus freiwillig personenbezogene Daten zur Verfügung stellen. Personenbezogene Daten werden nur dann erhoben, wenn dies für die Nutzung der auf der Webseite angebotenen Leistungen, insbesondere Formularangebote, erforderlich ist. Wir werden die von Ihnen zur Verfügung gestellten Daten streng vertraulich behandeln. Ohne Ihre ausdrückliche Einwilligung geben wir keine persönlichen Daten weiter, es sei denn, dass wir rechtlich dazu verpflichtet sind oder dies zur Durchführung der Buchung erforderlich ist. Wir weisen jedoch darauf hin, dass es bei der Übermittlung von Daten im Internet immer dazu kommen kann, dass Dritte Ihre Daten zur Kenntnis nehmen oder verfälschen. Sofern Sie es wünschen, geben wir Auskunft über die gespeicherten Daten, beziehungsweise löschen diese. Wenn Sie Daten berichtigen, löschen oder einsehen wollen, genügt hierfür ein Schreiben an die im Impressum angegebene Adresse.
+            </p>
+
+            <p class="text-bold">Cookies</p>
+            <p>
+                Cookies sind Textdateien, die bei dem Besuch auf einer Internetseite auf dem Computer des Benutzers gespeichert werden. hey! sharing community verwendet Cookies, um das Angebot nutzerfreundlich, effektiver und sicherer zu machen. Dank dieser Dateien ist es beispielsweise möglich, dass Sie speziell auf Ihre Interessen abgestimmte Informationen auf der Seite angezeigt bekommen. Der ausschließliche Zweck besteht also darin, unser Angebot Ihren Kundenwünschen bestmöglich anzupassen und Ihnen das Surfen bei uns so komfortabel wie möglich zu gestalten und die Navigation zu erleichtern.
+            </p>
+
+            <p class="text-bold">Google Analytics</p>
+            <p>
+                Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Inc. („Google, USA“). Google Analytics verwendet sog. „Cookies“, Textdateien, die in Ihrem Browser gespeichert werden. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert. Durch Aktivierung der IP-Anonymisierung wird Ihre IP-Adresse von Google innerhalb von Mitgliedstaaten der Europäischen Union oder in anderen Vertragsstaaten des Abkommens über den Europäischen Wirtschaftsraum zuvor gekürzt. Google wird Besucherverhalten auszuwerten, um Reports über die Websiteaktivitäten zusammenzustellen und um weitere mit der Websitenutzung und der Internetnutzung verbundene Dienstleistungen gegenüber dem Websitebetreiber zu erbringen.
+            </p>
+
+            <p class="text-bold">Facebook-Plugins (Like-Button)</p>
+            <p>
+                Auf der Seite sind Like-Buttons des sozialen Netzwerks Facebook (Facebook Inc., 1601 Willow Road, Menlo Park, California, 94025, USA) integriert. Wenn Sie unsere Seiten besuchen, wird über das Plugin eine Verbindung zwischen Ihrem Browser und Facebook hergestellt. Facebook erhält dadurch die Information, dass Sie unsere Seite besucht haben. Wenn Sie den „Like-Button“ klicken während Sie in Ihrem Facebook-Account eingeloggt sind, können die Inhalte unserer Seiten mit Ihrem Facebook-Profil in Verbindung gebracht werden. Dadurch kann Facebook den Besuch unserer Seiten Ihrem Benutzerkonto zuordnen. hey! sharing community hat keine Kenntnis von Inhalten der übermittelten Daten, sowie deren Nutzung durch Facebook. Wenn Sie nicht wünschen, dass Facebook den Besuch unserer Seiten Ihrem Facebook-Account zuordnen kann, loggen Sie sich bitte aus Ihrem Facebook-Benutzerkonto aus.
+            </p>
+
+      </div>
+      </section>
+      <span class="add-margin mobile-hidden"></span> </div>
+{% endblock %}

@@ -119,6 +119,13 @@ class StaticController extends BaseController {
         return $this->render('static/clientInfo/kundeninfos_impressum.html.twig');
     }
     
+    /**
+     * @Route("/kundeninfos/datenschutz", name="kundeninfos_datenschutz")
+     */
+    public function kundeninfosDatenschutzAction(Request $request) {               
+        return $this->render('static/clientInfo/kundeninfos_datenschutz.html.twig');
+    }
+    
     /** 
      * @Route("/tutorial/photo", name="tutorial-photo")
      */
