@@ -196,6 +196,10 @@ class Equipment
      * @ORM\Column(type="decimal", scale=2, precision=10)
      */
     protected $priceMonth;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $service = 0;
     
     
     public function setUuid($uuid)
@@ -1330,5 +1334,29 @@ class Equipment
     public function getPriceMonth()
     {
         return $this->priceMonth;
+    }
+
+    /**
+     * Set service
+     *
+     * @param integer $service
+     *
+     * @return Equipment
+     */
+    public function setService($service)
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return integer
+     */
+    public function getService()
+    {
+        return $this->service;
     }
 }

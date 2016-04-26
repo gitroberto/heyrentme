@@ -122,18 +122,16 @@
                                         <div class="err-msg">{{ form_errors(form.deposit) }}</div>
                                       </div>
                                   </div>
-                                  {#
-                                  <div class="chbox-holder">
-                                      <input type="checkbox" id="chx">
-                                        <label for="invoice"><span></span>Original-Rechnung ist vorhanden</label>
-                                  </div>
-                                  #}
                               </div>
                           </div>
-                        <div class="chbox-holder">
-                            {# <input type="checkbox" id="chxx"> #}
+                        <div class="chbox-holder" style="display: inline-block;">
                             {{ form_widget(form.invoice) }}
                             <label for="form_invoice"><span></span>Original-Rechnung ist vorhanden</label>
+                        </div>
+                        <div class="chbox-holder" style="display: inline-block;">
+                            {{ form_widget(form.service) }}
+                            <label for="form_service" style="margin-right: 0px;"><span></span>Equipment wird mit Dienstleistung angeboten</label>
+                            <span class="info-icon" data-toggle="tooltip" title="" data-original-title="Falls du dein Equipment mit einer Dienstleistung anbieten möchtest, aktiviere bitte diese Option. Dadurch entfällt die Eingabe von Kaution und Angaben zu Preis &amp; Alter des Equipments."></span>
                         </div>
 
                       </div>
@@ -265,6 +263,18 @@
               
           } 
       }
+      function serviceChanged() {
+          var $fvd = $('#form_value, #form_deposit');
+          var $fs = $('#form_service');
+          if ($fs.prop('checked')) {
+              $fvd.attr('readOnly', 'true');
+              $fvd.css({ 'background-color': '#aaa', 'opacity': '0.5' });
+          }
+          else {
+              $fvd.removeAttr('readOnly');
+              $fvd.css({ 'background-color': '#fff', 'opacity': '1.0' });
+          }
+      }
       
       $(document).ready(function () {
         {% if statusChanged %}
@@ -284,8 +294,9 @@
           
           $(".top-menu-button").click(topMenuClick);
           
-          
-      })
+          serviceChanged();
+          $("#form_service").on('click change', serviceChanged);          
+      });
   </script>
   </div>
 {% endblock %}

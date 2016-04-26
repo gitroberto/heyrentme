@@ -275,6 +275,7 @@ class EquipmentController extends BaseAdminController {
             'priceBuy' => $equipment->getPriceBuy(),
             'invoice' => $equipment->getInvoice(),
             'industrial' => $equipment->getIndustrial(),
+            'service' => $equipment->getService(),
             'ageId' => $equipment->getAge()->getId(),
             
             //edit 2
@@ -368,6 +369,7 @@ class EquipmentController extends BaseAdminController {
                     )
                 ))
                 ->add('invoice', 'checkbox', array('required' => false))
+                ->add('service', 'checkbox', array('required' => false))
                 ->add('industrial', 'checkbox', array('required' => false))
                 
                 
@@ -497,6 +499,7 @@ class EquipmentController extends BaseAdminController {
             $equipment->setPriceBuy($data['priceBuy']);
             $equipment->setInvoice($data['invoice']);
             $equipment->setIndustrial($data['industrial']);
+            $equipment->setService($data['service']);
             $equipment->setAge($age);
             //</editor-fold>
             

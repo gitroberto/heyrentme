@@ -2,14 +2,13 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\Equipment;
 use AppBundle\Entity\EquipmentImage;
 use AppBundle\Entity\Image;
-use AppBundle\Entity\Talent;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +18,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use function str_split;
 
 class ProviderController extends BaseController {
             
@@ -497,6 +497,7 @@ class ProviderController extends BaseController {
             'priceBuy' => $equipment->getPriceBuy(),
             'invoice' => $equipment->getInvoice(),
             'industrial' => $equipment->getIndustrial(),
+            'service' => $equipment->getService(),
             'ageId' => $equipment->getAge()->getId()
         );
         //</editor-fold>
@@ -504,7 +505,14 @@ class ProviderController extends BaseController {
         // build form
         //<editor-fold>
         $ageArr = $this->getDoctrineRepo('AppBundle:EquipmentAge')->getAllForDropdown();        
-        $form = $this->createFormBuilder($data)
+        $form = $this->createFormBuilder($data, array(
+                    'validation_groups' => function (FormInterface $form) {
+                        $data = $form->getData();
+                        if (!$data['service'])
+                            return array('Default', 'no-service');
+                        return array('Default');
+                    }
+                ))
                 ->add('name', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
@@ -531,13 +539,13 @@ class ProviderController extends BaseController {
                 ))
                 ->add('deposit', 'integer', array(
                     'constraints' => array(
-                        new NotBlank(),
+                        new NotBlank(array('groups' => 'no-service')),
                         new Range(array('min' => 0, 'max' => 1000))
                     )
                 ))
                 ->add('value', 'integer', array(
                     'constraints' => array(
-                        new NotBlank(),
+                        new NotBlank(array('groups' => 'no-service')),
                         new Range(array('min' => 50, 'max' => 2000))
                     )
                 ))
@@ -555,6 +563,7 @@ class ProviderController extends BaseController {
                     )
                 ))
                 ->add('invoice', 'checkbox', array('required' => false))
+                ->add('service', 'checkbox', array('required' => false))
                 ->add('industrial', 'checkbox', array('required' => false))
                 ->getForm();
         //</editor-fold>
@@ -581,6 +590,7 @@ class ProviderController extends BaseController {
             $equipment->setPriceBuy($data['priceBuy']);
             $equipment->setInvoice($data['invoice']);
             $equipment->setIndustrial($data['industrial']);
+            $equipment->setService($data['service']);
             $equipment->setAge($age);
             //</editor-fold>
             
@@ -618,7 +628,14 @@ class ProviderController extends BaseController {
         // build form
         //<editor-fold>
         $ageArr = $this->getDoctrineRepo('AppBundle:EquipmentAge')->getAllForDropdown();        
-        $form = $this->createFormBuilder()
+        $form = $this->createFormBuilder(null, array(
+                    'validation_groups' => function (FormInterface $form) {
+                        $data = $form->getData();
+                        if (!$data['service'])
+                            return array('Default', 'no-service');
+                        return array('Default');
+                    }
+                ))
                 ->add('name', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
@@ -645,13 +662,13 @@ class ProviderController extends BaseController {
                 ))
                 ->add('deposit', 'integer', array(
                     'constraints' => array(
-                        new NotBlank(),
+                        new NotBlank(array('groups' => 'no-service')),
                         new Range(array('min' => 0, 'max' => 1000))
                     )
                 ))
                 ->add('value', 'integer', array(
                     'constraints' => array(
-                        new NotBlank(),
+                        new NotBlank(array('groups' => 'no-service')),
                         new Range(array('min' => 50, 'max' => 2000))
                     )
                 ))
@@ -669,8 +686,10 @@ class ProviderController extends BaseController {
                     )
                 ))
                 ->add('invoice', 'checkbox', array('required' => false))
+                ->add('service', 'checkbox', array('required' => false))
                 ->add('industrial', 'checkbox', array('required' => false))
-                ->getForm();
+                ->getForm();        
+        
         //</editor-fold>
         
         $form->handleRequest($request);
@@ -696,6 +715,7 @@ class ProviderController extends BaseController {
             $eq->setPriceBuy($data['priceBuy']);
             $eq->setInvoice($data['invoice']);
             $eq->setIndustrial($data['industrial']);
+            $eq->setService($data['service']);
             $eq->setAge($age);
             //</editor-fold>
             // save to db
