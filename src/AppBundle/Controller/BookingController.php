@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 class BookingController extends BaseController {
@@ -808,7 +809,12 @@ class BookingController extends BaseController {
         if (!$loggedIn) {
             $builder->add('name', 'text', array(
                 'constraints' => array(
-                    new NotBlank()
+                    new NotBlank(),
+                    new Regex(array(
+                        'pattern' => '/^\S+$/',
+                        'htmlPattern' => '/^\S+$/',
+                        'message' => 'Nur Vorname bitte (ohne Leerzeichen).'
+                    ))
                 )
             ))
             ->add('email', 'email', array(
@@ -878,7 +884,7 @@ class BookingController extends BaseController {
     }
 
     /**
-     * @Route("/equipment/reply/{id}", name="equipment-reply")
+     * @Route("/booking/reply/{id}", name="equipment-reply")
      */
     public function replyAction(Request $request, $id) {
         $q = $this->getDoctrineRepo('AppBundle:EquipmentQuestion')->find($id);
@@ -945,8 +951,7 @@ class BookingController extends BaseController {
             'provider' => $provider,
             'form' => $form->createView(),
             'question' => $q,
-            'saved' => $saved,
-            'askerName' => $asker !== null ? $asker->getName() : $q->getName()
+            'saved' => $saved
         ));
     }
 }

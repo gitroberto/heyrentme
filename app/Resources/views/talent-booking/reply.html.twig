@@ -8,12 +8,12 @@
     <img src="/img/detail-bg-rwd.jpg" alt="image" class="img-responsive min-320"/></div>
   <div class="container request-container reply-page">
         <div class="col-xs-12">
-            <h1>Nachricht an {{ askerName }}</h1>
+            <h1>{% if asker %}Nachricht an {{ asker.name }}{% else %}Deine Nachricht{% endif %}</h1>
         </div>
     <div class="row bewertung-request-form">
         {{ form_start(form, { 'attr': { 'id': 'reply' } }) }}
         <div class="col-xs-12">
-            {{ form_widget(form.reply, { 'attr': { 'placeholder': 'Deine Nachricht an ' ~ askerName }}) }}
+            {{ form_widget(form.reply, { 'attr': { 'placeholder': 'Hier kannst du auf die Anfrage antworten. Wenn Interessenten buchen möchten, verweise sie bitte auf die Buchungsmöglichkeiten auf deiner Portraitseite.' }}) }}
             {#<textarea placeholder="Deine Nachricht an {{ asker.name }}"></textarea>#}
             <button>Absenden</button>
         </div>

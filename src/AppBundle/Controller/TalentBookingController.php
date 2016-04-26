@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 class TalentBookingController extends BaseController {
@@ -820,7 +821,12 @@ class TalentBookingController extends BaseController {
         if (!$loggedIn) {
             $builder->add('name', 'text', array(
                 'constraints' => array(
-                    new NotBlank()
+                    new NotBlank(),
+                    new Regex(array(
+                        'pattern' => '/^\S+$/',
+                        'htmlPattern' => '/^\S+$/',
+                        'message' => 'Nur Vorname bitte (ohne Leerzeichen).'
+                    ))
                 )
             ))
             ->add('email', 'email', array(
@@ -890,7 +896,7 @@ class TalentBookingController extends BaseController {
     }
 
     /**
-     * @Route("/talent-booking/reply/{id}", name="talent-booking-reply")
+     * @Route("/talent/reply/{id}", name="talent-booking-reply")
      */
     public function replyAction(Request $request, $id) {
         $q = $this->getDoctrineRepo('AppBundle:TalentQuestion')->find($id);
@@ -957,8 +963,7 @@ class TalentBookingController extends BaseController {
             'provider' => $provider,
             'form' => $form->createView(),
             'question' => $q,
-            'saved' => $saved,
-            'askerName' => $asker !== null ? $asker->getName() : $q->getName()
+            'saved' => $saved
         ));
     }
 }

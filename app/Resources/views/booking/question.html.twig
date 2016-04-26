@@ -5,12 +5,12 @@
         {{ form_start(form) }}
             <div>
                 {% if not loggedIn %}
-                    {{ form_widget(form.name, { 'attr': { 'placeholder': 'DEIN NAME*' }}) }}
+                    {{ form_widget(form.name, { 'attr': { 'placeholder': 'VORNAME*' }}) }}
                     <div class="err-msg">{{ form_errors(form.name) }}</div>
-                    {{ form_widget(form.email, { 'attr': { 'placeholder': 'DEIN EMAIL*' }}) }}
+                    {{ form_widget(form.email, { 'attr': { 'placeholder': 'DEINE EMAIL*' }}) }}
                     <div class="err-msg">{{ form_errors(form.email) }}</div>
                 {% endif %}
-                {{ form_widget(form.message, { 'attr': { 'rows': '5', 'placeholder': 'NACHRICHT: BITTE STELLE DEM ANBIETER HIER EIN FRAGE*' }}) }}
+                {{ form_widget(form.message, { 'attr': { 'rows': '5', 'placeholder': 'DEINE NACHRICHT: HIER KANNST DU DEM ANBIETER EINE FRAGE ZU DEM ANGEBOT STELLEN*' }}) }}
                 <div class="err-msg">{{ form_errors(form.message) }}</div>
                 <input type="submit" value="abschicken">
             </div>
