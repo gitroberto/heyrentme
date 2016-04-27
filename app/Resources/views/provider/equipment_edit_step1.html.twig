@@ -47,13 +47,11 @@
                           <div class="row">
                               <div class="col-sm-7">
                                   <label for="form[name]">Angebotsname:</label>
-                                  {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
                                   {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 22 Zeichen', 'class': 'normal-input' } }) }}
                                   <div class="err-msg">{{ form_errors(form.name) }}</div>
                               </div>
                                <div class="col-sm-5">
                                   <label for="form[price]">Preis pro Tag (ab):</label>
-                                  {#<input type="number" name="name2" placeholder="0" class="small-input" id="preis_pro_tag" min="10" max="2500" required> ,- €#}
                                   {{ form_widget(form.price, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '10', 'max': '2500' }}) }}EUR 
                                   <div class="err-msg">{{ form_errors(form.price) }}</div>
                               </div>
@@ -98,18 +96,12 @@
                                   <div class="kaution row">
                                       <div class="col-xs-5">
                                         <span>Original-Wert (ca.)</span>
-                                        {# <input type="text" name="name2" placeholder="z.B.: 500" class="small-input " id="name2">    ,- € #}
                                         {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }}EUR 
                                         <div class="err-msg">{{ form_errors(form.value) }}</div>
                                       </div>
                                       <div class="col-xs-3">
                                         <div class="search-form mobile-kategorie-form">
                                             <div class="select-link">
-                                                {#
-                                                <select title='Alter (ca.)' name="gender2" class="selectpicker bs-select-hidden ">
-                                                    <option>Alter (ca.)</option>
-                                                </select>
-                                                #}
                                                 {{ form_widget(form.ageId, { 'attr': { 'class': 'selectpicker bs-select-hidden', 'title': 'Alter (ca.)' }}) }}
                                                 <div class="err-msg">{{ form_errors(form.ageId) }}</div>
                                             </div>
@@ -117,7 +109,6 @@
                                       </div>
                                       <div class="col-xs-4">
                                         <span>Kaution</span>
-                                        {# <input type="text" name="name2" placeholder="z.B.: 20" class="small-input " id="name2">    ,- € #}
                                         {{ form_widget(form.deposit, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '1000' }}) }}EUR 
                                         <div class="err-msg">{{ form_errors(form.deposit) }}</div>
                                       </div>
@@ -153,7 +144,6 @@
 
                                               <div class="kaution">
                                                 <span>Verkaufspreis bei Kauf</span>
-                                                {# <input type="text" name="name2" placeholder="z.B.: 250" class="small-input " id="name2">,- € #}
                                                 {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }}EUR 
                                                 <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
                                               </div>
@@ -265,14 +255,15 @@
       }
       function serviceChanged() {
           var $fvd = $('#form_value, #form_deposit');
+          var $fa = $('#form_ageId');
           var $fs = $('#form_service');
           if ($fs.prop('checked')) {
-              $fvd.attr('readOnly', 'true');
-              $fvd.css({ 'background-color': '#aaa', 'opacity': '0.5' });
+              $fvd.attr('readOnly', 'true').css({ 'background-color': '#aaa', 'opacity': '0.5' });
+              $fa.attr('disabled', 'disabled').selectpicker('refresh');
           }
           else {
-              $fvd.removeAttr('readOnly');
-              $fvd.css({ 'background-color': '#fff', 'opacity': '1.0' });
+              $fvd.removeAttr('readOnly').css({ 'background-color': '#fff', 'opacity': '1.0' });
+              $fa.removeAttr('disabled').selectpicker('refresh');
           }
       }
       

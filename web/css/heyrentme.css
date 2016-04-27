@@ -637,3 +637,9 @@ p.how-many {
     left:15px !important;
     width: 200px !important;
 }
+
+
+div.btn-group.bootstrap-select.disabled {
+    opacity: 0.5;
+    background-color: rgb(20, 20, 20);
+}

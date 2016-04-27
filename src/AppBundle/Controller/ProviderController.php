@@ -486,6 +486,7 @@ class ProviderController extends BaseController {
         
         // map fields, TODO: consider moving to Equipment's method
         //<editor-fold> map fields            
+        $age = $equipment->getAge();
         $data = array(
             'name' => $equipment->getName(),
             'price' => $equipment->getPrice(),
@@ -497,7 +498,7 @@ class ProviderController extends BaseController {
             'invoice' => $equipment->getInvoice(),
             'industrial' => $equipment->getIndustrial(),
             'service' => $equipment->getService(),
-            'ageId' => $equipment->getAge()->getId()
+            'ageId' => $age !== null ? $age->getId() : null
         );
         //</editor-fold>
         
@@ -558,7 +559,7 @@ class ProviderController extends BaseController {
                     'choices' => $ageArr,
                     'choices_as_values' => false,
                     'constraints' => array(
-                        new NotBlank()
+                        new NotBlank(array('groups' => 'no-service'))
                     )
                 ))
                 ->add('invoice', 'checkbox', array('required' => false))
@@ -573,7 +574,6 @@ class ProviderController extends BaseController {
         if ($form->isValid()) {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
 
             // check for modaration relevant changes
             $changed = $equipment->getName() !== $data['name'];
@@ -590,7 +590,12 @@ class ProviderController extends BaseController {
             $equipment->setInvoice($data['invoice']);
             $equipment->setIndustrial($data['industrial']);
             $equipment->setService($data['service']);
-            $equipment->setAge($age);
+            if ($data['ageId'] !== null) {
+                $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
+                $equipment->setAge($age);
+            }
+            else 
+                $equipment->setAge(null);
             //</editor-fold>
             
             // save to db
@@ -681,7 +686,7 @@ class ProviderController extends BaseController {
                     'choices' => $ageArr,
                     'choices_as_values' => false,
                     'constraints' => array(
-                        new NotBlank()
+                        new NotBlank(array('groups' => 'no-service'))
                     )
                 ))
                 ->add('invoice', 'checkbox', array('required' => false))
@@ -700,7 +705,6 @@ class ProviderController extends BaseController {
             $user = $this->getUser();
             // map fields, TODO: consider moving to Equipment's method
             //<editor-fold> map fields
-            $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
             $eq = new Equipment();
             $eq->setUuid(Utils::getUuid());            
             $eq->setName($data['name']);
@@ -715,7 +719,10 @@ class ProviderController extends BaseController {
             $eq->setInvoice($data['invoice']);
             $eq->setIndustrial($data['industrial']);
             $eq->setService($data['service']);
-            $eq->setAge($age);
+            if ($data['ageId'] !== null) {
+                $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
+                $eq->setAge($age);
+            }
             //</editor-fold>
             // save to db
             $em = $this->getDoctrine()->getManager();
