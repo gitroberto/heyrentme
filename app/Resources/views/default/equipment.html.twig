@@ -81,15 +81,15 @@
               {% endif %}
               <div id="media-content">
                     {% if item.equipmentImages|length > 0 %}
-                        <img src="{{ item.equipmentImages[0].image.urlPath(image_url_prefix) }}" alt=""/>
+                        <img src="{{ item.equipmentImages[0].image.urlPath(image_url_prefix) }}" alt="{{ item.name }}"/>
                     {% else %}
-                        <img src="/img/equipment-default.jpg" alt=""/>
+                        <img src="/img/equipment-default.jpg" alt="{{ item.name }}"/>
                     {% endif %}
               </div>
 
               <div class="media-list" id="media-list">
                     {% for eimg in item.equipmentImages %}
-                        <span class="media-img"><img src="{{ eimg.image.thumbnailUrlPath(image_url_prefix) }}" data-url="{{ eimg.image.urlPath(image_url_prefix) }}" alt=""/></span>
+                        <span class="media-img"><img src="{{ eimg.image.thumbnailUrlPath(image_url_prefix) }}" data-url="{{ eimg.image.urlPath(image_url_prefix) }}" alt="{{ item.name }}{% if loop.index != 1 %} {{ loop.index}}{% endif %}"/></span>
                     {% endfor %}
                     {#
                         <span><a class="videos-ico" id="3"></a><img src="/img/placeholder/video2.jpg" id="3" alt=""/>   </span>
@@ -285,7 +285,7 @@
             </div>
             <div class="user-data">
                 <h3>Details:</h3>
-                <img src="{{ item.user.profilePicture(true, image_url_prefix) }}" alt="" class="user-avatar eq-details-avatar"/>
+                <img src="{{ item.user.profilePicture(true, image_url_prefix) }}" class="user-avatar eq-details-avatar" alt="{{ item.name }} - {{ item.user.name }}" />
                 <p class="user-name">{{ item.user.name }}</p>
                 <div class="user-data-tabs">
                   <div class="user-tab euro">

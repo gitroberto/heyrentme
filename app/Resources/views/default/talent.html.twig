@@ -86,7 +86,7 @@
                         <div id="player-thumb" style="width: 100%; height: 421px;"></div>
                     {% else %}
                         {% if item.talentImages|length > 0 %}
-                            <img src="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" alt="" {% if item.video %}style="display: none;"{% endif %}/>
+                            <img src="{{ item.talentImages[0].image.urlPath(image_url_prefix) }}" alt="{{ item.name }}" {% if item.video %}style="display: none;"{% endif %}/>
                         {% endif %}
                     {% endif %}
               </div>
@@ -95,11 +95,11 @@
                     {% if item.video %}
                         <span class="media-video" data-url="{{ item.video.embedUrl }}">
                             <a class="videos-ico"></a>
-                            <img src="{{ item.video.thumbnailUrl }}" />
+                            <img src="{{ item.video.thumbnailUrl }}" alt="{{ item.name }} video" />
                         </span>
                     {% endif %}
                     {% for img in item.talentImages %}
-                        <span class="media-img"><img src="{{ img.image.thumbnailUrlPath(image_url_prefix) }}" data-url="{{ img.image.urlPath(image_url_prefix) }}" alt=""/></span>
+                        <span class="media-img"><img src="{{ img.image.thumbnailUrlPath(image_url_prefix) }}" data-url="{{ img.image.urlPath(image_url_prefix) }}" alt="{{ item.name }}{% if loop.index != 1 %} {{ loop.index}}{% endif %}"/></span>
                     {% endfor %}
               </div>
             </div>
@@ -303,7 +303,7 @@
             </div>
             <div class="user-data">
                 <h3>Details:</h3>
-                <img src="{{ item.user.profilePicture(true, image_url_prefix) }}" alt="" class="user-avatar eq-details-avatar"/>
+                <img src="{{ item.user.profilePicture(true, image_url_prefix) }}" class="user-avatar eq-details-avatar" alt="{{ item.name }} - {{ item.user.name }}" />
                 <p class="user-name">{{ item.user.name }}</p>
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
