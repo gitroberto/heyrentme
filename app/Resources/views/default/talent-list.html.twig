@@ -7,7 +7,7 @@
         <div class="col-md-4">
             {% if tal.talentImages|length > 0 %}
                 <div class="rcatimage">
-                <img src="{{ tal.talentImages[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="placeholder"/>
+                <img src="{{ tal.talentImages[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ tal.name }}"/>
                 </div>
             {% else %}
                 <div class="rcatimage">

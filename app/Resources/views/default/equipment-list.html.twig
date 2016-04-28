@@ -7,7 +7,7 @@
         <div class="col-md-4">
             {% if eq.equipmentImages|length > 0 %}
                 <div class="rcatimage">
-                <img src="{{ eq.equipmentImages[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="placeholder"/>
+                <img src="{{ eq.equipmentImages[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ eq.name }}"/>
                 </div>
             {% else %}
                 <div class="rcatimage">
