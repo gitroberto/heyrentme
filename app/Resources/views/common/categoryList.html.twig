@@ -4,7 +4,7 @@
     {% for cat in cats2 %}
         <a href="{{ path('catchall', { 'content': cat.slug }) }}" style="padding: 0;">
             <p>
-                <img src="{{ cat.imageUrl }}" class="category-drop-down" alt=""/>
+                <img src="{{ cat.imageUrl }}" class="category-drop-down" alt="{{ cat.name }}"/>
                 {{ cat.name }}
             </p>
         </a>
@@ -16,7 +16,7 @@
     {% for cat in cats1 %}
         <a href="{{ path('catchall', { 'content': cat.slug }) }}" style="padding: 0;">
             <p>
-                <img src="{{ cat.imageUrl }}" class="category-drop-down" alt=""/>
+                <img src="{{ cat.imageUrl }}" class="category-drop-down" alt="{{ cat.name }}"/>
                 {{ cat.name }}
             </p>
         </a>
