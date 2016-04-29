@@ -114,6 +114,7 @@
     <div class="row">          
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
+                <a class="button-black backgound-yellow text-black" target="_blank" href="{{ path('blog_preview', { 'uuid': blog.uuid }) }}">Preview</a>
                 <input type="submit" class="button-black backgound-yellow text-black" value="Save">
                 <a class="button-black backgound-yellow text-black" href="{{ path('admin_blog_list') }}">Cancel</a>
             </div>
