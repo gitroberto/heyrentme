@@ -1,5 +1,15 @@
 {% extends "base.html.twig" %}
 
+{% block head %}
+	<meta property="og:url"           content="{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': category.slug }) }}" />
+	<meta property="og:type"          content="article" />
+	<meta property="og:title"         content="{{ category.name }}" />
+	<meta property="og:description"   content="Auf der hey! sharing community kannst du tolles Equipment und Talente in deiner Umgebung buchen." />
+        {% if category.imageUrl %}
+            <meta property="og:image"         content="{{ category.imageUrl }}" />    
+        {% endif %}
+{% endblock %}
+
 {% block body %}
   <div class="main-header ">
          <img src="{% if category.bigImageUrl %}{{ category.bigImageUrl }}{% else %}/img/cat-final/e_sport.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive max-1600 max-320"/>
