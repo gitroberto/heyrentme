@@ -56,10 +56,6 @@ $(document).ready(function () {
         window.location.href = href;
     });
 
-
-    //set height of map div like his sibling
-    $('#googleMap').css('min-height', $('#map-sibling p').innerHeight());
-
     // Assign accordion
     $('.panel-heading').click(function () {
         $(this).find('span.toggle-icon').toggleClass('glyphicon glyphicon-triangle-top glyphicon glyphicon-triangle-bottom');

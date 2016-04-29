@@ -105,51 +105,54 @@
             </div>
             <div>
                 <div class="row">
-                    <div class="col-md-8 col-xs-12 product-description" id="map-sibling">
+                    <div class="col-xs-12 product-description" id="map-sibling">
                         <p class="no-top-margin text-padding">
                             <span class="text-bold mobile-hidden">Beschreibung:</span><br class="mobile-hidden"><br class="mobile-hidden">
                             {{ item.description|nl2br }}
+                            {% if item.descReference %}
+                                    <br/><br class="mobile-hidden"/>
+                                    <span class="text-bold mobile-hidden">Abgeschlossene Ausbildungen, Zertifikate oder Referenzen</span><br class="mobile-hidden"><br class="mobile-hidden">
+                                    {{ item.descReference|nl2br }}
+                            {% endif %}
                         </p>
-                    </div>
-                    <div class="col-md-4 col-xs-12" id="googleMap"></div>
+                    </div>                    
                 </div>
             </div>
-            {% if item.descReference or item.descScope or item.descTarget or item.descCondition %}         
-            <div class="panel-group" id="panel-quote-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading" id="panel-heading">
-                        <p class="panel-title">
-                           Fragen und Antworten
-                            <span class="pull-right">
-                                <a>
-                                    <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
-                                </a>
-                            </span>
-                        </p>
-                    </div>
-                    <div id="collapseQuote" class="panel-collapse collapse2 collapse">
-                        <div class="panel-body">
-                            {% if item.descReference %}
-                                <p class="panel-head">Abgeschlossene Ausbildungen, Zertifikate oder Referenzen</p>
-                                <p>{{ item.descReference|nl2br }}</p>
-                            {% endif %}
-                            {% if item.descScope %}
-                                <p class="panel-head">Angebotsumfang</p>
-                                <p>{{ item.descScope|nl2br }}</p>
-                            {% endif %}
-                            {% if item.descTarget %}
-                                <p class="panel-head">Für wen ist dein Angebot besonders geeignet?</p>
-                                <p>{{ item.descTarget|nl2br }}</p>
-                            {% endif %}
-                            {% if item.descCondition %}
-                                <p class="panel-head">Spezielle Angebotskonditionen</p>
-                                <p>{{ item.descCondition|nl2br }}</p>
-                            {% endif %}
+            {% if item.descScope or item.descTarget or item.descCondition %}         
+                <div class="panel-group" id="panel-quote-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="panel-heading">
+                            <p class="panel-title">
+                               Fragen und Antworten
+                                <span class="pull-right">
+                                    <a>
+                                        <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
+                                    </a>
+                                </span>
+                            </p>
+                        </div>
+                        <div id="collapseQuote" class="panel-collapse collapse2 collapse">
+                            <div class="panel-body">
+                                {% if item.descScope %}
+                                    <p class="panel-head">Angebotsumfang</p>
+                                    <p>{{ item.descScope|nl2br }}</p>
+                                {% endif %}
+                                {% if item.descTarget %}
+                                    <p class="panel-head">Für wen ist dein Angebot besonders geeignet?</p>
+                                    <p>{{ item.descTarget|nl2br }}</p>
+                                {% endif %}
+                                {% if item.descCondition %}
+                                    <p class="panel-head">Spezielle Angebotskonditionen</p>
+                                    <p>{{ item.descCondition|nl2br }}</p>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             {% endif %}
+            
+            <div style="height: 240px;" id="googleMap"></div>
+            
             <div class="panel-group desktop-hide" id="panel-quote-group2">
                 <div class="panel panel-default">
                     <div class="panel-heading" id="panel-heading1">
