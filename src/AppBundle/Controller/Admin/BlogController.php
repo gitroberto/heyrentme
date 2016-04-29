@@ -273,6 +273,7 @@ class BlogController  extends BaseAdminController {
             
             // save to db
             
+            $blog->setUuid(Utils::getUuid());
             $em->persist($blog);
             $em->flush();
 
