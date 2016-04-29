@@ -3,7 +3,7 @@
 {% block head %}
 	<meta property="og:url"           content="{{ mailer_app_url_prefix }}{{ path('catchall', { 'content': category.slug }) }}" />
 	<meta property="og:type"          content="article" />
-	<meta property="og:title"         content="{{ category.name }}" />
+	<meta property="og:title"         content="hey! sharing: {{ category.name }}" />
 	<meta property="og:description"   content="Auf der hey! sharing community kannst du tolles Equipment und Talente in deiner Umgebung buchen." />
         {% if category.imageUrl %}
             <meta property="og:image"         content="{{ category.imageUrl }}" />    
