@@ -2,6 +2,10 @@
 min-height: 55px;
 }
 
+.product-detail .left-side .user-notes {
+margin-top: 16px;
+}
+
 .btnSaveStatus {
 background-color: #34b437 !important
 }
@@ -669,7 +673,7 @@ padding:0!important;
 }
 
 .yellow {
-background-color:#f0c814;
+background-color:#34b437;
 width: 90%;
 margin: -15px 0 30px 0;
 padding: 6px 0;
@@ -974,7 +978,7 @@ padding: 0 15px 10px 15px
 .yellow {
     width: 100%;
     margin: 10px 0 30px 0;
-	background-color:#f0c814;
+	background-color:#34b437;
 }
 
 .product-detail .left-side .product-info {
@@ -1423,7 +1427,7 @@ padding:0!important;
 }
 
 .yellow {
-background-color:#f0c814;
+background-color:#34b437;
 width: 90%;
 margin: -15px 0 30px 0;
 padding: 6px 0;
