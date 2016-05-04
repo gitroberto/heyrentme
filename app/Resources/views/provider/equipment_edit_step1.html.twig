@@ -96,7 +96,7 @@
                                   <div class="kaution row">
                                       <div class="col-xs-5">
                                         <span>Original-Wert (ca.)</span>
-                                        {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }}EUR 
+                                        {{ form_widget(form.value, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '50', 'max': '50000' }}) }}EUR 
                                         <div class="err-msg">{{ form_errors(form.value) }}</div>
                                       </div>
                                       <div class="col-xs-3">
@@ -144,7 +144,7 @@
 
                                               <div class="kaution">
                                                 <span>Verkaufspreis bei Kauf</span>
-                                                {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }}EUR 
+                                                {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '50000' }}) }}EUR 
                                                 <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
                                               </div>
                                           </div>
