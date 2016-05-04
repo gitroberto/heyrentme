@@ -352,13 +352,13 @@ class EquipmentController extends BaseAdminController {
                 ->add('value', 'integer', array(
                     'constraints' => array(
                         new NotBlank(),
-                        new Range(array('min' => 50, 'max' => 2000))
+                        new Range(array('min' => 50, 'max' => 50000))
                     )
                 ))
                 ->add('priceBuy', 'integer', array(
                     'required' => false,
                     'constraints' => array(
-                        new Range(array('min' => 0, 'max' => 20000))
+                        new Range(array('min' => 0, 'max' => 50000))
                     )
                 ))
                 ->add('ageId', 'choice', array(
