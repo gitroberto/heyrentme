@@ -125,7 +125,7 @@
         </div>
         <div class="col-xs-6">
             {#<input type="text" name="name2" placeholder="Maximal 22 Zeichen" class="normal-input " id="offer-name" maxlength="22" required>#}
-            {{ form_widget(form.value, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '50', 'max': '2000' }}) }}EUR 
+            {{ form_widget(form.value, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '50', 'max': '50000' }}) }}EUR 
         </div>
         <div class="err-msg">{{ form_errors(form.value) }}</div>
     </div>
@@ -167,7 +167,7 @@
             <label >verkaufspreis bei kauf</label>
         </div>
         <div class="col-xs-6">                        
-            {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '0', 'max': '20000' }}) }}EUR 
+            {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '0', 'max': '50000' }}) }}EUR 
         </div>
         <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
     </div>
