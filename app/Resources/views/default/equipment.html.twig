@@ -636,6 +636,8 @@
                $("#action-disabled-modal").modal(); 
             });
         {% endif %}
+            
+        $("#googleMap").css("min-height",$("#map-sibling p").innerHeight());
     });
     $(window).load(function(){
         $('#tests').parent().find('.bootstrap-select').eq(0).find('.dropdown-toggle').html('Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp;   10:00').prepend('<span class="caret"></span>');
