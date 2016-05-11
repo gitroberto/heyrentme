@@ -489,6 +489,8 @@ EOT;
         
         if ($status === Talent::STATUS_APPROVED || $status === Talent::STATUS_REJECTED) {
             $talent->setStatus(Talent::STATUS_MODIFIED);
+            $talent->setShowcaseStart(0);
+            $talent->setShowcaseTalent(0);
             $this->getEntityManager()->flush();
             $changed = true;
         }

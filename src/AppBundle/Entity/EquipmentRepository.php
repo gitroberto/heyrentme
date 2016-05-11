@@ -525,14 +525,16 @@ EOT;
 EOT;
         return $this->getEntityManager()->createQuery($sql)->getResult();
     }
-    public function equipmentModified($talentId) {
+    public function equipmentModified($eqId) {
         // todo: possibly call a service to send notification
-        $talent = $this->getEntityManager()->getRepository('AppBundle:Equipment')->find($talentId);
-        $status = $talent->getStatus();
+        $eq = $this->getEntityManager()->getRepository('AppBundle:Equipment')->find($eqId);
+        $status = $eq->getStatus();
         $changed = false;
         
         if ($status === Talent::STATUS_APPROVED || $status === Talent::STATUS_REJECTED) {
-            $talent->setStatus(Talent::STATUS_MODIFIED);
+            $eq->setStatus(Talent::STATUS_MODIFIED);
+            $eq->setShowcaseStart(0);
+            $eq->setShowcaseEquipment(0);
             $this->getEntityManager()->flush();
             $changed = true;
         }
