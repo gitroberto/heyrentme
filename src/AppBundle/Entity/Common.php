@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 
 class Common {
 
-    const SHOWCASE_MIN = 2;
-    const SHOWCASE_MAX = 4;
+    const SHOWCASE_MIN = 6;
+    const SHOWCASE_MAX = 9;
     
 }
