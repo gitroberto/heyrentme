@@ -725,34 +725,15 @@ EOT;
     }
 
     /* ------------------------------------------------------------------------- showcase */
-    public function getCategoryShowcaseCount($categoryId) {
-        return $this->getEntityManager()->createQueryBuilder()
-            ->select('count(e.id)')
-            ->from('AppBundle:Equipment', 'e')
-            ->leftJoin('e.subcategory', 's')
-            ->andWhere('e.showcaseCategory = 1')
-            ->andWhere('s.category = :categoryId')
-            ->setParameter('categoryId', $categoryId)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-    public function getStartShowcaseCount() {
+    public function getShowcaseStartCount() {
         return $this->getEntityManager()->createQueryBuilder()
             ->select('count(e.id)')
             ->from('AppBundle:Equipment', 'e')
             ->andWhere('e.showcaseStart = 1')
+            ->andWhere('e.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
             ->getQuery()
             ->getSingleScalarResult();
-    }
-    public function setShowcaseCategory($id, $value) {
-        $eq = $this->find($id);
-        $eq->setShowcaseCategory($value);
-        $this->getEntityManager()->flush();        
-    }
-    public function setShowcaseStart($id, $value) {
-        $eq = $this->find($id);
-        $eq->setShowcaseStart($value);
-        $this->getEntityManager()->flush();        
     }
     public function getShowcaseStart() {
         $eqs = $this
@@ -762,6 +743,8 @@ EOT;
             ->from('AppBundle:Equipment', 'e')
             ->leftJoin('e.images', 'i')
             ->andWhere('e.showcaseStart = 1')
+            ->andWhere('e.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
             ->addOrderBy('e.createdAt', 'desc')
             ->getQuery()
             ->getResult();
@@ -772,24 +755,34 @@ EOT;
         
         return $eqs;
     }
-    public function getShowcaseCategory($categoryId) {
+    public function getShowcaseEquipmentCount() {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(e.id)')
+            ->from('AppBundle:Equipment', 'e')
+            ->andWhere('e.showcaseEquipment = 1')
+            ->andWhere('e.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getShowcaseEquipment() {
         $eqs = $this
             ->getEntityManager()
             ->createQueryBuilder()
-            ->select('e')
+            ->select('e', 'i')
             ->from('AppBundle:Equipment', 'e')
-            ->leftJoin('e.subcategory', 's')
-            ->andWhere('e.showcaseCategory = 1')
-            ->andWhere('s.category = :categoryId')
-            ->setParameter('categoryId', $categoryId)
+            ->leftJoin('e.images', 'i')
+            ->andWhere('e.showcaseEquipment = 1')
+            ->andWhere('e.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->addOrderBy('e.createdAt', 'desc')
             ->getQuery()
             ->getResult();
-
+        
         foreach ($eqs as $eq) {
             $eq->setEquipmentImages($this->getEquipmentImages($eq->getId()));
         }        
         
         return $eqs;
-    }
-    
+    }    
 }

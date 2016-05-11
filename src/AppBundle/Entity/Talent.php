@@ -177,7 +177,7 @@ class Talent {
     /**
      * @ORM\Column(type="boolean")
      */
-    protected $showcaseCategory = 0;
+    protected $showcaseTalent = 0;
     
     
     public function setUuid($uuid)
@@ -1139,26 +1139,26 @@ class Talent {
     }
 
     /**
-     * Set showcaseCategory
+     * Set showcaseTalent
      *
-     * @param boolean $showcaseCategory
+     * @param boolean $showcaseTalent
      *
      * @return Talent
      */
-    public function setShowcaseCategory($showcaseCategory)
+    public function setShowcaseTalent($showcaseTalent)
     {
-        $this->showcaseCategory = $showcaseCategory;
+        $this->showcaseTalent = $showcaseTalent;
 
         return $this;
     }
 
     /**
-     * Get showcaseCategory
+     * Get showcaseTalent
      *
      * @return boolean
      */
-    public function getShowcaseCategory()
+    public function getShowcaseTalent()
     {
-        return $this->showcaseCategory;
+        return $this->showcaseTalent;
     }
 }

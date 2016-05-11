@@ -207,7 +207,7 @@ class Equipment
     /**
      * @ORM\Column(type="boolean")
      */
-    protected $showcaseCategory = 0;
+    protected $showcaseEquipment = 0;
     
     
     public function setUuid($uuid)
@@ -1393,26 +1393,26 @@ class Equipment
     }
 
     /**
-     * Set showcaseCategory
+     * Set showcaseEquipment
      *
-     * @param boolean $showcaseCategory
+     * @param boolean $showcaseEquipment
      *
      * @return Equipment
      */
-    public function setShowcaseCategory($showcaseCategory)
+    public function setShowcaseEquipment($showcaseEquipment)
     {
-        $this->showcaseCategory = $showcaseCategory;
+        $this->showcaseEquipment = $showcaseEquipment;
 
         return $this;
     }
 
     /**
-     * Get showcaseCategory
+     * Get showcaseEquipment
      *
      * @return boolean
      */
-    public function getShowcaseCategory()
+    public function getShowcaseEquipment()
     {
-        return $this->showcaseCategory;
+        return $this->showcaseEquipment;
     }
 }

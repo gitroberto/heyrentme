@@ -121,7 +121,7 @@ class TalentController extends BaseAdminController {
             $cell[$i++] = $this->generateUrl('admin-talent-log', array('id' => $dataRow->getId()));
             $cell[$i++] = $this->generateUrl('admin_talent_moderate', array('id' => $dataRow->getId()));
             $cell[$i++] = $dataRow->getShowcaseStart();
-            $cell[$i++] = $dataRow->getShowcaseCategory();
+            $cell[$i++] = $dataRow->getShowcaseTalent();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -1012,54 +1012,63 @@ class TalentController extends BaseAdminController {
         $this->getDoctrineRepo('AppBundle:Talent')->delete($id, $dir);
         return new JsonResponse("ok");
     }    
-    /**
-     * @Route("admin-talent-showcase-category/{id}/{value}", name="admin-talent-showcase-category")
-     */
-    public function showcaseCategoryAction($id, $value) {
-        $repo = $this->getDoctrineRepo('AppBundle:Talent');
-        $eq = $repo->find($id);
-        $cat = $eq->getSubcategory()->getCategory();        
-        $cnt = $repo->getCategoryShowcaseCount($cat->getId());
-        
-        // validate max
-        $max = Common::SHOWCASE_MAX;
-        if ($value == 1 && $cnt == $max)
-            return new JsonResponse(array('type' => 'error', 'message' => "<strong>{$cat->getName()}</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Maximum</strong>: <strong>{$max}</strong>."));
-            
-        // set value & save
-        $repo->setShowcaseCategory($eq->getId(), $value);
-                
-        // check for warning
-        $min = Common::SHOWCASE_MIN;
-        $cnt = $repo->getCategoryShowcaseCount($cat->getId());
-        if ($cnt < $min)
-            return new JsonResponse(array('type' => 'warning', 'message' => "<strong>{$cat->getName()}</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
-        
-        return new JsonResponse(array('type' => 'info', 'message' => "<strong>{$cat->getName()}</strong>: <strong>{$cnt}</strong> selected."));
-    }    
+
     /**
      * @Route("admin-talent-showcase-start/{id}/{value}", name="admin-talent-showcase-start")
      */
     public function showcaseStartAction($id, $value) {
         $repo = $this->getDoctrineRepo('AppBundle:Talent');
         $eq = $repo->find($id);
-        $cat = $eq->getSubcategory()->getCategory();        
-        $cnt = $repo->getStartShowcaseCount($cat->getId()) + $this->getDoctrineRepo('AppBundle:Equipment')->getStartShowcaseCount();
+        $cnt = $repo->getShowcaseStartCount() + $this->getDoctrineRepo('AppBundle:Equipment')->getShowcaseStartCount();
         
+        // validate status
+        if ($value == 1 && $eq->getStatus() !== Talent::STATUS_APPROVED)
+            return new JsonResponse(array('type' => 'error', 'message' => "The item is not APPROVED."));
+            
         // validate max
         $max = Common::SHOWCASE_MAX;
         if ($value == 1 && $cnt == $max)
             return new JsonResponse(array('type' => 'error', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Maximum</strong>: <strong>{$max}</strong>."));
             
         // set value & save
-        $repo->setShowcaseStart($eq->getId(), $value);
+        $eq->setShowcaseStart($value);
+        $this->getDoctrine()->getManager()->flush();
                 
         // check for warning
         $min = Common::SHOWCASE_MIN;
-        $cnt = $repo->getStartShowcaseCount($cat->getId()) + $this->getDoctrineRepo('AppBundle:Equipment')->getStartShowcaseCount();
+        $cnt = $repo->getShowcaseStartCount() + $this->getDoctrineRepo('AppBundle:Equipment')->getShowcaseStartCount();
         if ($cnt < $min)
             return new JsonResponse(array('type' => 'warning', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
         
         return new JsonResponse(array('type' => 'info', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected."));
+    }    
+    /**
+     * @Route("admin-talent-showcase-talent/{id}/{value}", name="admin-talent-showcase-talent")
+     */
+    public function showcaseTalentAction($id, $value) {
+        $repo = $this->getDoctrineRepo('AppBundle:Talent');
+        $eq = $repo->find($id);
+        $cnt = $repo->getShowcaseTalentCount();
+        
+        // validate status
+        if ($value == 1 && $eq->getStatus() !== Talent::STATUS_APPROVED)
+            return new JsonResponse(array('type' => 'error', 'message' => "The item is not APPROVED."));
+            
+        // validate max
+        $max = Common::SHOWCASE_MAX;
+        if ($value == 1 && $cnt == $max)
+            return new JsonResponse(array('type' => 'error', 'message' => "<strong>Talent page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Maximum</strong>: <strong>{$max}</strong>."));
+            
+        // set value & save
+        $eq->setShowcaseTalent($value);
+        $this->getDoctrine()->getManager()->flush();
+                
+        // check for warning
+        $min = Common::SHOWCASE_MIN;
+        $cnt = $repo->getShowcaseTalentCount();
+        if ($cnt < $min)
+            return new JsonResponse(array('type' => 'warning', 'message' => "<strong>Talent page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
+        
+        return new JsonResponse(array('type' => 'info', 'message' => "<strong>Talent page</strong>: <strong>{$cnt}</strong> selected."));
     }    
 }

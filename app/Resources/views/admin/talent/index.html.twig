@@ -36,9 +36,12 @@
             '<a class="grid-icon delete" title="Delete" href="#" data-href="' + cellobject[16] + '"><span class="glyphicon glyphicon-remove"></span></a>';
     }
     function showcaseActions(cellvalue, options, cellobject) {
+        if (cellobject[6] !== 'approved')
+            return '';
+
         var s = '<input type="checkbox" class="showcase" data-type="start" data-id="' + cellobject[1] + '" title="start page"' + (cellobject[19] ? ' checked="checked" ' : '') + '/>';
         s += '&nbsp;&nbsp;';
-        s += '<input type="checkbox" class="showcase" data-type="category" data-id="' + cellobject[1] + '" title="category page"' + (cellobject[20] ? ' checked="checked" ' : '') + '/>';
+        s += '<input type="checkbox" class="showcase" data-type="talent" data-id="' + cellobject[1] + '" title="talent page"' + (cellobject[20] ? ' checked="checked" ' : '') + '/>';
         return s;
     }
     function gridComplete() {
@@ -49,8 +52,8 @@
         var ch = $(this);
         var val = ch.prop('checked') ? '1' : '0';
         var url;
-        if (ch.data('type') === 'category')
-            url = '{{ path('admin-talent-showcase-category', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
+        if (ch.data('type') === 'talent')
+            url = '{{ path('admin-talent-showcase-talent', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
         else
             url = '{{ path('admin-talent-showcase-start', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
         url = url.replace('-ID-', ch.data('id')).replace('-VALUE-', val);

@@ -721,43 +721,25 @@ EOT;
         //</editor-fold>
     }
     /* ------------------------------------------------------------------------- showcase */
-    public function getCategoryShowcaseCount($categoryId) {
-        return $this->getEntityManager()->createQueryBuilder()
-            ->select('count(t.id)')
-            ->from('AppBundle:Talent', 't')
-            ->leftJoin('t.subcategory', 's')
-            ->andWhere('t.showcaseCategory = 1')
-            ->andWhere('s.category = :categoryId')
-            ->setParameter('categoryId', $categoryId)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-    public function getStartShowcaseCount() {
+    public function getShowcaseStartCount() {
         return $this->getEntityManager()->createQueryBuilder()
             ->select('count(t.id)')
             ->from('AppBundle:Talent', 't')
             ->andWhere('t.showcaseStart = 1')
+            ->andWhere('t.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
             ->getQuery()
             ->getSingleScalarResult();
     }
-    public function setShowcaseCategory($id, $value) {
-        $tal = $this->find($id);
-        $tal->setShowcaseCategory($value);
-        $this->getEntityManager()->flush();        
-    }
-    public function setShowcaseStart($id, $value) {
-        $tal = $this->find($id);
-        $tal->setShowcaseStart($value);
-        $this->getEntityManager()->flush();        
-    }
-    public function getShowcaseCategory($categoryId) {
+    public function getShowcaseStart() {
         $tals = $this->getEntityManager()->createQueryBuilder()
-            ->select('t')
+            ->select('t', 'i')
             ->from('AppBundle:Talent', 't')
-            ->leftJoin('t.subcategory', 's')
-            ->andWhere('t.showcaseCategory = 1')
-            ->andWhere('s.category = :categoryId')
-            ->setParameter('categoryId', $categoryId)
+            ->leftJoin('t.images', 'i')
+            ->andWhere('t.showcaseStart = 1')
+            ->andWhere('t.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->addOrderBy('t.createdAt', 'desc')
             ->getQuery()
             ->getResult();
 
@@ -765,12 +747,26 @@ EOT;
             $tal->setTalentImages($this->getTalentImages($tal->getId()));
         
         return $tals;
-    }
-    public function getShowcaseStart() {
-        $tals = $this->getEntityManager()->createQueryBuilder()
-            ->select('t')
+    }    
+    public function getShowcaseTalentCount() {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(t.id)')
             ->from('AppBundle:Talent', 't')
-            ->andWhere('t.showcaseStart = 1')
+            ->andWhere('t.showcaseTalent = 1')
+            ->andWhere('t.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getShowcaseTalent() {
+        $tals = $this->getEntityManager()->createQueryBuilder()
+            ->select('t', 'i')
+            ->from('AppBundle:Talent', 't')
+            ->leftJoin('t.images', 'i')
+            ->andWhere('t.showcaseTalent = 1')
+            ->andWhere('t.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->addOrderBy('t.createdAt', 'desc')
             ->getQuery()
             ->getResult();
 

@@ -47,6 +47,70 @@
             </nav>
             {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT'), 'mobile': true })) }}
           </div>
+
+        {% if equipmentSc|length >= constant('AppBundle\\Entity\\Common::SHOWCASE_MIN') and equipmentSc|length <= constant('AppBundle\\Entity\\Common::SHOWCASE_MAX') %}
+            <div class="container new-header mobile-hidden">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>Neu bei <b>hey! VIENNA</b></h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container new-header mobile-hidden rhomehead main-offers">
+                {% for eq in equipmentSc %}
+                    {% if loop.index0 % 3 == 0 %}
+                        <div class="row">
+                    {% endif %}
+
+                    <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
+                        <div class="col-md-4">
+                            {% set images = eq.equipmentImages %}
+                            {% if images|length > 0 %}
+                                <div class="rcatimage">
+                                <img src="{{ images[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ eq.name }}"/>
+                                </div>
+                            {% else %}
+                                <div class="rcatimage">
+                                <img src="/img/equipment-default.jpg" alt="placeholder"/>
+                                </div>
+                            {% endif %}
+                            {% if eq.priceBuy %}
+                                <img src="/img/cart.png" alt="cart" class="cart"/>
+                            {% endif %}
+                            <div class="product-info position-relative">
+                                <div class="row">                                  
+                                    <div class="col-xs-7">
+                                        {{ include('common/stars.html.twig', { rating: eq.rating }) }}
+                                        <p class="product-name">
+                                            {{ eq.name }}
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-5">
+                                            <p class="price">
+                                                {{ eq.pricesLine }}&nbsp;&#8364;
+                                            </p>
+                                            <p class="tag">
+                                                Pr. ab: {{ eq.pricesDesc }}
+                                            </p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if eq.offerStatus %}
+                                <p class="product-list-info">{{ eq.offerStatus }}</p>
+                            {% endif %}
+                            <p class="product-list-info">{{ eq.description }}</p>
+                            <span class="list-desc-border"></span>
+                        </div>
+                    </a>
+
+                    {% if loop.index0 % 3 == 2 %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+          
         <!-- Categories -->
         <div class="container new-header mobile-hidden">
           <div class="row">

@@ -64,6 +64,7 @@ class DefaultController extends BaseController {
         
         //if param = 0 then get all from db
         $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(Testimonial::TYPE_EQUIPMENT);
+        $eqSc = $this->getDoctrineRepo("AppBundle:Equipment")->getShowcaseEquipment();
         
         $confirmed= null;
         $confParam = $request->query->get('confirmed');
@@ -75,7 +76,8 @@ class DefaultController extends BaseController {
             'categories' => $cats,
             'token' => $token,
             'confirmed' => $confirmed,
-            'testimonials' => $testimonials
+            'testimonials' => $testimonials,
+            'equipmentSc' => $eqSc
         ));
     }
     /**
@@ -86,6 +88,7 @@ class DefaultController extends BaseController {
         
         //if param = 0 then get all from db
         $testimonials = $this->getDoctrineRepo("AppBundle:Testimonial")->getForMainPage(Testimonial::TYPE_TALENT);
+        $talSc = $this->getDoctrineRepo("AppBundle:Talent")->getShowcaseTalent();
         
         $confirmed= null;
         $confParam = $request->query->get('confirmed');
@@ -97,7 +100,8 @@ class DefaultController extends BaseController {
             'categories' => $cats,
             'token' => $token,
             'confirmed' => $confirmed,
-            'testimonials' => $testimonials
+            'testimonials' => $testimonials,
+            'talentSc' => $talSc
         ));
     }
     
