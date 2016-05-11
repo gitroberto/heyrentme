@@ -19,7 +19,7 @@ class Equipment
     const STATUS_MODIFIED = 2;
     const STATUS_APPROVED = 3;
     const STATUS_REJECTED = 4;  
-    const STATUS_INCOMPLETE = 5;
+    const STATUS_INCOMPLETE = 5;    
     
     /**
      * @ORM\Column(type="integer")
@@ -200,6 +200,14 @@ class Equipment
      * @ORM\Column(type="boolean")
      */
     protected $service = 0;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $showcaseStart = 0;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $showcaseCategory = 0;
     
     
     public function setUuid($uuid)
@@ -1358,5 +1366,53 @@ class Equipment
     public function getService()
     {
         return $this->service;
+    }
+
+    /**
+     * Set showcaseStart
+     *
+     * @param boolean $showcaseStart
+     *
+     * @return Equipment
+     */
+    public function setShowcaseStart($showcaseStart)
+    {
+        $this->showcaseStart = $showcaseStart;
+
+        return $this;
+    }
+
+    /**
+     * Get showcaseStart
+     *
+     * @return boolean
+     */
+    public function getShowcaseStart()
+    {
+        return $this->showcaseStart;
+    }
+
+    /**
+     * Set showcaseCategory
+     *
+     * @param boolean $showcaseCategory
+     *
+     * @return Equipment
+     */
+    public function setShowcaseCategory($showcaseCategory)
+    {
+        $this->showcaseCategory = $showcaseCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get showcaseCategory
+     *
+     * @return boolean
+     */
+    public function getShowcaseCategory()
+    {
+        return $this->showcaseCategory;
     }
 }

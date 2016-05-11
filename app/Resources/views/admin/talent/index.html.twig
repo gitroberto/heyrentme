@@ -35,8 +35,40 @@
             '<a class="grid-icon" title="Log" href="' + cellobject[17] + '" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a>' +
             '<a class="grid-icon delete" title="Delete" href="#" data-href="' + cellobject[16] + '"><span class="glyphicon glyphicon-remove"></span></a>';
     }
+    function showcaseActions(cellvalue, options, cellobject) {
+        var s = '<input type="checkbox" class="showcase" data-type="start" data-id="' + cellobject[1] + '" title="start page"' + (cellobject[19] ? ' checked="checked" ' : '') + '/>';
+        s += '&nbsp;&nbsp;';
+        s += '<input type="checkbox" class="showcase" data-type="category" data-id="' + cellobject[1] + '" title="category page"' + (cellobject[20] ? ' checked="checked" ' : '') + '/>';
+        return s;
+    }
     function gridComplete() {
         $('a.delete').on('click', deleteClick);
+        $('input.showcase').on('change', showcaseChange)
+    }
+    function showcaseChange(e) {
+        var ch = $(this);
+        var val = ch.prop('checked') ? '1' : '0';
+        var url;
+        if (ch.data('type') === 'category')
+            url = '{{ path('admin-talent-showcase-category', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
+        else
+            url = '{{ path('admin-talent-showcase-start', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
+        url = url.replace('-ID-', ch.data('id')).replace('-VALUE-', val);
+        $.get(url)
+            .done(function(data) {
+                if (data.type === 'error') {
+                    ch.prop('checked', !ch.prop('checked')); // revert checkbox state
+                    toastr.error(data.message, 'Failed to save');
+                }
+                else {
+                    var f = toastr[data.type];
+                    f(data.message, 'Saved');
+                }
+            })
+            .fail(function(jqXHR) {
+                ch.prop('checked', !ch.prop('checked')); // revert checkbox state
+                toastr.error('Unexpected error occurred. Please try again.', 'Failed to save');
+            });        
     }
     function deleteClick(e) {
         e.preventDefault();
@@ -80,7 +112,8 @@
                             { name: 'B', width: 40, align: 'right', sortable: false, search: false },
                             { name: 'C', width: 40, align: 'right', sortable: false, search: false },
                             { name: 'R', width: 70, align: 'right', sortable: false, search: false },
-                            { name: 'D', width: 50, align: 'right', sortable: false, search: false }
+                            { name: 'D', width: 50, align: 'right', sortable: false, search: false },
+                            { name: 'SC', width: 50, align: 'center', fixed: true, editable: false, sortable: false, search: false, formatter: showcaseActions }
                     ],
                     height: 550,
                     rowNum: 20,
@@ -99,6 +132,11 @@
                 clearSearch: false
             });
         }
+
+        toastr.options["timeOut"] = 3000;
+        toastr.options["closeButton"] = true;
+        toastr.options["showDuration"] = 100;
+        toastr.options["hideDuration"] = 100;
     });
 </script>    
     

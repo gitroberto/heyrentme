@@ -2,6 +2,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Common;
 use AppBundle\Entity\Equipment;
 use AppBundle\Entity\EquipmentImage;
 use AppBundle\Entity\Image;
@@ -116,6 +117,8 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $stat['revenue'];
             $cell[$i++] = $stat['discount'];            
             $cell[$i++] = $this->generateUrl('admin-equipment-delete', array('id' => $dataRow->getId()));
+            $cell[$i++] = $dataRow->getShowcaseStart();
+            $cell[$i++] = $dataRow->getShowcaseCategory();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -995,5 +998,56 @@ class EquipmentController extends BaseAdminController {
         $dir = $this->getParameter('image_storage_dir');
         $this->getDoctrineRepo('AppBundle:Equipment')->delete($id, $dir);
         return new JsonResponse("ok");
+    }    
+
+    /**
+     * @Route("admin-equipment-showcase-category/{id}/{value}", name="admin-equipment-showcase-category")
+     */
+    public function showcaseCategoryAction($id, $value) {
+        $repo = $this->getDoctrineRepo('AppBundle:Equipment');
+        $eq = $repo->find($id);
+        $cat = $eq->getSubcategory()->getCategory();        
+        $cnt = $repo->getCategoryShowcaseCount($cat->getId());
+        
+        // validate max
+        $max = Common::SHOWCASE_MAX;
+        if ($value == 1 && $cnt == $max)
+            return new JsonResponse(array('type' => 'error', 'message' => "<strong>{$cat->getName()}</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Maximum</strong>: <strong>{$max}</strong>."));
+            
+        // set value & save
+        $repo->setShowcaseCategory($eq->getId(), $value);
+                
+        // check for warning
+        $min = Common::SHOWCASE_MIN;
+        $cnt = $repo->getCategoryShowcaseCount($cat->getId());
+        if ($cnt < $min)
+            return new JsonResponse(array('type' => 'warning', 'message' => "<strong>{$cat->getName()}</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
+        
+        return new JsonResponse(array('type' => 'info', 'message' => "<strong>{$cat->getName()}</strong>: <strong>{$cnt}</strong> selected."));
+    }    
+    /**
+     * @Route("admin-equipment-showcase-start/{id}/{value}", name="admin-equipment-showcase-start")
+     */
+    public function showcaseStartAction($id, $value) {
+        $repo = $this->getDoctrineRepo('AppBundle:Equipment');
+        $eq = $repo->find($id);
+        $cat = $eq->getSubcategory()->getCategory();        
+        $cnt = $repo->getStartShowcaseCount($cat->getId()) + $this->getDoctrineRepo('AppBundle:Talent')->getStartShowcaseCount();
+        
+        // validate max
+        $max = Common::SHOWCASE_MAX;
+        if ($value == 1 && $cnt == $max)
+            return new JsonResponse(array('type' => 'error', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Maximum</strong>: <strong>{$max}</strong>."));
+            
+        // set value & save
+        $repo->setShowcaseStart($eq->getId(), $value);
+                
+        // check for warning
+        $min = Common::SHOWCASE_MIN;
+        $cnt = $repo->getStartShowcaseCount($cat->getId()) + $this->getDoctrineRepo('AppBundle:Talent')->getStartShowcaseCount();
+        if ($cnt < $min)
+            return new JsonResponse(array('type' => 'warning', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
+        
+        return new JsonResponse(array('type' => 'info', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected."));
     }    
 }

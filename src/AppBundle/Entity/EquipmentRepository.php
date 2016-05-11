@@ -7,6 +7,7 @@ use AppBundle\ViewModel\Admin\EventNode;
 use AppBundle\ViewModel\Admin\LogEvent;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
+use ErrorException;
 
 
 
@@ -722,4 +723,73 @@ EOT;
         $em->getConnection()->executeUpdate($sql);
         //</editor-fold>
     }
+
+    /* ------------------------------------------------------------------------- showcase */
+    public function getCategoryShowcaseCount($categoryId) {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(e.id)')
+            ->from('AppBundle:Equipment', 'e')
+            ->leftJoin('e.subcategory', 's')
+            ->andWhere('e.showcaseCategory = 1')
+            ->andWhere('s.category = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getStartShowcaseCount() {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(e.id)')
+            ->from('AppBundle:Equipment', 'e')
+            ->andWhere('e.showcaseStart = 1')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function setShowcaseCategory($id, $value) {
+        $eq = $this->find($id);
+        $eq->setShowcaseCategory($value);
+        $this->getEntityManager()->flush();        
+    }
+    public function setShowcaseStart($id, $value) {
+        $eq = $this->find($id);
+        $eq->setShowcaseStart($value);
+        $this->getEntityManager()->flush();        
+    }
+    public function getShowcaseStart() {
+        $eqs = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('e', 'i')
+            ->from('AppBundle:Equipment', 'e')
+            ->leftJoin('e.images', 'i')
+            ->andWhere('e.showcaseStart = 1')
+            ->addOrderBy('e.createdAt', 'desc')
+            ->getQuery()
+            ->getResult();
+        
+        foreach ($eqs as $eq) {
+            $eq->setEquipmentImages($this->getEquipmentImages($eq->getId()));
+        }        
+        
+        return $eqs;
+    }
+    public function getShowcaseCategory($categoryId) {
+        $eqs = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('e')
+            ->from('AppBundle:Equipment', 'e')
+            ->leftJoin('e.subcategory', 's')
+            ->andWhere('e.showcaseCategory = 1')
+            ->andWhere('s.category = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($eqs as $eq) {
+            $eq->setEquipmentImages($this->getEquipmentImages($eq->getId()));
+        }        
+        
+        return $eqs;
+    }
+    
 }

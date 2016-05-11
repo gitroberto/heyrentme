@@ -37,15 +37,22 @@ class DefaultController extends BaseController {
             $confirmed = true;
         }
         
+        $showcase = $this->getShowcase();
+        
         return $this->render('default/newStartPage.html.twig', array(
             'equipmentCategories' => $equipmentCats,
             'talentCategories' => $talentCats,
             'token' => $token,
             'confirmed' => $confirmed,
-            'testimonials' => $testimonials
+            'testimonials' => $testimonials,
+            'showcase' => $showcase
         ));
-        return $this->render('default/index.html.twig');
-
+    }
+    
+    private function getShowcase() {
+        $eqSc = $this->getDoctrineRepo("AppBundle:Equipment")->getShowcaseStart();
+        $talSc = $this->getDoctrineRepo("AppBundle:Talent")->getShowcaseStart();
+        return array_merge($eqSc, $talSc);
     }
     
     /**

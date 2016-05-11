@@ -170,6 +170,14 @@ class Talent {
      * @ORM\Column(type="string", length=36)
      */
     protected $uuid;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $showcaseStart = 0;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $showcaseCategory = 0;
     
     
     public function setUuid($uuid)
@@ -1104,5 +1112,53 @@ class Talent {
     public function getRequestPrice()
     {
         return $this->requestPrice;
+    }
+
+    /**
+     * Set showcaseStart
+     *
+     * @param boolean $showcaseStart
+     *
+     * @return Talent
+     */
+    public function setShowcaseStart($showcaseStart)
+    {
+        $this->showcaseStart = $showcaseStart;
+
+        return $this;
+    }
+
+    /**
+     * Get showcaseStart
+     *
+     * @return boolean
+     */
+    public function getShowcaseStart()
+    {
+        return $this->showcaseStart;
+    }
+
+    /**
+     * Set showcaseCategory
+     *
+     * @param boolean $showcaseCategory
+     *
+     * @return Talent
+     */
+    public function setShowcaseCategory($showcaseCategory)
+    {
+        $this->showcaseCategory = $showcaseCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get showcaseCategory
+     *
+     * @return boolean
+     */
+    public function getShowcaseCategory()
+    {
+        return $this->showcaseCategory;
     }
 }

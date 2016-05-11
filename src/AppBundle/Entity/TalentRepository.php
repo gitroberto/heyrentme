@@ -720,5 +720,64 @@ EOT;
         $em->getConnection()->executeUpdate($sql);
         //</editor-fold>
     }
+    /* ------------------------------------------------------------------------- showcase */
+    public function getCategoryShowcaseCount($categoryId) {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(t.id)')
+            ->from('AppBundle:Talent', 't')
+            ->leftJoin('t.subcategory', 's')
+            ->andWhere('t.showcaseCategory = 1')
+            ->andWhere('s.category = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getStartShowcaseCount() {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('count(t.id)')
+            ->from('AppBundle:Talent', 't')
+            ->andWhere('t.showcaseStart = 1')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function setShowcaseCategory($id, $value) {
+        $tal = $this->find($id);
+        $tal->setShowcaseCategory($value);
+        $this->getEntityManager()->flush();        
+    }
+    public function setShowcaseStart($id, $value) {
+        $tal = $this->find($id);
+        $tal->setShowcaseStart($value);
+        $this->getEntityManager()->flush();        
+    }
+    public function getShowcaseCategory($categoryId) {
+        $tals = $this->getEntityManager()->createQueryBuilder()
+            ->select('t')
+            ->from('AppBundle:Talent', 't')
+            ->leftJoin('t.subcategory', 's')
+            ->andWhere('t.showcaseCategory = 1')
+            ->andWhere('s.category = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($tals as $tal)
+            $tal->setTalentImages($this->getTalentImages($tal->getId()));
+        
+        return $tals;
+    }
+    public function getShowcaseStart() {
+        $tals = $this->getEntityManager()->createQueryBuilder()
+            ->select('t')
+            ->from('AppBundle:Talent', 't')
+            ->andWhere('t.showcaseStart = 1')
+            ->getQuery()
+            ->getResult();
+
+        foreach ($tals as $tal)
+            $tal->setTalentImages($this->getTalentImages($tal->getId()));
+        
+        return $tals;
+    }
 }
 
