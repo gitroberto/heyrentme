@@ -22,6 +22,7 @@ parameters:
     image_storage_dir: "C:\\projects\\reddragon\\dev\\web\\db-img"
     facebook_client_id: 1390938247874229
     facebook_client_secret: c801ab39b2606d9818641b2731ef3555
+    facebook_pixel_code: 878578502252541
     google_analytics_code: ~
     mailer_fromemail: test.app@hey-buyme.com
     mailer_fromname: Hey! Rent Me (TEST)
