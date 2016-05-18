@@ -276,5 +276,5 @@ EOT;
             $manager->getRepository('AppBundle:Image')->removeImage($image, $folder);
             $manager->getRepository('AppBundle:Image')->deleteById($image->getId());
         }    
-    }
+    }    
 }

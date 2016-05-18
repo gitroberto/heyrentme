@@ -39,13 +39,22 @@ class DefaultController extends BaseController {
         
         $showcase = $this->getShowcase();
         
+        //newsletter message
+        $session = $request->getSession();
+        $newsletterMessage = null;
+        if ($session->has('NewsletterMessage')) {
+            $newsletterMessage = $session->get('NewsletterMessage');
+            $session->remove('NewsletterMessage');
+        }
+        
         return $this->render('default/newStartPage.html.twig', array(
             'equipmentCategories' => $equipmentCats,
             'talentCategories' => $talentCats,
             'token' => $token,
             'confirmed' => $confirmed,
             'testimonials' => $testimonials,
-            'showcase' => $showcase
+            'showcase' => $showcase,
+            'newsletterMessage' => $newsletterMessage
         ));
     }
     

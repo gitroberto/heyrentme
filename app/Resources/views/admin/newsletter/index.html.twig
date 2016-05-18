@@ -1,0 +1,71 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_discount_code_list') }}" class="active-crumb">Newsletter subscribers</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Newsletter subscribers</h1>
+<div id="jqgrid-wrapper">
+        <table id="jqgrid" class="table table-striped table-hover">
+                <tr>
+                        <td></td>
+                </tr>
+        </table>
+        <div id="jqgrid-pager"></div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+    {{ include('admin/common/admin.footer.html.twig') }}
+<script>    
+
+function boolFormatter(cellvalue, options, cellobject) {
+    return cellvalue ? 'X' : '-';
+}
+    
+$(function(){    
+    var $grid = $('#jqgrid');
+
+    if( $grid.length > 0 ) {
+        
+        var boolSearchOpts = ":All;1:Yes;0:No";
+    
+        $grid.jqGrid({
+                url: '{{ path('admin-subscriber-jsondata') }}',
+                mtype: 'GET',
+                datatype: 'jsonp',
+                colModel:[
+                        { name: '', width:40, fixed:true, align: "center", editable:false, sortable:false, hidden: true, search: false },
+                        { name:'Id', index:'s.id', editable:false, sortable:false, hidden: true, search: false },
+                        { name:'Email', index:'s.code', width: 240, editable:false, sortable:true, search: false },
+                        { name:'Confirmed', index:'s.confirmed', width: 100, editable:false, sortable:true, formatter: boolFormatter, stype: 'select', searchoptions: { sopt:['eq'], value: boolSearchOpts, clearSearch: true } },
+                        { name:'Unsubscribed', index:'s.unsubscribed', width: 100, editable:false, sortable:true, formatter: boolFormatter, stype: 'select', searchoptions: { sopt:['eq'], value: boolSearchOpts, clearSearch: true } },
+                        { name:'Created', index:'s.createdAt', width: 130, editable:false, sortable:true, search: false },
+                        { name:'Modified', index:'s.modifiedAt', width: 130, editable:false, sortable:true, search: false }
+                ],
+                height: 550,
+                rowNum: 20,
+                rowList: [20, 50, 100],
+                pager: 'jqgrid-pager',
+                sortname: 's.confirmed',
+                viewrecords: true,
+                sortorder: "desc",
+                multiselect: false,
+                headertitles: true
+        });
+        $grid.jqGrid('filterToolbar', {
+            stringResult: false,
+            searchOnEnter: false,
+            defaultSearch: 'e',
+            clearSearch: false
+        });
+    }
+
+}); // end ready function
+</script>    
+{% endblock %}
+

@@ -88,6 +88,43 @@ class DiscountCodeRepository extends EntityRepository
         
         return $code;
     }
+    public function assignToSubscriber($subscriber, $value) {
+        // find a free discount code
+        $dql = "select dc from AppBundle:DiscountCode dc where dc.status = :status and dc.value = :value";
+        $q = $this->getEntityManager()
+                ->createQuery($dql)
+                ->setParameter('status', DiscountCode::STATUS_NEW)
+                ->setParameter('value', $value);
+        $q->setMaxResults(1);
+        $rows = $q->getResult();
+        
+        if (count($rows) == 0)
+            return null;
+        
+        $code = $rows[0];
+        
+        // assign to the user
+        $code->setSubscriber($subscriber);
+        $code->setStatus(DiscountCode::STATUS_ASSIGNED);
+        $this->getEntityManager()->flush();
+        
+        return $code;
+    }
+    public function updateFromSubscriber($user) {
+        $em = $this->getEntityManager();
+        $sub = $em->getRepository('AppBundle:Subscriber')->findOneByEmail($user->getEmail());
+        $dcode = null;
+        if ($sub !== null) {
+            $dcodes = $sub->getDiscountCodes();
+            if (count($dcodes) === 1) { // there should only 0 or 1
+                $dcodes[0]->setUser($user);
+                $dcode = $dcodes[0];
+                $em->flush();
+            }
+        }
+        return $dcode;
+    }
+
     
     public function isCodeUnique($code) {        
         $dql = "select dc from AppBundle:DiscountCode dc where dc.code = :code";

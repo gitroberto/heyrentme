@@ -103,9 +103,11 @@ class RegistrationController extends BaseRegistrationController
         }
 
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));                
-        
+                
         $repo = $this->getDoctrine()->getRepository('AppBundle:DiscountCode');
-        $code = $repo->assignToUser($user);
+        $code = $repo->updateFromSubscriber($user); // check if user has discount code as newsletter subscriber
+        if ($code === null) // if no Newsletter discount code, then assign Startrabatt
+            $code = $repo->assignToUser($user);
         $this->get("app.general_mailer")->SendWelcomeEmail($user, $code);
         
         return $response;

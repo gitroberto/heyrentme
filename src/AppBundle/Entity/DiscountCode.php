@@ -57,6 +57,11 @@ class DiscountCode {
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+    /**
+     * @ORM\ManyToOne(targetEntity="Subscriber", inversedBy="discountCodes")
+     * @ORM\JoinColumn(name="subscriber_id", referencedColumnName="id")
+     */
+    protected $subscriber;
     
     /**
      * @ORM\OneToOne(targetEntity="EquipmentBooking", mappedBy="discountCode")
@@ -251,5 +256,29 @@ class DiscountCode {
         $interval = $now->diff($this->expiresAt);
         //invert = 1 if value is negative, otherwise invert = 0;
         return $interval->invert === 1; 
+    }
+
+    /**
+     * Set subscriber
+     *
+     * @param \AppBundle\Entity\Subscriber $subscriber
+     *
+     * @return DiscountCode
+     */
+    public function setSubscriber(\AppBundle\Entity\Subscriber $subscriber = null)
+    {
+        $this->subscriber = $subscriber;
+
+        return $this;
+    }
+
+    /**
+     * Get subscriber
+     *
+     * @return \AppBundle\Entity\Subscriber
+     */
+    public function getSubscriber()
+    {
+        return $this->subscriber;
     }
 }
