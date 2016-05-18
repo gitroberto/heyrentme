@@ -9,8 +9,12 @@ CREATE TABLE `subscriber` (
 	`modified_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	`unsubscribed_at` TIMESTAMP NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)
-);
+)
+ENGINE=InnoDB
+;
 
 ALTER TABLE `discount_code`
-	ADD COLUMN `subscriber_id` INT NULL DEFAULT NULL AFTER `user_id`,
+	ADD COLUMN `subscriber_id` INT NULL DEFAULT NULL AFTER `user_id`;
+
+ALTER TABLE `discount_code`
 	ADD CONSTRAINT `FK_discount_code_subscriber` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`) ON UPDATE CASCADE;
