@@ -23,7 +23,7 @@ class DiscountCodeRepository extends EntityRepository
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
-        $qb->select(array('dc', 'u', 'e', 'eb', 'ei', 'ep', 't', 'tb', 'ti', 'tp'))
+        $qb->select(array('dc', 'u', 'e', 'eb', 'ei', 'ep', 't', 'tb', 'ti', 'tp', 'sub'))
             ->from('AppBundle:DiscountCode', 'dc')
                 ->leftJoin('dc.user', 'u')
                 ->leftJoin('dc.equipmentBooking', 'eb')
@@ -33,7 +33,8 @@ class DiscountCodeRepository extends EntityRepository
                 ->leftJoin('dc.talentBooking', 'tb')
                 ->leftJoin('tb.inquiry', 'ti')
                 ->leftJoin('ti.talent', 't')
-                ->leftJoin('t.user', 'tp');
+                ->leftJoin('t.user', 'tp')
+                ->leftJoin('dc.subscriber', 'sub');
         // sort by
         if (!empty($sortColumn)) {
             if (!empty($sortDirection)) {

@@ -42,7 +42,7 @@ $(document).ready(function(){
 
 
 function rowActions(cellvalue, options, cellobject) {
-      var s = cellobject[3];
+      var s = cellobject[5];
       if (s === "cancelled" || s === 'assigned' || s === 'expired'){
         return "";  
       } else {
@@ -50,23 +50,26 @@ function rowActions(cellvalue, options, cellobject) {
       }
     }
 function userFormatter(cellvalue, options, cellobject) {
-    if (cellobject[8] === '')
+    if (cellobject[10] === '')
         return '';
-    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[10]).replace('#NAME#', cellobject[9]);
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[12]).replace('#NAME#', cellobject[11]);
     return s;
 }
 function itemFormatter(cellvalue, options, cellobject) {
-    if (cellobject[11] === '')
+    if (cellobject[13] === '')
         return '';
-    var name = (cellobject[13].indexOf('equipment') !== -1 ? 'E-' : 'T-') + cellobject[11] + ': ' + cellobject[12];
-    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[13]).replace('#NAME#', name);
+    var name = (cellobject[15].indexOf('equipment') !== -1 ? 'E-' : 'T-') + cellobject[13] + ': ' + cellobject[14];
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[15]).replace('#NAME#', name);
     return s;
 }
 function providerFormatter(cellvalue, options, cellobject) {
-    if (cellobject[14] === '')
+    if (cellobject[16] === '')
         return '';
-    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[16]).replace('#NAME#', cellobject[15]);
+    var s = '<a href="#URL#" target="_blank">#NAME#</a>'.replace('#URL#', cellobject[18]).replace('#NAME#', cellobject[17]);
     return s;
+}
+function subFormatter(cellvalue, options, cellobject) {
+    return '<span title="id=' + cellobject[8] + '">' + cellobject[9] + '</span>';
 }
 
 
@@ -88,6 +91,8 @@ if( $('#jqgrid').length > 0 ) {
                         { name:'Modified', index:'dc.modifiedAt', width: 130, editable:false, sortable:true },
                         { name:'Expires', index:'dc.expiresAt', width: 130, editable:false, sortable:true },
                         { name:'Value', index:'dc.value', width: 130, align: "right", editable:false, sortable:true },
+                        { name:'SubscriberId', hidden: true },
+                        { name:'Subscriber', index:'sub.email', width: 200, editable:false, sortable:true, formatter: subFormatter },
                         { name:'UserId', hidden: true },
                         { name:'User', index:'u.username', width: 200, editable:false, sortable:true, formatter: userFormatter },
                         { name:'UserUrl', hidden: true },

@@ -158,7 +158,16 @@ class DiscountCodeController extends BaseAdminController {
             } else {
                 $cell[$i++] =  "";
             }
-            $cell[$i++] = $dataRow->getValue();  
+            $cell[$i++] = $dataRow->getValue();
+            $sub = $dataRow->getSubscriber();
+            if ($sub !== null) {
+                $cell[$i++] = $sub->getId();
+                $cell[$i++] = $sub->getEmail(); 
+            }
+            else {
+                $cell[$i++] = "";
+                $cell[$i++] = "";
+            }
             $user = $dataRow->getUser();
             if ($user !== null) {
                 $cell[$i++] = $user->getId();
