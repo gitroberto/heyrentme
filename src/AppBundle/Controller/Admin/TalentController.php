@@ -122,6 +122,7 @@ class TalentController extends BaseAdminController {
             $cell[$i++] = $this->generateUrl('admin_talent_moderate', array('id' => $dataRow->getId()));
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseTalent();
+            $cell[$i++] = $dataRow->getFeatured();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -1070,5 +1071,16 @@ class TalentController extends BaseAdminController {
             return new JsonResponse(array('type' => 'warning', 'message' => "<strong>Talent page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
         
         return new JsonResponse(array('type' => 'info', 'message' => "<strong>Talent page</strong>: <strong>{$cnt}</strong> selected."));
+    }    
+    /**
+     * @Route("admin-talent-featured/{id}", name="admin-talent-featured")
+     */
+    public function featuredAction($id) {
+        $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        
+        $tal->setFeatured(!$tal->getFeatured()); // toggle
+        $this->getDoctrine()->getManager()->flush();                
+        
+        return new JsonResponse(array('message' => 'ok'));
     }    
 }

@@ -71,6 +71,7 @@
             </p>
             {% endif %}            
             <div class="position-relative" id="media-container">
+                {% if item.featured %}<div class="featured-icon mobile-hidden"><span>FEATURED</span></div>{% endif %}
                 {#
               {% if item.activeDiscount %}
                 <div class="discount discount-big">

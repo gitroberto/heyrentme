@@ -178,6 +178,10 @@ class Talent {
      * @ORM\Column(type="boolean")
      */
     protected $showcaseTalent = 0;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $featured = false;
     
     
     public function setUuid($uuid)
@@ -1160,5 +1164,29 @@ class Talent {
     public function getShowcaseTalent()
     {
         return $this->showcaseTalent;
+    }
+
+    /**
+     * Set featured
+     *
+     * @param boolean $featured
+     *
+     * @return Talent
+     */
+    public function setFeatured($featured)
+    {
+        $this->featured = $featured;
+
+        return $this;
+    }
+
+    /**
+     * Get featured
+     *
+     * @return boolean
+     */
+    public function getFeatured()
+    {
+        return $this->featured;
     }
 }

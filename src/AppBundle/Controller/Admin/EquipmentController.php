@@ -119,6 +119,7 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $this->generateUrl('admin-equipment-delete', array('id' => $dataRow->getId()));
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseEquipment();
+            $cell[$i++] = $dataRow->getFeatured();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -1057,5 +1058,16 @@ class EquipmentController extends BaseAdminController {
             return new JsonResponse(array('type' => 'warning', 'message' => "<strong>Equipment page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
         
         return new JsonResponse(array('type' => 'info', 'message' => "<strong>Equipment page</strong>: <strong>{$cnt}</strong> selected."));
+    }    
+    /**
+     * @Route("admin-equipment-featured/{id}", name="admin-equipment-featured")
+     */
+    public function featuredAction($id) {
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        
+        $eq->setFeatured(!$eq->getFeatured()); // toggle
+        $this->getDoctrine()->getManager()->flush();                
+        
+        return new JsonResponse(array('message' => 'ok'));
     }    
 }

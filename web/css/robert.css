@@ -1437,3 +1437,32 @@ padding: 6px 0;
 background-color:#000;
 }
 }
+
+.featured-icon.rcat {
+    right: 11px;
+}
+.featured-icon {
+    background: rgba(0, 0, 0, 0) url("../img/statt_offer.png") no-repeat scroll center center;
+    display: block;
+    height: 83px;
+    position: absolute;
+    right: -4px;
+    top: -4px;
+    width: 82px;
+    z-index: 100;
+}
+
+.featured-icon span {
+    color: #fff;
+    display: inline-block;
+    font-family: "Open Sans",sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 18px;
+    padding: 0 4px;
+    position: absolute;
+    right: -7px;
+    text-transform: uppercase;
+    top: 21px;
+    transform: rotate(45deg);
+}

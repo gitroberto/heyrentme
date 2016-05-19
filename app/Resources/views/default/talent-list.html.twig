@@ -44,6 +44,7 @@
             {% if tal.offerStatus %}
                 <p class="product-list-info">{{ tal.offerStatus }}</p>
             {% endif %}
+            {% if tal.featured %}<div class="featured-icon rcat"><span>FEATURED</span></div>{% endif %}
             <p class="product-list-info">{{ tal.description }}</p>
             <span class="list-desc-border"></span>
         </div>

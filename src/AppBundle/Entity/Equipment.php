@@ -208,6 +208,10 @@ class Equipment
      * @ORM\Column(type="boolean")
      */
     protected $showcaseEquipment = 0;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $featured = false;
     
     
     public function setUuid($uuid)
@@ -1414,5 +1418,29 @@ class Equipment
     public function getShowcaseEquipment()
     {
         return $this->showcaseEquipment;
+    }
+
+    /**
+     * Set featured
+     *
+     * @param boolean $featured
+     *
+     * @return Equipment
+     */
+    public function setFeatured($featured)
+    {
+        $this->featured = $featured;
+
+        return $this;
+    }
+
+    /**
+     * Get featured
+     *
+     * @return boolean
+     */
+    public function getFeatured()
+    {
+        return $this->featured;
     }
 }
