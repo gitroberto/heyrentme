@@ -156,7 +156,12 @@ class TalentController extends BaseAdminController {
         $options = array();
         $options[0] = 
         
-        $form = $this->createFormBuilder($talent, array(
+        $data = array(
+            'id' => $talent->getId(),
+            'status' => $talent->getStatus(),
+            'reason' => $talent->getReason()
+        );
+        $form = $this->createFormBuilder($data, array(
                     'constraints' => array(
                         new Callback(array($this, 'validateReason'))
                     )
@@ -174,6 +179,7 @@ class TalentController extends BaseAdminController {
                         new NotBlank()
                     )
                 ))
+                ->add('sendNot', 'checkbox', array('required' => false))
                 ->add('reason', 'textarea', array(
                     'required' => false,
                     'constraints' => array(                        
@@ -188,9 +194,13 @@ class TalentController extends BaseAdminController {
         
         if ($form->isValid()) {
             $talent->changeStatus($form['status']->getData(), $form['reason']->getData());            
+            $talent->setReason($form['reason']->getData());
             $em = $this->getDoctrine()->getManager();
             $em->flush();
-            $this->sendApprovedRejectedInfoMessage($request, $talent, $form['reason']->getData());
+
+            $send = !$form['sendNot']->getData();
+            if ($send)
+                $this->sendApprovedRejectedInfoMessage($request, $talent, $form['reason']->getData());
             
             return $this->redirectToRoute("admin_talent_list");
         }

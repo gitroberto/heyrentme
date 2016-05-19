@@ -153,7 +153,12 @@ class EquipmentController extends BaseAdminController {
         $options = array();
         $options[0] = 
         
-        $form = $this->createFormBuilder($equipment, array(
+        $data = array(
+            'id' => $equipment->getId(),
+            'status' => $equipment->getStatus(),
+            'reason' => $equipment->getReason()
+        );
+        $form = $this->createFormBuilder($data, array(
                     'constraints' => array(
                         new Callback(array($this, 'validateReason'))
                     )
@@ -171,6 +176,7 @@ class EquipmentController extends BaseAdminController {
                         new NotBlank()
                     )
                 ))
+                ->add('sendNot', 'checkbox', array('required' => false))
                 ->add('reason', 'textarea', array(
                     'required' => false,
                     'constraints' => array(                        
@@ -184,10 +190,14 @@ class EquipmentController extends BaseAdminController {
         $form->handleRequest($request);
         
         if ($form->isValid()) {
-            $equipment->changeStatus($form['status']->getData(), $form['reason']->getData());            
+            $equipment->changeStatus($form['status']->getData(), $form['reason']->getData());
+            $equipment->setReason($form['reason']->getData());
             $em = $this->getDoctrine()->getManager();
             $em->flush();
-            $this->sendApprovedRejectedInfoMessage($request, $equipment, $form['reason']->getData());
+            
+            $send = !$form['sendNot']->getData();
+            if ($send)
+                $this->sendApprovedRejectedInfoMessage($request, $equipment, $form['reason']->getData());
             
             return $this->redirectToRoute("admin_equipment_list");
         }
