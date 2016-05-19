@@ -16,9 +16,8 @@ class GeneralMailer {
         $this->doctrine = $doctrine;
     }
     
-    public function SendWelcomeEmail(User $user, $discountCode)
-    {        
-        $from = $this->parameters['mailer_fromEmail'];        
+    public function SendWelcomeEmail(User $user, $discountCode) {        
+        $from = array($this->parameters['mailer_fromEmail'] => $this->parameters['mailer_fromName']);
         #$username = 'seba';
         $username = $user->getName(). " ". $user->getSurname();
         $to = $user->getEmail();

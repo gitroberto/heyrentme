@@ -115,7 +115,9 @@ class NewsletterController extends BaseController {
             $sub->setConfirmed(true);
             $em->flush();
 
-            $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->assignToSubscriber($sub, 10); // todo: unhardcode value
+            $dcodeRepo = $this->getDoctrineRepo('AppBundle:DiscountCode');
+            $dcode = $dcodeRepo->assignToSubscriber($sub, 10); // todo: unhardcode value
+            $dcodeRepo->updateFromUser($sub);
             
             $message = "Du hast Dich hiermit erfolgreich für den hey! VIENNA Newsletter angemeldet.";
             
@@ -142,7 +144,7 @@ class NewsletterController extends BaseController {
     }
     
     private function addNewsletterCookie($response) {
-        $t = time() + (3600 * 24 * 28);
+        $t = time() + (3600 * 24 * 10); // 10 days
         $cookie = new Cookie('nl-close', '1', $t, $this->generateUrl('start-page'));
         $response->headers->setCookie($cookie);
     }

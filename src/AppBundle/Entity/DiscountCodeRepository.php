@@ -114,16 +114,22 @@ class DiscountCodeRepository extends EntityRepository
     public function updateFromSubscriber($user) {
         $em = $this->getEntityManager();
         $sub = $em->getRepository('AppBundle:Subscriber')->findOneByEmail($user->getEmail());
-        $dcode = null;
         if ($sub !== null) {
             $dcodes = $sub->getDiscountCodes();
-            if (count($dcodes) === 1) { // there should only 0 or 1
-                $dcodes[0]->setUser($user);
-                $dcode = $dcodes[0];
-                $em->flush();
-            }
+            foreach ($dcodes as $dc)
+                $dc->setUser($user);
+            $em->flush();
         }
-        return $dcode;
+    }
+    public function updateFromUser($sub) {
+        $em = $this->getEntityManager();
+        $user = $em->getRepository('AppBundle:User')->findOneByEmail($sub->getEmail());
+        if ($user !== null) {
+            $dcodes = $sub->getDiscountCodes();
+            foreach ($dcodes as $dc)
+                $dc->setUser($user);
+            $em->flush();
+        }
     }
 
     
