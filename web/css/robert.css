@@ -11,10 +11,14 @@
     top: 5px;
     right: 10px;
     color: #f5f5f5;
-	font-size: 30px;
+    font-size: 30px;
     opacity: 1;
     filter: alpha(opacity=100);
     text-shadow: none;
+}
+.lead-close:hover {
+    color: #f5f5f5;
+    opacity: 1.0;
 }
 
 .email-bar-text {

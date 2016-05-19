@@ -52,7 +52,7 @@ class NewsletterController extends BaseController {
         $em = $this->getDoctrine()->getManager();
         $sub = $this->getDoctrineRepo('AppBundle:Subscriber')->findOneByEmail($email);
         
-        if ($sub !== null && $sub->getConfirmed() === 1) { // exists and already confirmed
+        if ($sub !== null && $sub->getConfirmed()) { // exists and already confirmed
             $message = "Sie haben sich erfolgreich für den hey! VIENNA Newsletter angemeldet";
             return new JsonResponse(array('valid' => false, 'message' => $message));
         }
@@ -63,7 +63,7 @@ class NewsletterController extends BaseController {
         else { // create and send a new ticket
             $sub = new Subscriber();
             $sub->setEmail($email);
-            $sub->setConfirmed(0);
+            $sub->setConfirmed(false);
             $sub->setToken(Utils::getUuid() . "-" . Utils::getUuid());
             
             $em->persist($sub);
@@ -108,11 +108,11 @@ class NewsletterController extends BaseController {
         
         if ($sub === null)
             $message = "Kann nicht Newsletter-Abonnement Anfrage mit dieser E-Mail-Adresse finden";
-        else if ($sub->getConfirmed() === 1)
+        else if ($sub->getConfirmed())
             $message = "Sie haben sich erfolgreich für den hey! VIENNA Newsletter angemeldet";
         else {
             $em = $this->getDoctrine()->getManager();
-            $sub->setConfirmed(1);
+            $sub->setConfirmed(true);
             $em->flush();
 
             $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->assignToSubscriber($sub, 10); // todo: unhardcode value
