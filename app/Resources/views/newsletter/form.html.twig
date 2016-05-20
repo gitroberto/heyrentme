@@ -1,0 +1,55 @@
+<form id="newsletter-form" method="post" action="{{ path('newsletter-submit') }}">
+    <div class="container">
+        <button type="button" class="close lead-close js-lead-close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <div class="row">
+            <div class="col-md-6">
+                <p class="email-bar-text mobile-hidden">
+                    Melde Dich für unseren Newsletter an und erhalte einen <span class="strongnews">10€ Willkommens-Rabatt</span> und wöchentlich Updates zu tollen neuen Angeboten!</p>
+                <p class="email-bar-text desktop-hide">
+                    Für Newsletter anmelden und <span class="strongnews">10€ Willkommens-Rabatt</span> erhalten!</p>
+            </div>
+            <div class="col-md-3 col-sm-6 mvl lead-form">
+                <label for="newsletter-email" class="sr-only">hey! Newsletter</label>
+                <input name="email" type="email" placeholder="E-Mail-Adresse hier eingeben" required="true" class="form-control"/>                
+            </div>
+            <div class="col-md-3 col-sm-6 mvl lead-form">
+                <button id="newsletter-submit" type="submit" class="green-big-button">10€ WILLKOMMENS-RABATT</button>
+            </div>
+            <div class="col-md-6 lead-feedback mbm mvl text-center init-hidden">feedback</div>
+        </div>
+    </div>          
+    <script>
+        $(function() {
+            $("#newsletter-form").submit(newsletterSubmit);
+            $("#newsletter-form .close").click(newsletterClose);
+        });
+        function newsletterClose() {
+            var url = '{{ path('newsletter-close') }}';
+            $.get(url).done(function() {
+                hideNewsletterBar();
+            });
+        }
+        function newsletterSubmit() {
+            var $f = $("#newsletter-form");
+            if ($f[0].checkValidity())
+                $f.ajaxSubmit(newsletterResponse);
+            return false;
+        }
+        function newsletterResponse(data) {
+            $("#newsletter-form .lead-feedback").text(data.message);
+            showFeedback();
+            window.setTimeout(data.valid ? hideNewsletterBar : hideFeedback, 5000);
+        }
+        function showFeedback() {
+            $("#newsletter-form .lead-form").hide();
+            $("#newsletter-form .lead-feedback").show();
+        }
+        function hideFeedback() {
+            $("#newsletter-form .lead-form").show();
+            $("#newsletter-form .lead-feedback").hide();
+        }
+        function hideNewsletterBar() {
+            $("#email-bar").slideUp();
+        }
+    </script>
+</form>
