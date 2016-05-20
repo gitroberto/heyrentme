@@ -23,15 +23,17 @@
         <td style="padding: 20px;padding-top: 0px;padding-bottom: 0px;">
             <h1 style="font-family: helvetica, arial;font-size: 34px;margin-bottom: 0px;" class="page-title">Herzlichen Glückwunsch!</h1>
             <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">Du hast Dich hiermit erfolgreich für den hey! VIENNA Newsletter angemeldet.</p>
-            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">Ab sofort kannst Du Dich auf regelmäßige Nachrichten über unsere Produkte, Rezeptideen und exklusive Angebote freuen.</p>
+            <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">Ab sofort kannst Du Dich auf regelmäßige Nachrichten über neue Talente und Erlebnisse in Deiner Nähe freuen.</p>
             <p style="font-family: helvetica, arial;font-weight: 100;font-size: 15px;line-height: 22px;">Wir wünschen Dir viel Spaß beim Stöbern!</p>
         </td>
     </tr>
     {% if dcode %}
         <tr style="max-width: 600px;width: 100%;display: block;margin: 0 auto;margin-bottom: 20px;">
             <td style="font-family: helvetica, arial;padding:20px;">
-                <p style="font-weight: bold;margin-bottom: 13px;font-size: 18px;">Nutze deine {{ dcode.value|number_format(0) }},- EUR Willkommens-rabatt!</p>
-                <p style="margin: 0px;margin-bottom: 3px;font-weight: 100;font-size: 15px;line-height: 22px;">Für deine erste Buchung gibt es {{ dcode.value|number_format(0) }},- EUR Willkommens-rabatt. Füge dazu einfach diesen Code in dem Feld Rabattcode ein: <span style="font-weight: bold;">{{ dcode.code }}</span></p>
+                <p style="font-weight: bold;margin-bottom: 13px;font-size: 18px;">Nutze Deine {{ dcode.value|number_format(0) }},- EUR Willkommens-rabatt!</p>
+                <p style="margin: 0px;margin-bottom: 3px;font-weight: 100;font-size: 15px;line-height: 22px;">
+                    Für Deine erste Buchung gibt es {{ dcode.value|number_format(0) }},- EUR Willkommens-rabatt. Füge dazu einfach diesen Code in dem Feld Rabattcode ein: <span style="font-weight: bold;">{{ dcode.code }}</span>
+                </p>
             </td>
         </tr>
     {% endif %}

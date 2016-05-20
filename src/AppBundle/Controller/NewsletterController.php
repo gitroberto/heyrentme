@@ -52,14 +52,10 @@ class NewsletterController extends BaseController {
         $em = $this->getDoctrine()->getManager();
         $sub = $this->getDoctrineRepo('AppBundle:Subscriber')->findOneByEmail($email);
         
-        if ($sub !== null && $sub->getConfirmed()) { // exists and already confirmed
-            $message = "Sie haben sich erfolgreich für den hey! VIENNA Newsletter angemeldet";
+        if ($sub !== null) { // exists
+            $message = "Sie haben sich bereits erfolgreich für den hey! VIENNA Newsletter angemeldet.";
             return new JsonResponse(array('valid' => false, 'message' => $message));
-        }
-        
-        if ($sub !== null) { // exists, but not confirmed, send a new ticket
-            $sub->setToken(Utils::getUuid() . "-" . Utils::getUuid());
-        }
+        }        
         else { // create and send a new ticket
             $sub = new Subscriber();
             $sub->setEmail($email);
@@ -67,25 +63,25 @@ class NewsletterController extends BaseController {
             $sub->setToken(Utils::getUuid() . "-" . Utils::getUuid());
             
             $em->persist($sub);
-        }
-        $em->flush();
-                    
-        // send email
-        $url = $request->getSchemeAndHttpHost() . $this->generateUrl('newsletter-confirm', array('token' => $sub->getToken()));
-        $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
-        $emailHtml = $this->renderView('Emails/newsletter/confirm.html.twig', array(
-            'url' => $url
-        ));
-        $sm = Swift_Message::newInstance()
-            ->setSubject('Bitte bestätige Deine Anmeldung für den hey! VIENNA Newsletter')
-            ->setFrom($from)
-            ->setTo($sub->getEmail())
-            ->setBody($emailHtml, 'text/html');
-        $this->get('mailer')->send($sm);
-        
-        $message = "Wir haben Ihnen eine Nachricht gesendet. Bitte bestätigen Sie darin Ihre E-Mail Adresse, um mit Ihrer Anmeldung für den Newsletter fortzufahren";        
-        $resp = new JsonResponse(array('valid' => true, 'message' => $message));
+            $em->flush();
 
+            // send email
+            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('newsletter-confirm', array('token' => $sub->getToken()));
+            $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
+            $emailHtml = $this->renderView('Emails/newsletter/confirm.html.twig', array(
+                'url' => $url
+            ));
+            $sm = Swift_Message::newInstance()
+                ->setSubject('Bitte bestätige Deine Anmeldung für den hey! VIENNA Newsletter')
+                ->setFrom($from)
+                ->setTo($sub->getEmail())
+                ->setBody($emailHtml, 'text/html');
+            $this->get('mailer')->send($sm);
+
+            $message = "Wir haben Ihnen eine Nachricht gesendet. Bitte bestätigen Sie darin Ihre E-Mail Adresse, um mit Ihrer Anmeldung für den Newsletter fortzufahren";        
+            $resp = new JsonResponse(array('valid' => true, 'message' => $message));
+        }
+        
         // set cookie to hide newsletter bar
         $this->addNewsletterCookie($resp);        
         return $resp;
