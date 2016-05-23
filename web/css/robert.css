@@ -15,6 +15,7 @@
     opacity: 1;
     filter: alpha(opacity=100);
     text-shadow: none;
+    z-index: 100;
 }
 .lead-close:hover {
     color: #f5f5f5;
