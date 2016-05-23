@@ -63,4 +63,29 @@ class SubscriberRepository extends EntityRepository {
             $qb->setParameter('unsubscribed', $sUnsubscribed);
         }
     }
+
+    public function exportAsCsv() {
+        $q = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('s')
+                ->from('AppBundle:Subscriber', 's')
+                ->orderBy('s.createdAt')
+                ->getQuery();
+        $rows = $q->getResult();
+
+        $csv = "id;email;confirmed;unsubscribed;created;modified;unsubscribed date\n";
+        foreach ($rows as $row) {
+            $u = $row->getUnsubscribedAt();
+            $csv .= sprintf("%d;\"%s\";%d;%d;%s;%s;%s\n", 
+                    $row->getId(),
+                    $row->getEmail(),
+                    $row->getConfirmed() ? "1" : "0",
+                    $row->getUnsubscribed() ? "1": "0",
+                    $row->getCreatedAt()->format("Y-m-d"),
+                    $row->getModifiedAt()->format("Y-m-d"),
+                    $u !== null ? $u->format("Y-m-d") : "");
+        }
+        
+        return $csv;
+    }
 }
