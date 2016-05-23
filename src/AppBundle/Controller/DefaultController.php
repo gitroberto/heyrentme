@@ -54,7 +54,8 @@ class DefaultController extends BaseController {
             'confirmed' => $confirmed,
             'testimonials' => $testimonials,
             'showcase' => $showcase,
-            'newsletterMessage' => $newsletterMessage
+            'newsletterMessage' => $newsletterMessage,
+            'newsletterBar' => true
         ));
     }
     
@@ -86,7 +87,8 @@ class DefaultController extends BaseController {
             'token' => $token,
             'confirmed' => $confirmed,
             'testimonials' => $testimonials,
-            'equipmentSc' => $eqSc
+            'equipmentSc' => $eqSc,
+            'newsletterBar' => true
         ));
     }
     /**
@@ -110,7 +112,8 @@ class DefaultController extends BaseController {
             'token' => $token,
             'confirmed' => $confirmed,
             'testimonials' => $testimonials,
-            'talentSc' => $talSc
+            'talentSc' => $talSc,
+            'newsletterBar' => true
         ));
     }
     
@@ -163,7 +166,8 @@ class DefaultController extends BaseController {
 
             return $this->render($tmpl, array(
                 'category' => $cat,
-                'searchParams' => $sp
+                'searchParams' => $sp,
+                'newsletterBar' => true
                 //'equipments' => $equipments
             ));
         }
@@ -301,7 +305,8 @@ class DefaultController extends BaseController {
             'opinions' => $opinions,
             'type' => $type,
             'loggedIn' => $loggedIn,
-            'isPreview' => $isPreview
+            'isPreview' => $isPreview,
+            'newsletterBar' => true
         ));
     }
     

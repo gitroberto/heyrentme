@@ -71,7 +71,10 @@
           </div>
       </nav>
         
-    <div id="email-bar" class="email-bar hidden-print">
-        {{ render(controller('AppBundle:Newsletter:form')) }}
-    </div>
+    {% if newsletterBar is defined %}
+        <div id="email-bar" class="email-bar hidden-print">
+            {{ render(controller('AppBundle:Newsletter:form')) }}
+        </div>
+    {% endif %}
+
 

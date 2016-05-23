@@ -21,7 +21,8 @@ class RentalController extends BaseController {
         $subcats = $this->getCategoriesByType($request, Category::TYPE_EQUIPMENT);
         
         return $this->render('rental/rental.html.twig', array(
-            'categories' => $subcats
+            'categories' => $subcats,
+            'newsletterBar' => true
         ));
     }
     
@@ -32,7 +33,8 @@ class RentalController extends BaseController {
         $category = $this->getDoctrineRepo('AppBundle:Category')->find($categoryId);
         
         return $this->render('rental/rental_detail.html.twig', array(
-            'category' => $category
+            'category' => $category,
+            'newsletterBar' => true
         ));
     }
     
@@ -128,7 +130,8 @@ class RentalController extends BaseController {
         $subcats = $this->getCategoriesByType($request, Category::TYPE_TALENT);
         
         return $this->render('rental/offer.html.twig', array(
-            'categories' => $subcats
+            'categories' => $subcats,
+            'newsletterBar' => true
         ));
     }    
     
@@ -139,7 +142,8 @@ class RentalController extends BaseController {
         $category = $this->getDoctrineRepo('AppBundle:Category')->find($categoryId);
         
         return $this->render('rental/offer_detail.html.twig', array(
-            'category' => $category
+            'category' => $category,
+            'newsletterBar' => true
         ));
     }
     

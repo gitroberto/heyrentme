@@ -34,28 +34,36 @@ class StaticController extends BaseController {
      * @Route("/faq")
      */
     public function hilfeFaqEuipmentMietenAction(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_euipment_mieten.html.twig');
+        return $this->render('static/faq/hilfe_faq_euipment_mieten.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     /**
      * @Route("/hilfe-faq/equipment-anbieten", name="hilfe_faq_euipment_anbieten")
      */
     public function hilfeFaqEuipmentAnbietenAction(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_euipment_anbieten.html.twig');
+        return $this->render('static/faq/hilfe_faq_euipment_anbieten.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     /**
      * @Route("/hilfe-faq/talent-buchen", name="hilfe_faq_talent_buchen")
      */
     public function hilfeFaqTalentBuchenAction(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_talent_buchen.html.twig');
+        return $this->render('static/faq/hilfe_faq_talent_buchen.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     /**
      * @Route("/hilfe-faq/talent-anbieten", name="hilfe_faq_talent_anbieten")
      */
     public function hilfeFaqTalentAnbietenAction(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_talent_anbieten.html.twig');
+        return $this->render('static/faq/hilfe_faq_talent_anbieten.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     
@@ -63,7 +71,9 @@ class StaticController extends BaseController {
      * @Route("/hilfe-faq/faq", name="hilfe_faq_faq")
      */
     public function hilfeFaqFaqAnbieter(Request $request) {               
-        return $this->render('static/faq/hilfe_faq_faq.html.twig');
+        return $this->render('static/faq/hilfe_faq_faq.html.twig', array(
+            'newsletterBar' => true
+        ));
     }    
 
     #ClientInfo
@@ -88,55 +98,71 @@ class StaticController extends BaseController {
      * @Route("/kundeninfos/")
      */
     public function kundeninfosAgbAction(Request $request) {               
-        return $this->render('static/clientInfo/kundeninfos_agb.html.twig');
+        return $this->render('static/clientInfo/kundeninfos_agb.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     /**
      * @Route("/kundeninfos/presse", name="kundeninfos_presse")
      */
     public function kundeninfosPresseAgbAction(Request $request) {               
-        return $this->render('static/clientInfo/kundeninfos_presse.html.twig');
+        return $this->render('static/clientInfo/kundeninfos_presse.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
 	
 	/**
      * @Route("/kundeninfos/partner", name="kundeninfos_partner")
      */
     public function kundeninfosPartnerAction(Request $request) {               
-        return $this->render('static/clientInfo/kundeninfos_partner.html.twig');
+        return $this->render('static/clientInfo/kundeninfos_partner.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     /**
      * @Route("/kundeninfos/kontakt", name="kundeninfos_kontakt")
      */
     public function kundeninfosKontaktAction(Request $request) {               
-        return $this->render('static/clientInfo/kundeninfos_kontakt.html.twig');
+        return $this->render('static/clientInfo/kundeninfos_kontakt.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     /**
      * @Route("/kundeninfos/impressum", name="kundeninfos_impressum")
      */
     public function kundeninfosImpressumAction(Request $request) {               
-        return $this->render('static/clientInfo/kundeninfos_impressum.html.twig');
+        return $this->render('static/clientInfo/kundeninfos_impressum.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     /**
      * @Route("/kundeninfos/datenschutz", name="kundeninfos_datenschutz")
      */
     public function kundeninfosDatenschutzAction(Request $request) {               
-        return $this->render('static/clientInfo/kundeninfos_datenschutz.html.twig');
+        return $this->render('static/clientInfo/kundeninfos_datenschutz.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
     
     /** 
      * @Route("/tutorial/photo", name="tutorial-photo")
      */
     public function photoTutorialAction() {
-        return $this->render('static/tutorial/photo.html.twig');
+        return $this->render('static/tutorial/photo.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
 
     /** 
      * @Route("/tutorial/video", name="tutorial-video")
      */
     public function videoTutorialAction() {
-        return $this->render('static/tutorial/video.html.twig');
+        return $this->render('static/tutorial/video.html.twig', array(
+            'newsletterBar' => true
+        ));
     }
 }
