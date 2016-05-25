@@ -28,7 +28,7 @@ function rowActions(cellvalue, options, cellobject) {
     var s =
         "<a class=\"grid-icon\" title='Edit'             href='blog/edit/"   +  options.rowId + "'><span class=\"glyphicon glyphicon-edit\"></span></a>"+
         "<a class=\"grid-icon\" title='Related'           href='blog/addrelated/" +  options.rowId + "' ><span class=\"glyphicon glyphicon-indent-left\"></span></a>"+
-        "<a class=\"grid-icon\" title='Preview' target='_blank'  href='" +  cellobject[6] + "' ><span class=\"glyphicon glyphicon-picture\"></span></a>" +
+        "<a class=\"grid-icon\" title='Preview' target='_blank'  href='" +  cellobject[7] + "' ><span class=\"glyphicon glyphicon-picture\"></span></a>" +
         "<a class=\"grid-icon\" title='Delete'           href='blog/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><span class=\"glyphicon glyphicon-remove\"></span></a>";
         if (cellobject[2])
             s += "<a class=\"grid-icon publish\" data-id=" +  options.rowId + " title='Unpublish' href=\"#\"><span class=\"glyphicon glyphicon-eye-open\"></span></a>";
