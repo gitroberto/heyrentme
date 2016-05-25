@@ -13,7 +13,7 @@ class BlogController extends BaseController {
      * @Route("/blog", name="blog")
      */
     public function indexAction(Request $request) {
-        $posts = $this->getDoctrineRepo('AppBundle:Blog')->getAllOrderedByPosition();
+        $posts = $this->getDoctrineRepo('AppBundle:Blog')->getPublishedOrderedByPosition();
         
         $this->createSessionBlogList($request, $posts);
         
@@ -39,9 +39,13 @@ class BlogController extends BaseController {
     }
     
     protected function display(Request $request, $post, $isPreview){
-        $posts = array();          
-        foreach ($post->getRelatedBlogs() as $rp){
-            $posts[count($posts)] = $rp->getRelatedBlog();
+        $posts = array();
+        
+        $related = $this->getDoctrineRepo('AppBundle:Blog')->getRelated($post->getId());
+        
+        foreach ($related as $rp){
+            array_push($posts, $rp);
+            //$posts[count($posts)] = $rp->getRelatedBlog();
         }
         
         // determine prev/next post for navigation
@@ -83,7 +87,7 @@ class BlogController extends BaseController {
     private function getSessionBlogList(Request $request) {
         $session = $request->getSession();
         if (!$session->has('BlogList')) {
-            $posts = $this->getDoctrineRepo('AppBundle:Blog')->getAllOrderedByPosition();
+            $posts = $this->getDoctrineRepo('AppBundle:Blog')->getPublishedOrderedByPosition();
             $this->createSessionBlogList($request, $posts);
         }
         return $session->get('BlogsList');

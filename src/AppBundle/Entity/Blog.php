@@ -62,7 +62,23 @@ class Blog
      * @ORM\Column(type="string", length=36)
      */
     protected $uuid;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $published = 0;    
+    /**
+     * @ORM\OneToMany(targetEntity="BlogRelated", mappedBy="blog")
+     */
+    protected $relatedBlogs;
+    /**
+     * @ORM\OneToMany(targetEntity="BlogRelated", mappedBy="relatedBlog")
+     */
+    protected $blog;
+
     
+    public function getExtendedTitle() {
+        return sprintf('%s [%s]', $this->title, $this->published ? "PUBLISHED" : "UNPUBLISHED");
+    }
     
     public function setUuid($uuid)
     {
@@ -137,11 +153,6 @@ class Blog
         return $this->image;
     }
     
-    /**
-     * @ORM\OneToMany(targetEntity="BlogRelated", mappedBy="blog")
-     */
-    protected $relatedBlogs;
-
     public function addRelatedBlog(Blog $blog)
     {
         $this->blog[] = $blog;
@@ -263,5 +274,29 @@ class Blog
     public function getBigImage()
     {
         return $this->bigImage;
+    }
+
+    /**
+     * Set published
+     *
+     * @param boolean $published
+     *
+     * @return Blog
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean
+     */
+    public function getPublished()
+    {
+        return $this->published;
     }
 }
