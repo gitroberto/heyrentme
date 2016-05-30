@@ -39,6 +39,8 @@
                             </p>
                         {% endif %}
                     </div>
+                    {% if tal.video %}<div class="rplay"></div>{% endif %}
+                    <img class="product-user product-user2" alt="{{ tal.user.fullName }}" src="{{ tal.user.getProfilePicture(false, image_url_prefix) }}">
                 </div>
             </div>
             {% if tal.offerStatus %}

@@ -1,3 +1,20 @@
+/* PLAY BUTTON */
+
+.rplay {
+	width: 60px;
+    height: 60px;
+    display: block;
+    background: url('../img/play.png') no-repeat center center;
+    text-align: center;
+    margin: 0 auto 0;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 185px;
+    background-size: 100%;
+}
+
 /* NEWSLETTER */
 
 .email-bar {
@@ -981,7 +998,7 @@ min-height: 70px;
 }
 
 .product-info img.product-user2 {
-bottom: 55px;
+bottom: 70px;
 }
 
 .blog-detail .left-side .blog-content {
@@ -1156,7 +1173,7 @@ font-size: 11px;
 .product-info img.product-user, .product-info img.product-user2 {
 width: 50px !important;
 height: 50px !important;
-bottom: 60px;
+bottom: 75px;
 }
 
 .main-categories .product-info  {
@@ -1455,7 +1472,7 @@ body .users .steps .step-3{
 }
 
 .product-info img.product-user2 {
-    bottom: 55px;
+    bottom: 70px;
 }
 
 .product-detail .left-side .product-description p {

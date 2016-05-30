@@ -94,6 +94,8 @@
                                             </p>
                                         {% endif %}
                                     </div>
+                                    {% if eq.video %}<div class="rplay"></div>{% endif %}
+                                    <img class="product-user product-user2" alt="{{ eq.user.fullName }}" src="{{ eq.user.getProfilePicture(false, image_url_prefix) }}">
                                 </div>
                             </div>
                             {% if eq.offerStatus %}
