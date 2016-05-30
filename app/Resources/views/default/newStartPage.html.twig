@@ -56,6 +56,30 @@
             </div>
 
             <div class="container new-header rhomehead main-offers">
+                {% if blogSc|length == 3 %}
+                    {% for post in blogSc %}
+                        <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
+                            <div class="col-sm-4">
+                                {% if post.image %}
+                                    <img src="{{ post.image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ post.title }}"/>
+                                {% else %}
+                                    {# TODO: change default blog photo #}
+                                    <img src="/img/placeholder/blog2.jpg" alt="{{ post.title }}" class="blogimg"/>
+                                {% endif %}
+                                <div class="product-info">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <p class="product-name">
+                                                {{ post.title }}
+                                              </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+                
                 {% if equipmentSc|length == 3 %}
                     <div class="row">
                     {% for eq in equipmentSc %}
@@ -152,31 +176,7 @@
                         </a>
                     {% endfor %}
                     </div>
-                {% endif %}
-                
-                {% if blogSc|length == 3 %}
-                    {% for post in blogSc %}
-                        <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
-                            <div class="col-sm-4">
-                                {% if post.image %}
-                                    <img src="{{ post.image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ post.title }}"/>
-                                {% else %}
-                                    {# TODO: change default blog photo #}
-                                    <img src="/img/placeholder/blog2.jpg" alt="{{ post.title }}" class="blogimg"/>
-                                {% endif %}
-                                <div class="product-info">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <p class="product-name">
-                                                {{ post.title }}
-                                              </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    {% endfor %}
-                {% endif %}
+                {% endif %}                
             </div>
         {% endif %}
           
