@@ -735,13 +735,13 @@ EOT;
     }
     public function getShowcaseStart() {
         $tals = $this->getEntityManager()->createQueryBuilder()
-            ->select('t', 'i')
+            ->select('t')
             ->from('AppBundle:Talent', 't')
-            ->leftJoin('t.images', 'i')
             ->andWhere('t.showcaseStart = 1')
             ->andWhere('t.status = :status')
             ->setParameter('status', Equipment::STATUS_APPROVED)
             ->addOrderBy('t.createdAt', 'desc')
+            ->setMaxResults(3)
             ->getQuery()
             ->getResult();
 

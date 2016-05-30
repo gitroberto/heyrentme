@@ -37,7 +37,9 @@ class DefaultController extends BaseController {
             $confirmed = true;
         }
         
-        $showcase = $this->getShowcase();
+        $eqSc = $this->getDoctrineRepo("AppBundle:Equipment")->getShowcaseStart();
+        $talSc = $this->getDoctrineRepo("AppBundle:Talent")->getShowcaseStart();
+        $blogSc = $this->getDoctrineRepo("AppBundle:Blog")->getShowcaseStart();
         
         //newsletter message
         $session = $request->getSession();
@@ -53,9 +55,11 @@ class DefaultController extends BaseController {
             'token' => $token,
             'confirmed' => $confirmed,
             'testimonials' => $testimonials,
-            'showcase' => $showcase,
             'newsletterMessage' => $newsletterMessage,
-            'newsletterBar' => true
+            'newsletterBar' => true,
+            'equipmentSc' => $eqSc,
+            'talentSc' => $talSc,
+            'blogSc' => $blogSc
         ));
     }
     

@@ -62,6 +62,10 @@ class Blog
      * @ORM\Column(type="string", length=36)
      */
     protected $uuid;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $published;
     
     
     public function setUuid($uuid)
@@ -263,5 +267,29 @@ class Blog
     public function getBigImage()
     {
         return $this->bigImage;
+    }
+
+    /**
+     * Set published
+     *
+     * @param boolean $published
+     *
+     * @return Blog
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean
+     */
+    public function getPublished()
+    {
+        return $this->published;
     }
 }

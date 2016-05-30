@@ -139,4 +139,18 @@ EOT;
 EOT;
         return $this->getEntityManager()->createQuery($sql)->getResult();
     }
+
+    public function getShowcaseStart() {
+        return $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('b')
+            ->from('AppBundle:Blog', 'b')
+            ->andWhere('b.published = 1')
+            ->addOrderBy('b.createdAt', 'desc')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult();
+    }
+    
 }
