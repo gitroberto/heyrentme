@@ -1017,28 +1017,24 @@ class EquipmentController extends BaseAdminController {
     public function showcaseStartAction($id, $value) {
         $repo = $this->getDoctrineRepo('AppBundle:Equipment');
         $eq = $repo->find($id);
-        $cnt = $repo->getShowcaseStartCount() + $this->getDoctrineRepo('AppBundle:Talent')->getShowcaseStartCount();
         
         // validate status
         if ($value == 1 && $eq->getStatus() !== Equipment::STATUS_APPROVED)
             return new JsonResponse(array('type' => 'error', 'message' => "The item is not APPROVED."));
             
-        // validate max
-        $max = Common::SHOWCASE_MAX;
-        if ($value == 1 && $cnt == $max)
-            return new JsonResponse(array('type' => 'error', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Maximum</strong>: <strong>{$max}</strong>."));
+        $count = $repo->getShowcaseStartCount();
+        if ($value == 1 && $count >= Common::EQUIPMENT_SHOWCASE_COUNT)
+            return new JsonResponse(array('type' => 'error', 'message' => "There are already {$count} items selected"));
             
         // set value & save
         $eq->setShowcaseStart($value);
         $this->getDoctrine()->getManager()->flush();
                 
         // check for warning
-        $min = Common::SHOWCASE_MIN;
-        $cnt = $repo->getShowcaseStartCount() + $this->getDoctrineRepo('AppBundle:Talent')->getShowcaseStartCount();
-        if ($cnt < $min)
-            return new JsonResponse(array('type' => 'warning', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
+        $count = $repo->getShowcaseStartCount();
+        $type = Common::EQUIPMENT_SHOWCASE_COUNT == $count ? "info" : "warning";
         
-        return new JsonResponse(array('type' => 'info', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected."));
+        return new JsonResponse(array('type' => $type, 'message' => "<strong>Start page</strong>: <strong>{$count}</strong> selected."));
     }    
     /**
      * @Route("admin-equipment-showcase-equipment/{id}/{value}", name="admin-equipment-showcase-equipment")
