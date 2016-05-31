@@ -162,6 +162,8 @@
         <div class="form-group">
           <label for="form_name" class="control-label col-xs-2">Reason</label>
           <div class="col-xs-10  control-readonly">
+              {{ form_widget(form.sendNot) }}
+                <label for="form_sendNot">Don't send message to the owner</label>
               <div class="err-msg">{{ form_errors(form.reason) }}</div>
             {{ form_widget(form.reason, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'reason' }}) }}
           </div>

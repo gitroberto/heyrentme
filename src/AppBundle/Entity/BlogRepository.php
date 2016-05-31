@@ -151,4 +151,30 @@ EOT;
 EOT;
         return $this->getEntityManager()->createQuery($sql)->getResult();
     }
+
+    public function getShowcaseStartCount() {
+        return $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('count(b.id)')
+            ->from('AppBundle:Blog', 'b')
+            ->andWhere('b.published = 1')
+            ->andWhere('b.showcase = 1')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getShowcaseStart() {
+        return $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('b')
+            ->from('AppBundle:Blog', 'b')
+            ->andWhere('b.published = 1')
+            ->andWhere('b.showcase = 1')
+            ->addOrderBy('b.createdAt', 'desc')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult();
+    }
+    
 }

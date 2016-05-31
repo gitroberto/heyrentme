@@ -21,7 +21,7 @@
     <script>
         $(function() {
             $("#newsletter-form").submit(newsletterSubmit);
-            $("#newsletter-form .close").click(newsletterClose);
+            $("#newsletter-form .close").on('click touchstart', newsletterClose);
         });
         function newsletterClose() {
             var url = '{{ path('newsletter-close') }}';

@@ -122,6 +122,7 @@ class TalentController extends BaseAdminController {
             $cell[$i++] = $this->generateUrl('admin_talent_moderate', array('id' => $dataRow->getId()));
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseTalent();
+            $cell[$i++] = $dataRow->getFeatured();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -155,7 +156,12 @@ class TalentController extends BaseAdminController {
         $options = array();
         $options[0] = 
         
-        $form = $this->createFormBuilder($talent, array(
+        $data = array(
+            'id' => $talent->getId(),
+            'status' => $talent->getStatus(),
+            'reason' => $talent->getReason()
+        );
+        $form = $this->createFormBuilder($data, array(
                     'constraints' => array(
                         new Callback(array($this, 'validateReason'))
                     )
@@ -173,6 +179,7 @@ class TalentController extends BaseAdminController {
                         new NotBlank()
                     )
                 ))
+                ->add('sendNot', 'checkbox', array('required' => false))
                 ->add('reason', 'textarea', array(
                     'required' => false,
                     'constraints' => array(                        
@@ -187,9 +194,13 @@ class TalentController extends BaseAdminController {
         
         if ($form->isValid()) {
             $talent->changeStatus($form['status']->getData(), $form['reason']->getData());            
+            $talent->setReason($form['reason']->getData());
             $em = $this->getDoctrine()->getManager();
             $em->flush();
-            $this->sendApprovedRejectedInfoMessage($request, $talent, $form['reason']->getData());
+
+            $send = !$form['sendNot']->getData();
+            if ($send)
+                $this->sendApprovedRejectedInfoMessage($request, $talent, $form['reason']->getData());
             
             return $this->redirectToRoute("admin_talent_list");
         }
@@ -1070,5 +1081,16 @@ class TalentController extends BaseAdminController {
             return new JsonResponse(array('type' => 'warning', 'message' => "<strong>Talent page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
         
         return new JsonResponse(array('type' => 'info', 'message' => "<strong>Talent page</strong>: <strong>{$cnt}</strong> selected."));
+    }    
+    /**
+     * @Route("admin-talent-featured/{id}", name="admin-talent-featured")
+     */
+    public function featuredAction($id) {
+        $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        
+        $tal->setFeatured(!$tal->getFeatured()); // toggle
+        $this->getDoctrine()->getManager()->flush();                
+        
+        return new JsonResponse(array('message' => 'ok'));
     }    
 }

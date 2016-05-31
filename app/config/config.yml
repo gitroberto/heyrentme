@@ -42,6 +42,7 @@ twig:
         image_url_prefix: "%image_url_prefix%"
         mailer_app_url_prefix: "%mailer_app_url_prefix%"
         facebook_client_id: "%facebook_client_id%"
+        facebook_pixel_code: "%facebook_pixel_code%"
         google_analytics_code: "%google_analytics_code%"
 
 # Assetic Configuration

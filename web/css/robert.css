@@ -1,3 +1,20 @@
+/* PLAY BUTTON */
+
+.rplay {
+	width: 60px;
+    height: 60px;
+    display: block;
+    background: url('../img/play.png') no-repeat center center;
+    text-align: center;
+    margin: 0 auto 0;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 185px;
+    background-size: 100%;
+}
+
 /* NEWSLETTER */
 
 .email-bar {
@@ -15,6 +32,7 @@
     opacity: 1;
     filter: alpha(opacity=100);
     text-shadow: none;
+    z-index: 100;
 }
 .lead-close:hover {
     color: #f5f5f5;
@@ -980,7 +998,7 @@ min-height: 70px;
 }
 
 .product-info img.product-user2 {
-bottom: 55px;
+bottom: 70px;
 }
 
 .blog-detail .left-side .blog-content {
@@ -1155,7 +1173,7 @@ font-size: 11px;
 .product-info img.product-user, .product-info img.product-user2 {
 width: 50px !important;
 height: 50px !important;
-bottom: 60px;
+bottom: 75px;
 }
 
 .main-categories .product-info  {
@@ -1454,7 +1472,7 @@ body .users .steps .step-3{
 }
 
 .product-info img.product-user2 {
-    bottom: 55px;
+    bottom: 70px;
 }
 
 .product-detail .left-side .product-description p {
@@ -1507,4 +1525,31 @@ background-color:#000;
 }
 }
 
+.featured-icon.rcat {
+    right: 11px;
+}
+.featured-icon {
+    background: rgba(0, 0, 0, 0) url("../img/statt_offer.png") no-repeat scroll center center;
+    display: block;
+    height: 83px;
+    position: absolute;
+    right: -4px;
+    top: -4px;
+    width: 82px;
+    z-index: 100;
+}
 
+.featured-icon span {
+    color: #fff;
+    display: inline-block;
+    font-family: "Open Sans",sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 18px;
+    padding: 0 4px;
+    position: absolute;
+    right: -7px;
+    text-transform: uppercase;
+    top: 21px;
+    transform: rotate(45deg);
+}

@@ -71,6 +71,7 @@
             </p>
             {% endif %}            
             <div class="position-relative" id="media-container">
+                {% if item.featured %}<div class="featured-icon mobile-hidden"><span>FEATURED</span></div>{% endif %}
                 {#
               {% if item.activeDiscount %}
                 <div class="discount discount-big">
@@ -151,7 +152,7 @@
                 </div>
             {% endif %}
             
-            <div style="height: 240px;" id="googleMapTalent"></div>
+            <div style="height: 240px;" id="googleMap"></div>
             
             <div class="panel-group desktop-hide" id="panel-quote-group2">
                 <div class="panel panel-default">
@@ -756,7 +757,7 @@
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        map = new google.maps.Map(document.getElementById('googleMapTalent'), mapOptions);
+        map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
                 
         geocoder.geocode({ 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {

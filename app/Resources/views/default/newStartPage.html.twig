@@ -45,9 +45,8 @@
             </nav>
               
           </div>
-        
-        {% if showcase|length >= constant('AppBundle\\Entity\\Common::SHOWCASE_MIN') and showcase|length <= constant('AppBundle\\Entity\\Common::SHOWCASE_MAX') %}
-            <div class="container new-header mobile-hidden">
+        {% if equipmentSc|length == 3 or talentSc|length == 3 or blogSc|length == 3 %}
+            <div class="container new-header">
                 <div class="row">
                     <div class="col-xs-12">
                         <h2>Neu bei <b>hey! VIENNA</b></h2>
@@ -55,50 +54,101 @@
                 </div>
             </div>
 
-            <div class="container new-header mobile-hidden rhomehead main-offers">
-                {% for eq in showcase %}
-                    {% if loop.index0 % 3 == 0 %}
-                        <div class="row">
-                    {% endif %}
-
-                    <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
-                        <div class="col-md-4">
-                            {% if eq.equipmentImages is defined %}
-                                {% set images = eq.equipmentImages %}
-                            {% else %}
-                                {% set images = eq.talentImages %}
-                            {% endif %}
-                            {% if images|length > 0 %}
-                                <div class="rcatimage">
-                                <img src="{{ images[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ eq.name }}"/>
-                                </div>
-                            {% else %}
-                                <div class="rcatimage">
-                                <img src="/img/equipment-default.jpg" alt="placeholder"/>
-                                </div>
-                            {% endif %}
-                            {% if eq.priceBuy is defined and eq.priceBuy %}
-                                <img src="/img/cart.png" alt="cart" class="cart"/>
-                            {% endif %}
-                            <div class="product-info position-relative">
-                                <div class="row">                                  
-                                    <div class="col-xs-7">
-                                        {% if eq.equipmentImages is defined %}
-                                            {{ include('common/stars.html.twig', { rating: eq.rating }) }}
-                                        {% endif %}
-                                        <p class="product-name">
-                                            {{ eq.name }}
-                                        </p>
+            <div class="container new-header rhomehead main-offers">
+                {% if blogSc|length == 3 %}
+                    {% for post in blogSc %}
+                        <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
+                            <div class="col-sm-4">
+                                {% if post.image %}
+                                    <img src="{{ post.image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ post.title }}"/>
+                                {% else %}                                    
+                                    <img src="/img/placeholder/blog2.jpg" alt="{{ post.title }}" class="blogimg"/>
+                                {% endif %}
+                                <div class="product-info">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <p class="product-name">
+                                                {{ post.title }}
+                                              </p>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-5">
-                                        {% if eq.equipmentImages is defined %}
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+                
+                {% if equipmentSc|length == 3 %}
+                    <div class="row">
+                    {% for eq in equipmentSc %}
+                        <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
+                            <div class="col-md-4">
+                                {% set images = eq.equipmentImages %}
+                                {% if images|length > 0 %}
+                                    <div class="rcatimage">
+                                    <img src="{{ images[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ eq.name }}"/>
+                                    </div>
+                                {% else %}
+                                    <div class="rcatimage">
+                                    <img src="/img/equipment-default.jpg" alt="placeholder"/>
+                                    </div>
+                                {% endif %}
+                                {% if eq.priceBuy is defined and eq.priceBuy %}
+                                    <img src="/img/cart.png" alt="cart" class="cart"/>
+                                {% endif %}
+                                <div class="product-info position-relative">
+                                    <div class="row">                                  
+                                        <div class="col-xs-7">
+                                            {{ include('common/stars.html.twig', { rating: eq.rating }) }}
+                                            <p class="product-name">
+                                                {{ eq.name }}
+                                            </p>
+                                        </div>
+                                        <div class="col-xs-5">
                                             <p class="price">
                                                 {{ eq.pricesLine }}&nbsp;&#8364;
                                             </p>
                                             <p class="tag">
                                                 Pr. ab: {{ eq.pricesDesc }}
                                             </p>
-                                        {% else %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if eq.offerStatus %}
+                                    <p class="product-list-info">{{ eq.offerStatus }}</p>
+                                {% endif %}
+                                {% if eq.featured %}<div class="featured-icon rcat"><span>FEATURED</span></div>{% endif %}
+                                <p class="product-list-info">{{ eq.description }}</p>
+                                <span class="list-desc-border"></span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {% if talentSc|length == 3 %}
+                    <div class="row">
+                    {% for eq in talentSc %}
+                        <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
+                            <div class="col-md-4">
+                                {% set images = eq.talentImages %}
+                                {% if images|length > 0 %}
+                                    <div class="rcatimage">
+                                    <img src="{{ images[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ eq.name }}"/>
+                                    </div>
+                                {% else %}
+                                    <div class="rcatimage">
+                                    <img src="/img/equipment-default.jpg" alt="placeholder"/>
+                                    </div>
+                                {% endif %}
+                                <div class="product-info position-relative">
+                                    <div class="row">                                  
+                                        <div class="col-xs-7">
+                                            <p class="product-name">
+                                                {{ eq.name }}
+                                            </p>
+                                        </div>
+                                        <div class="col-xs-5">
                                             {% if eq.requestPrice %}
                                                 <p class="price">auf Anfr.</p>
                                             {% else %}
@@ -109,22 +159,22 @@
                                                     pro Stunde
                                                 </p>
                                             {% endif %}
-                                        {% endif %}
+                                        </div>
+                                        {% if eq.video %}<div class="rplay"></div>{% endif %}
+                                        <img class="product-user product-user2" alt="{{ eq.user.fullName }}" src="{{ eq.user.getProfilePicture(false, image_url_prefix) }}">
                                     </div>
                                 </div>
+                                {% if eq.offerStatus %}
+                                    <p class="product-list-info">{{ eq.offerStatus }}</p>
+                                {% endif %}
+                                {% if eq.featured %}<div class="featured-icon rcat"><span>FEATURED</span></div>{% endif %}
+                                <p class="product-list-info">{{ eq.description }}</p>
+                                <span class="list-desc-border"></span>
                             </div>
-                            {% if eq.offerStatus %}
-                                <p class="product-list-info">{{ eq.offerStatus }}</p>
-                            {% endif %}
-                            <p class="product-list-info">{{ eq.description }}</p>
-                            <span class="list-desc-border"></span>
-                        </div>
-                    </a>
-
-                    {% if loop.index0 % 3 == 2 %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                        </a>
+                    {% endfor %}
+                    </div>
+                {% endif %}                
             </div>
         {% endif %}
           

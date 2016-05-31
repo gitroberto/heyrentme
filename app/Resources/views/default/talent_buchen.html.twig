@@ -49,7 +49,7 @@
           </div>
 
         {% if talentSc|length >= constant('AppBundle\\Entity\\Common::SHOWCASE_MIN') and talentSc|length <= constant('AppBundle\\Entity\\Common::SHOWCASE_MAX') %}
-            <div class="container new-header mobile-hidden">
+            <div class="container new-header">
                 <div class="row">
                     <div class="col-xs-12">
                         <h2>Neu bei <b>hey! VIENNA</b></h2>
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <div class="container new-header mobile-hidden rhomehead main-offers">
+            <div class="container new-header rhomehead main-offers">
                 {% for eq in talentSc %}
                     {% if loop.index0 % 3 == 0 %}
                         <div class="row">
@@ -94,6 +94,8 @@
                                             </p>
                                         {% endif %}
                                     </div>
+                                    {% if eq.video %}<div class="rplay"></div>{% endif %}
+                                    <img class="product-user product-user2" alt="{{ eq.user.fullName }}" src="{{ eq.user.getProfilePicture(false, image_url_prefix) }}">
                                 </div>
                             </div>
                             {% if eq.offerStatus %}

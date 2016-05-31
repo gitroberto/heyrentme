@@ -18,7 +18,8 @@ class BlogController extends BaseController {
         $this->createSessionBlogList($request, $posts);
         
         return $this->render('blog/blog.html.twig', array(
-            'posts' => $posts
+            'posts' => $posts,
+            'newsletterBar' => true
         ));
     }
     
@@ -71,7 +72,8 @@ class BlogController extends BaseController {
             'posts' => $posts,
             'nextPost' => $nextPost,
             'prevPost' => $prevPost,
-            'isPreview' => $isPreview
+            'isPreview' => $isPreview,
+            'newsletterBar' => true
         ));
     
     }

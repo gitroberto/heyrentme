@@ -3,6 +3,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Blog;
 use AppBundle\Entity\BlogRelated;
+use AppBundle\Entity\Common;
 use AppBundle\Entity\Image;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -523,14 +524,15 @@ class BlogController  extends BaseAdminController {
             $i = 0;
             $row['id'] = $dataRow->getId();
             $cell = array();
-            $cell[$i++] = null;
-            $cell[$i++] = $dataRow->getId();
-            $cell[$i++] = $dataRow->getPublished();
-            $cell[$i++] = $dataRow->getTitle();
-            $cell[$i++] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
-            $cell[$i++] = $dataRow->getModifiedAt()->format('Y-m-d H:i');
-            $cell[$i++] = $dataRow->getPosition();
-            $cell[$i++] = $this->generateUrl('blog_preview', array('uuid'=>$dataRow->getUuid()));
+            $cell[0] = null;
+            $cell[1] = $dataRow->getId();
+            $cell[2] = $dataRow->getPublished();
+            $cell[3] = $dataRow->getTitle();
+            $cell[4] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
+            $cell[5] = $dataRow->getModifiedAt()->format('Y-m-d H:i');
+            $cell[6] = $dataRow->getPosition();
+            $cell[7] = $this->generateUrl('blog_preview', array('uuid'=>$dataRow->getUuid()));
+            $cell[8] = $dataRow->getShowcase();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -548,4 +550,29 @@ class BlogController  extends BaseAdminController {
         return $resp;
         
     }
+    /**
+     * @Route("admin/blog/showcase/{id}/{value}", name="admin-blog-showcase")
+     */
+    public function showcaseAction($id, $value) {
+        $repo = $this->getDoctrineRepo('AppBundle:Blog');
+        $post = $repo->find($id);
+        
+        // validate status
+        if ($value == 1 && !$post->getPublished())
+            return new JsonResponse(array('type' => 'error', 'message' => "The post is not public."));
+        
+        $count = $repo->getShowcaseStartCount();
+        if ($value == 1 && $count >= Common::BLOG_SHOWCASE_COUNT)
+            return new JsonResponse(array('type' => 'error', 'message' => "There are already ${count} posts selected"));
+                                
+        // set value & save
+        $post->setShowcase($value);
+        $this->getDoctrine()->getManager()->flush();
+                
+        // check for warning
+        $count = $repo->getShowcaseStartCount();        
+        $type = Common::BLOG_SHOWCASE_COUNT == $count ? "info" : "warning";
+        
+        return new JsonResponse(array('type' => $type, 'message' => "<strong>Start page</strong>: <strong>{$count}</strong> selected."));
+    }    
 }

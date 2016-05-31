@@ -741,19 +741,18 @@ EOT;
         $eqs = $this
             ->getEntityManager()
             ->createQueryBuilder()
-            ->select('e', 'i')
+            ->select('e')
             ->from('AppBundle:Equipment', 'e')
-            ->leftJoin('e.images', 'i')
             ->andWhere('e.showcaseStart = 1')
             ->andWhere('e.status = :status')
             ->setParameter('status', Equipment::STATUS_APPROVED)
             ->addOrderBy('e.createdAt', 'desc')
+            ->setMaxResults(3)
             ->getQuery()
             ->getResult();
         
-        foreach ($eqs as $eq) {
+        foreach ($eqs as $eq)
             $eq->setEquipmentImages($this->getEquipmentImages($eq->getId()));
-        }        
         
         return $eqs;
     }

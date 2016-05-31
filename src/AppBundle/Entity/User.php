@@ -757,4 +757,8 @@ class User extends BaseUser
     {
         return $this->addrPlace;
     }
+
+    public function getFullName() {
+        return $this->name . " " . $this->surname;
+    }    
 }

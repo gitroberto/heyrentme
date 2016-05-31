@@ -36,6 +36,10 @@ function rowActions(cellvalue, options, cellobject) {
             s += "<a class=\"grid-icon publish\" data-id=" +  options.rowId + " title='Publish' href=\"#\"><span class=\"glyphicon glyphicon-eye-close\"></span></a>";
         return s;
 }
+function showcaseActions(cellvalue, options, cellobject) {
+    var s = '<input type="checkbox" class="showcase" data-type="start" data-id="' + cellobject[1] + '" title="showcase start page"' + (cellobject[8] ? ' checked="checked" ' : '') + '/>';
+    return s;
+}
 function publishedFormatter(cellvalue, options, cellobject) {
     return cellvalue ? "X" : "-";
 }
@@ -62,6 +66,28 @@ function publish() {
 }
 function gridComplete() {
     $("a.publish").click(publish);
+    $('input.showcase').on('change', showcaseChange);
+}
+function showcaseChange(e) {
+    var ch = $(this);
+    var val = ch.prop('checked') ? '1' : '0';
+    var url = '{{ path('admin-blog-showcase', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
+    url = url.replace('-ID-', ch.data('id')).replace('-VALUE-', val);
+    $.get(url)
+        .done(function(data) {
+            if (data.type === 'error') {
+                ch.prop('checked', !ch.prop('checked')); // revert checkbox state
+                toastr.error(data.message, 'Failed to save');
+            }
+            else {
+                var f = toastr[data.type];
+                f(data.message, 'Saved');
+            }
+        })
+        .fail(function(jqXHR) {
+            ch.prop('checked', !ch.prop('checked')); // revert checkbox state
+            toastr.error('Unexpected error occurred. Please try again.', 'Failed to save');
+        });        
 }
     
 $(document).ready(function(){    
@@ -79,7 +105,8 @@ $(document).ready(function(){
                             { name:'Title', index:'b.title', width: 400, editable:false, sortable:true },
                             { name:'Created', index:'b.createdAt', width: 130, editable:false, sortable:true },
                             { name:'Modified', index:'b.modifiedAt', width: 130, editable:false, sortable:true },
-                            { name:'Position', index:'b.position', align:"right", width: 80, editable:false, sortable:true}
+                            { name:'Position', index:'b.position', align:"right", width: 80, editable:false, sortable:true},
+                            { name: 'SC', index: 'b.showcase', align: 'center', width: 80, editable: false, sortable: true, formatter: showcaseActions }
                     ],
                     height: 550,
                     rowNum: 20,
@@ -94,6 +121,7 @@ $(document).ready(function(){
     }
 
 }); // end ready function
+
 </script>    
     
 {% endblock %}

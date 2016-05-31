@@ -37,7 +37,9 @@ class DefaultController extends BaseController {
             $confirmed = true;
         }
         
-        $showcase = $this->getShowcase();
+        $eqSc = $this->getDoctrineRepo("AppBundle:Equipment")->getShowcaseStart();
+        $talSc = $this->getDoctrineRepo("AppBundle:Talent")->getShowcaseStart();
+        $blogSc = $this->getDoctrineRepo("AppBundle:Blog")->getShowcaseStart();
         
         //newsletter message
         $session = $request->getSession();
@@ -53,8 +55,11 @@ class DefaultController extends BaseController {
             'token' => $token,
             'confirmed' => $confirmed,
             'testimonials' => $testimonials,
-            'showcase' => $showcase,
-            'newsletterMessage' => $newsletterMessage
+            'newsletterMessage' => $newsletterMessage,
+            'newsletterBar' => true,
+            'equipmentSc' => $eqSc,
+            'talentSc' => $talSc,
+            'blogSc' => $blogSc
         ));
     }
     
@@ -86,7 +91,8 @@ class DefaultController extends BaseController {
             'token' => $token,
             'confirmed' => $confirmed,
             'testimonials' => $testimonials,
-            'equipmentSc' => $eqSc
+            'equipmentSc' => $eqSc,
+            'newsletterBar' => true
         ));
     }
     /**
@@ -110,7 +116,8 @@ class DefaultController extends BaseController {
             'token' => $token,
             'confirmed' => $confirmed,
             'testimonials' => $testimonials,
-            'talentSc' => $talSc
+            'talentSc' => $talSc,
+            'newsletterBar' => true
         ));
     }
     
@@ -163,7 +170,8 @@ class DefaultController extends BaseController {
 
             return $this->render($tmpl, array(
                 'category' => $cat,
-                'searchParams' => $sp
+                'searchParams' => $sp,
+                'newsletterBar' => true
                 //'equipments' => $equipments
             ));
         }
@@ -301,7 +309,8 @@ class DefaultController extends BaseController {
             'opinions' => $opinions,
             'type' => $type,
             'loggedIn' => $loggedIn,
-            'isPreview' => $isPreview
+            'isPreview' => $isPreview,
+            'newsletterBar' => true
         ));
     }
     

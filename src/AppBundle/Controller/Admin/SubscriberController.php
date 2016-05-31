@@ -2,9 +2,12 @@
 
 namespace AppBundle\Controller\Admin;
 
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class SubscriberController extends BaseAdminController {
     /**
@@ -60,6 +63,22 @@ class SubscriberController extends BaseAdminController {
         
         $resp = new JsonResponse($result, JsonResponse::HTTP_OK);
         $resp->setCallback($callback);
+        return $resp;
+    }
+
+    /**
+     * @Route("/admin/subscriber/csv", name="admin-subscriber-csv")
+     */
+    public function csvAction() {
+        $csv = $this->getDoctrineRepo('AppBundle:Subscriber')->exportAsCsv();
+        $now = new DateTime();
+        $name = sprintf("subscribers-%s.csv", $now->format("Ymd"));
+        
+        $resp = new Response();
+        $resp->headers->set('Content-type', 'text/csv');
+        $cs = $resp->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $name);
+        $resp->headers->set('Content-disposition', $cs);
+        $resp->setContent($csv);
         return $resp;
     }
 }

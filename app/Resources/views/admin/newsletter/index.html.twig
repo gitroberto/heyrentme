@@ -7,6 +7,13 @@
 
 {% block body %}
 <h1>Newsletter subscribers</h1>
+
+<div>
+    <a class="" href="{{ path('admin-subscriber-csv') }}">Download as CSV</a>
+</div>
+
+<br/>
+
 <div id="jqgrid-wrapper">
         <table id="jqgrid" class="table table-striped table-hover">
                 <tr>
