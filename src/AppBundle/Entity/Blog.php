@@ -74,7 +74,6 @@ class Blog
      * @ORM\OneToMany(targetEntity="BlogRelated", mappedBy="relatedBlog")
      */
     protected $blog;
-
     /**
      * @ORM\Column(type="boolean")
      */

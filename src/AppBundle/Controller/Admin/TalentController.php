@@ -1030,28 +1030,24 @@ class TalentController extends BaseAdminController {
     public function showcaseStartAction($id, $value) {
         $repo = $this->getDoctrineRepo('AppBundle:Talent');
         $eq = $repo->find($id);
-        $cnt = $repo->getShowcaseStartCount() + $this->getDoctrineRepo('AppBundle:Equipment')->getShowcaseStartCount();
         
         // validate status
         if ($value == 1 && $eq->getStatus() !== Talent::STATUS_APPROVED)
             return new JsonResponse(array('type' => 'error', 'message' => "The item is not APPROVED."));
             
-        // validate max
-        $max = Common::SHOWCASE_MAX;
-        if ($value == 1 && $cnt == $max)
-            return new JsonResponse(array('type' => 'error', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Maximum</strong>: <strong>{$max}</strong>."));
+        $count = $repo->getShowcaseStartCount();
+        if ($value == 1 && $count >= Common::TALENT_SHOWCASE_COUNT)
+            return new JsonResponse(array('type' => 'error', 'message' => "There are already {$count} items selected"));
             
         // set value & save
         $eq->setShowcaseStart($value);
         $this->getDoctrine()->getManager()->flush();
                 
         // check for warning
-        $min = Common::SHOWCASE_MIN;
-        $cnt = $repo->getShowcaseStartCount() + $this->getDoctrineRepo('AppBundle:Equipment')->getShowcaseStartCount();
-        if ($cnt < $min)
-            return new JsonResponse(array('type' => 'warning', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected.<br/><strong>Minimum</strong>: <strong>{$min}</strong>."));
+        $count = $repo->getShowcaseStartCount();
+        $type = Common::TALENT_SHOWCASE_COUNT == $count ? "info" : "warning";
         
-        return new JsonResponse(array('type' => 'info', 'message' => "<strong>Start page</strong>: <strong>{$cnt}</strong> selected."));
+        return new JsonResponse(array('type' => $type, 'message' => "<strong>Start page</strong>: <strong>{$count}</strong> selected."));
     }    
     /**
      * @Route("admin-talent-showcase-talent/{id}/{value}", name="admin-talent-showcase-talent")
