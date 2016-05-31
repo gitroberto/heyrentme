@@ -58,7 +58,6 @@
             </div>
 
             <div class="container new-header rhomehead main-offers">
-                {#
                 {% if blogSc|length == 3 %}
                     {% for post in blogSc %}
                         <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
@@ -81,7 +80,6 @@
                         </a>
                     {% endfor %}
                 {% endif %}
-                #}
                 
                 {% if equipmentSc|length == 3 %}
                     <div class="row">

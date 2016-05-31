@@ -66,6 +66,10 @@ class Blog
      * @ORM\Column(type="boolean")
      */
     protected $published;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $showcase;
     
     
     public function setUuid($uuid)
@@ -291,5 +295,29 @@ class Blog
     public function getPublished()
     {
         return $this->published;
+    }
+
+    /**
+     * Set showcase
+     *
+     * @param boolean $showcase
+     *
+     * @return Blog
+     */
+    public function setShowcase($showcase)
+    {
+        $this->showcase = $showcase;
+
+        return $this;
+    }
+
+    /**
+     * Get showcase
+     *
+     * @return boolean
+     */
+    public function getShowcase()
+    {
+        return $this->showcase;
     }
 }

@@ -1,0 +1,3 @@
+
+ALTER TABLE `blog`
+	ADD COLUMN `showcase` SMALLINT NOT NULL DEFAULT '0' AFTER `published`;

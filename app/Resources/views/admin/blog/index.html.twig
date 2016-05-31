@@ -27,46 +27,70 @@
 {% block footer %}
     {{ include('admin/common/admin.footer.html.twig') }}
 <script>    
-$(document).ready(function(){    
-//*******************************************
-/*	JQGRID INIT
-/********************************************/
+    function gridComplete() {
+        $('input.showcase').on('change', showcaseChange);
+    }
+    function rowActions(cellvalue, options, cellobject) {
+          return   "<a title='Edit'             href='blog/edit/"   +  options.rowId + "'><u>Edit</u></a>  "+
+                   "<a title='Delete'           href='blog/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>  "+
+                   "<a title='Related'           href='blog/addrelated/" +  options.rowId + "' ><u>Related</u></a>  "+
+                   "<a title='Preview' target='_blank'  href='" +  cellobject[6] + "' ><u>Preview</u></a>"  ;
+      }
+    function showcaseActions(cellvalue, options, cellobject) {
+        var s = '<input type="checkbox" class="showcase" data-type="start" data-id="' + cellobject[1] + '" title="showcase start page"' + (cellobject[7] ? ' checked="checked" ' : '') + '/>';
+        return s;
+    }
+    function showcaseChange(e) {
+        var ch = $(this);
+        var val = ch.prop('checked') ? '1' : '0';
+        var url = '{{ path('admin-blog-showcase', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
+        url = url.replace('-ID-', ch.data('id')).replace('-VALUE-', val);
+        $.get(url)
+            .done(function(data) {
+                if (data.type === 'error') {
+                    ch.prop('checked', !ch.prop('checked')); // revert checkbox state
+                    toastr.error(data.message, 'Failed to save');
+                }
+                else {
+                    var f = toastr[data.type];
+                    f(data.message, 'Saved');
+                }
+            })
+            .fail(function(jqXHR) {
+                ch.prop('checked', !ch.prop('checked')); // revert checkbox state
+                toastr.error('Unexpected error occurred. Please try again.', 'Failed to save');
+            });        
+    }
 
+    $(function(){    
+        var grid = $('#jqgrid');
 
-function rowActions(cellvalue, options, cellobject) {
-      return   "<a title='Edit'             href='blog/edit/"   +  options.rowId + "'><u>Edit</u></a>  "+
-  	       "<a title='Delete'           href='blog/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>  "+
-               "<a title='Related'           href='blog/addrelated/" +  options.rowId + "' ><u>Related</u></a>  "+
-               "<a title='Preview' target='_blank'  href='" +  cellobject[6] + "' ><u>Preview</u></a>"  ;
-  }
-
-var grid = $('#jqgrid');
-
-if( $('#jqgrid').length > 0 ) {
-        grid.jqGrid({
-                url: '{{ path('admin_blog_jsondata') }}',
-                mtype: 'GET',
-                datatype: 'jsonp',
-                colModel:[
-                        { name:' ', width:200, fixed:true, editable:false, sortable:false, formatter:rowActions },
-                        { name:'Id', index:'b.id', width: 0, editable:false, sortable:false, hidden: true },
-                        { name:'Title', index:'b.title', width: 400, editable:false, sortable:true },
-                        { name:'Created', index:'b.createdAt', width: 130, editable:false, sortable:true },
-                        { name:'Modified', index:'b.modifiedAt', width: 130, editable:false, sortable:true },
-                        { name:'Position', index:'b.position', align:"right", width: 80, editable:false, sortable:true},
-                ],
-                height: 550,
-                rowNum: 20,
-                rowList: [20, 50, 100],
-                pager: 'jqgrid-pager',
-                sortname: 'b.position',
-                viewrecords: true,
-                sortorder: "asc",
-                multiselect: false,
-        });
-}
-
-}); // end ready function
+        if( $('#jqgrid').length > 0 ) {
+                grid.jqGrid({
+                        url: '{{ path('admin_blog_jsondata') }}',
+                        mtype: 'GET',
+                        datatype: 'jsonp',
+                        colModel:[
+                                { name:' ', width:200, fixed:true, editable:false, sortable:false, formatter:rowActions },
+                                { name:'Id', index:'b.id', width: 0, editable:false, sortable:false, hidden: true },
+                                { name:'Title', index:'b.title', width: 400, editable:false, sortable:true },
+                                { name:'Created', index:'b.createdAt', width: 130, editable:false, sortable:true },
+                                { name:'Modified', index:'b.modifiedAt', width: 130, editable:false, sortable:true },
+                                { name:'Position', index:'b.position', align:"right", width: 80, editable:false, sortable:true},
+                                { name: 'SC', index: 'b.showcase', align: 'center', width: 80, editable: false, sortable: true, formatter: showcaseActions }
+                        ],
+                        height: 550,
+                        rowNum: 20,
+                        rowList: [20, 50, 100],
+                        pager: 'jqgrid-pager',
+                        sortname: 'b.position',
+                        viewrecords: true,
+                        sortorder: "asc",
+                        gridComplete: gridComplete,
+                        multiselect: false
+                });
+        }
+    }); // end of ready function
 </script>    
     
 {% endblock %}
