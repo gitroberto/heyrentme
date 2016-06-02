@@ -18,7 +18,7 @@ class BlogRelated
      * @ORM\JoinColumn(name="related_blog_id", referencedColumnName="id")
      * @ORM\Id
      */
-    protected $relatedBog;
+    protected $relatedBlog;
     
     /**
      * @ORM\ManyToOne(targetEntity="Blog")
@@ -45,16 +45,16 @@ class BlogRelated
         return $this->blog;
     }
     
-     public function setRelatedBlog(\AppBundle\Entity\Blog $relatedBlog)
+    public function setRelatedBlog(\AppBundle\Entity\Blog $relatedBlog)
     {
-        $this->relatedBog = $relatedBlog;
+        $this->relatedBlog = $relatedBlog;
         return $this;
     }
 
     
     public function getRelatedBlog()
     {
-        return $this->relatedBog;
+        return $this->relatedBlog;
     }
 
     public function setPosition($position)

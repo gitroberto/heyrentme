@@ -13,11 +13,7 @@
 <br/>
 
 <div id="jqgrid-wrapper">
-        <table id="jqgrid" class="table table-striped table-hover">
-                <tr>
-                        <td></td>
-                </tr>
-        </table>
+        <table id="jqgrid" class="table table-striped table-hover"></table>
         <div id="jqgrid-pager"></div>
 </div>
 
@@ -27,70 +23,104 @@
 {% block footer %}
     {{ include('admin/common/admin.footer.html.twig') }}
 <script>    
-    function gridComplete() {
-        $('input.showcase').on('change', showcaseChange);
-    }
-    function rowActions(cellvalue, options, cellobject) {
-          return   "<a title='Edit'             href='blog/edit/"   +  options.rowId + "'><u>Edit</u></a>  "+
-                   "<a title='Delete'           href='blog/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>  "+
-                   "<a title='Related'           href='blog/addrelated/" +  options.rowId + "' ><u>Related</u></a>  "+
-                   "<a title='Preview' target='_blank'  href='" +  cellobject[6] + "' ><u>Preview</u></a>"  ;
-      }
-    function showcaseActions(cellvalue, options, cellobject) {
-        var s = '<input type="checkbox" class="showcase" data-type="start" data-id="' + cellobject[1] + '" title="showcase start page"' + (cellobject[7] ? ' checked="checked" ' : '') + '/>';
+
+function rowActions(cellvalue, options, cellobject) {
+    var s =
+        "<a class=\"grid-icon\" title='Edit'             href='blog/edit/"   +  options.rowId + "'><span class=\"glyphicon glyphicon-edit\"></span></a>"+
+        "<a class=\"grid-icon\" title='Related'           href='blog/addrelated/" +  options.rowId + "' ><span class=\"glyphicon glyphicon-indent-left\"></span></a>"+
+        "<a class=\"grid-icon\" title='Preview' target='_blank'  href='" +  cellobject[7] + "' ><span class=\"glyphicon glyphicon-picture\"></span></a>" +
+        "<a class=\"grid-icon\" title='Delete'           href='blog/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><span class=\"glyphicon glyphicon-remove\"></span></a>";
+        if (cellobject[2])
+            s += "<a class=\"grid-icon publish\" data-id=" +  options.rowId + " title='Unpublish' href=\"#\"><span class=\"glyphicon glyphicon-eye-open\"></span></a>";
+        else
+            s += "<a class=\"grid-icon publish\" data-id=" +  options.rowId + " title='Publish' href=\"#\"><span class=\"glyphicon glyphicon-eye-close\"></span></a>";
         return s;
-    }
-    function showcaseChange(e) {
-        var ch = $(this);
-        var val = ch.prop('checked') ? '1' : '0';
-        var url = '{{ path('admin-blog-showcase', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
-        url = url.replace('-ID-', ch.data('id')).replace('-VALUE-', val);
-        $.get(url)
-            .done(function(data) {
-                if (data.type === 'error') {
-                    ch.prop('checked', !ch.prop('checked')); // revert checkbox state
-                    toastr.error(data.message, 'Failed to save');
-                }
-                else {
-                    var f = toastr[data.type];
-                    f(data.message, 'Saved');
-                }
-            })
-            .fail(function(jqXHR) {
+}
+function showcaseActions(cellvalue, options, cellobject) {
+    var s = '<input type="checkbox" class="showcase" data-type="start" data-id="' + cellobject[1] + '" title="showcase start page"' + (cellobject[8] ? ' checked="checked" ' : '') + '/>';
+    return s;
+}
+function publishedFormatter(cellvalue, options, cellobject) {
+    return cellvalue ? "X" : "-";
+}
+function publish() {
+    var $a = $(this);
+    var url = '{{ path('admin_blog_publish', { 'id': '-ID-' }) }}';
+    url = url.replace('-ID-', $a.data('id'));
+    $.get(url)
+        .done(function(data) {
+            if (data.published) {
+                toastr.info('Blog post published successfully');
+                $a.attr('title', 'Unpublish');
+                $a.children().removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
+            }
+            else {
+                toastr.info('Blog post unpublished successfully');
+                $a.attr('title', 'Publish');
+                $a.children().removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
+            }
+        })
+        .fail(function() {
+            toastr.error('Unexpected error occurred. Please try again.', 'Failed to save');
+        });
+}
+function gridComplete() {
+    $("a.publish").click(publish);
+    $('input.showcase').on('change', showcaseChange);
+}
+function showcaseChange(e) {
+    var ch = $(this);
+    var val = ch.prop('checked') ? '1' : '0';
+    var url = '{{ path('admin-blog-showcase', { 'id': '-ID-', 'value': '-VALUE-' }) }}';
+    url = url.replace('-ID-', ch.data('id')).replace('-VALUE-', val);
+    $.get(url)
+        .done(function(data) {
+            if (data.type === 'error') {
                 ch.prop('checked', !ch.prop('checked')); // revert checkbox state
-                toastr.error('Unexpected error occurred. Please try again.', 'Failed to save');
-            });        
+                toastr.error(data.message, 'Failed to save');
+            }
+            else {
+                var f = toastr[data.type];
+                f(data.message, 'Saved');
+            }
+        })
+        .fail(function(jqXHR) {
+            ch.prop('checked', !ch.prop('checked')); // revert checkbox state
+            toastr.error('Unexpected error occurred. Please try again.', 'Failed to save');
+        });        
+}
+    
+$(document).ready(function(){    
+    var grid = $('#jqgrid');
+
+    if( $('#jqgrid').length > 0 ) {
+            grid.jqGrid({
+                    url: '{{ path('admin_blog_jsondata') }}',
+                    mtype: 'GET',
+                    datatype: 'jsonp',
+                    colModel:[
+                            { name:' ', width:200, fixed:true, editable:false, sortable:false, formatter:rowActions },
+                            { name:'Id', index:'b.id', width: 0, editable:false, sortable:false, hidden: true },
+                            { name:'Public', index:'b.published', width: 60, editable:false, sortable:true, align: 'center', formatter: publishedFormatter },
+                            { name:'Title', index:'b.title', width: 400, editable:false, sortable:true },
+                            { name:'Created', index:'b.createdAt', width: 130, editable:false, sortable:true },
+                            { name:'Modified', index:'b.modifiedAt', width: 130, editable:false, sortable:true },
+                            { name:'Position', index:'b.position', align:"right", width: 80, editable:false, sortable:true},
+                            { name: 'SC', index: 'b.showcase', align: 'center', width: 80, editable: false, sortable: true, formatter: showcaseActions }
+                    ],
+                    height: 550,
+                    rowNum: 20,
+                    rowList: [20, 50, 100],
+                    pager: 'jqgrid-pager',
+                    sortname: 'b.position',
+                    viewrecords: true,
+                    sortorder: "asc",
+                    multiselect: false,
+                    gridComplete: gridComplete
+            });
     }
 
-    $(function(){    
-        var grid = $('#jqgrid');
-
-        if( $('#jqgrid').length > 0 ) {
-                grid.jqGrid({
-                        url: '{{ path('admin_blog_jsondata') }}',
-                        mtype: 'GET',
-                        datatype: 'jsonp',
-                        colModel:[
-                                { name:' ', width:200, fixed:true, editable:false, sortable:false, formatter:rowActions },
-                                { name:'Id', index:'b.id', width: 0, editable:false, sortable:false, hidden: true },
-                                { name:'Title', index:'b.title', width: 400, editable:false, sortable:true },
-                                { name:'Created', index:'b.createdAt', width: 130, editable:false, sortable:true },
-                                { name:'Modified', index:'b.modifiedAt', width: 130, editable:false, sortable:true },
-                                { name:'Position', index:'b.position', align:"right", width: 80, editable:false, sortable:true},
-                                { name: 'SC', index: 'b.showcase', align: 'center', width: 80, editable: false, sortable: true, formatter: showcaseActions }
-                        ],
-                        height: 550,
-                        rowNum: 20,
-                        rowList: [20, 50, 100],
-                        pager: 'jqgrid-pager',
-                        sortname: 'b.position',
-                        viewrecords: true,
-                        sortorder: "asc",
-                        gridComplete: gridComplete,
-                        multiselect: false
-                });
-        }
-    }); // end of ready function
+}); // end ready function
 </script>    
     
 {% endblock %}
