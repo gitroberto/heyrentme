@@ -31,6 +31,8 @@ class ProviderController extends BaseController {
         $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());        
         $talents = $this->getDoctrineRepo('AppBundle:Talent')->getAllByUserId($user->getId());        
         
+        $this->clearNewIds($request);
+        
         return $this->render('provider/dashboard.html.twig', array( 
             'equipments'=> $equipments, 
             'talents' => $talents,
@@ -1706,5 +1708,25 @@ class ProviderController extends BaseController {
     }   
     */
     
+    private function clearNewIds($request) {
+        // remove "hanging" equipments (new but not saved)
+        $session = $request->getSession();
+
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());        
+        if (count($ids) === 0)
+            return;
+        
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrineRepo('AppBundle:Talent');
+        
+        foreach($ids as $id) {
+            $eq = $repo->find($id);
+            if ($eq !== null)
+                $em->remove($eq);
+        }
+        $em->flush();
+        
+        $session->set(TalentController::NEW_TALENT_IDS, array()); // clear session var
+    }
     
 }

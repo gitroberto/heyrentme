@@ -21,109 +21,79 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class TalentController extends BaseController {
+    
+    
+    public function formBasicAction(Request $request) {
+        $form = $this->createFormBuilder()
+            ->add('name', 'text', array(
+                'constraints' => array(
+                    new NotBlank(),
+                    new Length(array('max' => 32))
+                )
+            ))
+            ->getForm();
+        
+        return $this->render('talent/form_basic.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+    
+    public function formTariffAction(Request $request) {
+        $form = $this->createFormBuilder()
+                ->getForm();
+        return $this->render('talent/form_tariff1.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
 
     /**
      * @Route("/provider/talent-add-1/{subcategoryId}", name="talent-add-1")
      */
-    public function talentAdd1Action(Request $request, $subcategoryId) {
-        
-        // build form
-        //<editor-fold>
-        $form = $this->createFormBuilder(null, array(
-                'error_bubbling' => false,
-                'constraints' => array(
-                    /*new Callback(array($this, 'validateStep1'))*/
-                )))
-                ->add('name', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('max' => 32))
-                    )
-                ))
-                ->add('price', 'integer', array(
-                    'required' => false
-                ))
-                ->add('requestPrice', 'checkbox', array(
-                    'required' => false
-                ))
-                ->getForm();
-        //</editor-fold>
-        
-        $form->handleRequest($request);
-        
-        if ($form->isValid()) {
-            $data = $form->getData();
-            // get subcategory
-            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
-            $user = $this->getUser();
-            // map fields, TODO: consider moving to Talent's method
-            //<editor-fold> map fields
-            $eq = new Talent();
-            $eq->setUuid(Utils::getUuid());  
-            $eq->setName($data['name']);
-            $eq->setUser($user);
-            $eq->setSubcategory($subcat);
-            $eq->setPrice($data['price']);
-            $eq->setRequestPrice($data['requestPrice'] ? 1 : 0);
-            $eq->setStatus(Talent::STATUS_INCOMPLETE);
-            //</editor-fold>
-            // save to db
-            $em = $this->getDoctrine()->getManager();
-            if ($eq->checkStatusOnSave()){
-                $this->sendNewModifiedTalentInfoMessage($request, $eq);
-            }
-            $em->persist($eq);
-            $em->flush();
-            
-            $session = $request->getSession();
-            $session->set('TalentEditId', $eq->getId());
-            return $this->redirectToRoute('talent-edit-2', array('id' => $eq->getId()));
-        }
-        
-        return $this->render('talent/talent_edit_step1.html.twig', array(
-            'form' => $form->createView(),
-            'complete' => false,
-            'id' => $subcategoryId,
-            'statusChanged' => false
-        ));
-    }
-    
-    public function validateStep1($data, ExecutionContextInterface $context) {
-        $p = $data['price'];
-        $rp = $data['requestPrice'];
-        
-        if ($p === null xor $rp) {
-            $context->buildViolation('Sie müssen entweder Preis beim Check Preis auf Anfrage füllen.')->atPath('price')->addViolation();
-        }
-        if ($p !== null and ($p < 10 or $p > 500)) {
-            $context->buildViolation('Preis muss eine Zahl zwischen 10 und 500 sein.')->atPath('price')->addViolation();
-        }
-    }
-    
-    /**
-     * @Route("/provider/talent-delete/{id}", name="talent-delete")
-     */
-    public function talentDeleteAction(Request $request, $id) {
-        $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+    public function addAction(Request $request, $subcategoryId) {
+        $em = $this->getDoctrine()->getManager();
+        $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+        $user = $this->getUser();
 
-        // security check
-        if ($this->getUser()->getId() !== $talent->getUser()->getId()) {
-            return new Response($status = Response::HTTP_FORBIDDEN);
-        }
+        $tal = new Talent();
+        $tal->setUuid(Utils::getUuid());  
+        $tal->setName('');
+        $tal->setUser($user);
+        $tal->setSubcategory($subcat);
+        $tal->setStatus(Talent::STATUS_INCOMPLETE);
+
+        $em->persist($tal);
+        $em->flush();
         
-        if (!$talent) {
-            return new Response(Response::HTTP_NOT_FOUND);
-        }
+        $id = $tal->getId();
+        $this->addNewId($request, $id);
         
-        $this->getDoctrineRepo('AppBundle:Talent')->delete($talent->getId(), $this->getParameter('image_storage_dir'));
-                
-        return $this->redirectToRoute("dashboard");
+        return $this->redirectToRoute('talent-edit-1', array('id' => $id));
     }
+    
     
     /**
      * @Route("/provider/talent-edit-1/{id}", name="talent-edit-1")
      */
     public function talentEdit1Action(Request $request, $id) {
+        $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        if (!$talent) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }        
+        // security check
+        if ($this->getUser()->getId() !== $talent->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }
+        
+        return $this->render('talent/talent_edit_step1.html.twig', array(
+            'complete' => false,
+            'id' => $id,
+            'statusChanged' => false
+        ));
+    }        
+    /**
+     * @Route("/provider/talent-edit-1-old/{id}", name="talent-edit-1-old")
+     */
+    public function talentEdit1OldAction(Request $request, $id) {
         $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
         if (!$talent) {
             return new Response(Response::HTTP_NOT_FOUND);
@@ -204,7 +174,108 @@ class TalentController extends BaseController {
             'statusChanged' => $statusChanged
         ));
     }        
+    
+    
+    /**
+     * @Route("/provider/talent-add-1-old/{subcategoryId}", name="talent-add-1-old")
+     */
+    public function talentAdd1Action(Request $request, $subcategoryId) {
+        
+        // build form
+        //<editor-fold>
+        $form = $this->createFormBuilder(null, array(
+                'error_bubbling' => false,
+                'constraints' => array(
+                    /*new Callback(array($this, 'validateStep1'))*/
+                )))
+                ->add('name', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 32))
+                    )
+                ))
+                ->add('price', 'integer', array(
+                    'required' => false
+                ))
+                ->add('requestPrice', 'checkbox', array(
+                    'required' => false
+                ))
+                ->getForm();
+        //</editor-fold>
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
+            // get subcategory
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+            $user = $this->getUser();
+            // map fields, TODO: consider moving to Talent's method
+            //<editor-fold> map fields
+            $eq = new Talent();
+            $eq->setUuid(Utils::getUuid());  
+            $eq->setName($data['name']);
+            $eq->setUser($user);
+            $eq->setSubcategory($subcat);
+            $eq->setPrice($data['price']);
+            $eq->setRequestPrice($data['requestPrice'] ? 1 : 0);
+            $eq->setStatus(Talent::STATUS_INCOMPLETE);
+            //</editor-fold>
+            // save to db
+            $em = $this->getDoctrine()->getManager();
+            if ($eq->checkStatusOnSave()){
+                $this->sendNewModifiedTalentInfoMessage($request, $eq);
+            }
+            $em->persist($eq);
+            $em->flush();
+            
+            $session = $request->getSession();
+            $session->set('TalentEditId', $eq->getId());
+            return $this->redirectToRoute('talent-edit-2', array('id' => $eq->getId()));
+        }
+        
+        return $this->render('talent/talent_edit_step1.html.twig', array(
+            'form' => $form->createView(),
+            'complete' => false,
+            'id' => $subcategoryId,
+            'statusChanged' => false
+        ));
+    }
+    
+    
+    
+    public function validateStep1($data, ExecutionContextInterface $context) {
+        $p = $data['price'];
+        $rp = $data['requestPrice'];
+        
+        if ($p === null xor $rp) {
+            $context->buildViolation('Sie müssen entweder Preis beim Check Preis auf Anfrage füllen.')->atPath('price')->addViolation();
+        }
+        if ($p !== null and ($p < 10 or $p > 500)) {
+            $context->buildViolation('Preis muss eine Zahl zwischen 10 und 500 sein.')->atPath('price')->addViolation();
+        }
+    }
+    
+    /**
+     * @Route("/provider/talent-delete/{id}", name="talent-delete")
+     */
+    public function talentDeleteAction(Request $request, $id) {
+        $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
 
+        // security check
+        if ($this->getUser()->getId() !== $talent->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }
+        
+        if (!$talent) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+        
+        $this->getDoctrineRepo('AppBundle:Talent')->delete($talent->getId(), $this->getParameter('image_storage_dir'));
+                
+        return $this->redirectToRoute("dashboard");
+    }
+    
     private $currentVideo;
     
     /**
@@ -1226,4 +1297,21 @@ class TalentController extends BaseController {
         $this->get('mailer')->send($message);
         
     }
+
+    const NEW_TALENT_IDS = 'AppBundle\Controller\TalentController\NewTalentIds';
+    
+    private function addNewId(Request $request, $id) {
+        $session = $request->getSession();
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());
+        array_push($ids, $id);
+        $session->set(TalentController::NEW_TALENT_IDS, $ids);
+    }
+    private function removeNewId(Request $request, $id) {
+        $session = $request->getSession();
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());
+        $key = array_search($id, $ids);
+        if ($key !== FALSE)
+            unset($ids[$key]);
+        $session->set(TalentController::NEW_TALENT_IDS, $ids);
+    }    
 }

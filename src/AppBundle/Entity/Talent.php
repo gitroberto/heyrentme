@@ -146,6 +146,10 @@ class Talent {
      * @ORM\OneToMany(targetEntity="TalentRating", mappedBy="talent")
      */
     protected $ratings;
+    /**
+     * @ORM\OneToMany(targetEntity="TalentTariff", mappedBy="talent")
+     */
+    protected $tariffs;
     
     /**
      * @ORM\OneToOne(targetEntity="Video")
@@ -1188,5 +1192,39 @@ class Talent {
     public function getFeatured()
     {
         return $this->featured;
+    }
+
+    /**
+     * Add tariff
+     *
+     * @param \AppBundle\Entity\TalentTariff $tariff
+     *
+     * @return Talent
+     */
+    public function addTariff(\AppBundle\Entity\TalentTariff $tariff)
+    {
+        $this->tariffs[] = $tariff;
+
+        return $this;
+    }
+
+    /**
+     * Remove tariff
+     *
+     * @param \AppBundle\Entity\TalentTariff $tariff
+     */
+    public function removeTariff(\AppBundle\Entity\TalentTariff $tariff)
+    {
+        $this->tariffs->removeElement($tariff);
+    }
+
+    /**
+     * Get tariffs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTariffs()
+    {
+        return $this->tariffs;
     }
 }

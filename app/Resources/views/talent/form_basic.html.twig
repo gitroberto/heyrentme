@@ -1,0 +1,5 @@
+{{ form_start(form) }}
+    <label for="name2">Angebotsname:*</label>
+    {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 32 Zeichen', 'class': 'normal-input', 'maxlength': '32' } }) }}
+    <div class="err-msg">{{ form_errors(form.name) }}</div>
+{{ form_end(form) }}

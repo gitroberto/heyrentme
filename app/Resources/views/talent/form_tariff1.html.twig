@@ -1,0 +1,20 @@
+{{ form_start(form, { 'attr': { 'id': 'tariff-form' }}) }}
+    <div class="row">
+        <div class="col-sm-6">
+           Einheit wählen:
+           <select id="tariff-picker" style="width: 100px;">
+               <option value="1" selected="selected">Einzelstunden</option>
+               <option value="2">Gruppenstunden</option>
+               <option value="3">Workshop</option>
+               <option value="4">Performance</option>
+               <option value="5">5erblock</option>
+               <option value="6">10erblock</option>
+               <option value="7">Tagessatz</option>
+           </select>
+        </div>
+        <div class="col-sm-6">
+            Preis pro Std. ab: 
+            <input type="text"/>
+        </div>
+    </div> 
+{{ form_end(form) }}
