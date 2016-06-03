@@ -29,6 +29,10 @@ class TalentTariff {
     /**
      * @ORM\Column(type="integer")
      */
+    private $type;
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $minNumPerson;
     /**
      * @ORM\Column(type="integer")
@@ -340,4 +344,28 @@ class TalentTariff {
         return $this->talent;
     }
     //</editor-fold>
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return TalentTariff
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }

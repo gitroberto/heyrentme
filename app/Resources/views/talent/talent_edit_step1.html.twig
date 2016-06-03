@@ -43,7 +43,9 @@
                     <div class="form-container form-input form-last-item">
                         <div class="row">
                              <div class="col-sm-12">
-                                 {{ render(controller('AppBundle:Talent:formBasic')) }}
+                                 <div id="basic-form">
+                                    {{ render(controller('AppBundle:Talent:formBasic', { 'id': id })) }}
+                                 </div>
                               </div>
                         </div>                         
                     </div>
@@ -62,11 +64,13 @@
                               
                 <div class="col-xs-12">
                     <div class="form-container form-input form-last-item">
-                        {{ render(controller('AppBundle:Talent:formTariff')) }}
+                        <div id="tariff-form">
+                            {{ render(controller('AppBundle:Talent:formTariff', { 'id': id, 'type': type })) }}
+                        </div>
                     </div>                     
                 </div>                              
             </div>
-            <input type="submit" class="yellow-button" value="Tarif speichern &gt;&gt;">
+            <input type="submit" id="basic-submit" class="yellow-button" value="Tarif speichern &gt;&gt;">
         </div>
         <!--<div class="col-xs-3">
             <div class="support">
@@ -96,16 +100,60 @@
     <script>
         
         $(function() {
-            var $tariffPicker = $("#tariff-picker");
+            initBasicForm();
+            initTariffForm();
+        }); // end of ready
+        
+        function initTariffForm() {
+            var $tariffPicker = $("#form_type");
             $tariffPicker.selectpicker({
                 width: 200,
                 style: 'btn-info'
             });
-            
-        }); // end of ready
-        
+            $tariffPicker.on('changed.bs.select', tariffChanged);
+            $("#tariff-save").click(tariffSave);
+        }
+        function initBasicForm() {
+            $("#basic-submit").click(basicSubmit);            
+        }
         function tariffChanged() {
-            console.log('tariff-changed');
+            var type = $("#form_type").selectpicker('val');
+            var url = '{{ path('talent-detail-form', { 'id': id, 'type': '-TYPE-' }) }}';
+            url = url.replace('-TYPE-', type);
+            
+            $("#tariff-form").load(url, function() {
+                initTariffForm();
+            });
+        }
+        function tariffSave(e) {
+            e.preventDefault();
+            
+            var $form = $('#tariff-form form');
+            if ($form[0].checkValidity())
+                $form.ajaxSubmit({
+                    target: $('#tariff-form'),
+                    success: function() { 
+                        initTariffForm();
+                        console.log('tariff form success'); 
+                    }
+                });
+            else
+                $('<input type="submit">').hide().appendTo($form).click().remove();
+        }
+        function basicSubmit(e) {
+            e.preventDefault();
+            
+            var $form = $('#basic-form form');
+            if ($form[0].checkValidity())
+                $form.ajaxSubmit({
+                    target: $('#basic-form'),
+                    success: function() { 
+                        initBasicForm();
+                        console.log('basic form success'); 
+                    }
+                });
+            else 
+                $('<input type="submit">').hide().appendTo($form).click().remove();
         }
         {#
       var fieldsChanged = false;

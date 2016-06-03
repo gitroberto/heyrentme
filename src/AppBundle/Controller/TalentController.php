@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentImage;
+use AppBundle\Entity\TalentTariff;
+use AppBundle\Entity\TariffType;
 use AppBundle\Entity\Video;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,29 +25,142 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class TalentController extends BaseController {
     
     
-    public function formBasicAction(Request $request) {
-        $form = $this->createFormBuilder()
-            ->add('name', 'text', array(
-                'constraints' => array(
-                    new NotBlank(),
-                    new Length(array('max' => 32))
-                )
-            ))
-            ->getForm();
+    /**
+     * @Route("/provider/talent-basic-form/{id}", name="talent-basic-form")
+     */
+    public function formBasicAction(Request $request, $id) {
+        $success = false;
+        $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        $data = array(
+            'name' => $tal->getName(),
+            'id' => $tal->getId()
+        );
+        
+        $action = $this->generateUrl('talent-basic-form', array('id' => $id));
+        $form = $this->createFormBuilder($data, array(
+                    'constraints' => array(
+                        new Callback(array($this, 'formBasicValidation'))
+                    )
+                ))
+                ->setAction($action)
+                ->add('name', 'text', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 32))
+                    )
+                ))
+                ->add('id', 'hidden')
+                ->add('success', 'hidden')
+                ->getForm();
+        
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $tal->setName($data['name']);
+            $this->getDoctrine()->getManager()->flush();
+            $success = true;            
+        }
         
         return $this->render('talent/form_basic.html.twig', array(
+            'form' => $form->createView(),
+            'success' => $success,
+            'id' => $id
+        ));
+    }
+    
+    public function formBasicValidation($data, ExecutionContextInterface $context) {
+        $count = $this->getDoctrineRepo('AppBundle:Talent')->getTariffCount($data['id']);
+        if ($count === 0) 
+            $context->addViolation('Bitte definieren Sie mindestens eine Tarifoption');
+    }
+    
+    /**
+     * @Route("/provider/talent-detail-form/{id}/{type}", name="talent-detail-form")
+     */
+    public function formTariffAction(Request $request, $id, $type) {
+        $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        $tariff = $this->getDoctrineRepo('AppBundle:Talent')->getTariff($id, $type);
+        $url = $this->generateUrl('talent-detail-form', array('id' => $id, 'type' => $type));
+        $form = $this->getTariffForm($type, $tariff, $url);
+        
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
+            if ($tariff === null) {
+                $tariff = new TalentTariff();
+                $tariff->setTalent($tal);
+                $tariff->setType($type);
+                $this->collectTariffFormData($tariff, $data, $type);
+                $em->persist($tariff);                
+            }
+            else {
+                $this->collectTariffFormData($tariff, $data, $type);
+            }
+            $em->flush();
+            
+        }
+        
+        $tmpl = sprintf('talent/form_tariff%d.html.twig', $type);
+        return $this->render($tmpl, array(
             'form' => $form->createView()
         ));
     }
     
-    public function formTariffAction(Request $request) {
-        $form = $this->createFormBuilder()
-                ->getForm();
-        return $this->render('talent/form_tariff1.html.twig', array(
-            'form' => $form->createView()
-        ));
+    private function getTariffForm($type, $tariff, $url) {
+        if ($type === TariffType::$EINZELSTUNDEN->getId()) {
+            $data = array();
+            $data['type'] = strval($type);
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+            }
+            $form = $this->createFormBuilder($data)
+                    ->setAction($url)
+                    ->add('type', 'choice', array(
+                        'choices' => TariffType::getChoices()
+                    ))
+                    ->add('price', 'integer', array(
+                        'constraints' => array(
+                            new NotBlank(),
+                            new Range(array('min' => 10, 'max' => 100))
+                        )
+                    ))
+                    ->getForm();
+        }
+        else /*if ($type === TariffType::$GRUPPENSTUNDEN)*/ {
+            $data = array();
+            $data['type'] = strval($type);
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+            }
+            $form = $this->createFormBuilder($data)
+                    ->setAction($url)
+                    ->add('type', 'choice', array(
+                        'choices' => TariffType::getChoices()
+                    ))
+                    ->add('price', 'integer', array(
+                        'constraints' => array(
+                            new NotBlank(),
+                            new Range(array('min' => 10, 'max' => 100))
+                        )
+                    ))
+                    ->getForm();
+        }
+        return $form;        
     }
-
+    private function collectTariffFormData($tariff, $data, $type) {
+        $tariff->setType($type);
+        if ($type === TariffType::$EINZELSTUNDEN->getId()) {
+            $tariff->setPrice($data['price']);
+        }
+        else {
+            $tariff->setPrice($data['price']);
+        }
+        
+    }
+    
     /**
      * @Route("/provider/talent-add-1/{subcategoryId}", name="talent-add-1")
      */
@@ -87,7 +202,8 @@ class TalentController extends BaseController {
         return $this->render('talent/talent_edit_step1.html.twig', array(
             'complete' => false,
             'id' => $id,
-            'statusChanged' => false
+            'statusChanged' => false,
+            'type' => TariffType::$EINZELSTUNDEN->getId()
         ));
     }        
     /**
