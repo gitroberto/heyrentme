@@ -171,7 +171,8 @@ EOT;
             ->from('AppBundle:Blog', 'b')
             ->andWhere('b.published = 1')
             ->andWhere('b.showcase = 1')
-            ->addOrderBy('b.createdAt', 'desc')
+            ->addOrderBy('b.position', 'asc')
+            ->addOrderBy('b.modifiedAt', 'desc')
             ->setMaxResults(3)
             ->getQuery()
             ->getResult();
