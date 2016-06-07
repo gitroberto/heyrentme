@@ -805,5 +805,21 @@ EOT;
         else 
             return null;
     }
+    public function getTariffs($talentId) {
+        $q = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('t')
+                ->from('AppBundle:TalentTariff', 't')
+                ->andWhere('t.talent = :talentId')
+                ->setParameter('talentId', $talentId)
+                ->addOrderBy('t.position', 'asc')
+                ->getQuery();
+        $rows = $q->getResult();
+        if (count($rows) === 1)
+            return $rows[0];
+        else 
+            return null;
+    }
+    
 }
 

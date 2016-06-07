@@ -162,6 +162,22 @@ class TalentController extends BaseController {
     }
     
     /**
+     * @Route("/provider/talent-tariffs/{id}", name="talent-tariffs")
+     */
+    public function tariffsAction(Request $request, $id) {
+        $tariffs = $this->getDoctrineRepo('AppBundle:Talent')->getTariffs($id);
+        
+        $arr = array();
+        foreach ($tariffs as $t)
+            array_push ($arr, array(
+                'id' => $t->getId(),
+                'name' => $t->getName()
+                ));
+        
+    }
+    
+    
+    /**
      * @Route("/provider/talent-add-1/{subcategoryId}", name="talent-add-1")
      */
     public function addAction(Request $request, $subcategoryId) {
