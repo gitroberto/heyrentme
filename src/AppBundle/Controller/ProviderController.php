@@ -495,6 +495,7 @@ class ProviderController extends BaseController {
             'deposit' => $equipment->getDeposit(),
             'value' => $equipment->getValue(),
             'priceBuy' => $equipment->getPriceBuy(),
+            'testDrive' => $equipment->getTestDrive(),
             'invoice' => $equipment->getInvoice(),
             'industrial' => $equipment->getIndustrial(),
             'service' => $equipment->getService(),
@@ -555,6 +556,12 @@ class ProviderController extends BaseController {
                         new Range(array('min' => 0, 'max' => 20000))
                     )
                 ))
+                ->add('testDrive', 'checkbox', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Callback(array($this, 'validateTestDrive'))
+                    )
+                ))
                 ->add('ageId', 'choice', array(
                     'choices' => $ageArr,
                     'choices_as_values' => false,
@@ -587,6 +594,7 @@ class ProviderController extends BaseController {
             $equipment->setValue($data['value']);
             $equipment->setDeposit($data['deposit']);
             $equipment->setPriceBuy($data['priceBuy']);
+            $equipment->setTestDrive($data['testDrive']);
             $equipment->setInvoice($data['invoice']);
             $equipment->setIndustrial($data['industrial']);
             $equipment->setService($data['service']);
@@ -682,6 +690,12 @@ class ProviderController extends BaseController {
                         new Range(array('min' => 0, 'max' => 20000))
                     )
                 ))
+                ->add('testDrive', 'checkbox', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Callback(array($this, 'validateTestDrive'))
+                    )
+                ))
                 ->add('ageId', 'choice', array(
                     'choices' => $ageArr,
                     'choices_as_values' => false,
@@ -716,6 +730,7 @@ class ProviderController extends BaseController {
             $eq->setValue($data['value']);
             $eq->setDeposit($data['deposit']);
             $eq->setPriceBuy($data['priceBuy']);
+            $eq->setTestDrive($data['testDrive']);
             $eq->setInvoice($data['invoice']);
             $eq->setIndustrial($data['industrial']);
             $eq->setService($data['service']);
@@ -744,6 +759,14 @@ class ProviderController extends BaseController {
             'statusChanged' => false
         ));
     }
+    public function validateTestDrive($value, ExecutionContextInterface $context) {
+        $data = $context->getRoot()->getData();
+        $price = $data['priceBuy'];
+        $test = $data['testDrive'];
+        if ($test && ($price === null || $price === 0))
+            $context->addViolation('Sie müssen in Verkaufspreis zu füllen Probefahrt zu ermöglichen.');
+    }    
+    
     /**
      * @Route("/provider/equipment-edit-2/{id}", name="equipment-edit-2")
      */

@@ -212,6 +212,10 @@ class Equipment
      * @ORM\Column(type="boolean")
      */
     protected $featured = false;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $testDrive = false;
     
     
     public function setUuid($uuid)
@@ -1442,5 +1446,29 @@ class Equipment
     public function getFeatured()
     {
         return $this->featured;
+    }
+
+    /**
+     * Set testDrive
+     *
+     * @param boolean $testDrive
+     *
+     * @return Equipment
+     */
+    public function setTestDrive($testDrive)
+    {
+        $this->testDrive = $testDrive;
+
+        return $this;
+    }
+
+    /**
+     * Get testDrive
+     *
+     * @return boolean
+     */
+    public function getTestDrive()
+    {
+        return $this->testDrive;
     }
 }
