@@ -87,18 +87,19 @@
           <select id="sort" class="selectpicker" title="Neuste zuerst">
             <option value="date">Neueste zuerst</option>
             <option value="price">Preis: niedrigster zuerst</option>
-        </select>
-          <div class="chbox-holder">
-            <input type="checkbox" id="buy" {% if searchParams.testBuy %}checked="checked"{% endif %} />
-            <label for="buy"><span></span>Test & Buy</label>
-          </div>
-          {# TODO: move style to class #}
-          {#
-          <div class="chbox-holder" style="margin-left: 8px;">
-            <input type="checkbox" id="discount" {% if searchParams.discount %}checked="checked"{% endif %} />
-            <label for="discount"><span></span>Discount</label>
-          </div>
-          #}
+          </select>
+            <p>Filtern nach:</p>
+            <select id="filter" multiple style="display: none;">
+                <optgroup label="Optionen">
+                    <option value="priceBuy">Test &amp; Buy</option>
+                    <option value="testDrive">Probefahrt</option>
+                </optgroup>
+                <optgroup label="Detailkategorien">
+                {% for subcat in subcategories %}
+                    <option value="{{ subcat.id }}">{{ subcat.name }}</option>
+                {% endfor %}
+                </optgroup>
+            </select>          
         </div>
         <div class="clearfix"></div>
         <div id="equipment-list">
@@ -118,7 +119,7 @@
         $sort.selectpicker('refresh');
         $sort.selectpicker('val', '{{ searchParams.sort }}');
         initGrids();
-        $("#sort, #buy, #discount").change(search);
+        $("#sort").change(search);
         $("#suche-dropdown").change(function() {
             if ($(this).val() === 'BIETE') {
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
@@ -129,6 +130,15 @@
                 {% endif %}
             }
         });
+        
+        $("#filter").val({{ searchParams.optionsAsArray|raw }});
+        $("#filter").selectpicker({
+            'style': 'btn-info',
+            'showTick': true,
+            'noneSelectedText': 'nichts ausgewählt',
+            'width': 'auto'
+        });
+        $("#filter").on('changed.bs.select', search);
     });
     
     function initGrids() {
@@ -158,26 +168,25 @@
     }
     function search() {
         {# wait 1 seconds before actual search (in case user changes another search option) #}
-        console.log('search');
         if (typeof window.searchT !== 'undefined') {
             window.clearTimeout(window.searchT);
         }
         window.searchT = window.setTimeout(doSearch, 1000);
     }
     function doSearch() {
-        console.log('doSearch');
+        var opts = $("#filter").selectpicker('val');
         var url = '{{ path('equipment-list') }}';
         var data = {
             'sort': $("#sort").val(),
-            'testBuy': $("#buy").is(':checked') ? 1 : 0,
+            'options': opts,
             'type': {{ constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') }}
             //, 'discount': $("#discount").is(':checked') ? 1 : 0
         };
-        console.log(JSON.stringify(data));
         $("#pls-wait").modal();
         $("#equipment-list").load(url, data, function() {
             initGrids();
             $("#pls-wait").modal('hide');
+            $("#filter").next().removeClass('open');
         });
     }
   </script>
