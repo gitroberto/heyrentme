@@ -23,6 +23,8 @@ class SearchParams {
         }
         if ($request->request->has('options')) {
             $opts = $request->get('options');
+            if (is_string($opts))
+                $opts = array($opts);
             $this->testDrive = in_array('testDrive', $opts);
             $this->testBuy = in_array('priceBuy', $opts);
             $this->subcategoryIds = array();
