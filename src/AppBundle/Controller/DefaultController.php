@@ -154,8 +154,7 @@ class DefaultController extends BaseController {
     }
     
     private function processCategory(Request $request, $content) {
-        $cat = $this->getCategoryBySlug($request, $content);
-        $subcats = $this->getSubcategories($request, $cat['id']);
+        $cat = $this->getCategoryBySlug($request, $content);        
         $sp = $this->getSearchParams($request, $cat['type']);
         $sp->setCategoryId($cat['id']);
         $request->getSession()->set('SearchState', $sp);
@@ -165,10 +164,12 @@ class DefaultController extends BaseController {
             
             if ($cat['type'] === Category::TYPE_EQUIPMENT) {
                 $tmpl = 'default/categorie.html.twig';
+                $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForEquipmentFilter($cat['id']);
             } else {
                 $tmpl = 'default/categorie-talent.html.twig';
+                $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForTalentFilter($cat['id']);
             }
-
+            
             return $this->render($tmpl, array(
                 'category' => $cat,
                 'searchParams' => $sp,

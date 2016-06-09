@@ -648,3 +648,13 @@ div.btn-group.bootstrap-select.disabled {
     opacity: 0.5;
     background-color: rgb(20, 20, 20);
 }
+
+.bootstrap-select .popover-title {
+    width: 100%;
+}
+
+#filter + .bootstrap-select .dropdown-menu,
+#sort + .bootstrap-select .dropdown-menu 
+{
+    top: 25px !important;
+}

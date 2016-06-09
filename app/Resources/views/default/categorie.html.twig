@@ -96,7 +96,7 @@
                 </optgroup>
                 <optgroup label="Detailkategorien">
                 {% for subcat in subcategories %}
-                    <option value="{{ subcat.id }}">{{ subcat.name }}</option>
+                    <option value="{{ subcat[0].id }}">{{ subcat[0].name }} ({{ subcat[1] }})</option>
                 {% endfor %}
                 </optgroup>
             </select>          
@@ -135,10 +135,11 @@
         $("#filter").selectpicker({
             'style': 'btn-info',
             'showTick': true,
-            'noneSelectedText': 'nichts ausgewählt',
-            'width': 'auto'
+            'noneSelectedText': 'Alle anzeigen',
+            'width': 'auto',
+            'header': 'Optionen und Detailkategorien wählen'
         });
-        $("#filter").on('changed.bs.select', search);
+        $("#filter").on('hidden.bs.select', search);
     });
     
     function initGrids() {
@@ -171,7 +172,7 @@
         if (typeof window.searchT !== 'undefined') {
             window.clearTimeout(window.searchT);
         }
-        window.searchT = window.setTimeout(doSearch, 1000);
+        window.searchT = window.setTimeout(doSearch, 0); // delay not necessary
     }
     function doSearch() {
         var opts = $("#filter").selectpicker('val');
