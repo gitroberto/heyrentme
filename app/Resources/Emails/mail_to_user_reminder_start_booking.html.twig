@@ -38,10 +38,10 @@
                 {% if booking.totalPrice %}
                     {{ booking.totalPrice|number_format(2, ',') }} €
                 {% else %}
-                    probefahrt
+                    Probefahrt
                 {% endif %}
             </p>
-            {% if not item.deposit %}
+            {% if not item.service and booking.totalPrice %}
                 <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Kaution:</span> {{ inquiry.deposit|number_format(2, ',') }} €</p>
             {% endif %}
             <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-top: 5px;margin-bottom: 0px;"><span style="font-weight: bold;">Ort:</span> {{ item.addressAsString }}</p>

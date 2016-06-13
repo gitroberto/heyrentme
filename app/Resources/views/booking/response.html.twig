@@ -64,10 +64,10 @@
                             {% if inquiry.price %}
                                 {{ inquiry.price|number_format(2, ',') }} €
                             {% else %}
-                                probefahrt
+                                Probefahrt
                             {% endif %}
                         </p>
-                        {% if not equipment.service %}
+                        {% if not equipment.service and inquiry.price %}
                             <p class="no-margin-bottom"><strong> Kaution:</strong> {{ inquiry.deposit|number_format(2, ',') }} €</p>
                         {% endif %}
                         <p><strong>Ort:</strong> {{ equipment.addressAsString }}

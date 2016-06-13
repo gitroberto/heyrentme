@@ -23,7 +23,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p class="price">
-                                    {% if equipment.testDrive %}probefahrt{% else %}{{ equipment.price|number_format(2, ',') }} €{% endif %}
+                                    {% if equipment.testDrive %}Probefahrt{% else %}{{ equipment.price|number_format(2, ',') }} €{% endif %}
                                 </p>
                                 {% if not equipment.testDrive %}
                                     <p class="tag">pro Tag</p>
@@ -45,7 +45,7 @@
                         {% if booking.price %}
                             {{ booking.totalPrice|number_format(2, ',') }} €
                         {% else %}
-                            probefahrt
+                            Probefahrt
                         {% endif %}
                     </p>
                     <p class="dont-transform">

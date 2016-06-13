@@ -39,7 +39,7 @@
                                     {% if booking.inquiry.equipment is defined %}
                                         <p class="price">
                                             {% if item.testDrive %}
-                                                probefahrt
+                                                Probefahrt
                                             {% else %}
                                                 {{ item.price|number_format(2, ',') }} €
                                             {% endif %}
@@ -76,7 +76,7 @@
                             {% if booking.totalPrice %}
                                 {{ booking.totalPrice|number_format(2, ',') }} €
                             {% else %}
-                                probefahrt
+                                Probefahrt
                             {% endif %}
                         </p>
                         <p class="dont-transform">
@@ -145,7 +145,7 @@
                             {% if booking.totalPrice %}
                                 {{ booking.totalPrice|number_format(2, ',') }} €
                             {% else %}
-                                probefahrt
+                                Probefahrt
                             {% endif %}
                         </p>
                         <p class="dont-transform">

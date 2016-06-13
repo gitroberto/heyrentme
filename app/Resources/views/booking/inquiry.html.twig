@@ -8,10 +8,10 @@
             {% if inquiry.price %}
                 <span class="price-calc">{{ inquiry.price|number_format(2, ',') }}</span> €
             {% else %}
-                probefahrt
+                Probefahrt
             {% endif %}
         </p>
-        {% if not equipment.service %}
+        {% if not equipment.service and inquiry.price %}
             <p><span class="text-bold">Kaution:</span> {{ equipment.deposit|number_format(2, ',') }} €</p>
         {% endif %}
         {% if equipment.priceBuy %}
