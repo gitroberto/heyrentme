@@ -4,7 +4,13 @@
         <h4 class="modal-title">Unverbindliche Anfrage</h4>
         <p><span class="text-bold" >Abholung:</span>  <span id="from-date">{{ inquiry.from|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</span>, <span id="from-time">&nbsp; &nbsp; &nbsp; &nbsp; {{ inquiry.from|date('H:i') }}</span> </p>
         <p><span class="text-bold">Rückgabe:</span> <span id="to-date">{{ inquiry.to|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</span>, <span id="to-time">&nbsp; &nbsp; &nbsp; &nbsp; {{ inquiry.to|date('H:i') }}</span></p>
-        <p><span class="text-bold">Kosten ab: </span><span class="price-calc">{{ inquiry.price|number_format(2, ',') }}</span> €</p>
+        <p><span class="text-bold">Kosten ab: </span>
+            {% if inquiry.price %}
+                <span class="price-calc">{{ inquiry.price|number_format(2, ',') }}</span> €
+            {% else %}
+                probefahrt
+            {% endif %}
+        </p>
         {% if not equipment.service %}
             <p><span class="text-bold">Kaution:</span> {{ equipment.deposit|number_format(2, ',') }} €</p>
         {% endif %}

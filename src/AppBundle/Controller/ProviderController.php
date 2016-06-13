@@ -521,9 +521,10 @@ class ProviderController extends BaseController {
                     )
                 ))
                 ->add('price', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 2500))
+                        new Range(array('min' => 10, 'max' => 2500)),
+                        new Callback(array($this, 'validatePrice'))
                     )
                 ))
                 ->add('priceWeek', 'integer', array(
@@ -655,9 +656,10 @@ class ProviderController extends BaseController {
                     )
                 ))
                 ->add('price', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 2500))
+                        new Range(array('min' => 10, 'max' => 2500)),
+                        new Callback(array($this, 'validatePrice'))
                     )
                 ))
                 ->add('priceWeek', 'integer', array(
@@ -766,6 +768,13 @@ class ProviderController extends BaseController {
         if ($test && ($price === null || $price === 0))
             $context->addViolation('Sie müssen in Verkaufspreis zu füllen Probefahrt zu ermöglichen.');
     }    
+    public function validatePrice($value, ExecutionContextInterface $context) {
+        $data = $context->getRoot()->getData();
+        $price = $data['price'];
+        $test = $data['testDrive'];
+        if ($price === null && !$test)
+            $context->addViolation ('Dieser Wert kann leer sein, nur dann, wenn Probefahrt aktiviert ist.');
+    }
     
     /**
      * @Route("/provider/equipment-edit-2/{id}", name="equipment-edit-2")

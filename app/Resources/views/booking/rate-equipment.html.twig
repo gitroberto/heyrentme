@@ -21,8 +21,11 @@
                                 {{ include('common/stars.html.twig', { rating: equipment.rating }) }}
                                 <p class="product-name">{{ equipment.name }}</p>
                             </div>
-                                <div class="col-xs-6"><p class="price">{{ equipment.price|number_format(2, ',') }} €</p>
-                                <p class="tag">pro Tag</p>
+                                <div class="col-xs-6">
+                                    <p class="price">
+                                        {% if equipment.testDrive %}probefahrt{% else %}{{ equipment.price|number_format(2, ',') }} €{% endif %}
+                                    </p>
+                                    {% if not equipment.testDrive %}<p class="tag">pro Tag</p>{% endif %}
                             </div>
                         </div>
                     </div>

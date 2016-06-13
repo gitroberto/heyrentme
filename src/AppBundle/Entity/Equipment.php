@@ -308,7 +308,7 @@ class Equipment
             array_push($arr, sprintf("%d", $p));
         return implode("/", $arr);
     }
-    public function getPricesDesc() {
+    public function getPricesDesc() {       
         $arr = array();
         array_push($arr, "T");
         $p = $this->getPriceWeek();
@@ -346,7 +346,10 @@ class Equipment
         $pw = $this->priceWeek;
         if ($days >= 7 && $pw !== null && $pw > 0)
             return $days * $pw / 7.0;
-        return $days * $this->price;
+        if ($this->price === null)
+            return null;
+        else
+            return $days * $this->price;
     }
     
     /**

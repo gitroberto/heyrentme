@@ -196,7 +196,11 @@
                 <div class="panel panel-default einzelstunden">
                     <div class="panel-heading" id="robert-heading">
                         <p class="panel-title">
-                           Ab {{ item.detailPricesLine|raw }} € 
+                            {% if item.testDrive %}
+                                Probefahrt
+                            {% else %}
+                                Ab {{ item.detailPricesLine|raw }} € 
+                            {% endif %}
                             <span class="pull-right">
                                 <a>
                                     <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
@@ -273,8 +277,17 @@
                             <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
                         </select>
                     </div>
-                    <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
-                    <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
+                    {% if not item.testDrive %}
+                        <p>
+                            Preis
+                            <span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span>
+                        </p>
+                    {% endif %}
+                    {% if item.testDrive %}
+                        <p class="price">Probefahrt</p>
+                    {% else %}                        
+                        <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
+                    {% endif %}
                     <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                 </div>
             
@@ -461,7 +474,7 @@
         $(tag).html(date);
     };
     function calculatePrice(days) {
-        var pd = {{ item.price }};
+        var pd = {% if item.price %}{{ item.price|number_format(2, '.', '') }}{% else %}null{% endif %};
         var pw = {% if item.priceWeek %}{{ item.priceWeek|number_format(2, '.', '') }}{% else %}null{% endif %};
         var pm = {% if item.priceMonth %}{{ item.priceMonth|number_format(2, '.', '') }}{% else %}null{% endif %};
         
@@ -469,7 +482,7 @@
             return pm / 30.0 * days;
         if (days >= 7 && pw !== null)
             return pw / 7.0 * days;
-        return days * pd;
+        return pd === null ? null : days * pd;
         
     }
     $(document).ready(function(){
@@ -542,7 +555,8 @@
 
                 var p = (Math.round(d) + 1) * {{ item.activePrice|number_format(2, '.', '') }};
                 p = calculatePrice(Math.round(d) + 1);
-                $('.price-calc').html(p.toFixed(2).replace('.', ','));
+                if (p !== null)
+                    $('.price-calc').html(p.toFixed(2).replace('.', ','));
                 $('#date-range').val('AB '+ s1 + ' BIS '+s2);
             }
         };
