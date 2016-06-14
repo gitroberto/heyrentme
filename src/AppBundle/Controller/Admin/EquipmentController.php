@@ -287,6 +287,7 @@ class EquipmentController extends BaseAdminController {
             'deposit' => $equipment->getDeposit(),
             'value' => $equipment->getValue(),
             'priceBuy' => $equipment->getPriceBuy(),
+            'testDrive' => $equipment->getTestDrive(),
             'invoice' => $equipment->getInvoice(),
             'industrial' => $equipment->getIndustrial(),
             'service' => $equipment->getService(),
@@ -319,11 +320,11 @@ class EquipmentController extends BaseAdminController {
         // build form
         //<editor-fold>
         $ageArr = $this->getDoctrineRepo('AppBundle:EquipmentAge')->getAllForDropdown();        
-        $form = $this->createFormBuilder($data, array('constraints' => array(
-                            new Callback(array($this, 'validateTime'))
-                        ) )                
-                
+        $form = $this->createFormBuilder($data, array(
+            'constraints' => array(
+                    new Callback(array($this, 'validateTime'))                
                 )
+            ))
                 ->add('subcategoryId', 'choice', array(
                     'choices' => $subcats,
                     'choices_as_values' => false,
@@ -340,9 +341,10 @@ class EquipmentController extends BaseAdminController {
                     )
                 ))
                 ->add('price', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 2500))
+                        new Range(array('min' => 10, 'max' => 2500)),
+                        new Callback(array($this, 'validatePrice'))
                     )
                 ))
                 ->add('priceWeek', 'integer', array(
@@ -375,6 +377,12 @@ class EquipmentController extends BaseAdminController {
                         new Range(array('min' => 0, 'max' => 50000))
                     )
                 ))
+                ->add('testDrive', 'checkbox', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Callback(array($this, 'validateTestDrive'))
+                    )
+                ))
                 ->add('ageId', 'choice', array(
                     'choices' => $ageArr,
                     'choices_as_values' => false,
@@ -398,7 +406,7 @@ class EquipmentController extends BaseAdminController {
                 ->add('make_sure', 'checkbox', array(
                     'required' => false,
                     'constraints' => array(
-                        new Callback(array($this, 'validateMakeSure'))                    
+                        new Callback(array($this, 'validateMakeSure'))
                     )
                 ))
                 ->add('street', 'text', array(
@@ -511,6 +519,7 @@ class EquipmentController extends BaseAdminController {
             $equipment->setValue($data['value']);
             $equipment->setDeposit($data['deposit']);
             $equipment->setPriceBuy($data['priceBuy']);
+            $equipment->setTestDrive($data['testDrive']);
             $equipment->setInvoice($data['invoice']);
             $equipment->setIndustrial($data['industrial']);
             $equipment->setService($data['service']);
@@ -527,7 +536,7 @@ class EquipmentController extends BaseAdminController {
             $equipment->setFunctional(intval($data['make_sure']));
             $equipment->setAccept(intval($data['accept']));
             //</editor-fold>
-            $em->flush();
+            //$em->flush();
             
             //EDIT3
             // map fields
@@ -574,6 +583,21 @@ class EquipmentController extends BaseAdminController {
                 
                 
         ));
+    }
+    
+    public function validateTestDrive($value, ExecutionContextInterface $context) {
+        $data = $context->getRoot()->getData();
+        $price = $data['priceBuy'];
+        $test = $data['testDrive'];
+        if ($test && ($price === null || $price === 0))
+            $context->addViolation('Sie müssen in Verkaufspreis zu füllen Probefahrt zu ermöglichen.');
+    }
+    public function validatePrice($value, ExecutionContextInterface $context) {
+        $data = $context->getRoot()->getData();
+        $price = $data['price'];
+        $test = $data['testDrive'];
+        if ($price === null && !$test)
+            $context->addViolation ('Dieser Wert kann leer sein, nur dann, wenn Probefahrt aktiviert ist.');
     }
     
     public function mainImageValidation($mainImage) {
@@ -978,9 +1002,8 @@ class EquipmentController extends BaseAdminController {
     }
     
     public function validateMakeSure($value, ExecutionContextInterface $context) {
-        if (!$value) {
-            $context->buildViolation('Bitte Checkbox bestätigen')->atPath('make_sure')->addViolation();
-        }            
+        if (!$value)
+            $context->buildViolation('Bitte Checkbox bestätigen')->addViolation();
     }
     
     public function validateAccept($value, ExecutionContextInterface $context) {

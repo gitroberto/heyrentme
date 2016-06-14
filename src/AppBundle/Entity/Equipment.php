@@ -212,6 +212,10 @@ class Equipment
      * @ORM\Column(type="boolean")
      */
     protected $featured = false;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $testDrive = false;
     
     
     public function setUuid($uuid)
@@ -304,7 +308,7 @@ class Equipment
             array_push($arr, sprintf("%d", $p));
         return implode("/", $arr);
     }
-    public function getPricesDesc() {
+    public function getPricesDesc() {       
         $arr = array();
         array_push($arr, "T");
         $p = $this->getPriceWeek();
@@ -342,7 +346,10 @@ class Equipment
         $pw = $this->priceWeek;
         if ($days >= 7 && $pw !== null && $pw > 0)
             return $days * $pw / 7.0;
-        return $days * $this->price;
+        if ($this->price === null)
+            return null;
+        else
+            return $days * $this->price;
     }
     
     /**
@@ -1442,5 +1449,29 @@ class Equipment
     public function getFeatured()
     {
         return $this->featured;
+    }
+
+    /**
+     * Set testDrive
+     *
+     * @param boolean $testDrive
+     *
+     * @return Equipment
+     */
+    public function setTestDrive($testDrive)
+    {
+        $this->testDrive = $testDrive;
+
+        return $this;
+    }
+
+    /**
+     * Get testDrive
+     *
+     * @return boolean
+     */
+    public function getTestDrive()
+    {
+        return $this->testDrive;
     }
 }

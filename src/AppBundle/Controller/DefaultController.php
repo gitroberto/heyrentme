@@ -154,8 +154,8 @@ class DefaultController extends BaseController {
     }
     
     private function processCategory(Request $request, $content) {
-        $cat = $this->getCategoryBySlug($request, $content);
-        $sp = $this->getSearchParams($request);
+        $cat = $this->getCategoryBySlug($request, $content);        
+        $sp = $this->getSearchParams($request, $cat['type']);
         $sp->setCategoryId($cat['id']);
         $request->getSession()->set('SearchState', $sp);
         
@@ -164,14 +164,17 @@ class DefaultController extends BaseController {
             
             if ($cat['type'] === Category::TYPE_EQUIPMENT) {
                 $tmpl = 'default/categorie.html.twig';
+                $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForEquipmentFilter($cat['id']);
             } else {
                 $tmpl = 'default/categorie-talent.html.twig';
+                $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForTalentFilter($cat['id']);
             }
-
+            
             return $this->render($tmpl, array(
                 'category' => $cat,
                 'searchParams' => $sp,
-                'newsletterBar' => true
+                'newsletterBar' => true,
+                'subcategories' => $subcats
                 //'equipments' => $equipments
             ));
         }
@@ -269,7 +272,8 @@ class DefaultController extends BaseController {
         $prev = null;
         $next = null;
         if (!$isPreview) {
-            $ids = $this->getSessionSearchList($request, $repo, $subcat->getCategory()->getId());
+            $cat = $subcat->getCategory();
+            $ids = $this->getSessionSearchList($request, $repo, $cat->getId(), $cat->getType());
             if (count($ids) > 1){
                 $i = array_search($id, $ids);
                 if ($i !== null) {            
@@ -323,10 +327,10 @@ class DefaultController extends BaseController {
         $session->set('SearchList', $ids);        
     }
     
-    private function getSessionSearchList(Request $request, $repo, $catId) {
+    private function getSessionSearchList(Request $request, $repo, $catId, $type) {
         $session = $request->getSession();
         if (!$session->has('SearchList')) {
-            $sp = $this->getSearchParams($request);            
+            $sp = $this->getSearchParams($request, $type);            
             if (!$sp->getCategoryId()){
                 $sp->setCategoryId($catId);
             }
@@ -339,10 +343,10 @@ class DefaultController extends BaseController {
     /**
      * @Route("/equipment-list", name="equipment-list")
      */ 
-    public function itemListAction(Request $request) {
-        $sp = $this->getSearchParams($request);
-        $sp->updateFromRequest($request);
+    public function itemListAction(Request $request) {        
         $type = intval($request->get('type'));
+        $sp = $this->getSearchParams($request, $type);
+        $sp->updateFromRequest($request);
         
         if ($type === Category::TYPE_EQUIPMENT) {
             $items = $this->getDoctrineRepo('AppBundle:Equipment')->getAll($sp);
@@ -368,14 +372,16 @@ class DefaultController extends BaseController {
         ));
     }
     
-    private function getSearchParams(Request $request) {
+    private function getSearchParams(Request $request, $type) {
         $session = $request->getSession();
-        if ($session->has('SearchParams')) {
-            $sp = $session->get('SearchParams');
+        $name = $type == Category::TYPE_EQUIPMENT ? "Equipment_SearchParams" : "Talent_SearchParams";
+        
+        if ($session->has($name)) {
+            $sp = $session->get($name);
         }
         else {
             $sp = new SearchParams();
-            $session->set('SearchParams', $sp);
+            $session->set($name, $sp);
         }
         return $sp;
     }

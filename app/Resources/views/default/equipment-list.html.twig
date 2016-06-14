@@ -33,10 +33,16 @@
                     </div>
                     <div class="col-xs-5">
                         <p class="price">
-                            {{ eq.pricesLine }}&nbsp;&#8364;
+                            {% if eq.testDrive %}
+                                Probefahrt
+                            {% else %}
+                                {{ eq.pricesLine }}&nbsp;&#8364;
+                            {% endif %}
                         </p>
                         <p class="tag">
-                            Pr. ab: {{ eq.pricesDesc }}
+                            {% if not eq.testDrive %}
+                                Pr. ab: {{ eq.pricesDesc }}
+                            {% endif %}
                         </p>
                     </div>
                 </div>
