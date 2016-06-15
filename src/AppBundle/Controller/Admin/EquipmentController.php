@@ -397,10 +397,13 @@ class EquipmentController extends BaseAdminController {
                 
                 //edit 2
                 ->add('description', 'textarea', array(
-                    'attr' => array('maxlength' => 900),
+                    'attr' => array(
+                        'maxlength' => 2500,
+                        'placeholder' => 'Maximal 2500 Zeichen verfügbar'                        
+                    ),
                     'constraints' => array(
                         new NotBlank(),
-                        new Length(array('max' => 900))
+                        new Length(array('max' => 2500))
                     )
                 ))
                 ->add('make_sure', 'checkbox', array(

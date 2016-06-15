@@ -32,7 +32,7 @@ class Equipment
      */
     protected $name;
     /**
-     * @ORM\Column(type="string", length=900)
+     * @ORM\Column(type="string", length=2500)
      */
     protected $description;
     /**
