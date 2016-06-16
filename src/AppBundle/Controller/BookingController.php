@@ -38,7 +38,10 @@ class BookingController extends BaseController {
         $from = DateTime::createFromFormat('Y-m-d\TH:i+', $dateFrom);
         $to = DateTime::createFromFormat('Y-m-d\TH:i+', $dateTo);
         $days = $to->diff($from)->days + 1;
-        $price = $eq->calculatePrice($days);
+        if ($eq->getTestDrive())
+            $price = null;
+        else
+            $price = $eq->calculatePrice($days);
         $inquiry = array(
             'from' => $from,
             'to' => $to,
@@ -267,24 +270,24 @@ class BookingController extends BaseController {
         $saved = false;
         $data = array('uuid' => $uuid);
         
-        $form = $this->createFormBuilder($data
-                , array(
+        $builder = $this->createFormBuilder($data,
+                array(
                     'constraints' => array(
                         new Callback(array($this, 'validateDiscountCode'))
                     )
-                )
-                )
+                ))
                 ->add('agree', 'checkbox', array(
                     'required' => false,
                     'constraints' => array(
                         new NotBlank()
                     )
                 ))
-                ->add('discountCode', 'text', array(
+                ->add('uuid', 'hidden');
+        if (!$eq->getTestDrive())
+            $builder->add('discountCode', 'text', array(
                     'required' => false
-                ))
-                ->add('uuid', 'hidden')
-                ->getForm();
+            ));
+        $form = $builder->getForm();
         
         $form->handleRequest($request);
         

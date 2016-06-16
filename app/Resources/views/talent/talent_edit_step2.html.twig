@@ -103,7 +103,7 @@
                               <div class="col-sm-12">
                                   <p class="form-heading-small">Beschreibe dein Angebot* (Anmerkung: Persönliche Kontaktdaten, Nachnamen, Firmennamen oder Web-Links werden automatisch entfernt.)</p>
                                   <div class="err-msg">{{ form_errors(form) }}</div>
-                                  {{ form_widget(form.description, { 'attr': { 'placeholder': 'Maximal 900 Zeichen verfügbar' } }) }}
+                                  {{ form_widget(form.description) }}
                                  <div class="chbox-holder">
                                       {{ form_widget(form.make_sure) }}
                                       <label for="form_make_sure"><span></span>Ich bin berechtigt, das beschriebene Angebot auszuüben*</label>

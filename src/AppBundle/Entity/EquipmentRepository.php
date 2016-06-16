@@ -300,51 +300,45 @@ EOT;
     }
     */
     public function getAll(SearchParams $params) {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        
         /*
          * Please not this query uses "fetch join".
          * It fetches images and discounts (associated with equipments) immediately 
          * (instead of lazy loading them later).
          * Keep for optimum performance.
          */        
-        $qb->select('e', 'i', 'd') // this line forces fetch join
-            ->from('AppBundle:Equipment', 'e')
-            ->join('e.subcategory', 's')
-            ->join('e.user', 'u')
-            ->leftJoin('e.images', 'i')
-            ->leftJoin('e.discounts', 'd');
-        
-        $qb->andWhere("e.status = ". Equipment::STATUS_APPROVED);
-        $qb->andWhere('u.status = '. User::STATUS_OK);
-        
-        if ($params->getCategoryId() != null) {
-            $qb->andWhere("s.category = {$params->getCategoryId()}");
-        }
-        if ($params->getDiscount()) {
-            $now = date('Y-m-d H:i:s');
-            $qb->andWhere("d.createdAt <= '{$now}'")
-                ->andWhere("d.expiresAt >= '{$now}'");
-        }
-        if ($params->getTestBuy()) {
+        $qb = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('e', 'i', 'd') // this line forces fetch join
+                ->from('AppBundle:Equipment', 'e')
+                ->join('e.subcategory', 's')
+                ->join('e.user', 'u')
+                ->leftJoin('e.images', 'i')
+                ->leftJoin('e.discounts', 'd')
+        // common where
+                ->andWhere("e.status = :eqStatus")
+                ->setParameter('eqStatus', Equipment::STATUS_APPROVED)
+                ->andWhere('u.status = :usrStatus')
+                ->setParameter('usrStatus', User::STATUS_OK);
+        // conditional where
+        if ($params->getCategoryId() !== null)
+            $qb->andWhere("s.category = :categoryId")
+                    ->setParameter('categoryId', $params->getCategoryId());
+        if ($params->getTestBuy())
             $qb->andWhere('e.priceBuy > 0');
-        }
-        
-        
-        if ($params->getSort() === 'date') {
+        if ($params->getTestDrive())
+            $qb->andWhere('e.testDrive > 0');
+        if (count($params->getSubcategoryIds()) > 0)
+            $qb->andWhere($qb->expr()->in('s.id', $params->getSubcategoryIds()));
+        // order by
+        if ($params->getSort() === 'date')
             $qb->orderBy('e.createdAt', 'desc');
-        }
-        elseif ($params->getSort() === 'price') {
+        else if ($params->getSort() === 'price')
             $qb->orderBy ('e.price', 'asc');
-        }
-                
-        $eqs = $qb->getQuery()->getResult();
-        
+        // result + images
+        $eqs = $qb->getQuery()->getResult();        
         $repo = $this->getEntityManager()->getRepository('AppBundle:Equipment');
-        
-        foreach ($eqs as $eq) {
+        foreach ($eqs as $eq)
             $eq->setEquipmentImages($repo->getEquipmentImages($eq->getId()));
-        }
         
         return $eqs;
     }

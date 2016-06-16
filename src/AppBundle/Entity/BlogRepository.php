@@ -13,8 +13,8 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class BlogRepository extends EntityRepository
 {    
-    public function getAllOrderedByPosition() {
-        $q = "select c from AppBundle:Blog c order by c.position asc";
+    public function getPublishedOrderedByPosition() {
+        $q = "select b from AppBundle:Blog b where b.published = 1 order by b.position asc";
         return $this->getEntityManager()->createQuery($q)->getResult();
     }
     
@@ -46,16 +46,28 @@ class BlogRepository extends EntityRepository
     }
    
     
-    public function getForRelatedOrderedByName($id) {
+    public function getListForRelated($id) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         // build query
         $qb->select('b')
            ->from('AppBundle:Blog', 'b')     
            ->where($qb->expr()->neq('b.id', $id))
-           ->orderBy("b.title", 'asc');      
+           ->orderBy("b.position", 'asc');      
         $q = $qb->getQuery();
         
-        return $q->getResult();        
+        return $q->getResult();              
+    }
+    public function getRelated($blogId) {
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('b')
+                ->from('AppBundle:Blog', 'b')
+                ->join('b.blog', 'br')
+                ->andWhere('br.blog = :blogId')
+                ->andWhere('b.published = 1')
+                ->addOrderBy('br.position')
+                ->setParameter('blogId', $blogId)
+                ->getQuery()
+                ->getResult();
     }
     
     public function getGridOverview($sortColumn, $sortDirection, $pageSize, $page) {
@@ -159,7 +171,8 @@ EOT;
             ->from('AppBundle:Blog', 'b')
             ->andWhere('b.published = 1')
             ->andWhere('b.showcase = 1')
-            ->addOrderBy('b.createdAt', 'desc')
+            ->addOrderBy('b.position', 'asc')
+            ->addOrderBy('b.modifiedAt', 'desc')
             ->setMaxResults(3)
             ->getQuery()
             ->getResult();

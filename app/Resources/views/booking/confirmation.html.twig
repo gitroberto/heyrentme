@@ -42,22 +42,37 @@
                 <div class="col-sm-4 col-xs-6 summary-info">
                     <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                     <p>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    <p>{{ inquiry.price|number_format(2, ',') }} &euro;</p>
+                    <p>
+                        {% if inquiry.price %}
+                            {{ inquiry.price|number_format(2, ',') }} &euro;
+                        {% else %}
+                            Probefahrt
+                        {% endif %}
+                    </p>
                     <p class="dont-transform">
                       {{ equipment.addressAsString }}
                     </p>
                     <p>0,- &euro; (Aktion!)</p>
-                    <p class="text-bold"><span id="price">{{ inquiry.price|number_format(2, ',') }}</span> &euro; (Barzahlung)</p>
+                    <p class="text-bold"><span id="price">
+                        {% if inquiry.price %}
+                            {{ inquiry.price|number_format(2, ',') }}</span> &euro; (Barzahlung)
+                        {% else %}
+                            Probefahrt
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="col-sm-4">
                     {{ form_widget(form.uuid) }}
-                    {#<input id="discount-code" name="discount-code" type="text" placeholder="rabattcode eingeben" class="rabat-input" />#}
-                    {{ form_widget(form.discountCode, { 'placeholder': 'rabattcode eingeben', 'class': 'rabat-input' }) }}
-                    <div class="err-msg">{{ form_errors(form.discountCode) }}</div>
+                    {% if form.discountCode is defined %}
+                        {{ form_widget(form.discountCode, { 'placeholder': 'rabattcode eingeben', 'class': 'rabat-input' }) }}
+                        <div class="err-msg">{{ form_errors(form.discountCode) }}</div>
+                    {% endif %}
                     <div class="err-msg">{{ form_errors(form) }}</div>
                 </div>
                 <div class="col-sm-4">
-                    <button class="rabat-button" onclick="checkCode(); return false;">rabatt einlösen</button>
+                    {% if form.discountCode is defined %}                    
+                        <button class="rabat-button" onclick="checkCode(); return false;">rabatt einlösen</button>
+                    {% endif %}
                 </div>
             </div>
         </div>

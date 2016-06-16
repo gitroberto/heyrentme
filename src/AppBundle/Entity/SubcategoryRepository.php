@@ -128,4 +128,34 @@ EOT;
         return $q->getResult();
     }
     
+    public function getAllForEquipmentFilter($categoryId) {
+        return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('s', 'count(e.id)')
+                ->from('AppBundle:Subcategory', 's')
+                ->leftJoin('s.equipments', 'e')
+                ->andWhere('s.category = :categoryId')
+                ->setParameter('categoryId', $categoryId)
+                ->andWhere('e.status = :status')
+                ->setParameter('status', Equipment::STATUS_APPROVED)
+                ->groupBy('s.id')
+                ->having('count(e.id) > 0')
+                ->getQuery()
+                ->getResult();
+    }
+    public function getAllForTalentFilter($categoryId) {
+        return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('s', 'count(t.id)')
+                ->from('AppBundle:Subcategory', 's')
+                ->leftJoin('s.talents', 't')
+                ->andWhere('s.category = :categoryId')
+                ->setParameter('categoryId', $categoryId)
+                ->andWhere('t.status = :status')
+                ->setParameter('status', Talent::STATUS_APPROVED)
+                ->groupBy('s.id')
+                ->having('count(t.id) > 0')
+                ->getQuery()
+                ->getResult();
+    }
 }

@@ -35,8 +35,30 @@
                                     {{ include('common/stars.html.twig', { rating: item.rating }) }}
                                     <p class="product-name">{{ item.name }}</p>
                                 </div>
-                                <div class="col-xs-6"><p class="price">{{ item.activePrice|number_format(2, ',') }} €</p>
-                                    <p class="tag">pro Tag</p>
+                                <div class="col-xs-6">
+                                    {% if booking.inquiry.equipment is defined %}
+                                        <p class="price">
+                                            {% if item.testDrive %}
+                                                Probefahrt
+                                            {% else %}
+                                                {{ item.price|number_format(2, ',') }} €
+                                            {% endif %}
+                                        </p>
+                                        {% if not item.testDrive %}
+                                            <p class="tag">pro Tag</p>
+                                        {% endif %}
+                                    {% else %}
+                                        <p class="price">
+                                            {% if item.requestPrice %}
+                                                auf Anfr.
+                                            {% else %}
+                                                {{ booking.totalPrice|number_format(2, ',') }} €
+                                            {% endif %}
+                                        </p>
+                                        {% if not item.requestPrice %}
+                                            <p class="tag">pro Tag</p>
+                                        {% endif %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -50,7 +72,13 @@
                     <div class="col-sm-4 col-xs-6 summary-info">
                         <p>{{ booking.inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                         <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                        <p>{{ booking.totalPrice|number_format(2, ',') }} €</p>
+                        <p>
+                            {% if booking.totalPrice %}
+                                {{ booking.totalPrice|number_format(2, ',') }} €
+                            {% else %}
+                                Probefahrt
+                            {% endif %}
+                        </p>
                         <p class="dont-transform">
                             {{ item.addressAsString }}
                         </p>
@@ -113,7 +141,13 @@
                     <div class="col-sm-4 col-xs-6 summary-info">
                         <p>{{ booking.inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                         <p>{{ booking.inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                        <p>{{ booking.totalPrice|number_format(2, ',') }} €</p>
+                        <p>
+                            {% if booking.totalPrice %}
+                                {{ booking.totalPrice|number_format(2, ',') }} €
+                            {% else %}
+                                Probefahrt
+                            {% endif %}
+                        </p>
                         <p class="dont-transform">
                             {{ item.addressAsString }}
                         </p>

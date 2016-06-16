@@ -147,6 +147,12 @@
                                                 {{ form_widget(form.priceBuy, { 'attr': { 'class': 'small-input', 'placeholder': '0', 'min': '0', 'max': '50000' }}) }}EUR 
                                                 <div class="err-msg">{{ form_errors(form.priceBuy) }}</div>
                                               </div>
+                                              <div>
+                                                  <div class="chbox-holder" style="display: inline-block;">
+                                                    {{ form_widget(form.testDrive) }}
+                                                    <label for="form_testDrive" style="margin-right: 0px;"><span></span>Probefahrt</label>
+                                                  </div>
+                                              </div>
                                           </div>
                                       </div>
                                   </div>
@@ -266,7 +272,19 @@
               $fa.removeAttr('disabled').selectpicker('refresh');
           }
       }
-      
+      function priceBuyChanged() {
+          var val = $("#form_priceBuy").val();
+          var $testDrive = $("#form_testDrive");
+          var $lab = $testDrive.next('label');
+          if (val !== null && val !== '' && parseInt(val) > 0) {
+              $lab.attr('for', 'form_testDrive').css({ 'opacity': '1.0' });
+              $testDrive.removeAttr('readOnly');
+          }
+          else {
+              $lab.removeAttr('for').css({ 'opacity': '0.5' });
+              $testDrive.prop('checked', false).attr('readOnly', 'true');
+          }
+      }
       $(document).ready(function () {
         {% if statusChanged %}
             $("#edit-offer").modal();
@@ -286,7 +304,9 @@
           $(".top-menu-button").click(topMenuClick);
           
           serviceChanged();
-          $("#form_service").on('click change', serviceChanged);          
+          priceBuyChanged();
+          $("#form_service").on('click change', serviceChanged);
+          $("#form_priceBuy").on('click change keyup', priceBuyChanged);
       });
   </script>
   </div>

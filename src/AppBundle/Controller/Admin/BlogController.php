@@ -39,7 +39,7 @@ class BlogController  extends BaseAdminController {
         if (!$blog) {
             return new Response(Response::HTTP_NOT_FOUND);
         }        
-        $blogs = $this->getDoctrineRepo('AppBundle:Blog')->getForRelatedOrderedByName($id);
+        $blogs = $this->getDoctrineRepo('AppBundle:Blog')->getListForRelated($id);
         
         $relatedBlogsCount = count($blog->getRelatedBlogs());
         
@@ -61,10 +61,9 @@ class BlogController  extends BaseAdminController {
                   'class' => 'AppBundle:Blog',
                   'choices' => $blogs,
                   'empty_value' => 'Select related post',
-                  'property' => 'title',                 
+                  'property' => 'extendedTitle',                 
                   'required' => false,
                   'data' => $selectedValue 
-                  
                   ));
         }        
         $form = $formTmp->getForm();
@@ -465,7 +464,6 @@ class BlogController  extends BaseAdminController {
     }
     
     /**
-     * 
      * @Route("/admin/blog/delete/{id}", name="admin_blog_delete")
      */
     public function deleteAction(Request $request, $id) {
@@ -483,6 +481,23 @@ class BlogController  extends BaseAdminController {
         $em->remove($blog);
         $em->flush();
         return $this->redirectToRoute("admin_blog_list");
+    }
+    /**
+     * @Route("/admin/blog/publish/{id}", name="admin_blog_publish")
+     */
+    public function publishAction($id) {
+        $blog = $this->getDoctrineRepo('AppBundle:Blog')->find($id);
+
+        if (!$blog) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        $blog->setPublished(!$blog->getPublished());
+                
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        
+        return new JsonResponse(array('published' => $blog->getPublished()));
     }
     
     
@@ -506,16 +521,18 @@ class BlogController  extends BaseAdminController {
         $rows = array(); // rows as json result        
         foreach ($dataRows as $dataRow) { // build single row
             $row = array();
+            $i = 0;
             $row['id'] = $dataRow->getId();
             $cell = array();
             $cell[0] = null;
             $cell[1] = $dataRow->getId();
-            $cell[2] = $dataRow->getTitle();
-            $cell[3] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
-            $cell[4] = $dataRow->getModifiedAt()->format('Y-m-d H:i');
-            $cell[5] = $dataRow->getPosition();
-            $cell[6] = $this->generateUrl('blog_preview', array('uuid'=>$dataRow->getUuid()));
-            $cell[7] = $dataRow->getShowcase();
+            $cell[2] = $dataRow->getPublished();
+            $cell[3] = $dataRow->getTitle();
+            $cell[4] = $dataRow->getCreatedAt()->format('Y-m-d H:i');
+            $cell[5] = $dataRow->getModifiedAt()->format('Y-m-d H:i');
+            $cell[6] = $dataRow->getPosition();
+            $cell[7] = $this->generateUrl('blog_preview', array('uuid'=>$dataRow->getUuid()));
+            $cell[8] = $dataRow->getShowcase();
             
             $row['cell'] = $cell;
             array_push($rows, $row);

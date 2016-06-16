@@ -88,6 +88,12 @@
             <option value="date">Neueste zuerst</option>
             <option value="price">Preis: niedrigster zuerst</option>
         </select>
+            <p>Filtern nach:</p>
+            <select id="filter" multiple style="display: none;">
+                {% for subcat in subcategories %}
+                    <option value="{{ subcat[0].id }}" data-subtext="">{{ subcat[0].name }} ({{ subcat[1] }})</option>
+                {% endfor %}
+            </select>          
         </div>
         <div class="clearfix"></div>
         <div id="equipment-list">
@@ -107,7 +113,7 @@
         $sort.selectpicker('refresh');
         $sort.selectpicker('val', '{{ searchParams.sort }}');
         initGrids();
-        $("#sort, #buy, #discount").change(search);
+        $("#sort").change(search);
         $("#suche-dropdown").change(function() {
             if ($(this).val() === 'BIETE') {
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
@@ -118,6 +124,16 @@
                 {% endif %}
             }
         });
+        
+        $("#filter").val({{ searchParams.optionsAsArray|raw }});
+        $("#filter").selectpicker({
+            'style': 'btn-info',
+            'showTick': true,
+            'noneSelectedText': 'Alle anzeigen',
+            'width': 'auto',
+            'header': 'Detailkategorien wählen'
+        });
+        $("#filter").on('hidden.bs.select', search);
     });
     
     function initGrids() {
@@ -147,25 +163,25 @@
     }
     function search() {
         {# wait 1 seconds before actual search (in case user changes another search option) #}
-        console.log('search');
         if (typeof window.searchT !== 'undefined') {
             window.clearTimeout(window.searchT);
         }
-        window.searchT = window.setTimeout(doSearch, 1000);
+        window.searchT = window.setTimeout(doSearch, 0); // delay not necessary
     }
     function doSearch() {
-        console.log('doSearch');
+        var opts = $("#filter").selectpicker('val');
         var url = '{{ path('equipment-list') }}';
         var data = {
             'sort': $("#sort").val(),
+            'options': opts,
             'type': {{ constant('AppBundle\\Entity\\Category::TYPE_TALENT') }}
             //, 'discount': $("#discount").is(':checked') ? 1 : 0
         };
-        console.log(JSON.stringify(data));
         $("#pls-wait").modal();
         $("#equipment-list").load(url, data, function() {
             initGrids();
             $("#pls-wait").modal('hide');
+            $("#filter").next().removeClass('open');
         });
     }
   </script>

@@ -497,6 +497,7 @@ class ProviderController extends BaseController {
             'deposit' => $equipment->getDeposit(),
             'value' => $equipment->getValue(),
             'priceBuy' => $equipment->getPriceBuy(),
+            'testDrive' => $equipment->getTestDrive(),
             'invoice' => $equipment->getInvoice(),
             'industrial' => $equipment->getIndustrial(),
             'service' => $equipment->getService(),
@@ -522,9 +523,10 @@ class ProviderController extends BaseController {
                     )
                 ))
                 ->add('price', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 2500))
+                        new Range(array('min' => 10, 'max' => 2500)),
+                        new Callback(array($this, 'validatePrice'))
                     )
                 ))
                 ->add('priceWeek', 'integer', array(
@@ -555,6 +557,12 @@ class ProviderController extends BaseController {
                     'required' => false,
                     'constraints' => array(
                         new Range(array('min' => 0, 'max' => 20000))
+                    )
+                ))
+                ->add('testDrive', 'checkbox', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Callback(array($this, 'validateTestDrive'))
                     )
                 ))
                 ->add('ageId', 'choice', array(
@@ -589,6 +597,7 @@ class ProviderController extends BaseController {
             $equipment->setValue($data['value']);
             $equipment->setDeposit($data['deposit']);
             $equipment->setPriceBuy($data['priceBuy']);
+            $equipment->setTestDrive($data['testDrive']);
             $equipment->setInvoice($data['invoice']);
             $equipment->setIndustrial($data['industrial']);
             $equipment->setService($data['service']);
@@ -649,9 +658,10 @@ class ProviderController extends BaseController {
                     )
                 ))
                 ->add('price', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 2500))
+                        new Range(array('min' => 10, 'max' => 2500)),
+                        new Callback(array($this, 'validatePrice'))
                     )
                 ))
                 ->add('priceWeek', 'integer', array(
@@ -682,6 +692,12 @@ class ProviderController extends BaseController {
                     'required' => false,
                     'constraints' => array(
                         new Range(array('min' => 0, 'max' => 20000))
+                    )
+                ))
+                ->add('testDrive', 'checkbox', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Callback(array($this, 'validateTestDrive'))
                     )
                 ))
                 ->add('ageId', 'choice', array(
@@ -718,6 +734,7 @@ class ProviderController extends BaseController {
             $eq->setValue($data['value']);
             $eq->setDeposit($data['deposit']);
             $eq->setPriceBuy($data['priceBuy']);
+            $eq->setTestDrive($data['testDrive']);
             $eq->setInvoice($data['invoice']);
             $eq->setIndustrial($data['industrial']);
             $eq->setService($data['service']);
@@ -746,6 +763,21 @@ class ProviderController extends BaseController {
             'statusChanged' => false
         ));
     }
+    public function validateTestDrive($value, ExecutionContextInterface $context) {
+        $data = $context->getRoot()->getData();
+        $price = $data['priceBuy'];
+        $test = $data['testDrive'];
+        if ($test && ($price === null || $price === 0))
+            $context->addViolation('Sie müssen in Verkaufspreis zu füllen Probefahrt zu ermöglichen.');
+    }    
+    public function validatePrice($value, ExecutionContextInterface $context) {
+        $data = $context->getRoot()->getData();
+        $price = $data['price'];
+        $test = $data['testDrive'];
+        if ($price === null && !$test)
+            $context->addViolation ('Dieser Wert kann leer sein, nur dann, wenn Probefahrt aktiviert ist.');
+    }
+    
     /**
      * @Route("/provider/equipment-edit-2/{id}", name="equipment-edit-2")
      */
@@ -790,10 +822,13 @@ class ProviderController extends BaseController {
         //<editor-fold>        
         $form = $this->createFormBuilder($data)
             ->add('description', 'textarea', array(
-                'attr' => array('maxlength' => 900),
+                'attr' => array(
+                    'maxlength' => 2500,
+                    'placeholder' => 'Maximal 2500 Zeichen verfügbar'
+                ),
                 'constraints' => array(
                     new NotBlank(),
-                    new Length(array('max' => 900))
+                    new Length(array('max' => 2500))
                 )
             ))
             ->add('make_sure', 'checkbox', array(

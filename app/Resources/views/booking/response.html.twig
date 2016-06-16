@@ -60,8 +60,14 @@
                         <p class="text-bold"><strong>{{ equipment.name }}</strong></p>
                         <p class="no-margin-bottom"><strong>Beginn:</strong> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
                         <p class="no-margin-bottom"><strong>Ende:</strong> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
-                        <p class="no-margin-bottom"><strong>Dein Verdienst: </strong> {{ inquiry.price|number_format(2, ',') }} €</p>
-                        {% if not equipment.service %}
+                        <p class="no-margin-bottom"><strong>Dein Verdienst: </strong> 
+                            {% if inquiry.price %}
+                                {{ inquiry.price|number_format(2, ',') }} €
+                            {% else %}
+                                Probefahrt
+                            {% endif %}
+                        </p>
+                        {% if not equipment.service and inquiry.price %}
                             <p class="no-margin-bottom"><strong> Kaution:</strong> {{ inquiry.deposit|number_format(2, ',') }} €</p>
                         {% endif %}
                         <p><strong>Ort:</strong> {{ equipment.addressAsString }}
