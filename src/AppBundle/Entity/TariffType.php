@@ -40,6 +40,17 @@ class TariffType {
         TariffType::$_10ERBLOCK = new TariffType(6, '10erblock');
         TariffType::$TAGESSATZ = new TariffType(7, 'Tagessatz');
     }
+    public static function getByType($type) {
+        switch ($type) {
+            case 1: return TariffType::$EINZELSTUNDEN;
+            case 2: return TariffType::$GRUPPENSTUNDEN;
+            case 3: return TariffType::$WORKSHOP;
+            case 4: return TariffType::$PERFORMANCE;
+            case 5: return TariffType::$_5ERBLOCK;
+            case 6: return TariffType::$_10ERBLOCK;
+            case 7: return TariffType::$TAGESSATZ;
+        }
+    }
     
     public static function getChoices() {
         return array(

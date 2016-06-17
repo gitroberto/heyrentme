@@ -769,48 +769,6 @@ EOT;
         return $tals;
     }
 
-    /* -------------------------------------------------------------- Tariffs */
-    public function getTariffCount($talentId) {
-        $c = $this->getEntityManager()->createQueryBuilder()
-                ->select('count(t)')
-                ->from('AppBundle:TalentTariff', 't')
-                ->andWhere('t.talent = :talentId')
-                ->setParameter('talentId', $talentId)
-                ->getQuery()
-                ->getSingleScalarResult();
-        return intval($c);
-    }    
-    public function getTariff($talentId, $type) {
-        $q = $this->getEntityManager()
-                ->createQueryBuilder()
-                ->select('t')
-                ->from('AppBundle:TalentTariff', 't')
-                ->andWhere('t.type = :type')
-                ->andWhere('t.talent = :talentId')
-                ->setParameter('talentId', $talentId)
-                ->setParameter('type', $type)
-                ->getQuery();
-        $rows = $q->getResult();
-        if (count($rows) === 1)
-            return $rows[0];
-        else 
-            return null;
-    }
-    public function getTariffs($talentId) {
-        $q = $this->getEntityManager()
-                ->createQueryBuilder()
-                ->select('t')
-                ->from('AppBundle:TalentTariff', 't')
-                ->andWhere('t.talent = :talentId')
-                ->setParameter('talentId', $talentId)
-                ->addOrderBy('t.position', 'asc')
-                ->getQuery();
-        $rows = $q->getResult();
-        if (count($rows) === 1)
-            return $rows[0];
-        else 
-            return null;
-    }
-    
+    /* -------------------------------------------------------------- Tariffs */    
 }
 

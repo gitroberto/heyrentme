@@ -666,3 +666,22 @@ button {
 {
     top: 25px !important;
 }
+
+.tariff-box {
+    padding: 0 16px;
+}
+#tariff-container {
+    margin: 32px 0;
+    list-style: none;
+    padding: 0;
+}
+#tariff-container > li.tariff {
+    border: 1px solid #888;
+    border-radius: 4px;
+    margin: 10px 0;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    font-family: 'open sans', sans-serif;
+    cursor: move;
+    background-color: #fff;
+}

@@ -1,27 +1,61 @@
 {{ form_start(form) }}
     <input type="hidden" name="success" value="{{ form.vars.submitted and form.vars.valid ? "1" : "0" }}"/>
     <div class="row">
-        <div class="col-sm-12">
-            Einzelstunden
+        <div class="col-sm-6">
+            <label for="form_type">Einheit wählen:</label>
+           {{ form_widget(form.type) }}
+        </div>
+        <div class="col-sm-6">
+            <label for="form_price">Preis pro Std. ab:</label>
+            {{ form_widget(form.price) }}
+            {% if form.price.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.price) }}</div>{% endif %}
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="memo">
+                Bitte gib hier Tarif (bist du Umsatzsteuerpflichtig inkl. Ust.) für diese Einheit an. Sollte es bei einer Buchung zu gefingfügigen Mehrkosten kommen, kannst du das dem Kunden separat mitteilen.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="chbox-holder" style="display: inline-block;">
+                {{ form_widget(form.requestPrice) }}
+                <label for="form_requestPrice"><span></span>Preis nur auf Anfrage*</label>
+                {% if form.requestPrice.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.requestPrice) }}</div>{% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="memo">
+                *Diese Option ist nur für Stundentarife ab 35,- EUR vorgesehen. Bitte bestätige dazu erst deinen Stundentarif. Bitte beachte, dass es fur Kunden generell vorteilhafter ist, wenn ein Tarif angegeben wird.
+            </p>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-6">
-           Einheit wählen:
-           {{ form_widget(form.type) }}
+            <div class="chbox-holder" style="display: inline-block;">
+                {{ form_widget(form.numDiscount) }}
+                <label for="form_numDiscount"><span></span>Mengenrabatt ab:</label>
+                {% if form.numDiscount.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.numDiscount) }}</div>{% endif %}
+            </div>
+            {{ form_widget(form.minNum) }}
+            {% if form.minNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.minNum) }}</div>{% endif %}
         </div>
         <div class="col-sm-6">
-            Preis pro Std. ab: 
-            {{ form_widget(form.price) }}
-            {% if form.price.vars.errors|length > 0 %}
-                <div class="err-msg">{{ form_errors(form.price) }}</div>
-            {% endif %}
+            <label for="form_priceDiscount">Preis pro Std. ab:</label>
+            {{ form_widget(form.priceDiscount) }}
+            {% if form.priceDiscount.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.priceDiscount) }}</div>{% endif %}
+            
         </div>
-    </div> 
+    </div>
+            
     <div class="row">
         <div class="col-sm-12">
             <button id="tariff-save">Diese Tarifoption speichern</button>
-            <button id="tariff-delete">Diese Tarifoption zurucksetzen und entrefnen</button>
+            <button id="tariff-delete">Diese Tarifoption zurücksetzen und entrefnen</button>
         </div>
     </div>
 {{ form_end(form) }}

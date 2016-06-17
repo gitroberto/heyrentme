@@ -72,6 +72,22 @@
             </div>
             <input type="submit" id="basic-submit" class="yellow-button" value="Tarif speichern &gt;&gt;">
         </div>
+        <div class="col-xs-3">
+            <div class="tariff-box support">
+                <p class="head">Tarif Reihenfolge*</p>
+
+                <ul id="tariff-container">
+                    {% for tariff in tariffs %}
+                        <li class="tariff" data-id="{{ tariff.id }}">{{ tariff.typeName }}</li>
+                    {% endfor %}
+                </ul>
+
+                <p class="small">Reihenfolgen ändern durch Drag &amp; Drop</p>
+                <p class="small">
+                    *Wichtig: Die 1. Tarifoption erscheint auch auf deiner Angebots-Vorschau auf der Übersichtsseite!
+                </p>
+            </div>
+        </div>
         <!--<div class="col-xs-3">
             <div class="support">
                 <p class="head">Dein Verdienst</p>
@@ -97,11 +113,21 @@
 {% endblock %}
 
 {% block script %}
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <script>
         
         $(function() {
             initBasicForm();
             initTariffForm();
+            $('ul').sortable({
+                'containment': '.tariff-box',
+                'stop': sortSave
+            });
+            
+            $(".num-picker").selectpicker({
+                width: 'fit',
+                style: 'btn-info'
+            });
         }); // end of ready
         
         function initTariffForm() {
@@ -154,6 +180,15 @@
                 });
             else 
                 $('<input type="submit">').hide().appendTo($form).click().remove();
+        }
+        function sortSave() {
+            var lis = $('#tariff-container li');
+            var arr = [];
+            for (var i = 0; i < lis.length; i++)
+                arr.push($(lis[i]).data('id'));
+            var ids = arr.join(',');
+            var url = '{{ path('talent-tariff-order', { 'id': id, 'ids': '-IDS-' }) }}'.replace('-IDS-', ids);
+            $.get(url);            
         }
         {#
       var fieldsChanged = false;

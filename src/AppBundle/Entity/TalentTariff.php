@@ -33,11 +33,11 @@ class TalentTariff {
     /**
      * @ORM\Column(type="integer")
      */
-    private $minNumPerson;
+    private $minNum;
     /**
      * @ORM\Column(type="integer")
      */
-    private $minNumDiscount;
+    private $numDiscount;
     /**
      * @ORM\Column(type="decimal")
      */
@@ -105,51 +105,75 @@ class TalentTariff {
     }
 
     /**
-     * Set minNumPerson
+     * Set type
      *
-     * @param integer $minNumPerson
+     * @param integer $type
      *
      * @return TalentTariff
      */
-    public function setMinNumPerson($minNumPerson)
+    public function setType($type)
     {
-        $this->minNumPerson = $minNumPerson;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get minNumPerson
+     * Get type
      *
      * @return integer
      */
-    public function getMinNumPerson()
+    public function getType()
     {
-        return $this->minNumPerson;
+        return $this->type;
     }
 
     /**
-     * Set minNumDiscount
+     * Set minNum
      *
-     * @param integer $minNumDiscount
+     * @param integer $minNum
      *
      * @return TalentTariff
      */
-    public function setMinNumDiscount($minNumDiscount)
+    public function setMinNum($minNum)
     {
-        $this->minNumDiscount = $minNumDiscount;
+        $this->minNum = $minNum;
 
         return $this;
     }
 
     /**
-     * Get minNumDiscount
+     * Get minNum
      *
      * @return integer
      */
-    public function getMinNumDiscount()
+    public function getMinNum()
     {
-        return $this->minNumDiscount;
+        return $this->minNum;
+    }
+
+    /**
+     * Set numDiscount
+     *
+     * @param integer $numDiscount
+     *
+     * @return TalentTariff
+     */
+    public function setNumDiscount($numDiscount)
+    {
+        $this->numDiscount = $numDiscount;
+
+        return $this;
+    }
+
+    /**
+     * Get numDiscount
+     *
+     * @return integer
+     */
+    public function getNumDiscount()
+    {
+        return $this->numDiscount;
     }
 
     /**
@@ -345,27 +369,10 @@ class TalentTariff {
     }
     //</editor-fold>
 
-    /**
-     * Set type
-     *
-     * @param integer $type
-     *
-     * @return TalentTariff
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
+    
+    public function getTypeName() {
+        return TariffType::getByType($this->getType())->getName();
     }
+    
 
-    /**
-     * Get type
-     *
-     * @return integer
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
 }
