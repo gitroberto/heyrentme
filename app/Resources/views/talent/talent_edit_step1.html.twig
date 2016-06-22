@@ -188,6 +188,7 @@
             $.get(url)
                     .done(function() {
                         reloadTariffs();
+                        tariffChanged();
                     });
         }
         function basicSubmit(e) {
