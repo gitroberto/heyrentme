@@ -10,6 +10,11 @@ use AppBundle\Entity\TariffType;
 use AppBundle\Entity\Video;
 use AppBundle\Form\Type\Tariff\TariffType1;
 use AppBundle\Form\Type\Tariff\TariffType2;
+use AppBundle\Form\Type\Tariff\TariffType3;
+use AppBundle\Form\Type\Tariff\TariffType4;
+use AppBundle\Form\Type\Tariff\TariffType5;
+use AppBundle\Form\Type\Tariff\TariffType6;
+use AppBundle\Form\Type\Tariff\TariffType7;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
@@ -81,8 +86,9 @@ class TalentController extends BaseController {
      * @Route("/provider/talent-detail-form/{id}/{type}", name="talent-detail-form")
      */
     public function formTariffAction(Request $request, $id, $type) {
+        $repo = $this->getDoctrineRepo('AppBundle:TalentTariff');
         $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
-        $tariff = $this->getDoctrineRepo('AppBundle:TalentTariff')->getTariff($id, $type);
+        $tariff = $repo->getTariff($id, $type);
         $url = $this->generateUrl('talent-detail-form', array('id' => $id, 'type' => $type));
         $form = $this->getTariffForm(intval($type), $tariff, $url);
         
@@ -96,13 +102,12 @@ class TalentController extends BaseController {
                 $tariff->setTalent($tal);
                 $tariff->setType($type);
                 $this->collectTariffFormData($tariff, $data, $type);
-                $em->persist($tariff);                
+                $repo->insert($tariff, $tal->getId());
             }
             else {
-                $this->collectTariffFormData($tariff, $data, $type);
+                $this->collectTariffFormData($tariff, $data);
                 $em->flush();
-            }
-            
+            }        
         }
         
         $tmpl = sprintf('talent/form_tariff%d.html.twig', $type);
@@ -124,9 +129,7 @@ class TalentController extends BaseController {
                 $data['discountMinNum'] = $tariff->getDiscountMinNum();
                 $data['discountPrice'] = $tariff->getDiscountPrice();                
             }
-            $form = $this->createForm(new TariffType1(), $data, array(
-                'action' => $url
-            ));            
+            $form = $this->createForm(new TariffType1(), $data, array('action' => $url));            
         }
         else if ($type === TariffType::$GRUPPENSTUNDEN->getId()) {
             if ($tariff !== null) {
@@ -137,9 +140,49 @@ class TalentController extends BaseController {
                 $data['discountPrice'] = $tariff->getDiscountPrice();
                 $data['ownPlace'] = $tariff->getOwnPlace();
             }
-            $form = $this->createForm(new TariffType2(), $data, array(
-                'action' => $url
-            ));            
+            $form = $this->createForm(new TariffType2(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$WORKSHOP->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['minNum'] = $tariff->getMinNum();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+                $data['ownPlace'] = $tariff->getOwnPlace();
+            }
+            $form = $this->createForm(new TariffType3(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$PERFORMANCE->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+                $data['requestPrice'] = $tariff->getRequestPrice();
+            }
+            $form = $this->createForm(new TariffType4(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$_5ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType5(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$_10ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType6(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$TAGESSATZ->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType7(), $data, array('action' => $url));            
         }
         
         return $form;        
@@ -162,8 +205,7 @@ class TalentController extends BaseController {
         $em->flush();
         return new JsonResponse("ok");
     }
-    private function collectTariffFormData($tariff, $data, $type) {
-        $tariff->setType($type);
+    private function collectTariffFormData($tariff, $data) {
         $tariff->setPrice(array_key_exists('price', $data) ? $data['price'] : null);
         $tariff->setMinNum(array_key_exists('minNum', $data) ? $data['minNum'] : null);
         $tariff->setDiscount(array_key_exists('discount', $data) ? ($data['discount'] ? 1 : 0) : null);

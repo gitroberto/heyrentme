@@ -6,7 +6,7 @@
            {{ form_widget(form.type) }}
         </div>
         <div class="col-sm-6">
-            <label for="form_price">Preis pro Per./Std. ab:</label>
+            <label for="form_price">Preis pro Tag ab:</label>
             {{ form_widget(form.price) }}
             {% if form.price.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.price) }}</div>{% endif %}
         </div>
@@ -15,20 +15,6 @@
         <div class="col-xs-12">
             <p class="memo">
                 Bitte gib hier Tarif (bist du Umsatzsteuerpflichtig inkl. Ust.) für diese Einheit an. Sollte es bei einer Buchung zu gefingfügigen Mehrkosten kommen, kannst du das dem Kunden separat mitteilen.
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <label for="form_minNum">Mindestanzahl Personen*:</label>
-            {{ form_widget(form.minNum) }}
-            {% if form.minNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.minNum) }}</div>{% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <p class="memo">
-                *Bitte wähle hier wieviele Personen für eine Gruppen-Buchung mindestens erforderlich sind.
             </p>
         </div>
     </div>
@@ -43,18 +29,10 @@
             {% if form.discountMinNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.discountMinNum) }}</div>{% endif %}
         </div>
         <div class="col-sm-6">
-            <label for="form_discountPrice">Preis pro Std. ab:</label>
+            <label for="form_discountPrice">Preis pro Tag ab:</label>
             {{ form_widget(form.discountPrice) }}
             {% if form.discountPrice.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.discountPrice) }}</div>{% endif %}
             
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="chbox-holder" style="display: inline-block;">
-                {{ form_widget(form.ownPlace) }}
-                <label for="form_ownPlace"><span></span>Eigene Treffpunkt Addresse (Falls der Treffpunkt nicht mit deiner Standard-Adresse übereinstimmt)</label>
-            </div>
         </div>
     </div>
     <div class="row">

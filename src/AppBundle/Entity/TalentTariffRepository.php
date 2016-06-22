@@ -50,5 +50,22 @@ class TalentTariffRepository extends \Doctrine\ORM\EntityRepository {
         }
         $this->getEntityManager()->getConnection()->executeUpdate($sql);
     }
+    public function insert($tariff, $talentId) {
+        $pos = $this->getEntityManager()->createQueryBuilder()
+                ->select('max(tt.position)')
+                ->from('AppBundle:TalentTariff', 'tt')
+                ->andWhere('tt.talent = :talentId')
+                ->setParameter('talentId', $talentId)
+                ->getQuery()
+                ->getSingleScalarResult();
+        if ($pos === null)
+            $pos = 1;
+        else
+            $pos = $pos + 1;
+        $tariff->setPosition($pos);
+        $em = $this->getEntityManager();
+        $em->persist($tariff);
+        $em->flush();
+    }
 }
 

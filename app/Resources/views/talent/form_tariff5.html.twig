@@ -1,0 +1,37 @@
+{{ form_start(form) }}
+    <input type="hidden" name="success" value="{{ form.vars.submitted and form.vars.valid ? "1" : "0" }}"/>
+    <div class="row">
+        <div class="col-sm-6">
+            <label for="form_type">Einheit wählen:</label>
+           {{ form_widget(form.type) }}
+        </div>
+        <div class="col-sm-6">
+            <label for="form_price">Preis 5 Einheiten ab:</label>
+            {{ form_widget(form.price) }}
+            {% if form.price.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.price) }}</div>{% endif %}
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="memo">
+                Bitte gib hier Tarif (bist du Umsatzsteuerpflichtig inkl. Ust.) für diese Einheit an. Sollte es bei einer Buchung zu gefingfügigen Mehrkosten kommen, kannst du das dem Kunden separat mitteilen.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <label for="form_duration">Dauer einer Einheit:</label>
+            {{ form_widget(form.duration) }}
+            <label>MIN.</label>
+            {% if form.duration.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.duration) }}</div>{% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="tariff-save">Diese Tarifoption speichern</button>
+            {% if tariffId %}
+                <button id="tariff-delete" data-id="{{ tariffId }}">Diese Tarifoption zurücksetzen und entrefnen</button>
+            {% endif %}
+        </div>
+    </div>
+{{ form_end(form) }}

@@ -73,10 +73,10 @@
             <input type="submit" id="basic-submit" class="yellow-button" value="Tarif speichern &gt;&gt;">
         </div>
         <div class="col-xs-3">
-            <div class="tariff-box support">
+            <div class="tariff-box support" style="overflow: auto;">
                 <p class="head">Tarif Reihenfolge*</p>
 
-                <ul id="tariff-container">
+                <ul id="tariff-container" style="">
                     {% for tariff in tariffs %}
                         <li class="tariff" data-id="{{ tariff.id }}">{{ tariff.typeName }}</li>
                     {% endfor %}
