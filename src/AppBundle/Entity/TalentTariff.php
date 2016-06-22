@@ -35,13 +35,17 @@ class TalentTariff {
      */
     private $minNum;
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $discount;
+    /**
      * @ORM\Column(type="integer")
      */
-    private $numDiscount;
+    private $discountMinNum;
     /**
      * @ORM\Column(type="decimal")
      */
-    private $priceDiscount;
+    private $discountPrice;
     /**
      * @ORM\Column(type="boolean")
      */
@@ -68,7 +72,11 @@ class TalentTariff {
     private $modifiedAt;    
     //</editor-fold>
 
-    // getters/setters
+    public function getTypeName() {
+        return TariffType::getByType($this->getType())->getName();
+    }
+    
+    // generated getters/setters
     //<editor-fold>    
     /**
      * Get id
@@ -153,51 +161,75 @@ class TalentTariff {
     }
 
     /**
-     * Set numDiscount
+     * Set discount
      *
-     * @param integer $numDiscount
+     * @param boolean $discount
      *
      * @return TalentTariff
      */
-    public function setNumDiscount($numDiscount)
+    public function setDiscount($discount)
     {
-        $this->numDiscount = $numDiscount;
+        $this->discount = $discount;
 
         return $this;
     }
 
     /**
-     * Get numDiscount
+     * Get discount
+     *
+     * @return boolean
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * Set discountMinNum
+     *
+     * @param integer $discountMinNum
+     *
+     * @return TalentTariff
+     */
+    public function setDiscountMinNum($discountMinNum)
+    {
+        $this->discountMinNum = $discountMinNum;
+
+        return $this;
+    }
+
+    /**
+     * Get discountMinNum
      *
      * @return integer
      */
-    public function getNumDiscount()
+    public function getDiscountMinNum()
     {
-        return $this->numDiscount;
+        return $this->discountMinNum;
     }
 
     /**
-     * Set priceDiscount
+     * Set discountPrice
      *
-     * @param string $priceDiscount
+     * @param string $discountPrice
      *
      * @return TalentTariff
      */
-    public function setPriceDiscount($priceDiscount)
+    public function setDiscountPrice($discountPrice)
     {
-        $this->priceDiscount = $priceDiscount;
+        $this->discountPrice = $discountPrice;
 
         return $this;
     }
 
     /**
-     * Get priceDiscount
+     * Get discountPrice
      *
      * @return string
      */
-    public function getPriceDiscount()
+    public function getDiscountPrice()
     {
-        return $this->priceDiscount;
+        return $this->discountPrice;
     }
 
     /**
@@ -368,11 +400,4 @@ class TalentTariff {
         return $this->talent;
     }
     //</editor-fold>
-
-    
-    public function getTypeName() {
-        return TariffType::getByType($this->getType())->getName();
-    }
-    
-
 }

@@ -119,17 +119,26 @@
         $(function() {
             initBasicForm();
             initTariffForm();
-            $('ul').sortable({
+            $('#tariff-container').sortable({
                 'containment': '.tariff-box',
                 'stop': sortSave
-            });
-            
-            $(".num-picker").selectpicker({
-                width: 'fit',
-                style: 'btn-info'
-            });
+            });            
         }); // end of ready
         
+        function reloadTariffs() {
+            var url = '{{ path('talent-tariffs', { 'id': id }) }}';
+            $.get(url)
+                    .done(function(data) {
+                        var box = $('#tariff-container');
+                        box.empty();
+                        var l = data.list.length;
+                        for (var i = 0; i < l; i++) {
+                            var t = data.list[i];
+                            var li = $('<li>').addClass('tariff').data('id', t.id).text(t.name);
+                            box.append(li);
+                        }
+                    });
+        }
         function initTariffForm() {
             var $tariffPicker = $("#form_type");
             $tariffPicker.selectpicker({
@@ -137,7 +146,12 @@
                 style: 'btn-info'
             });
             $tariffPicker.on('changed.bs.select', tariffChanged);
+            $(".num-picker").selectpicker({
+                width: 'fit',
+                style: 'btn-info'
+            });
             $("#tariff-save").click(tariffSave);
+            $("#tariff-delete").click(tariffDelete);
         }
         function initBasicForm() {
             $("#basic-submit").click(basicSubmit);            
@@ -160,11 +174,21 @@
                     target: $('#tariff-form'),
                     success: function() { 
                         initTariffForm();
-                        console.log('tariff form success'); 
+                        reloadTariffs();
                     }
                 });
             else
                 $('<input type="submit">').hide().appendTo($form).click().remove();
+        }
+        function tariffDelete(e) {
+            e.preventDefault();
+            
+            var id = $(this).data('id');
+            var url = '{{ path('talent-tariff-delete', { 'id': '-ID-' }) }}'.replace('-ID-', id);
+            $.get(url)
+                    .done(function() {
+                        reloadTariffs();
+                    });
         }
         function basicSubmit(e) {
             e.preventDefault();

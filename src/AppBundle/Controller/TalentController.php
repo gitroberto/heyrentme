@@ -9,6 +9,7 @@ use AppBundle\Entity\TalentTariff;
 use AppBundle\Entity\TariffType;
 use AppBundle\Entity\Video;
 use AppBundle\Form\Type\Tariff\TariffType1;
+use AppBundle\Form\Type\Tariff\TariffType2;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
@@ -89,7 +90,7 @@ class TalentController extends BaseController {
         if ($form->isValid()) {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            
+                        
             if ($tariff === null) {
                 $tariff = new TalentTariff();
                 $tariff->setTalent($tal);
@@ -99,113 +100,96 @@ class TalentController extends BaseController {
             }
             else {
                 $this->collectTariffFormData($tariff, $data, $type);
+                $em->flush();
             }
-            $em->flush();
             
         }
         
         $tmpl = sprintf('talent/form_tariff%d.html.twig', $type);
-        $fv = $form->createView();
         return $this->render($tmpl, array(
-            'form' => $fv
+            'form' => $form->createView(),
+            'tariffId' => $tariff !== null ? $tariff->getId() : null
         ));
     }
     
     private function getTariffForm($type, $tariff, $url) {
+        $data = array();
+        $data['type'] = strval($type);
+        
         if ($type === TariffType::$EINZELSTUNDEN->getId()) {
-            $data = array();
-            $data['type'] = strval($type);
             if ($tariff !== null) {
                 $data['price'] = $tariff->getPrice();
-                $data['requestPrice'] = $tariff->getRequestPrice();
+                $data['requestPrice'] = $tariff->getRequestPrice() > 0;
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();                
             }
             $form = $this->createForm(new TariffType1(), $data, array(
                 'action' => $url
-            ));
-            
-            
-            /*$hours = array();
-            for ($i = 3; $i < 10; $i++)
-                $hours[$i] = "{$i} STD.";
-            $form = $this->createFormBuilder($data)
-                    ->setAction($url)
-                    ->add('type', 'choice', array(
-                        'choices' => TariffType::getChoices()
-                    ))
-                    ->add('price', 'integer', array(
-                        'constraints' => array(
-                            new NotBlank(),
-                            new Range(array('min' => 10, 'max' => 100))
-                        )
-                    ))
-                    ->add('requestPrice', 'checkbox', array(
-                        'required' => false
-                    ))
-                    ->add('numDiscount', 'checkbox', array(
-                        'required' => false
-                    ))
-                    ->add('minNum', 'choice', array(
-                        'choices' => $hours
-                    ))
-                    ->add('priceDiscount', 'integer', array(
-                        
-                    ))
-                    ->getForm();
-             */
+            ));            
         }
-        else /*if ($type === TariffType::$GRUPPENSTUNDEN)*/ {
-            $data = array();
-            $data['type'] = strval($type);
+        else if ($type === TariffType::$GRUPPENSTUNDEN->getId()) {
             if ($tariff !== null) {
                 $data['price'] = $tariff->getPrice();
+                $data['minNum'] = $tariff->getMinNum();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+                $data['ownPlace'] = $tariff->getOwnPlace();
             }
-            $form = $this->createFormBuilder($data)
-                    ->setAction($url)
-                    ->add('type', 'choice', array(
-                        'choices' => TariffType::getChoices()
-                    ))
-                    ->add('price', 'integer', array(
-                        'constraints' => array(
-                            new NotBlank(),
-                            new Range(array('min' => 10, 'max' => 100))
-                        )
-                    ))
-                    ->getForm();
+            $form = $this->createForm(new TariffType2(), $data, array(
+                'action' => $url
+            ));            
         }
+        
         return $form;        
     }
     /**
      * @Route("/provider/talent-tariff-order/{id}/{ids}", name="talent-tariff-order")
      */
-    public function tariffOrderAction(Request $request, $id, $ids) {        
+    public function tariffDeleteAction(Request $request, $id, $ids) {
         $arr = array_map('intval', explode(',', $ids));
         $this->getDoctrineRepo('AppBundle:TalentTariff')->saveOrder($id, $arr);
-        return JsonResponse("ok");
+        return new JsonResponse("ok");
+    }
+    /**
+     * @Route("/provider/talent-tariff-delete/{id}", name="talent-tariff-delete")
+     */
+    public function tariffOrderAction(Request $request, $id) {
+        $em = $this->getDoctrine()->getManager();
+        $tt = $this->getDoctrineRepo('AppBundle:TalentTariff')->find($id);
+        $em->remove($tt);
+        $em->flush();
+        return new JsonResponse("ok");
     }
     private function collectTariffFormData($tariff, $data, $type) {
         $tariff->setType($type);
-        if ($type === TariffType::$EINZELSTUNDEN->getId()) {
-            $tariff->setPrice($data['price']);
-        }
-        else {
-            $tariff->setPrice($data['price']);
-        }
-        
+        $tariff->setPrice(array_key_exists('price', $data) ? $data['price'] : null);
+        $tariff->setMinNum(array_key_exists('minNum', $data) ? $data['minNum'] : null);
+        $tariff->setDiscount(array_key_exists('discount', $data) ? ($data['discount'] ? 1 : 0) : null);
+        $tariff->setDiscountMinNum(array_key_exists('discountMinNum', $data) ? $data['discountMinNum'] : null);
+        $tariff->setDiscountPrice(array_key_exists('discountPrice', $data) ? $data['discountPrice'] : null);
+        $tariff->setOwnPlace(array_key_exists('ownPlace', $data) ? ($data['ownPlace'] ? 1 : 0) : null);
+        $tariff->setDuration(array_key_exists('duration', $data) ? $data['duration'] : null);
+        $tariff->setRequestPrice(array_key_exists('requestPrice', $data) ? ($data['requestPrice'] ? 1 : 0) : null);
     }
     
     /**
      * @Route("/provider/talent-tariffs/{id}", name="talent-tariffs")
      */
     public function tariffsAction(Request $request, $id) {
-        $tariffs = $this->getDoctrineRepo('AppBundle:Talent')->getTariffs($id);
+        $tariffs = $this->getDoctrineRepo('AppBundle:TalentTariff')->getTariffs($id);
         
         $arr = array();
+        $i = 0;
         foreach ($tariffs as $t)
-            array_push ($arr, array(
+            $arr[] = array(
                 'id' => $t->getId(),
-                'name' => $t->getName()
-                ));
-        
+                'name' => $t->getTypeName()
+            );
+        $result = array('list' => $arr);
+      
+        return new JsonResponse($result);
     }
     
     

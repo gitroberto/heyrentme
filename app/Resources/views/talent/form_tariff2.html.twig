@@ -1,27 +1,92 @@
 {{ form_start(form) }}
     <input type="hidden" name="success" value="{{ form.vars.submitted and form.vars.valid ? "1" : "0" }}"/>
     <div class="row">
-        <div class="col-sm-12">
-            Gruppenstunden
-        </div>
-    </div>
-    <div class="row">
         <div class="col-sm-6">
-           Einheit wählen:
+            <label for="form_type">Einheit wählen:</label>
            {{ form_widget(form.type) }}
         </div>
         <div class="col-sm-6">
-            Preis pro Std. ab: 
+            <label for="form_price">Preis pro Per./Std. ab:</label>
             {{ form_widget(form.price) }}
-            {% if form.price.vars.errors|length > 0 %}
-                <div class="err-msg">{{ form_errors(form.price) }}</div>
-            {% endif %}
+            {% if form.price.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.price) }}</div>{% endif %}
         </div>
     </div> 
     <div class="row">
+        <div class="col-xs-12">
+            <p class="memo">
+                Bitte gib hier Tarif (bist du Umsatzsteuerpflichtig inkl. Ust.) für diese Einheit an. Sollte es bei einer Buchung zu gefingfügigen Mehrkosten kommen, kannst du das dem Kunden separat mitteilen.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <label for="form_minNum">Mindestanzahl Personen*:</label>
+            {{ form_widget(form.minNum) }}
+            {% if form.minNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.minNum) }}</div>{% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="memo">
+                *Bitte wähle hier wieviele Personen für eine Gruppen-Buchung mindestens erforderlich sind.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="chbox-holder" style="display: inline-block;">
+                {{ form_widget(form.discount) }}
+                <label for="form_discount"><span></span>Mengenrabatt ab:</label>
+            </div>
+            {% if form.discount.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.discount) }}</div>{% endif %}
+            {{ form_widget(form.discountMinNum) }}
+            {% if form.discountMinNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.discountMinNum) }}</div>{% endif %}
+        </div>
+        <div class="col-sm-6">
+            <label for="form_discountPrice">Preis pro Std. ab:</label>
+            {{ form_widget(form.discountPrice) }}
+            {% if form.discountPrice.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.discountPrice) }}</div>{% endif %}
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="chbox-holder" style="display: inline-block;">
+                {{ form_widget(form.ownPlace) }}
+                <label for="form_ownPlace"><span></span>Eigene Treffpunkt Addresse (Falls der Treffpunkt nicht mit deiner Standard-Adresse übereinstimmt)</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <button id="tariff-save">Diese Tarifoption speichern</button>
-            <button id="tariff-delete">Diese Tarifoption zurücksetzen und entrefnen</button>
+            {% if tariffId %}
+                <button id="tariff-delete" data-id="{{ tariffId }}">Diese Tarifoption zurücksetzen und entrefnen</button>
+            {% endif %}
         </div>
     </div>
 {{ form_end(form) }}
+
+<script>
+    function discountChanged() {
+        var $dcnt = $('#form_discount');
+        var $dcntNum = $('#form_discountMinNum');
+        var $dcntPrice = $('#form_discountPrice');
+        if ($dcnt.prop('checked')) {
+            $dcntPrice.removeAttr('readOnly');
+            $dcntPrice.css({ 'background-color': '#fff', 'opacity': '1.0' });
+            $dcntNum.prop('disabled', false);
+            $dcntNum.selectpicker('refresh');
+        }
+        else {
+            $dcntPrice.attr('readOnly', 'true');
+            $dcntPrice.css({ 'background-color': '#aaa', 'opacity': '0.5' });
+            $dcntNum.prop('disabled', true);
+            $dcntNum.selectpicker('refresh');
+        }        
+    }
+    $(document).ready(function () {
+        $("#form_discount").on('click change', discountChanged);
+        window.setTimeout(discountChanged, 123); // todo: improve (call after $('.num-picker').selectpicker())
+    });
+</script>

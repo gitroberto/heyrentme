@@ -37,25 +37,84 @@
     <div class="row">
         <div class="col-sm-6">
             <div class="chbox-holder" style="display: inline-block;">
-                {{ form_widget(form.numDiscount) }}
-                <label for="form_numDiscount"><span></span>Mengenrabatt ab:</label>
-                {% if form.numDiscount.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.numDiscount) }}</div>{% endif %}
+                {{ form_widget(form.discount) }}
+                <label for="form_discount"><span></span>Mengenrabatt ab:</label>
             </div>
-            {{ form_widget(form.minNum) }}
-            {% if form.minNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.minNum) }}</div>{% endif %}
+            {% if form.discount.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.discount) }}</div>{% endif %}
+            {{ form_widget(form.discountMinNum) }}
+            {% if form.discountMinNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.discountMinNum) }}</div>{% endif %}
         </div>
         <div class="col-sm-6">
-            <label for="form_priceDiscount">Preis pro Std. ab:</label>
-            {{ form_widget(form.priceDiscount) }}
-            {% if form.priceDiscount.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.priceDiscount) }}</div>{% endif %}
-            
+            <div class="chbox-holder" style="display: inline-block;">
+                <label for="form_discountPrice">Preis pro Std. ab:</label>
+                {{ form_widget(form.discountPrice) }}
+            </div>
+            {% if form.discountPrice.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.discountPrice) }}</div>{% endif %}
         </div>
     </div>
-            
     <div class="row">
         <div class="col-sm-12">
             <button id="tariff-save">Diese Tarifoption speichern</button>
-            <button id="tariff-delete">Diese Tarifoption zurücksetzen und entrefnen</button>
+            {% if tariffId %}
+                <button id="tariff-delete" data-id="{{ tariffId }}">Diese Tarifoption zurücksetzen und entrefnen</button>
+            {% endif %}
         </div>
     </div>
 {{ form_end(form) }}
+
+<script>
+    function priceChanged() {
+        var $price = $("#form_price");
+        var price = parseInt($price.val());
+        var $req = $("#form_requestPrice");
+        var $reqHold = $req.parent(".chbox-holder");
+        if (price >= 35) {
+            $req.removeAttr('disabled');
+            $reqHold.removeClass('rdisable');
+        }
+        else {
+            $req.prop('checked', false);
+            $req.attr('disabled', 'disabled');
+            $reqHold.addClass('rdisable');
+        }
+    }
+    function requestPriceChanged() {
+        var $price = $("#form_price");
+        var price = parseInt($price.val());
+        var $req = $("#form_requestPrice");
+        var req = $req.prop('checked');
+        if (req) {
+            $price.attr('readOnly', 'true');
+            $price.css({ 'background-color': '#aaa', 'opacity': '0.5' });
+        }
+        else {
+            $price.removeAttr('readOnly');
+            $price.css({ 'background-color': '#fff', 'opacity': '1.0' });
+        }
+    }
+    function discountChanged() {
+        var $dcnt = $('#form_discount');
+        var $dcntNum = $('#form_discountMinNum');
+        var $dcntPrice = $('#form_discountPrice');
+        if ($dcnt.prop('checked')) {
+            $dcntPrice.removeAttr('readOnly');
+            $dcntPrice.css({ 'background-color': '#fff', 'opacity': '1.0' });
+            $dcntNum.prop('disabled', false);
+            $dcntNum.selectpicker('refresh');
+        }
+        else {
+            $dcntPrice.attr('readOnly', 'true');
+            $dcntPrice.css({ 'background-color': '#aaa', 'opacity': '0.5' });
+            $dcntNum.prop('disabled', true);
+            $dcntNum.selectpicker('refresh');
+        }        
+    }
+    $(document).ready(function () {
+        $("#form_price").on('change keyup', priceChanged);
+        $("#form_requestPrice").on('click change', requestPriceChanged);          
+        $("#form_discount").on('click change', discountChanged);
+        priceChanged();
+        requestPriceChanged();
+        window.setTimeout(discountChanged, 123); // todo: improve (call after $('.num-picker').selectpicker())
+    });
+</script>

@@ -6,12 +6,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class TariffType1 extends AbstractType {
+class TariffType2 extends AbstractType {
     
     public static $numChoices;
+    public static $minChoices;
     
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
@@ -24,19 +27,26 @@ class TariffType1 extends AbstractType {
                         new Range(array('min' => 10, 'max' => 100))
                     )
                 ))
-                ->add('requestPrice', 'checkbox', array(
-                    'required' => false
+                ->add('minNum', 'choice', array(
+                    'choices' => TariffType2::$minChoices,
+                    'attr' => array(
+                        'class' => 'num-picker'
+                    )
                 ))
                 ->add('discount', 'checkbox', array(
                     'required' => false
                 ))
                 ->add('discountMinNum', 'choice', array(                    
-                    'choices' => TariffType1::$numChoices,
+                    'choices' => TariffType2::$numChoices,
                     'attr' => array(
                         'class' => 'num-picker'
                     ),
                     'constraints' => array(
-                        new NotBlank(array('groups' => 'num-discount'))
+                        new NotBlank(array('groups' => 'num-discount')),
+                        new Callback(array(
+                            'callback' => array($this, 'validate'),
+                            'groups' => 'num-discount'
+                        ))
                     )
                 ))
                 ->add('discountPrice', 'integer', array(
@@ -45,7 +55,16 @@ class TariffType1 extends AbstractType {
                         new NotBlank(array('groups' => 'num-discount')),
                         new Range(array('min' => 10, 'max' => 100))
                     )
+                ))
+                ->add('ownPlace', 'checkbox', array(
+                    'required' => false
                 ));
+    }
+    
+    public function validate($value, ExecutionContextInterface $context) {
+        $data = $context->getRoot()->getData();
+        if (intval($data['minNum']) >= intval($data['discountMinNum']))
+            $context->addViolation('Dieser Wert muss größer als Mindestanzahl Personen sein');
     }
     
     public function configureOptions(OptionsResolver $resolver) {
@@ -65,10 +84,13 @@ class TariffType1 extends AbstractType {
     }
     
     public static function init() {
-        TariffType1::$numChoices = array();
+        TariffType2::$minChoices = array();
+        for ($i = 2; $i < 10; $i++)
+            TariffType2::$minChoices[$i] = "{$i} PER.";
+        TariffType2::$numChoices = array();
         for ($i = 3; $i < 10; $i++)
-            TariffType1::$numChoices[$i] = "{$i} STD.";
+            TariffType2::$numChoices[$i] = "{$i} PER.";
     }
 }
 
-TariffType1::init();
+TariffType2::init();
