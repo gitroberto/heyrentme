@@ -115,6 +115,7 @@
 {% block script %}
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <script>
+        var fieldsChanged = false;
         
         $(function() {
             initBasicForm();
@@ -122,7 +123,12 @@
             $('#tariff-container').sortable({
                 'containment': '.tariff-box',
                 'stop': sortSave
-            });            
+            });
+            
+            $("form input[type='text']").on("change", function() {
+                fieldsChanged = true;
+            });
+            $(".top-menu-button").click(topMenuClick);
         }); // end of ready
         
         function reloadTariffs() {
@@ -198,9 +204,20 @@
             if ($form[0].checkValidity())
                 $form.ajaxSubmit({
                     target: $('#basic-form'),
-                    success: function() { 
-                        initBasicForm();
-                        console.log('basic form success'); 
+                    success: function(data, statusText, xhr, $newForm) { 
+                        var url = '{{ path('talent-edit-2', { 'id': id }) }}';
+                        // status change
+                        var $f = $(data);
+                        var v1 = $f.find('input[name="statusChanged"]').val();
+                        var v2 = $f.find('input[name="success"]').val();
+                        if (v1 === '1') {
+                            $("#edit-offer").modal();
+                            $("#edit-offer").on("hidden.bs.modal", function() {
+                                window.location = url;
+                            });
+                        }
+                        else if (v2 === '1')
+                            window.location = url;                        
                     }
                 });
             else 
@@ -215,80 +232,14 @@
             var url = '{{ path('talent-tariff-order', { 'id': id, 'ids': '-IDS-' }) }}'.replace('-IDS-', ids);
             $.get(url);            
         }
-        {#
-      var fieldsChanged = false;
-      var url2 = "{{ path('talent-edit-2', {'id': id}) }}";
-      var url3 = "{{ path('talent-edit-3', {'eqid': id}) }}";
-      var url4 = "{{ path('talent-edit-4', {'id': id}) }}";
-      
-      function topMenuClick(){
-          
-          if (!fieldsChanged || confirm('Sie haben ungesicherte Änderungen. Möchtest du fortfahren?')){
-              switch($(this).attr("id").split("_")[1]){
-                  case "2":
-                      location.href = url2;
-                      break;
-                  case "3":
-                      location.href = url3;
-                      break;
-                  case "4":
-                      location.href = url4;
-                      break;
-              }
-              
-          } 
-      }
-      function priceChanged() {
-          var $price = $("#form_price");
-          var price = parseInt($price.val());
-          var $req = $("#form_requestPrice");
-          var $reqHold = $req.parent(".chbox-holder");
-          if (price >= 35) {
-              $req.removeAttr('disabled');
-              $reqHold.removeClass('rdisable');
-          }
-          else {
-              $req.prop('checked', false);
-              $req.attr('disabled', 'disabled');
-              $reqHold.addClass('rdisable');
-          }
-      }
-      function requestPriceChanged() {
-          var $price = $("#form_price");
-          var price = parseInt($price.val());
-          var $req = $("#form_requestPrice");
-          var req = $req.prop('checked');
-          if (req) {
-              $price.attr('readOnly', 'true');
-              $price.css({ 'background-color': '#aaa', 'opacity': '0.5' });
-          }
-          else {
-              $price.removeAttr('readOnly');
-              $price.css({ 'background-color': '#fff', 'opacity': '1.0' });
-          }
-      }
-      #}
-          {# 
-      
-      $(document).ready(function () {
-          $("form input[type='text']").on("change", function(){
-              fieldsChanged = true;
-          });
-          
-          $(".top-menu-button").click(topMenuClick);
-          $("#form_price").on('change keyup', priceChanged);
-          $("#form_requestPrice").on('click change', requestPriceChanged);
-          
-        priceChanged();
-        requestPriceChanged();  
-          
-        {% if statusChanged %}
-            $("#edit-offer").modal();
-            $("#edit-offer").on("hidden.bs.modal", function() {
-                window.location = '{{ path('talent-edit-2', { 'id': id }) }}';
-            });
-        {% endif %}
-      });
-        #}
-  </script>
+        function topMenuClick() {
+            if (!fieldsChanged || confirm('Sie haben ungesicherte Änderungen. Möchtest du fortfahren?')){
+                switch($(this).attr("id").split("_")[1]){
+                    case "2": location.href = "{{ path('talent-edit-2', {'id': id}) }}"; break;
+                    case "3": location.href = "{{ path('talent-edit-3', {'eqid': id}) }}"; break;
+                    case "4": location.href = "{{ path('talent-edit-4', {'id': id}) }}"; break;
+                }
+            } 
+        }
+    </script>
 {% endblock %}

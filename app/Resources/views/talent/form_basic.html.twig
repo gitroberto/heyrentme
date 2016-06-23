@@ -1,5 +1,7 @@
 {{ form_start(form) }}
-    <label for="name2">Angebotsname:*</label>
+    <input type="hidden" name="statusChanged" value="{{ statusChanged ? '1' : '0' }}"/>
+    <input type="hidden" name="success" value="{{ form.vars.submitted and form.vars.valid ? "1" : "0" }}"/>
+    <label for="name">Angebotsname:*</label>
     {{ form_widget(form.name, { 'attr': { 'placeholder': 'Maximal 32 Zeichen', 'class': 'normal-input', 'maxlength': '32' } }) }}
     {% if form.name.vars.errors|length > 0 %}
         <div class="err-msg">{{ form_errors(form.name) }}</div>

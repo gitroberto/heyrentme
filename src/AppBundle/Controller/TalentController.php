@@ -58,20 +58,35 @@ class TalentController extends BaseController {
                     )
                 ))
                 ->add('id', 'hidden')
-                ->add('success', 'hidden')
                 ->getForm();
         
         $form->handleRequest($request);
+        $statusChanged = false; // change relevant for email notification
         if ($form->isValid()) {
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
+            // check for modaration relevant changes
+            $changed = $tal->getName() !== $data['name'];
+            
             $tal->setName($data['name']);
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
             $success = true;            
+
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Talent')->talentModified($id);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedTalentInfoMessage($request, $tal); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }            
         }
         
         return $this->render('talent/form_basic.html.twig', array(
             'form' => $form->createView(),
             'success' => $success,
+            'statusChanged' => $statusChanged,
             'id' => $id
         ));
     }
