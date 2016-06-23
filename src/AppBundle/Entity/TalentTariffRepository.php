@@ -67,5 +67,37 @@ class TalentTariffRepository extends \Doctrine\ORM\EntityRepository {
         $em->persist($tariff);
         $em->flush();
     }
+
+    public function convertTalentToTariffs() {
+        $out = '';
+        $em = $this->getEntityManager();
+        $talents = $em->getRepository('AppBundle:Talent')->findAll();
+        foreach ($talents as $tal) {
+            $n = str_pad(substr($tal->getName(), 0, 20) . "...", 24);
+            $out .= "Checking talent id={$tal->getId()}, name={$n}\t";
+            $tt = $em->getRepository('AppBundle:TalentTariff')->findOneBy(array(
+                'type' => TariffType::$EINZELSTUNDEN->getId(),
+                'talent' => $tal->getId()
+            ));
+            if ($tt === null) {
+                $nt = new TalentTariff();
+                $nt->setTalent($tal);
+                $nt->setType(TariffType::$EINZELSTUNDEN->getId());
+                $nt->setPrice($tal->getPrice());
+                $nt->setRequestPrice($tal->getRequestPrice());
+                $nt->setPosition(1);
+                $em->persist($nt);
+                $out .= "CREATED NEW Einzelstunden tariff";
+            }
+            else 
+                $out .= "ALREADY EXISTS Einzelstunden tariff";
+            $out .= "\n";
+        }
+        
+        $em->flush();
+        $out .= "Saved to database\n";
+        
+        return $out;
+    }
 }
 

@@ -49,3 +49,6 @@ services:
         class: AppBundle\Service\FillUuidService
         arguments: [@doctrine.orm.entity_manager]
         
+    convert_talent_to_tariff:
+        class: AppBundle\Service\ConvertTalentToTariff
+        arguments: [@doctrine.orm.entity_manager]
