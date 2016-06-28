@@ -72,6 +72,9 @@ class TalentTariff {
     private $modifiedAt;    
     //</editor-fold>
 
+    public function getTariffType() {
+        return TariffType::getByType($this->getType());
+    }
     public function getTypeName() {
         return TariffType::getByType($this->getType())->getName();
     }

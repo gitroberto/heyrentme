@@ -4,6 +4,14 @@ namespace AppBundle\Entity;
 
 class TariffType {
     
+    const EINZELSTUNDEN = 1;
+    const GRUPPENSTUNDEN = 2;
+    const WORKSHOP = 3;
+    const PERFORMANCE = 4;
+    const _5ERBLOCK = 5;
+    const _10ERBLOCK = 6;
+    const TAGESSATZ = 7;
+
     public static $EINZELSTUNDEN;
     public static $GRUPPENSTUNDEN;
     public static $WORKSHOP;
@@ -32,13 +40,13 @@ class TariffType {
     }
     
     public static function init() {
-        TariffType::$EINZELSTUNDEN = new TariffType(1, 'Einzelstunden');
-        TariffType::$GRUPPENSTUNDEN = new TariffType(2, 'Gruppenstunden');
-        TariffType::$WORKSHOP = new TariffType(3, 'Workshop');
-        TariffType::$PERFORMANCE = new TariffType(4, 'Performance');
-        TariffType::$_5ERBLOCK = new TariffType(5, '5erblock');
-        TariffType::$_10ERBLOCK = new TariffType(6, '10erblock');
-        TariffType::$TAGESSATZ = new TariffType(7, 'Tagessatz');
+        TariffType::$EINZELSTUNDEN = new TariffType(TariffType::EINZELSTUNDEN, 'Einzelstunden');
+        TariffType::$GRUPPENSTUNDEN = new TariffType(TariffType::GRUPPENSTUNDEN, 'Gruppenstunden');
+        TariffType::$WORKSHOP = new TariffType(TariffType::WORKSHOP, 'Workshop');
+        TariffType::$PERFORMANCE = new TariffType(TariffType::PERFORMANCE, 'Performance');
+        TariffType::$_5ERBLOCK = new TariffType(TariffType::_5ERBLOCK, '5erblock');
+        TariffType::$_10ERBLOCK = new TariffType(TariffType::_10ERBLOCK, '10erblock');
+        TariffType::$TAGESSATZ = new TariffType(TariffType::TAGESSATZ, 'Tagessatz');
     }
     public static function getByType($type) {
         switch ($type) {

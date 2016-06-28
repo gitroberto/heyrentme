@@ -212,97 +212,174 @@
             <div class="offer-dates">
                 <h3>Anfrage für:</h3>
                 <h4>{{ item.name }}</h4>
-
-                <div class="panel-group" id="panel-quote-group">
-                <div class="panel panel-default einzelstunden">
-                    <div class="panel-heading" id="robert-heading">
-                        <p class="panel-title">
-                           EINZELSTUNDEN{% if item.requestPrice %}: auf Anfr.{% else %} ab: {{ item.activePrice|number_format(2, ',') }} €{% endif %} 
-                            <span class="pull-right">
-                                <a>
-                                    <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
-                                </a>
-                            </span>
-                        </p>
-                    </div>
-                   
-                    <div id="collapseQuote" class="panel-collapse robertcollapse collapse">
-                        <div class="panel-body">
                 
-                <div class="date-picker">
-                    <!-- Date -->
-                    <div class="date-container  position-relative">
-                      <p class="mobile-hidden">Beginn / Ende</p>
-                      <div class="input-group date" id="datetimepicker1">
-                          <input type="text" class="form-control" id="date-range" />
-                      </div>
+                {% for tariff in tariffs %}
+                    <div class="panel-group" id="panel-quote-group">
+                        <div class="panel panel-default einzelstunden">
+                            <div class="panel-heading" id="robert-heading">
+                                <p class="panel-title">
+                                   {{ tariff.tariffType.name }}
+                                   {% if tariff.requestPrice %}: auf Anfr.{% else %} ab: {{ tariff.price|number_format(2, ',') }} &euro;{% endif %} 
+                                    <span class="pull-right">
+                                        <a>
+                                            <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
+                                        </a>
+                                    </span>
+                                </p>
+                            </div>
+                            <div id="collapseQuote" class="panel-collapse robertcollapse collapse" data-id="{{ tariff.id }}" data-type="{{ tariff.type }}">
+                                {% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
+                                    <div class="panel-body">
+                                        <div class="date-picker">
+                                            <!-- Date -->
+                                            <div class="date-container  position-relative">
+                                              <p class="mobile-hidden">Beginn / Ende</p>
+                                              <div class="input-group date datetimepicker" id="datetimepicker1">
+                                                  <input type="text" class="form-control date-range" id="date-range" />
+                                              </div>
+                                            </div>
+                                            <!-- Time -->
+                                            <div class="time-container">
+                                                <p class="mobile-hidden">Uhrzeit
+                                                    {% if tariff.discount %}
+                                                        <br/>
+                                                        Ab {{ tariff.discountMinNum }} Std. nur <span style="font-weight: bold;">{{ tariff.discountPrice|number_format(2, ',') }} EUR/Std.</span>
+                                                    {% endif %}
+                                                    <br/>
+                                                    <br/>
+                                                </p>
+                                                <select id="tests" name="gender" class="selectpicker bs-select-hidden hour-from">
+                                                    {% for i in range(1, 23) %}<option value="{{ "Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; %02d:00"|format(i)|raw }}"{% if i == 10 %} selected="selected"{% endif %}>{{ "%02d:00 Uhr"|format(i) }}</option>{% endfor %}</select>
+                                                <select id="tests2" name="gender" class="selectpicker bs-select-hidden hour-to">
+                                                    {% for i in range(1, 23) %}<option value="{{ "Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; %02d:00"|format(i)|raw }}"{% if i == 11 %} selected="selected"{% endif %}>{{ "%02d:00 Uhr"|format(i) }}</option>{% endfor %}</select>
+                                            </div>
+                                            <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
+                                            <p class="price">
+                                                <b class="price-calc">
+                                                    {% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}
+                                                </b>                         
+                                            </p>
+                                            <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
+                                        </div>
+                                    </div>
+                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+                                    <div class="panel-body">
+                                        <div class="date-picker">
+                                            <!-- Date -->
+                                            <div class="date-container  position-relative">
+                                              <p class="mobile-hidden">Wunschtermin*</p>
+                                              <div class="input-group date datetimepicker" id="datetimepicker1">
+                                                  <input type="text" class="form-control date-range" id="date-range" />
+                                              </div>
+                                            </div>
+                                            <div>
+                                                <p>
+                                                    Anzahl Personen (min. {{ tariff.minNum }})
+                                                    {% if tariff.discount %}
+                                                        <br/>
+                                                        Ab {{ tariff.discountMinNum }} Per. nur <span style="font-weight: bold;">{{ tariff.discountPrice|number_format(2, ',') }} EUR/Per.</span>
+                                                    {% endif %}
+                                                    <br/>
+                                                    <br/>
+                                                    <select id="min-num" class="num-picker">
+                                                        {% for i in range(tariff.minNum, 9) %}<option value="{{ i }}">{{ i }} PER.</option>{% endfor %}
+                                                    </select>
+                                                </p>
+                                                
+                                            </div>
+                                            <div class="user-data">
+                                                <p>Treffpunkt*</p>
+                                                <div class="user-data-tabs">
+                                                    <div class="user-tab steps">
+                                                        <p>{{ item.addressAsString }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
+                                            <p class="price">{#<span>ab</span>#}
+                                                <b class="price-calc">
+                                                    {% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}
+                                                </b>                         
+                                            </p>
+                                            <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
+                                        </div>
+                                    </div>
+                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::PERFORMANCE') %}
+                                    <div class="panel-body">                
+                                        <div class="date-picker">
+                                            <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
+                                            <p class="price">
+                                                <b class="price-calc">{% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}</b>
+                                            </p>
+                                            <p>
+                                                Hinweis: Termine werden direkt mit dem Anbieter vereinbart.<br/>
+                                                Dauer einer Einheit: {{ tariff.duration|number_format(0) }} min.
+                                            </p>
+                                            <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
+                                        </div>
+                                    </div>
+                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_5ERBLOCK') or tariff.type == constant('AppBundle\\Entity\\TariffType::_10ERBLOCK') %}
+                                    <div class="panel-body">                
+                                        <div class="date-picker">
+                                            <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
+                                            <p class="price">{#<span>ab</span>#}
+                                                <b class="price-calc">{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span></b>                         
+                                            </p>
+                                            <p>
+                                                Hinweis: Termine werden direkt mit dem Anbieter vereinbart.<br/>
+                                                Dauer einer Einheit: {{ tariff.duration|number_format(0) }} min.
+                                            </p>
+                                            <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
+                                        </div>
+                                    </div>
+                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}
+                                    <div class="panel-body">
+                                        <div class="date-picker">
+                                            <!-- Date -->
+                                            <div class="date-container  position-relative">
+                                              <p class="mobile-hidden">Wunschtermin*</p>
+                                              <div class="input-group date datetimepicker" id="datetimepicker1">
+                                                  <input type="text" class="form-control date-range" id="date-range" />
+                                              </div>
+                                            </div>
+                                            <div>
+                                                <p>
+                                                    Anzahl Tagen (min. {{ tariff.minNum }})
+                                                    {% if tariff.discount %}
+                                                        <br/>
+                                                        Ab {{ tariff.discountMinNum }} Tage nur <span style="font-weight: bold;">{{ tariff.discountPrice|number_format(2, ',') }} EUR/T</span>
+                                                    {% endif %}
+                                                    <br/>
+                                                    <br/>
+                                                    <select id="min-num" class="num-picker">
+                                                        {% for i in range(1, 9) %}<option value="{{ i }}">{{ i }} T</option>{% endfor %}
+                                                    </select>
+                                                </p>
+                                                
+                                            </div>
+                                            <div class="user-data">
+                                                <p>Treffpunkt*</p>
+                                                <div class="user-data-tabs">
+                                                    <div class="user-tab steps">
+                                                        <p>{{ item.addressAsString }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
+                                            <p class="price">{#<span>ab</span>#}
+                                                <b class="price-calc">
+                                                    {% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}
+                                                </b>                         
+                                            </p>
+                                            <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                        </div>
+                        </div>
                     </div>
-                    <!-- Time -->
-                    <div class="time-container">
-                        <p class="mobile-hidden">Uhrzeit</p>
-                        <select id="tests" name="gender" class="selectpicker bs-select-hidden">
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 01:00">01:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 02:00">02:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 03:00">03:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 04:00">04:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 05:00">05:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 06:00">06:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 07:00">07:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 08:00">08:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 09:00">09:00 Uhr</option>
-                            <option selected="selected" value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 10:00">10:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 11:00">11:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 12:00">12:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 13:00">13:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 14:00">14:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 15:00">15:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 16:00">16:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 17:00">17:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 18:00">18:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 19:00">19:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 20:00">20:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 21:00">21:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 22:00">22:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
-                        </select>
-                        <select id="tests2" name="gender" class="selectpicker bs-select-hidden">
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 01:00">01:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 02:00">02:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 03:00">03:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 04:00">04:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 05:00">05:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 06:00">06:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 07:00">07:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 08:00">08:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 09:00">09:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 10:00">10:00 Uhr</option>
-                            <option selected="selected" value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 11:00">11:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 12:00">12:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 13:00">13:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 14:00">14:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 15:00">15:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 16:00">16:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 17:00">17:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 18:00">18:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 19:00">19:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 20:00">20:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 21:00">21:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 22:00">22:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
-                        </select>
-                    </div>
-                    <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
-                    <p class="price">{#<span>ab</span>#}
-                        <b class="price-calc">
-                            {% if item.requestPrice %}auf Anfr.{% else %}{{ item.activePrice|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}
-                        </b>                         
-                    </p>
-                    <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
-                </div>
-                    </div>
-                </div>
-            </div>
-                </div>
+                {% endfor %}
+                
                 <a id="fragestellenbut" class="green-big-button yellow question" href="#">Eine Frage stellen</a>
             </div>
             <div class="user-data">
@@ -482,9 +559,7 @@
   <script src="/js/vendors/moment.min.js"></script>
   <script src="/js/vendors/bootstrap-datetimepicker.min.js"></script>
     <script src="/js/vendors/vimeo.js"></script>
-  <script>
-    var itemPrice = {% if item.requestPrice %}null{% else %}{{ item.activePrice|number_format(2) }}{% endif %};
-    
+  <script>    
     {% if item.video %}
         function playerWidth() {
             var pl = document.getElementById('player');
@@ -552,37 +627,36 @@
         {% endif %}    
          
         
-        $('#date-range').val(moment().add(1, 'days').format('DD.MM.YYYY'));
-        updatePrice();
+        $('.date-range').val(moment().add(1, 'days').format('DD.MM.YYYY'));        
         
-        var config = {
-            language:'de',
-            format:'DD.MM.YYYY',
-            autoClose: true,
-            startDate: new Date(),
-            selectForward: true,
-            duration: 0,
-            container:'.date-container',
-            singleMonth: true,
-            showShortcuts: false,
-            showTopbar: false,
-            singleDate: true,
-            setValue: function(date) {
-                $('#date-range').val(date);
-            }
-        };
-        
-        
-        $("#datetimepicker1").dateRangePicker(config).bind('datepicker-open',function()  {
-            $(this).children('input').css('background-color','#f0c814').css('color','white').addClass('calendar-icon-hover');
-        }).bind('datepicker-closed',function()
-        {
-            $(this).children('input').css('background-color','white').css('color','black').removeClass('calendar-icon-hover');
+        $(".datetimepicker").each(function(index, item) {
+            $(item).dateRangePicker({
+                language:'de',
+                format:'DD.MM.YYYY',
+                autoClose: true,
+                startDate: new Date(),
+                selectForward: true,
+                duration: 0,
+                container: $(item).parent(),
+                singleMonth: true,
+                showShortcuts: false,
+                showTopbar: false,
+                singleDate: true,
+                setValue: function(date) {
+                    $('.date-range').val(date);
+                }
+            }).bind('datepicker-open',function()  {
+                $(this).children('input').css('background-color','#f0c814').css('color','white').addClass('calendar-icon-hover');
+            }).bind('datepicker-closed',function()
+            {
+                $(this).children('input').css('background-color','white').css('color','black').removeClass('calendar-icon-hover');
+            });            
         });
         
-        $("#tests, #tests2").change(function() {
-            updatePrice();
-        });
+        $(".num-picker").selectpicker({
+            style: 'btn-info'
+        });        
+        
         {% if not (isPreview) %}
             $(".social.fb").off('click touchstart').on('click touchstart', function(e) {
                     e.preventDefault();
@@ -626,6 +700,7 @@
             $("a.question").click(question);
         {% endif %}
             
+        {#
         $('#robert-heading').on('click', function () {
             $('.robertcollapse').collapse('toggle');
             if($('#fragestellenbut').is(':hidden'))
@@ -633,6 +708,37 @@
             else
                 $('#fragestellenbut').hide();
 
+        });
+        #}
+       
+        $('.panel-heading').on('click', function() {
+            var $th = $(this);
+            var $phs = $('.panel-heading');
+            var l = $phs.length;
+            for (var i = 0; i < l; i++) {
+                var $ph = $($phs[i]);
+                var $pc = $ph.next();
+                if ($ph[0] === $th[0]) {
+                    $pc.collapse('toggle');
+                    
+                    var $b = $('#fragestellenbut');
+                    var $a = $ph.find('span.toggle-icon');
+                    var hidden = $pc.height() === 0;
+                    if (hidden) {
+                        $b.hide();
+                        $a.addClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom');
+                    }
+                    else {
+                        $b.show();
+                        $a.removeClass('glyphicon-triangle-top').addClass('glyphicon-triangle-bottom');
+                    }
+                }
+                else {
+                    $pc.collapse('hide');
+                    $ph.find('span.toggle-icon').removeClass('glyphicon-triangle-top').addClass('glyphicon-triangle-bottom');
+                    $ph.removeClass('accordion-yellow');
+                }
+            }
         });
             
         {% if (isPreview) %}
@@ -644,7 +750,21 @@
                $("#action-disabled-modal").modal(); 
             });
         {% endif %}
-    });
+            
+        {% for tariff in tariffs %}
+            {% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
+                $(".panel-collapse[data-type='1'] .hour-from, .panel-collapse[data-type='1'] .hour-to").on('change', updatePrice1);
+                updatePrice1();
+            {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::PERFORMANCE') %}
+            {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_5ERBLOCK') or tariff.type == constant('AppBundle\\Entity\\TariffType::_10ERBLOCK') %}
+            {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+                $(".panel-collapse[data-type='{{ tariff.type }}'] select.num-picker").on('change', updatePrice{{ tariff.type }});
+                updatePrice{{ tariff.type }}();
+            {% endif %}
+            
+        {% endfor %}
+    }); // end of document.ready
+    
     function question(e) {
         e.preventDefault();
         
@@ -673,19 +793,78 @@
         }
     }
     
-    function updatePrice() {
-        var span = calculateTimespan();
-        if (itemPrice !== null) {
-            var total = {{ item.activePrice|number_format(2) }} * span.diff;
-            $(".price-calc").html(' <span>ab</span> ' + total.toFixed(2).replace('.', ','));
-        }
-        else {
-            $(".price-calc").text('auf Anfr.');
+    {% for tariff in tariffs %}
+        {% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
+            function updatePrice1() {
+                var $panel = $(".panel-collapse[data-type='1'] .panel-body");
+                var min = {{ tariff.discountMinNum|default('null') }};
+                var discount = {{ tariff.discount ? "true" : "false" }};
+                var request = {{ tariff.requestPrice ? "true" : "false" }};
+                var price = {{ tariff.price|number_format(2, '.') }};
+                var discountPrice = {{ tariff.discountPrice|number_format(2, '.') }};
+                
+                if (request) {
+                    $(".price-calc").text('auf Anfr.');
+                    return;
+                }
+
+                var span = calculateTimespan($panel);
+                var total;
+                if (discount && discountPrice !== null && min !== null && span.diff >= min)
+                    total = span.diff * discountPrice;
+                else
+                    total = span.diff * price;
+                
+                console.log('p1: ' + total);
+                if (total !== null && !isNaN(total)) {
+                    var $p = $panel.find('.price-calc');
+                    $p.html(' <span>ab</span> ' + total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
+                }
+            }
+        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::PERFORMANCE') %}
+        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_5ERBLOCK') or tariff.type == constant('AppBundle\\Entity\\TariffType::_10ERBLOCK') %}
+        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+            function updatePrice{{ tariff.type }}() {
+                var $th = $(".panel-collapse[data-type='{{ tariff.type }}'] select.num-picker");
+                var args = {
+                    min: {{ tariff.discountMinNum|default('null') }},
+                    discount: {{ tariff.discount ? "true" : "false" }},
+                    price: {{ tariff.price|number_format(2, '.') }},
+                    discountPrice: {{ tariff.discountPrice|number_format(2, '.') }}
+                };
+                updatePrice237($th, args);
+            }
+        {% endif %}
+
+    {% endfor %}
+    function updatePrice237($th, args) {
+        var num = $th.val();
+
+        if (typeof num === 'undefined' || num === null)
+            return;
+
+        num = parseInt(num);                
+        var total;
+        if (args.discount && args.discountPrice !== null && args.min !== null && num >= args.min)
+            total = args.discountPrice * num;
+        else
+            total = args.price * num;
+
+        console.log('p7: ' + total);
+        if (total !== null && !isNaN(total)) {
+            var $p = $th.parents('.panel-body').find('.price-calc');
+            $p.html(total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
         }
     }
-    function calculateTimespan() {
-        var fh = $.trim($("#tests").val().replace('Uhrzeit ab', '')).split(':');    // from hour
-        var th = $.trim($("#tests2").val().replace('Uhrzeit bis', '')).split(':');  // to hour
+        
+    function calculateTimespan($panel) {
+        var fv = $panel.find('.hour-from').val();
+        var tv = $panel.find('.hour-to').val();
+        if (typeof fv === 'undefined' || fv === null || typeof tv === 'undefined' || tv === null)
+            return;
+        
+        var fh = $.trim(fv.replace('Uhrzeit ab', '')).split(':');    // from hour
+        var th = $.trim(tv.replace('Uhrzeit bis', '')).split(':');  // to hour
         var h1 = parseInt(fh[0]);
         var h2 = parseInt(th[0]);        
         var d = $.trim($('#date-range').val()).split('.');                        // from date

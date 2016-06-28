@@ -2,12 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Equipment;
-use AppBundle\Entity\Talent;
-use AppBundle\Entity\User;
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Equipment;
 use AppBundle\Entity\ReportOffer;
+use AppBundle\Entity\Talent;
+use AppBundle\Entity\TariffType;
 use AppBundle\Entity\Testimonial;
+use AppBundle\Entity\User;
 use AppBundle\Utils\SearchParams;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -294,6 +295,9 @@ class DefaultController extends BaseController {
         }
         //</editor-fold>
         
+        $tariffs = null;
+        if ($tal != null)
+            $tariffs = $this->getDoctrineRepo('AppBundle:TalentTariff')->getTariffsForTalent($tal->getId());
         
         //$featureSections = $this->getDoctrineRepo('AppBundle:Equipment')->getEquipmentFeatures($eq->getId());
         $post = $this->getDoctrineRepo('AppBundle:Blog')->getPostForEquipmentPage();
@@ -303,6 +307,7 @@ class DefaultController extends BaseController {
         
         return $this->render($tmpl, array(
             'item' => $eq !== null ? $eq : $tal,
+            'tariffs' => $tariffs,
             /*'equipments' => $equipments,*/
             'category' => $subcat->getCategory(),
             'categories' => $this->getCategories($request),

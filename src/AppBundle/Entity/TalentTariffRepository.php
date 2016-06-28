@@ -68,6 +68,18 @@ class TalentTariffRepository extends \Doctrine\ORM\EntityRepository {
         $em->flush();
     }
 
+    public function getTariffsForTalent($talentId) {
+        return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('tt')
+                ->from('AppBundle:TalentTariff', 'tt')
+                ->where('tt.talent = :talentId')
+                ->setParameter('talentId', $talentId)
+                ->addOrderBy('tt.position')
+                ->getQuery()
+                ->getResult();
+                
+    }
     public function convertTalentToTariffs() {
         $out = '';
         $em = $this->getEntityManager();
