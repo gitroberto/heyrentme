@@ -61,6 +61,18 @@ class TalentInquiry {
      * @ORM\Column(type="string")
      */
     private $uuid;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $requestPrice = false;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $num;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $type;
     
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="inquiries")
@@ -478,5 +490,77 @@ class TalentInquiry {
     public function getBooking()
     {
         return $this->booking;
+    }
+
+    /**
+     * Set requestPrice
+     *
+     * @param boolean $requestPrice
+     *
+     * @return TalentInquiry
+     */
+    public function setRequestPrice($requestPrice)
+    {
+        $this->requestPrice = $requestPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get requestPrice
+     *
+     * @return boolean
+     */
+    public function getRequestPrice()
+    {
+        return $this->requestPrice;
+    }
+
+    /**
+     * Set num
+     *
+     * @param integer $num
+     *
+     * @return TalentInquiry
+     */
+    public function setNum($num)
+    {
+        $this->num = $num;
+
+        return $this;
+    }
+
+    /**
+     * Get num
+     *
+     * @return integer
+     */
+    public function getNum()
+    {
+        return $this->num;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return TalentInquiry
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

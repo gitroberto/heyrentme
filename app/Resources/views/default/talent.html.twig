@@ -821,8 +821,6 @@
                     $p.html(' <span>ab</span> ' + total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
                 }
             }
-        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::PERFORMANCE') %}
-        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_5ERBLOCK') or tariff.type == constant('AppBundle\\Entity\\TariffType::_10ERBLOCK') %}
         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
             function updatePrice{{ tariff.type }}() {
                 var $th = $(".panel-collapse[data-type='{{ tariff.type }}'] select.num-picker");
@@ -850,7 +848,7 @@
         else
             total = args.price * num;
 
-        console.log('p7: ' + total);
+        console.log('p237: ' + total);
         if (total !== null && !isNaN(total)) {
             var $p = $th.parents('.panel-body').find('.price-calc');
             $p.html(total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
@@ -858,53 +856,82 @@
     }
         
     function calculateTimespan($panel) {
-        var fv = $panel.find('.hour-from').val();
-        var tv = $panel.find('.hour-to').val();
-        if (typeof fv === 'undefined' || fv === null || typeof tv === 'undefined' || tv === null)
-            return;
+        var h1 = null;
+        if ($panel.find('.hour-from').length > 0) {
+            var fv = $panel.find('.hour-from').val();
+            var fh = $.trim(fv.replace('Uhrzeit ab', '')).split(':');    // from hour
+            h1 = parseInt(fh[0]);
+        }
+        var h2 = null;
+        if ($panel.find('.hour-to').length > 0) {
+            var tv = $panel.find('.hour-to').val();
+            var th = $.trim(tv.replace('Uhrzeit bis', '')).split(':');  // to hour
+            h2 = parseInt(th[0]);
+        }
         
-        var fh = $.trim(fv.replace('Uhrzeit ab', '')).split(':');    // from hour
-        var th = $.trim(tv.replace('Uhrzeit bis', '')).split(':');  // to hour
-        var h1 = parseInt(fh[0]);
-        var h2 = parseInt(th[0]);        
-        var d = $.trim($('#date-range').val()).split('.');                        // from date
         var diff, total, date1, date2;
-        if (h2 > h1) {
-            date1 = new Date(d[2], d[1] - 1, d[0], h1, 0);
-            date2 = new Date(d[2], d[1] - 1, d[0], h2, 0);
-            diff = h2 - h1;
+        var d = $.trim($('#date-range').val()).split('.');                        // from date
+
+        if (h1 != null && h2 != null) {
+            if (h2 > h1) {
+                date1 = new Date(d[2], d[1] - 1, d[0], h1, 0);
+                date2 = new Date(d[2], d[1] - 1, d[0], h2, 0);
+                diff = h2 - h1;
+            }
+            else {
+                date1 = new Date(d[2], d[1] - 1, d[0], h1, 0);
+                date2 = new Date(d[2], d[1] - 1, d[0], h2, 0);
+                date2.setDate(date2.getDate() + 1);
+                diff = 24 - h1 + h2;
+            }
         }
         else {
-            date1 = new Date(d[2], d[1] - 1, d[0], h1, 0);
-            date2 = new Date(d[2], d[1] - 1, d[0], h2, 0);
-            date2.setDate(date2.getDate() + 1);
-            diff = 24 - h1 + h2;
+            date1 = new Date(d[2], d[1] - 1, d[0], 0, 0);
+            date2 = null;
+            diff = 0;
         }
+        
         // update timezone offset, so toISOString yields local time
         var tzoffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
         date1 = new Date(date1.getTime() - tzoffset);
-        date2 = new Date(date2.getTime() - tzoffset);
+        if (date2 !== null)
+            date2 = new Date(date2.getTime() - tzoffset);
 
         return { 'h1': h1, 'h2': h2, 'date1': date1, 'date2': date2, 'diff': diff };
     }
 
     function inquiry(e) {
         e.preventDefault();
-        
-        var span = calculateTimespan();
-        
-        // assemble params
-        var url = '{{ path('talent-inquiry', { 'id': item.id, 'dateFrom': ':FROM', 'dateTo': ':TO' }) }}'
-                .replace(':FROM', span.date1.toISOString())
-                .replace(':TO', span.date2.toISOString());
+        var $th = $(this);
+        var $panel = $(this).parents('.panel-body');
+        var args = inquiryArgs($panel);        
+        var url = '{{ path('talent-inquiry', { 'id': '-ID-' }) }}'.replace('-ID-', args.tariffId);
+        delete args.tariffId;
                 
-        $("#inquiry-modal .modal-dialog").load(url, function(data) {
+        $("#inquiry-modal .modal-dialog").load(url, args, function(data) {
             $("#inquiry-modal").modal();
             $("#inquiry-modal form").ajaxForm({
                 target: $("#inquiry-modal .modal-dialog"),
                 success: makeAjaxForm
             });
         });
+    }
+    function inquiryArgs($panel) {
+        var $pan = $panel.parents('.panel-collapse');
+        var id = parseInt($pan.data('id'));
+        var type = parseInt($pan.data('type'));
+        var args = { 'tariffId': id };
+        if (type === 1) {
+            var span = calculateTimespan($panel);
+            args['dateFrom'] = span.date1.toISOString();
+            args['dateTo'] = span.date2.toISOString();
+        }
+        else if (type === 2 || type === 3 || type === 7) {
+            var span = calculateTimespan($panel);
+            args['dateFrom'] = span.date1.toISOString();
+            args['num'] = $panel.find('.num-picker').val();
+        }
+        return args;
     }
         
     function makeAjaxForm(data, status, xhr) {

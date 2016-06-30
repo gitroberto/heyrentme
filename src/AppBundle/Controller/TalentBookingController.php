@@ -10,6 +10,7 @@ use AppBundle\Entity\TalentQuestion;
 use AppBundle\Entity\TalentRating;
 use AppBundle\Entity\UserRating;
 use AppBundle\Utils\Utils;
+use AppBundle\ViewModel\TalentInquiryVM;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
@@ -27,69 +28,59 @@ use Symfony\Component\Validator\ExecutionContextInterface;
 class TalentBookingController extends BaseController {
 
     /**
-     * @Route("/talent/inquiry/{id}/{dateFrom}/{dateTo}", name="talent-inquiry")
+     * @Route("/talent/inquiry/{id}", name="talent-inquiry")
      */
-    public function inquiryAction(Request $request, $id, $dateFrom, $dateTo) {
+    public function inquiryAction(Request $request, $id) {
+        $log = $this->get('monolog.logger.artur');
         $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
-        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
-        
-        // init/calculate inquiry details
-        //<editor-fold>
-        $from = DateTime::createFromFormat('Y-m-d\TH:i+', $dateFrom);
-        $to = DateTime::createFromFormat('Y-m-d\TH:i+', $dateTo);
-        $diff = $to->diff($from);       
-        $price = null;
-        if ($eq->getRequestPrice() === 0) {
-            $price = $diff->h * $eq->getActivePrice();
+        $tariff = $this->getDoctrineRepo('AppBundle:TalentTariff')->find($id);
+        $tal = $tariff->getTalent();
+
+        $log->info('-----------------');
+        $ks = $request->request->keys();
+        foreach($ks as $k) {
+            $v = var_export($request->request->get($k), true);
+            $log->info("req1 '{$k}': '{$v}'");
+            $v = var_export($request->get($k), true);
+            $log->info("req2 '{$k}': '{$v}'");
         }
+            
         
-        $inquiry = array(
-            'from' => $from,
-            'to' => $to,
-            'diff' => $diff,
-            'price' => $price,
-            'whereabouts' => $eq->getIncompleteAddressAsString()
-        );
-        //</editor-fold>
+        $log->info('req from');
+        $f = $request->get('dateFrom', $request->get('form[dateFrom]'));
+        $log->info("f: " . ($f === null ? "null" : "{$f}"));
+
+        $model = new TalentInquiryVM();
+        $model->parse($request);        
+        $model->calculate($tariff);
+        
+        $inquiry = $model->getAsArray();
+        $inquiry['whereabouts'] = $tal->getIncompleteAddressAsString();
+
+        $log->info('inq parse');
+        $f = $inquiry['from'];
+        $log->info("f: " . ($f === null ? "null" : "{$f}"));
+        
         
         // build form
         //<editor-fold>
-        $url = $this->generateUrl('talent-inquiry', array(
-            'id' => $id,
-            'dateFrom' => $dateFrom,
-            'dateTo' => $dateTo
-        ));
-        
-        $builder = $this->createFormBuilder()
-            ->setAction($url);
-/*        if (!$loggedIn) {
-            $builder->add('name', 'text', array(
-                'attr' => array (
-                    'max-length' => 128
-                ),
-                'constraints' => array(
-                    new NotBlank(),
-                    new Length(array('max' => 128))
-                )
-            ))
-            ->add('email', 'email', array(
-                'attr' => array (
-                    'max-length' => 128
-                ),
-                'constraints' => array(
-                    new NotBlank(),
-                    new Length(array('max' => 128)),
-                    new Email(array('checkHost' => true))
-                )
-            ));
-        }
- */
-        $builder->add('message', 'textarea', array(
-                'constraints' => array(
-                    new NotBlank(),
-                 )
-            ));
-        $form = $builder->getForm();
+        $url = $this->generateUrl('talent-inquiry', array('id' => $tariff->getId()));
+        $data = array(
+            'dateFrom' => $model->dateFrom === null ? null : $model->dateFrom->format('Y-m-d\TH:i+'),
+            'dateTo' => $model->dateTo === null ? null : $model->dateTo->format('Y-m-d\TH:i+'),
+            'num' => $model->num
+        );
+        $form = $this->createFormBuilder($data)
+                ->setAction($url)
+                ->add('dateFrom', 'hidden')
+                ->add('dateTo', 'hidden')
+                ->add('num', 'hidden')
+                ->add('message', 'textarea', array(
+                    'constraints' => array(
+                        new NotBlank()
+                     )
+                ))
+                ->getForm();
         //</editor-fold>
        
         $form->handleRequest($request);
@@ -99,7 +90,7 @@ class TalentBookingController extends BaseController {
             $inq = new TalentInquiry();
             // map fields & save
             //<editor-fold>
-            $inq->setTalent($eq);
+            $inq->setTalent($tal);
 /*            if (!$loggedIn) {
                 $inq->setName($data['name']);
                 $inq->setEmail($data['email']);
@@ -113,11 +104,22 @@ class TalentBookingController extends BaseController {
             }
             else {
  */
+            /*
+            $log->info('date from');
+            $f = $inquiry['from'];
+            $log->info($f->format(\DateTime::ISO8601));
+            $f = $inquiry['to'];
+            $log->info($f->format(\DateTime::ISO8601));
+             */
+            
             $inq->setUser($this->getUser());                
             $inq->setMessage($data['message']);
             $inq->setFromAt($inquiry['from']);
             $inq->setToAt($inquiry['to']);
             $inq->setPrice($inquiry['price']);
+            $inq->setRequestPrice($inquiry['requestPrice']);
+            $inq->setNum($inquiry['num']);
+            $inq->setType($inquiry['type']);
             
             
             // TODO: filter out any contact data from the message (phone, email)
@@ -130,7 +132,7 @@ class TalentBookingController extends BaseController {
             // send email
             //<editor-fold>
             // prepare params
-            $provider = $eq->getUser();
+            $provider = $tal->getUser();
             $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('talent-response', array('id' => $inq->getId()));
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
@@ -138,7 +140,7 @@ class TalentBookingController extends BaseController {
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
                 'provider' => $provider,
                 'inquiry' => $inq,
-                'talent' => $eq,
+                'talent' => $tal,
                 'url' => $url
             ));
             $message = Swift_Message::newInstance()
@@ -156,9 +158,14 @@ class TalentBookingController extends BaseController {
             'loggedIn' => $loggedIn,
             'inquiry' => $inquiry,
             'form' => $form->createView(),
-            'talent' => $eq
+            'talent' => $tal,
+            'tariff' => $tariff
         ));
     }
+    
+    /**
+     * @Route("/talent/inquiry/{id}", name="talent-inquiry-form")
+     */
 
     /**
      * @Route("talent/response/{id}", name="talent-response")
