@@ -6,6 +6,7 @@
                 <span class="text-bold" >Tarifoption:</span>  
                 {{ tariff.getTypeName }}
             </p>
+{#---------------------------------------------------------------------------#}
         {% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
             <p>
                 <span class="text-bold" >Datum:</span>  
@@ -27,6 +28,7 @@
                 {{ inquiry.whereabouts }}
                 (Genaue Adresse wird nach Buchung bekanntgegeben)
             </p>
+{#---------------------------------------------------------------------------#}
         {% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::WORKSHOP'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN')] %}
             <p>
                 <span class="text-bold" >Termin:</span>  
@@ -45,6 +47,7 @@
                 {{ inquiry.whereabouts }}
                 (Genaue Adresse wird nach Buchung bekanntgegeben)
             </p>
+{#---------------------------------------------------------------------------#}
         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}
             <p>
                 <span class="text-bold" >BEGINN:</span>  
@@ -63,6 +66,7 @@
                 {{ inquiry.whereabouts }}
                 (Genaue Adresse wird nach Buchung bekanntgegeben)
             </p>
+{#---------------------------------------------------------------------------#}
         {% else %}
             <p>
                 <span class="text-bold">Kosten ab: </span>            
@@ -78,6 +82,8 @@
                 (Genaue Adresse wird nach Buchung bekanntgegeben)
             </p>
         {% endif %}
+
+{#---------------------------------------------------------------------------#}
         <div style="height:20px"></div>
         {{ form_start(form) }}
             <div>

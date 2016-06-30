@@ -668,7 +668,10 @@ button {
 }
 
 .tariff-box {
-    padding: 0 16px;
+    padding: 0 16px;    
+}
+.tariff-box p {
+    font-family: 'open sans', sans-serif;
 }
 #tariff-container {
     margin: 32px 0;
@@ -682,7 +685,7 @@ button {
     padding: 10px 20px;
     text-transform: uppercase;
     font-family: 'open sans', sans-serif;
-    cursor: move;
+    cursor: pointer;
     background-color: #fff;
 }
 
@@ -698,4 +701,8 @@ div#panel-quote-group {
 }
 #fragestellenbut {
     margin-top: 20px;
+}
+
+button#tariff-save, button#tariff-delete {
+    font-family: 'open sans', sans-serif;    
 }

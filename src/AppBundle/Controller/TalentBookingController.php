@@ -8,10 +8,10 @@ use AppBundle\Entity\TalentBookingCancel;
 use AppBundle\Entity\TalentInquiry;
 use AppBundle\Entity\TalentQuestion;
 use AppBundle\Entity\TalentRating;
+use AppBundle\Entity\TariffType;
 use AppBundle\Entity\UserRating;
 use AppBundle\Utils\Utils;
 use AppBundle\ViewModel\TalentInquiryVM;
-use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,36 +31,24 @@ class TalentBookingController extends BaseController {
      * @Route("/talent/inquiry/{id}", name="talent-inquiry")
      */
     public function inquiryAction(Request $request, $id) {
-        $log = $this->get('monolog.logger.artur');
         $loggedIn = $this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED'); // user logged in
         $tariff = $this->getDoctrineRepo('AppBundle:TalentTariff')->find($id);
         $tal = $tariff->getTalent();
 
-        $log->info('-----------------');
-        $ks = $request->request->keys();
-        foreach($ks as $k) {
-            $v = var_export($request->request->get($k), true);
-            $log->info("req1 '{$k}': '{$v}'");
-            $v = var_export($request->get($k), true);
-            $log->info("req2 '{$k}': '{$v}'");
-        }
-            
-        
-        $log->info('req from');
-        $f = $request->get('dateFrom', $request->get('form[dateFrom]'));
-        $log->info("f: " . ($f === null ? "null" : "{$f}"));
-
         $model = new TalentInquiryVM();
-        $model->parse($request);        
+        $model->parse($request);     
+        
+        $log = $this->get('monolog.logger.artur');
+        $ks = $request->request->keys();
+        foreach ($ks as $k) {            
+            $v = var_export($request->get($k), true);
+            $log->info("{$k}: {$v}");
+        }
+        
         $model->calculate($tariff);
         
         $inquiry = $model->getAsArray();
         $inquiry['whereabouts'] = $tal->getIncompleteAddressAsString();
-
-        $log->info('inq parse');
-        $f = $inquiry['from'];
-        $log->info("f: " . ($f === null ? "null" : "{$f}"));
-        
         
         // build form
         //<editor-fold>
@@ -91,26 +79,6 @@ class TalentBookingController extends BaseController {
             // map fields & save
             //<editor-fold>
             $inq->setTalent($tal);
-/*            if (!$loggedIn) {
-                $inq->setName($data['name']);
-                $inq->setEmail($data['email']);
-                $u = null;
-                try {
-                    $u = $this->getDoctrineRepo('AppBundle:User')->findOneByEmail($data['email']);
-                } catch (NoResultException $e) {};
-                if ($u !== null) {
-                    $inq->setUser($u);
-                }
-            }
-            else {
- */
-            /*
-            $log->info('date from');
-            $f = $inquiry['from'];
-            $log->info($f->format(\DateTime::ISO8601));
-            $f = $inquiry['to'];
-            $log->info($f->format(\DateTime::ISO8601));
-             */
             
             $inq->setUser($this->getUser());                
             $inq->setMessage($data['message']);
@@ -238,6 +206,8 @@ class TalentBookingController extends BaseController {
             
             // send email
             //<editor-fold>
+            $log = $this->get('monolog.logger.artur');
+            
             $provider = $eq->getUser();
             if ($inq->getUser() !== null) {
                 $email = $inq->getUser()->getEmail();
@@ -245,11 +215,13 @@ class TalentBookingController extends BaseController {
             else {
                 $email = $inq->getEmail();
             }
+            $log->info($email);
             $url = null;
             if ($inq->getAccepted() === 1) {
                 $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('talent-confirmation', array('uuid' => $inq->getUuid()));
             }
+            $log->info($url);
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             $emailHtml = $this->renderView('Emails/talent/mail_to_user_confirm_offer_accepted.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
@@ -258,12 +230,16 @@ class TalentBookingController extends BaseController {
                 'talent' => $eq,
                 'url' => $url
             ));
+            $log->info($emailHtml);
             $message = Swift_Message::newInstance()
                 ->setSubject('Deine Anfrage bei hey! VIENNA')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
-            $this->get('mailer')->send($message);
+            $log->info('aa');
+            $res = $this->get('mailer')->send($message);
+            
+            $log->info(var_export($res, true));
             //</editor-fold>
                         
             $saved = true;
@@ -973,4 +949,22 @@ class TalentBookingController extends BaseController {
             'saved' => $saved
         ));
     }
+
+
+    public function emailDetailsPartAction($inquiryId, $includePrice = false) {
+        $inq = $this->getDoctrineRepo('AppBundle:TalentInquiry')->find($inquiryId);
+        $tariff = $this->getDoctrineRepo('AppBundle:TalentTariff')->findOneBy(array(
+            'talent' => $inq->getTalent()->getId(),
+            'type' => $inq->getType()
+        ));
+        $tariffName = TariffType::getByType($inq->getType())->getName();
+        return $this->render('Emails/talent/details-part.html.twig', array(
+            'inquiry' => $inq,
+            'tariff' => $tariff,
+            'talent' => $inq->getTalent(),
+            'tariffName' => $tariffName,
+            'includePrice' => $includePrice
+        ));        
+    }
+    
 }

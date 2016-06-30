@@ -1,0 +1,55 @@
+<p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+    <span style="font-weight: bold;">Angebotsname:</span>
+    {{ talent.name }}
+</p>
+<p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+    <span style="font-weight: bold;">Tarifoption:</span>
+    {{ tariffName }}
+</p>
+
+{#---------------------------------------------------------------------------#}
+{% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}    
+    <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+        <span style="font-weight: bold;">Datum:</span> 
+        {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy, HH:mm') }} &ndash;
+        {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'HH:mm') }}
+    </p>
+{#---------------------------------------------------------------------------#}
+{% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::WORKSHOP'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN')] %}
+    <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+        <span style="font-weight: bold;">Termin:</span> 
+        {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}
+    </p>
+    <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+        <span style="font-weight: bold;">Personen:</span>
+        {{ inquiry.num|number_format(0) }}
+    </p>    
+{#---------------------------------------------------------------------------#}
+{% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}    
+    <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+        <span style="font-weight: bold;">Beginn:</span> 
+        {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}
+    </p>
+    <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+        <span style="font-weight: bold;">Ende:</span> 
+        {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}
+    </p>
+{#---------------------------------------------------------------------------#}
+{% endif %}
+
+
+{%if includePrice %}
+    {#---------------------------------------------------------------------------#}
+    {% if tariff.type in [constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN'), constant('AppBundle\\Entity\\TariffType::PERFORMANCE')] %}
+        <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+            <span style="font-weight: bold;">Dein Verdienst:</span>
+            {% if inquiry.requestPrice %}auf Anfr.{% else %}{{ inquiry.price|number_format(2, ',') }} &euro;{% endif %}
+        </p>
+    {#---------------------------------------------------------------------------#}
+    {% else %}
+        <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
+            <span style="font-weight: bold;">Dein Verdienst:</span>
+            {{ inquiry.price|number_format(2, ',') }} &euro;
+        </p>        
+    {% endif %}
+{% endif %}

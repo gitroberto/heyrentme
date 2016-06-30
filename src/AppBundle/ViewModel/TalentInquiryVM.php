@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 class TalentInquiryVM {
     
     public $type;
-    public $tariffId;
     public $dateFrom;
     public $dateTo;
     public $num;
@@ -18,17 +17,20 @@ class TalentInquiryVM {
     public $diff;
     
     public function parse(Request $req) {
-        $this->tariffId = intval($req->get('tariffId'));
-        
-        $from = $req->get('dateFrom', $req->get('form[dateFrom]'));
-        $this->dateFrom = $from === null ? null : \DateTime::createFromFormat('Y-m-d\TH:i+', $from);
-                        
-        $to = $req->get('dateTo', $req->get('form[dateTo]'));
-        $this->dateTo = $to === null ? null : \DateTime::createFromFormat('Y-m-d\TH:i+', $to);
-                
-        $num = $req->get('num');
-        $this->num = $num === null ? null : intval($num);
-                
+        if ($req->request->has('form')) {
+            $form = $req->request->get('form');
+            $from = $form['dateFrom'];
+            $to = $form['dateTo'];
+            $num = $form['num'];
+        }
+        else {
+            $from = $req->get('dateFrom');
+            $to = $req->get('dateTo');
+            $num = $req->get('num');
+        }
+        $this->dateFrom = ($from === null || trim($from) === '') ? null : \DateTime::createFromFormat('Y-m-d\TH:i+', $from);
+        $this->dateTo = ($to === null || trim($to) === '') ? null : \DateTime::createFromFormat('Y-m-d\TH:i+', $to);
+        $this->num = ($num === null || trim($num) === '') ? null : intval($num);            
     }
     
     public function calculate($tariff) {
