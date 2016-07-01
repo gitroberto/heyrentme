@@ -24,7 +24,7 @@ class BaseController extends Controller
      */
     protected function initCategories($session) {
         if (!$session->has('CategoryList')) {
-            $cats = $this->getDoctrineRepo('AppBundle:Category')->getAllOrderedByPosition();
+            $cats = $this->getDoctrineRepo('AppBundle:Category')->getActiveOrderedByPosition();
             $categories = array();
             foreach ($cats as $cat) {
                 $categories[$cat->getSlug()] = array(

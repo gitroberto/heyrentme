@@ -38,6 +38,9 @@ function rowActions(cellvalue, options, cellobject) {
                "<a title='Edit'             href='category/edit/"   +  options.rowId + "'><u>Edit</u></a>  "+
   	       "<a title='Delete'           href='category/delete/" +  options.rowId + "' onclick=\"return confirm('Are you sure to delete?')\"><u>Delete</u></a>";
   }
+function activeFormatter(val, opts, obj) {
+    return val ? 'X' : '';
+}
 
 var grid = $('#jqgrid');
 
@@ -53,6 +56,7 @@ if( $('#jqgrid').length > 0 ) {
                         { name:'Slug', index:'c.slug', width: 150, editable:false, sortable:true },
                         { name:'Type', index:'c.type', align:"left", width: 100, editable:false, sortable:true},
                         { name:'Position', index:'c.position', align:"right", width: 80, editable:false, sortable:true},
+                        { name: 'Active', index: 'c.active', align: "center", width: 80, editable: false, sortable: true, formatter: activeFormatter }
                 ],
                 height: 550,
                 rowNum: 20,
