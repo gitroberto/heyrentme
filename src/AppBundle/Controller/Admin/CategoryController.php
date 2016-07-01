@@ -56,6 +56,9 @@ class CategoryController extends BaseAdminController {
                         new Type(array('type' => 'integer'))
                     )
                 ))
+                ->add('active', 'checkbox', array(
+                    'required' => false
+                ))
                 ->add('type', 'choice', array(
                     'choices' => array(                        
                         'Equipment' => Category::TYPE_EQUIPMENT,
@@ -187,6 +190,9 @@ class CategoryController extends BaseAdminController {
                     'constraints' => array(
                         new Type(array('type' => 'integer'))
                     )
+                ))
+                ->add('active', 'checkbox', array(
+                    'required' => false
                 ))
                 ->add('type', 'choice', array(
                     'choices' => array(                        
@@ -355,6 +361,7 @@ class CategoryController extends BaseAdminController {
             $cell[3] = $dataRow->getSlug();
             $cell[4] = $dataRow->getTypeStr();
             $cell[5] = $dataRow->getPosition();
+            $cell[6] = $dataRow->getActive();
             $row['cell'] = $cell;
             array_push($rows, $row);
         }

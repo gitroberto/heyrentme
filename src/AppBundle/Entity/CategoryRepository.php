@@ -13,8 +13,8 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
  */
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {    
-    public function getAllOrderedByPosition() {
-        $q = "select c from AppBundle:Category c order by c.position asc";
+    public function getActiveOrderedByPosition() {
+        $q = "select c from AppBundle:Category c where c.active = 1 order by c.position asc";
         return $this->getEntityManager()->createQuery($q)->getResult();
     }
     

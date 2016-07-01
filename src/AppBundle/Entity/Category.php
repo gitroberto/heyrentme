@@ -36,6 +36,10 @@ class Category
      * @ORM\Column(type="integer")
      */
     protected $position;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $active;
 
     /**
      * @ORM\OneToMany(targetEntity="Subcategory", mappedBy="category")
@@ -268,5 +272,29 @@ class Category
         } else {
             return "Talent";
         }
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Category
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 }
