@@ -8,6 +8,8 @@ ALTER TABLE `talent_inquiry`
 	ADD COLUMN `request_price` SMALLINT NULL AFTER `uuid`;
 ALTER TABLE `talent_inquiry`
 	ADD COLUMN `num` INT NULL AFTER `request_price`;
+ALTER TABLE `talent_inquiry`
+	ADD COLUMN `type` INT NULL AFTER `request_price`;
 
 ALTER TABLE `talent_booking`
 	ALTER `price` DROP DEFAULT;
