@@ -5,17 +5,28 @@
           <img src="/img/allgemein-final/heyvienna.jpg" alt="Equipment mieten" class="img-responsive max-1600 max-320"/>
           <img src="/img/allgemein-final/heyvienna_small.jpg" alt="Equipment mieten" class="img-responsive min-320"/>
           <div class="main-search">
-            <h1 class="margin-bottom-40 rhomeheader text-white text-background mobile-hidden">Entdecke <span
-                    class="text-yellow text-bold">hey! VIENNA</span></h1>
+            <h1 class="margin-bottom-40 text-white text-background mobile-hidden">Die Plattform für <span
+                    class="text-yellow text-bold">Equipment, Talente und Dienstleistungen</span></h1>
+                    <!-- <div class="mobile-headers">
+                     <h1 class="text-white text-background desktop-hide-inline">Die Plattform für</h1> 
+                    </div>
+                    <div class="mobile-headers">
+                      <h1 class="margin-bottom-40 text-white text-background desktop-hide-inline"><span
+                                      class="text-yellow text-bold">Equipment, Talente und Dienstleistungen</span></h1>
+                    </div>  -->
             <div class="search-form mobile-kategorie-form mobile-hidden">
-         <div class="row">  
-    <div class="col-md-6">
-  <a id="fragestellenbut" class="green-big-button yellow question rstartbuttons" href="{{ path('bookme') }}">Talente entdecken</a>
-  </div>
-    <div class="col-md-6">
-  <a id="fragestellenbut" class="green-big-button yellow question rstartbuttons" href="{{ path('rentme') }}">Equipment entdecken</a>
-  </div>
-  </div>
+                <form method="post" accept-charset="utf-8" action="">
+                    <div style="display:none;">
+                        <input type="hidden" name="_method" value="POST"></div>
+                    
+                    <select name="gender2" class="selectpickerspc">
+                        <option value="S">HAUPTKATEGORIEN</option>
+                        <option value="T">HAUPTKATEGORIEN</option>
+                    </select>
+                    <input type="submit" class="desktop-hide" value="los geht's!"></form>
+                <ul class="col-xs-6 pull-right text-right kaup-select">
+                    {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
+                </ul>
             </div>
           </div>
         </div>
@@ -35,14 +46,13 @@
               
           </div>
         {% if equipmentSc|length == 3 or talentSc|length == 3 or blogSc|length == 3 %}
-             <!-- <div class="container new-header">
+            <div class="container new-header">
                 <div class="row">
                     <div class="col-xs-12">
-                       <h2>Neu bei <b>hey! VIENNA</b></h2>
+                        <h2>Neu bei <b>hey! VIENNA</b></h2>
                     </div>
                 </div>
             </div>
-			 -->
 
             <div class="container new-header rhomehead main-offers">
                 {% if blogSc|length == 3 %}
@@ -184,7 +194,7 @@
         <div class="container new-header mobile-hidden rhomehead">
           <div class="row">
             <div class="col-xs-12">
-              <h2>Talente bei <b>hey! VIENNA</b></h2>
+              <h2>Beliebte Dienstleistungen bei <b>hey! VIENNA</b></h2>
             </div>
           </div>
         </div>
@@ -206,7 +216,7 @@
         <div class="container new-header mobile-hidden rhomehead">
           <div class="row">
             <div class="col-xs-12">
-              <h2>Equipment bei <b>hey! VIENNA</b></h2>
+              <h2>Beliebtes Equipment bei <b>hey! VIENNA</b></h2>
             </div>
           </div>
         </div>
@@ -229,7 +239,7 @@
           <div class="container">
               <div class="row">
                   <div class="col-sm-6 pull-right">
-                      <h4 class="heading text-bold text-yellow">Angebote buchen</h4>
+                      <h4 class="heading text-bold text-yellow">Tolle Angebote buchen</h4>
                       <h4 class="heading">bei hey! VIENNA</h4>
 
                       <p><span class="text-bold">Finde das richtige Angebot für unterschiedliche Anwendungsbereiche!</span>
