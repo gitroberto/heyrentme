@@ -20,11 +20,11 @@ font-weight: 400;
 
 .rstartbuttons {
 font-size: 14px;
-margin: 5px 0 10px 0!important;
+margin: 15px 0 0 0!important;
 }
 
 .rstartbutton:hover {
-transition: none;
+transition: none!important;
 }
 
 .main-header .main-search .rhomeheader {
