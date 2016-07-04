@@ -25,6 +25,15 @@ margin: 5px 0 10px 0!important;
 .main-header .main-search .rhomeheader {
 font-size: 22px;
 }
+
+.main-header .main-search {
+top: 45% !important;
+}
+
+.main-header .main-search .margin-bottom-40 {
+margin-bottom: 0 !important;
+}
+
 }
 
 @media only screen 
