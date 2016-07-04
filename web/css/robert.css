@@ -20,6 +20,10 @@ font-weight: 400;
 .rstartbuttons {
 font-size: 14px;
 margin: 5px 0 10px 0!important;
+
+}
+.main-header .main-search .rhomeheader {
+font-size: 22px;
 }
 }
 
@@ -32,6 +36,9 @@ display:none
 }
 .rstartbuttons {
 display:none;
+}
+.main-header .main-search .rhomeheader {
+font-size: 27px;
 }
 	  
   }
