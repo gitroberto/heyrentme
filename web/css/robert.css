@@ -17,11 +17,16 @@ font-weight: 400;
 }
 
 @media (max-width: 736px) {	
+
 .rstartbuttons {
 font-size: 14px;
 margin: 5px 0 10px 0!important;
-
 }
+
+.rstartbutton:hover {
+transition: none;
+}
+
 .main-header .main-search .rhomeheader {
 font-size: 22px;
 }
