@@ -6,7 +6,7 @@
 	<meta property="og:title"         content="{{ item.name }}" />
 	<meta property="og:description"   content="{{ item.description }}" />
         {% if item.equipmentImages|length > 0 %}
-            <meta property="og:image"         content="{{ item.equipmentImages[0].image.urlPath(image_url_prefix) }}" />    
+            <meta property="og:image"         content="{{ item.equipmentImages[0].image.urlPath(image_url_prefix) }}" />
         {% endif %}
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
         <link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker.min.css" />
@@ -29,8 +29,8 @@
             <ul class="col-xs-5 pull-right text-right kaup-select">
                 {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
                 <li id="kategorie-select"><a class="active-crumb haup-ico" href="#">Hauptkategorien &nbsp;&nbsp;&nbsp;</a></li>
-                <li>                    
-                    <a class="active-crumb" 
+                <li>
+                    <a class="active-crumb"
                        href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}javascript:anbieten(1, {{ category.id }}){% else %}{{ path("rental-detail", { 'categoryId': category.id }) }}{% endif %}"
                        >In dieser Kategorie anbieten</a>
                 </li>
@@ -69,7 +69,7 @@
                 <p class="detail-notice">
                     {{ item.offerStatus }}
                 </p>
-            {% endif %}            
+            {% endif %}
             <div class="position-relative" id="media-container">
                 {% if item.featured %}<div class="featured-icon mobile-hidden"><span>FEATURED</span></div>{% endif %}
               {% if item.priceBuy %}
@@ -147,7 +147,7 @@
                     <div id="collapseQuote" class="panel-collapse collapse1 collapse">
                         <div class="panel-body">
                             <div class="row user-notes">
-                                
+
                                 {% for opinion in opinions %}
                                 <div class="col-md-4">
                                     <div class="product-info">
@@ -159,7 +159,7 @@
                                     </div>
                                 </div>
                                 {% endfor %}
-                                
+
                                 <!-- row end -->
                             </div>
                         </div>
@@ -169,17 +169,17 @@
             <!-- notes area -->
             <div class="row user-notes mobile-hidden">
                 {% for opinion in opinions %}
-                <div class="col-md-4">                    
+                <div class="col-md-4">
                     <div class="product-info">
                         <img class="user-avatar eq-details-avatar" src="{{ opinion.booking.inquiry.user.getProfilePicture(true, image_url_prefix) }}" alt="" />
                         {{ include('common/stars.html.twig', { rating: opinion.rating }) }}
                         <p>{{ opinion.opinion }}</p>
                     </div>
                 </div>
-                {% endfor %}                
+                {% endfor %}
                 <!-- row end -->
             </div>
-            <div class="row user-notes mobile-hidden">                
+            <div class="row user-notes mobile-hidden">
                 <!-- row end -->
                 <div class="col-xs-12">
                     <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
@@ -191,7 +191,7 @@
             <div class="offer-dates">
                 <h3>Anfrage für:</h3>
                 <h4>{{ item.name }}</h4>
-                
+
                 <div class="panel-group" id="panel-quote-group">
                 <div class="panel panel-default einzelstunden">
                     <div class="panel-heading" id="robert-heading">
@@ -199,7 +199,7 @@
                             {% if item.testDrive %}
                                 Probefahrt
                             {% else %}
-                                Ab {{ item.detailPricesLine|raw }} € 
+                                Ab {{ item.detailPricesLine|raw }} €
                             {% endif %}
                             <span class="pull-right">
                                 <a>
@@ -208,10 +208,10 @@
                             </span>
                         </p>
                     </div>
-                   
+
                     <div id="collapseQuote" class="panel-collapse robertcollapse collapse">
                         <div class="panel-body">
-                
+
                 <div class="date-picker">
                     <!-- Date -->
                     <div class="date-container  position-relative">
@@ -285,12 +285,12 @@
                     {% endif %}
                     {% if item.testDrive %}
                         <h4>Probefahrt</h4>
-                    {% else %}                        
+                    {% else %}
                         <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
                     {% endif %}
                     <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                 </div>
-            
+
                     </div>
                 </div>
             </div>
@@ -327,18 +327,18 @@
                     {% endif %}
                 </div>
             </div>
-            
+
             {% if post %}
             <div class="user-info">
                 <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
-                    
+
                     {% if post.image %}
                         <img src="{{ post.image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ post.title }}" class="blogimg"/>
                     {% else %}
                         {# TODO: change default blog photo #}
                         <img src="/img/placeholder/blog2.jpg" alt="{{ post.title }}" class="blogimg"/>
                     {% endif %}
-                    
+
                     <div class="row">
                         <div class="col-xs-9">
                             <p>
@@ -351,7 +351,7 @@
                 <img src="/img/info-icon.png" alt="info-icon" class="icon-info">
             </div>
             {% endif %}
-            
+
         </div>
         <!-- End of right side -->
     </div>
@@ -362,10 +362,10 @@
     <div class="container border-light-gray">
         <div class="row">
             {% if equipments %}
-            <p class="see-also mobile-hidden">Das könnte dich auch interessieren:</p>           
+            <p class="see-also mobile-hidden">Das könnte dich auch interessieren:</p>
             {{ render(controller('AppBundle:Default:renderEquipmentList', { "equipments":equipments } )) }}
             {% endif %}
-            
+
         </div>
     </div>
   </section>
@@ -411,7 +411,7 @@
                 <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
                 <h4 class="modal-title">Angebot melden</h4>
                 {{ render(controller('AppBundle:Common:ReportOffer', { "id": item.id, "type": type } )) }}
-                
+
                 <div id ="ReportOfferConfirmationDiv" style="display:none;" >
                     Vielen Dank für den Bericht!
                 </div>
@@ -420,7 +420,7 @@
     </div>
   </div>
     <div id="inquiry-sent" class="modal fade delete-offer" role="dialog">
-      <div class="modal-dialog"> 
+      <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
           <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
@@ -430,9 +430,9 @@
           </div>
         </div>
       </div>
-    </div>                
+    </div>
     <div id="question-sent" class="modal fade delete-offer" role="dialog">
-      <div class="modal-dialog"> 
+      <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
           <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
@@ -442,7 +442,7 @@
           </div>
         </div>
       </div>
-    </div>                
+    </div>
   </div>
   {% if isPreview %}
   <div id="action-disabled-modal" class="modal fade delete-offer" role="dialog">
@@ -452,15 +452,15 @@
               <div class="modal-header">
 			  <button type="button" class="close" data-dismiss="modal"><img src="/img/close-modal.png" alt="close"/></button>
       <div class="content-modal">
-        
+
                 <p class="delate-info">Diese Funktion ist in der Vorschau nicht verfügbar</p>
-		 
+
               </div>
           </div>
       </div>
   </div>
   {% endif %}
-  
+
 {% endblock %}
 
 
@@ -468,7 +468,7 @@
   <script src="/js/vendors/moment.min.js"></script>
   <script src="/js/vendors/bootstrap-datetimepicker.min.js"></script>
   <script src="http://maps.googleapis.com/maps/api/js?language=de"></script>
-  <script src="http://malsup.github.com/jquery.form.js"></script> 
+  <script src="http://malsup.github.com/jquery.form.js"></script>
   <script src="/js/vendors/vimeo.js"></script>
   <script>
     function addData(tag,data) {
@@ -481,18 +481,18 @@
         var pd = {% if item.price %}{{ item.price|number_format(2, '.', '') }}{% else %}null{% endif %};
         var pw = {% if item.priceWeek %}{{ item.priceWeek|number_format(2, '.', '') }}{% else %}null{% endif %};
         var pm = {% if item.priceMonth %}{{ item.priceMonth|number_format(2, '.', '') }}{% else %}null{% endif %};
-        
+
         if (days >= 30 && pm !== null)
             return pm / 30.0 * days;
         if (days >= 7 && pw !== null)
             return pw / 7.0 * days;
         return pd === null ? null : days * pd;
-        
+
     }
     $(document).ready(function(){
         var media = $('#media-list .media-img img');
         var mediaContainer = $('#media-content');
-        
+
         $(media).on('click',function(e){
             var $n = $(this).parent().clone();
             var $img = $n.find("img");
@@ -500,10 +500,10 @@
               $(mediaContainer).empty().append($n);
               $(".product-detail .left-side .cart, .discount.discount-big").show();
             });
-            $img.attr('src', $img.data('url'));                  
+            $img.attr('src', $img.data('url'));
         });
-        
-        
+
+
         var t1 = $('#date-range').val(moment().add(1, "days").format('[AB] DD.MM.YYYY'));
         var t2 = (moment().add(2, "days").format('[BIS] DD.MM.YYYY'));
 
@@ -588,7 +588,7 @@
             $('#to-time').html(time1.replace('Uhrzeit bis ',''));
             $(this).parent().find('.bootstrap-select').eq(1).find('.dropdown-toggle').text($(this).val()).prepend('<span class="caret"></span>');
         });
-        
+
         {% if not (isPreview) %}
             $('#myVideoPlay').on('click',function(){
                 $(this).hide();
@@ -620,23 +620,23 @@
                 var url = 'mailto:?subject=' + subject + '&body=' + body;
                 window.location = url;
             });
-        
-            
-        
+
+
+
             {% if (loggedIn) %}
                 $("a.inquiry").click(inquiry);
             {% else %}
                 $("a.inquiry").click(function(){
                     if ($("a[data-target='#login']").size() > 0) {
-                            $("a[data-target='#login']")[0].click();      
+                            $("a[data-target='#login']")[0].click();
                         }
                 });
             {% endif %}
-        
-        
+
+
             $("a.question").click(question);
         {% endif %}
-            
+
         $('#robert-heading').on('click', function () {
             $('.robertcollapse').collapse('toggle');
             if($('#fragestellenbut').is(':hidden'))
@@ -645,30 +645,28 @@
                 $('#fragestellenbut').hide();
 
         });
-            
+
         {% if (isPreview) %}
             $('#kategorie-select').unbind("click");
             $("a").unbind("click");
             $("a").attr("data-target", "");
             $("a:not(#robert-heading a)").click(function(e){
                e.preventDefault();
-               $("#action-disabled-modal").modal(); 
+               $("#action-disabled-modal").modal();
             });
         {% endif %}
-            
-        $("#googleMap").css("min-height",$("#map-sibling p").innerHeight());
     });
     $(window).load(function(){
         $('#tests').parent().find('.bootstrap-select').eq(0).find('.dropdown-toggle').html('Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp;   10:00').prepend('<span class="caret"></span>');
         $('#tests2').parent().find('.bootstrap-select').eq(1).find('.dropdown-toggle').html('Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp;  18:00').prepend('<span class="caret"></span>');
     });
-    
+
     function question(e) {
         e.preventDefault();
-        
+
         // assemble params
         var url = '{{ path('equipment-question', { 'id': item.id }) }}';
-                
+
         $("#question-modal .modal-dialog").load(url, function(data) {
             $("#question-modal").modal();
             $("#question-modal form").ajaxForm({
@@ -681,7 +679,7 @@
         // check response
         if (xhr.getResponseHeader('content-type').indexOf('json') > -1 && data.status === 'ok') { // form was submitted successfully
             $("#question-modal").modal('hide');
-            $("#question-sent").modal('show');            
+            $("#question-sent").modal('show');
         }
         else { // make ajaxForm again (ie. attach events to new DOM elements)
             $("#question-modal form").ajaxForm({
@@ -690,10 +688,10 @@
             });
         }
     }
-    
+
     function inquiry(e) {
         e.preventDefault();
-        
+
         // parse datetimes
         var range = $('#date-range').val();
         var arr = range.split('BIS');
@@ -701,19 +699,19 @@
         var t = $.trim(arr[1].replace('BIS', '')).split('.');                       // to date
         var fh = $.trim($("#tests").val().replace('Uhrzeit ab', '')).split(':');    // from hour
         var th = $.trim($("#tests2").val().replace('Uhrzeit bis', '')).split(':');  // to hour
-        
+
         var from = new Date(f[2], f[1] - 1, f[0], fh[0], fh[1]);
         var to = new Date(t[2], t[1] - 1, t[0], th[0], th[1]);
         // update timezone offset, so toISOString yields local time
         var tzoffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
         from = new Date(from.getTime() - tzoffset);
         to = new Date(to.getTime() - tzoffset);
-        
+
         // assemble params
         var url = '{{ path('booking-inquiry', { 'id': item.id, 'dateFrom': ':FROM', 'dateTo': ':TO' }) }}'
                 .replace(':FROM', from.toISOString())
                 .replace(':TO', to.toISOString());
-                
+
         $("#inquiry-modal .modal-dialog").load(url, function(data) {
             $("#inquiry-modal").modal();
             $("#inquiry-modal form").ajaxForm({
@@ -722,12 +720,12 @@
             });
         });
     }
-        
+
     function makeAjaxForm(data, status, xhr) {
         // check response
         if (xhr.getResponseHeader('content-type').indexOf('json') > -1 && data.status === 'ok') { // form was submitted successfully
             $("#inquiry-modal").modal('hide');
-            $("#inquiry-sent").modal('show');            
+            $("#inquiry-sent").modal('show');
         }
         else { // make ajaxForm again (ie. attach events to new DOM elements)
             $("#inquiry-modal form").ajaxForm({
@@ -753,7 +751,7 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
-                
+
         geocoder.geocode({ 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
