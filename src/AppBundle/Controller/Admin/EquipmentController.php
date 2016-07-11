@@ -321,9 +321,15 @@ class EquipmentController extends BaseAdminController {
         //<editor-fold>
         $ageArr = $this->getDoctrineRepo('AppBundle:EquipmentAge')->getAllForDropdown();        
         $form = $this->createFormBuilder($data, array(
-            'constraints' => array(
+                'constraints' => array(
                     new Callback(array($this, 'validateTime'))                
-                )
+                ),
+                'validation_groups' => function (\Symfony\Component\Form\FormInterface $form) {
+                    $data = $form->getData();
+                    if (!$data['service'])
+                        return array('Default', 'no-service');
+                    return array('Default');
+                }
             ))
                 ->add('subcategoryId', 'choice', array(
                     'choices' => $subcats,
@@ -360,14 +366,16 @@ class EquipmentController extends BaseAdminController {
                     )
                 ))
                 ->add('deposit', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
+                        new NotBlank(array('groups' => 'no-service')),
                         new Range(array('min' => 0, 'max' => 1000))
                     )
                 ))
                 ->add('value', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
+                        new NotBlank(array('groups' => 'no-service')),
                         new Range(array('min' => 50, 'max' => 50000))
                     )
                 ))

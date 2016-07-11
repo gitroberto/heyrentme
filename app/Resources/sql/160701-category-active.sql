@@ -1,0 +1,3 @@
+
+ALTER TABLE `category`
+	ADD COLUMN `active` SMALLINT NOT NULL DEFAULT '1' AFTER `position`;
