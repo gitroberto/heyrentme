@@ -292,7 +292,7 @@ class EquipmentController extends BaseAdminController {
             'invoice' => $equipment->getInvoice(),
             'industrial' => $equipment->getIndustrial(),
             'service' => $equipment->getService(),
-            'ageId' => $equipment->getAge()->getId(),
+            'ageId' => $equipment->getAge() !== null ? $equipment->getAge()->getId() : null,
             
             //edit 2
             'description' => $equipment->getDescription(),
