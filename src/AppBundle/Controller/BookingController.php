@@ -149,7 +149,7 @@ class BookingController extends BaseController {
             //</editor-fold>
             
             // notify
-            if ($eq->getInquiryCc())
+            if ($eq->getInquiryEmail() !== null)
                 $this->get('app.general_mailer')->AdmItemInquiryCc($inq);
             
             return new JsonResponse(array('status' => 'ok'));

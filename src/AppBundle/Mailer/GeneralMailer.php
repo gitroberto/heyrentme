@@ -47,28 +47,21 @@ class GeneralMailer {
     }
 
     public function AdmItemInquiryCC($inq) {
-        $from = array($this->parameters['mailer_fromEmail'] => $this->parameters['mailer_fromName']);
-        $to = $this->parameters['notification_email'];        
         
         $eq = get_class($inq) === 'AppBundle\\Entity\\EquipmentInquiry';
-        if ($eq) {
+        if ($eq)
             $item = $inq->getEquipment();
-        }
-        else {
+        else
             $item = $inq->getTalent();            
-        }
         $provider = $item->getUser();
-        $user = $inq->getUser();
-        $itemUrl = $this->router->generate('catchall', array('content' => $item->getUrlPath()));
         
-        
-        $subject = "Inquiry notification {$item->getUfid()} ({$item->getName()})";        
+        $from = array($this->parameters['mailer_fromEmail'] => $this->parameters['mailer_fromName']);
+        $to = $item->getInquiryEmail();
+        $subject = "Du hast soeben eine Anfrage erhalten!";        
         $copy = $this->templating->render('Emails/admin/item_inquiry_notification.html.twig', array(
             'inquiry' => $inq,
             'eq' => $eq,
             'item' => $item,
-            'itemUrl' => $itemUrl,
-            'user' => $user,
             'provider' => $provider
         ));        
         

@@ -183,9 +183,9 @@ class Talent {
      */
     protected $featured = false;
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string")
      */
-    protected $inquiryCc = false;
+    protected $inquiryEmail;
     
     
     public function setUuid($uuid)
@@ -1195,26 +1195,26 @@ class Talent {
     }
 
     /**
-     * Set inquiryCc
+     * Set inquiryEmail
      *
-     * @param boolean $inquiryCc
+     * @param string $inquiryEmail
      *
      * @return Talent
      */
-    public function setInquiryCc($inquiryCc)
+    public function setInquiryEmail($inquiryEmail)
     {
-        $this->inquiryCc = $inquiryCc;
+        $this->inquiryEmail = $inquiryEmail;
 
         return $this;
     }
 
     /**
-     * Get inquiryCc
+     * Get inquiryEmail
      *
-     * @return boolean
+     * @return string
      */
-    public function getInquiryCc()
+    public function getInquiryEmail()
     {
-        return $this->inquiryCc;
+        return $this->inquiryEmail;
     }
 }

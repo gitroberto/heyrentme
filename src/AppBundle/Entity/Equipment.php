@@ -217,9 +217,9 @@ class Equipment
      */
     protected $testDrive = false;
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string")
      */
-    protected $inquiryCc = false;
+    protected $inquiryEmail;
     
     
     public function setUuid($uuid)
@@ -1480,26 +1480,26 @@ class Equipment
     }
 
     /**
-     * Set inquiryCc
+     * Set inquiryEmail
      *
-     * @param boolean $inquiryCc
+     * @param string $inquiryEmail
      *
      * @return Equipment
      */
-    public function setInquiryCc($inquiryCc)
+    public function setInquiryEmail($inquiryEmail)
     {
-        $this->inquiryCc = $inquiryCc;
+        $this->inquiryEmail = $inquiryEmail;
 
         return $this;
     }
 
     /**
-     * Get inquiryCc
+     * Get inquiryEmail
      *
-     * @return boolean
+     * @return string
      */
-    public function getInquiryCc()
+    public function getInquiryEmail()
     {
-        return $this->inquiryCc;
+        return $this->inquiryEmail;
     }
 }

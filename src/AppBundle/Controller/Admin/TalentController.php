@@ -123,7 +123,6 @@ class TalentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseTalent();
             $cell[$i++] = $dataRow->getFeatured();
-            $cell[$i++] = $dataRow->getInquiryCc();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -276,6 +275,7 @@ class TalentController extends BaseAdminController {
         //<editor-fold> map fields            
         $data = array(
             'subcategoryId' => $talent->getSubcategory()->getId(),
+            'inquiryEmail' => $talent->getInquiryEmail(),
             'name' => $talent->getName(),
             'price' => $talent->getPrice(),
             'requestPrice' => $talent->getRequestPrice() > 0,
@@ -450,6 +450,12 @@ class TalentController extends BaseAdminController {
                     'attr' => array('maxlength' => 1000),
                     'constraints' => array(new Length(array('max' => 1000)))
                 ))              
+                ->add('inquiryEmail', 'email', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\Email(array('checkHost' => true))
+                    )
+                ))
                 ->getForm();
         //</editor-fold>
         
@@ -526,9 +532,11 @@ class TalentController extends BaseAdminController {
             $talent->setDescScope($data['descScope']);
             $talent->setDescCondition($data['descCondition']);
             
+            $talent->setInquiryEmail($data['inquiryEmail']);
+
             $owner->setPhonePrefix($data['phonePrefix']);
             $owner->setPhone($data['phone']);
-            
+
             if ($data['defaultAddress'] === true) {
                 $owner->setAddrStreet($talent->getAddrStreet());
                 $owner->setAddrNumber($talent->getAddrNumber());
@@ -1089,17 +1097,6 @@ class TalentController extends BaseAdminController {
         $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
         
         $tal->setFeatured(!$tal->getFeatured()); // toggle
-        $this->getDoctrine()->getManager()->flush();                
-        
-        return new JsonResponse(array('message' => 'ok'));
-    }    
-    /**
-     * @Route("admin-talent-inquirycc/{id}", name="admin-talent-inquirycc")
-     */
-    public function inquiryCcAction($id) {
-        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
-        
-        $eq->setInquiryCc(!$eq->getInquiryCc()); // toggle
         $this->getDoctrine()->getManager()->flush();                
         
         return new JsonResponse(array('message' => 'ok'));

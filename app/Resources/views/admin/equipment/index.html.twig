@@ -42,14 +42,10 @@
     function featuredActions(cellvalue, options, cellobject) {
         return '<input type="checkbox" class="featured" data-type="featured" data-id="' + cellobject[1] + '" title="featured"' + (cellobject[21] ? ' checked="checked" ' : '') + '/>';
     }
-    function inquiryCcActions(cellvalue, options, cellobject) {
-        return '<input type="checkbox" class="inquirycc" data-type="inquirycc" data-id="' + cellobject[1] + '" title="inquiry CC"' + (cellobject[22] ? ' checked="checked" ' : '') + '/>';
-    }
     function gridComplete() {
         $('a.delete').on('click', deleteClick);
         $('input.showcase').on('change', showcaseChange);
         $('input.featured').on('change', featuredChange);
-        $('input.inquirycc').on('change', inquiryCcChange);
     }
     function showcaseChange(e) {
         var ch = $(this);
@@ -79,18 +75,6 @@
     function featuredChange(e) {
         var $ch = $(this);
         var url = '{{ path('admin-equipment-featured', { 'id': '-ID-' }) }}'.replace('-ID-', $ch.data('id'));
-        $.get(url)
-                .done(function() {
-                    toastr.info('Saved successfully');
-                })
-                .fail(function() {
-                    $ch.prop('checked', !$ch.prop('checked')); // revert checkbox state
-                    toastr.error('Unexpected error occurred. Please try again.', 'Failed to save');
-                });
-    }
-    function inquiryCcChange(e) {
-        var $ch = $(this);
-        var url = '{{ path('admin-equipment-inquirycc', { 'id': '-ID-' }) }}'.replace('-ID-', $ch.data('id'));
         $.get(url)
                 .done(function() {
                     toastr.info('Saved successfully');
@@ -146,8 +130,7 @@
                                 { name: 'R', width: 70, align: 'right', sortable: false, search: false },
                                 { name: 'D', width: 50, align: 'right', sortable: false, search: false },
                                 { name: 'SC', width: 50, align: 'center', fixed: true, editable: false, sortable: false, search: false, formatter: showcaseActions },
-                                { name: 'F', width: 30, align: 'center', fixed: true, editable: false, sortable: false, search: false, formatter: featuredActions },
-                                { name: 'CC', width: 30, align: 'center', fixed: true, editable: false, sortable: false, search: false, formatter: inquiryCcActions }
+                                { name: 'F', width: 30, align: 'center', fixed: true, editable: false, sortable: false, search: false, formatter: featuredActions }
                         ],
                         height: 550,
                         rowNum: 20,
@@ -175,8 +158,6 @@
             $('.ui-jqgrid-htable thead tr:first-child th:nth-child(18)').attr('title', 'Discount');
             $('.ui-jqgrid-htable thead tr:first-child th:nth-child(19)').attr('title', 'Showcase');
             $('.ui-jqgrid-htable thead tr:first-child th:nth-child(20)').attr('title', 'Featured');
-            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(21)').attr('title', 'Inquiry CC');
-            
         }
         
         toastr.options["timeOut"] = 3000;

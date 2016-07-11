@@ -120,7 +120,6 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseEquipment();
             $cell[$i++] = $dataRow->getFeatured();
-            $cell[$i++] = $dataRow->getInquiryCc();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -279,6 +278,7 @@ class EquipmentController extends BaseAdminController {
         //<editor-fold> map fields            
         $data = array(
             'subcategoryId' => $equipment->getSubcategory()->getId(),
+            'inquiryEmail' => $equipment->getInquiryEmail(),
             
             //edit 1
             'name' => $equipment->getName(),
@@ -477,7 +477,6 @@ class EquipmentController extends BaseAdminController {
                         new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Bitte gib hier eine gültige Vorwahl ein'))
                     )
                 ))
-
                 //edit 3
                 ->add('timeMorning', 'checkbox', array('required' => false))
                 ->add('timeAfternoon', 'checkbox', array('required' => false))
@@ -498,7 +497,13 @@ class EquipmentController extends BaseAdminController {
                     'attr' => array('maxlength' => 1000),
                     'constraints' => array(new Length(array('max' => 1000)))
                 ))              
-                
+                // other stuff
+                ->add('inquiryEmail', 'email', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\Email(array('checkHost' => true))
+                    )
+                ))
                 ->getForm();
         //</editor-fold>
         
@@ -560,6 +565,8 @@ class EquipmentController extends BaseAdminController {
             $equipment->setDescType($data['descType']);
             $equipment->setDescSpecial($data['descSpecial']);
             $equipment->setDescCondition($data['descCondition']);
+            
+            $equipment->setInquiryEmail($data['inquiryEmail']);
             
             $owner->setPhonePrefix($data['phonePrefix']);
             $owner->setPhone($data['phone']);
@@ -1107,17 +1114,6 @@ class EquipmentController extends BaseAdminController {
         $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
         
         $eq->setFeatured(!$eq->getFeatured()); // toggle
-        $this->getDoctrine()->getManager()->flush();                
-        
-        return new JsonResponse(array('message' => 'ok'));
-    }    
-    /**
-     * @Route("admin-equipment-inquirycc/{id}", name="admin-equipment-inquirycc")
-     */
-    public function inquiryCcAction($id) {
-        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
-        
-        $eq->setInquiryCc(!$eq->getInquiryCc()); // toggle
         $this->getDoctrine()->getManager()->flush();                
         
         return new JsonResponse(array('message' => 'ok'));
