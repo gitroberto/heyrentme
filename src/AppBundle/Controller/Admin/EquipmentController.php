@@ -120,6 +120,7 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseEquipment();
             $cell[$i++] = $dataRow->getFeatured();
+            $cell[$i++] = $dataRow->getInquiryCc();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -1106,6 +1107,17 @@ class EquipmentController extends BaseAdminController {
         $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
         
         $eq->setFeatured(!$eq->getFeatured()); // toggle
+        $this->getDoctrine()->getManager()->flush();                
+        
+        return new JsonResponse(array('message' => 'ok'));
+    }    
+    /**
+     * @Route("admin-equipment-inquirycc/{id}", name="admin-equipment-inquirycc")
+     */
+    public function inquiryCcAction($id) {
+        $eq = $this->getDoctrineRepo('AppBundle:Equipment')->find($id);
+        
+        $eq->setInquiryCc(!$eq->getInquiryCc()); // toggle
         $this->getDoctrine()->getManager()->flush();                
         
         return new JsonResponse(array('message' => 'ok'));

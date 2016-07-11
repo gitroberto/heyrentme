@@ -123,6 +123,7 @@ class TalentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseTalent();
             $cell[$i++] = $dataRow->getFeatured();
+            $cell[$i++] = $dataRow->getInquiryCc();
             
             $row['cell'] = $cell;
             array_push($rows, $row);
@@ -1088,6 +1089,17 @@ class TalentController extends BaseAdminController {
         $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
         
         $tal->setFeatured(!$tal->getFeatured()); // toggle
+        $this->getDoctrine()->getManager()->flush();                
+        
+        return new JsonResponse(array('message' => 'ok'));
+    }    
+    /**
+     * @Route("admin-talent-inquirycc/{id}", name="admin-talent-inquirycc")
+     */
+    public function inquiryCcAction($id) {
+        $eq = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        
+        $eq->setInquiryCc(!$eq->getInquiryCc()); // toggle
         $this->getDoctrine()->getManager()->flush();                
         
         return new JsonResponse(array('message' => 'ok'));

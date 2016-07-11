@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dein Angebot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+</head>
+
+<body style="">
+    <p style="">        
+        Item: 
+        {% if eq %}Equipment{% else %}Talent{% endif %}
+        <b>{{ item.name }}</b> <a href="{{ mailer_app_url_prefix }}{{ itemUrl }}" target="_blank">details</a>
+    </p>
+    <p style="text-align: left;">
+        Provider: 
+        <b>{{ provider.fullname }}</b>
+        (<a href="mailto:{{ provider.email }}">{{ provider.email }}</a>)
+        <a href="{{ mailer_app_url_prefix }}{{ path('admin-user-details', { id: provider.id }) }}">details</a>
+    </p>
+    <p>
+        User: 
+        <b>{{ user.fullname }}</b>
+        (<a href="mailto:{{ user.email }}">{{ user.email }}</a>)
+        <a href="{{ mailer_app_url_prefix }}{{ path('admin-user-details', { id: user.id }) }}">details</a>
+    </p>
+    <p>
+        Inquiry:<br/>
+        start date: <b>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</b><br/>
+        end date: <b>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</b><br/>
+        price: <b>
+                {% if inquiry.price %}
+                    {{ inquiry.price|number_format(2, ',') }} &euro;
+                {% else %}
+                    {% if eq %}
+                    Probefahrt
+                    {% else %}
+                        auf Anfr.
+                    {% endif %}
+                {% endif %}
+            </b><br/>
+        message:<br/>
+        <i>{{ inquiry.message|nl2br }}</i>
+    </p>
+</body>
+</html>
+{# empty Twig template #}

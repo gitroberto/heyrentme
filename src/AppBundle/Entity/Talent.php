@@ -182,6 +182,10 @@ class Talent {
      * @ORM\Column(type="boolean")
      */
     protected $featured = false;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $inquiryCc = false;
     
     
     public function setUuid($uuid)
@@ -1188,5 +1192,29 @@ class Talent {
     public function getFeatured()
     {
         return $this->featured;
+    }
+
+    /**
+     * Set inquiryCc
+     *
+     * @param boolean $inquiryCc
+     *
+     * @return Talent
+     */
+    public function setInquiryCc($inquiryCc)
+    {
+        $this->inquiryCc = $inquiryCc;
+
+        return $this;
+    }
+
+    /**
+     * Get inquiryCc
+     *
+     * @return boolean
+     */
+    public function getInquiryCc()
+    {
+        return $this->inquiryCc;
     }
 }

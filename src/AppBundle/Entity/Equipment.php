@@ -216,6 +216,10 @@ class Equipment
      * @ORM\Column(type="boolean")
      */
     protected $testDrive = false;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $inquiryCc = false;
     
     
     public function setUuid($uuid)
@@ -1473,5 +1477,29 @@ class Equipment
     public function getTestDrive()
     {
         return $this->testDrive;
+    }
+
+    /**
+     * Set inquiryCc
+     *
+     * @param boolean $inquiryCc
+     *
+     * @return Equipment
+     */
+    public function setInquiryCc($inquiryCc)
+    {
+        $this->inquiryCc = $inquiryCc;
+
+        return $this;
+    }
+
+    /**
+     * Get inquiryCc
+     *
+     * @return boolean
+     */
+    public function getInquiryCc()
+    {
+        return $this->inquiryCc;
     }
 }

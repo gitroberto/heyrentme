@@ -35,7 +35,7 @@ services:
     
     app.general_mailer:
         class: AppBundle\Mailer\GeneralMailer
-        arguments: ['@mailer', '@templating', @doctrine.orm.entity_manager , { mailer_fromEmail: %mailer_fromemail%, mailer_fromName: %mailer_fromname%, mailer_app_url_prefix: %mailer_app_url_prefix%  } ]
+        arguments: ['@mailer', '@templating', '@router', @doctrine.orm.entity_manager , { mailer_fromEmail: %mailer_fromemail%, mailer_fromName: %mailer_fromname%, mailer_app_url_prefix: %mailer_app_url_prefix%, notification_email: %notification_email%  } ]
     
     scheduler:
         class: AppBundle\Service\SchedulerService

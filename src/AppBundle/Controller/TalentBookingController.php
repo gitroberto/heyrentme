@@ -149,6 +149,10 @@ class TalentBookingController extends BaseController {
             $this->get('mailer')->send($message);
             //</editor-fold>
             
+            // notify
+            if ($eq->getInquiryCc())
+                $this->get('app.general_mailer')->AdmItemInquiryCc($inq);
+            
             return new JsonResponse(array('status' => 'ok'));
         }
         
