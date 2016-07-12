@@ -46,8 +46,7 @@ class GeneralMailer {
         $this->mailer->send($message);
     }
 
-    public function AdmItemInquiryCC($inq) {
-        
+    public function AdmItemInquiryCC($inq) {        
         $eq = get_class($inq) === 'AppBundle\\Entity\\EquipmentInquiry';
         if ($eq)
             $item = $inq->getEquipment();
@@ -70,6 +69,32 @@ class GeneralMailer {
                 ->setFrom($from)
                 ->setTo($to)
                 ->setBody($copy, 'text/html');        
+        $this->mailer->send($msg);
+    }
+    
+    public function AdmItemQuestionCC($quest) {
+        $eq = get_class($quest) === 'AppBundle\\Entity\\EquipmentQuestion';
+        if ($eq)
+            $item = $quest->getEquipment();
+        else
+            $item = $quest->getTalent();                    
+        $provider = $item->getUser();
+        
+        $from = array($this->parameters['mailer_fromEmail'] => $this->parameters['mailer_fromName']);
+        $to = $item->getInquiryEmail();
+        $emailHtml = $this->templating->render('Emails/admin/item_question_notification.html.twig', array(
+            'mailer_app_url_prefix' => $this->parameters['mailer_app_url_prefix'],
+            'provider' => $provider,
+            'question' => $quest,
+            'equipment' => $eq,
+            'item' => $item
+        ));
+        
+        $msg = Swift_Message::newInstance()
+            ->setSubject('Du hast soeben eine Frage erhalten!')
+            ->setFrom($from)
+            ->setTo($to)
+            ->setBody($emailHtml, 'text/html');
         $this->mailer->send($msg);
     }
 }
