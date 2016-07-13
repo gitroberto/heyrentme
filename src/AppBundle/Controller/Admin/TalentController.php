@@ -92,8 +92,6 @@ class TalentController extends BaseAdminController {
         
         $rows = array(); // rows as json result        
         foreach ($dataRows as $dataRow) { // build single row
-            $subcat = $dataRow->getSubcategory();
-            $cat = $subcat->getCategory();
             $user = $dataRow->getUser();
             $stat = $stats[$dataRow->getId()];
 
@@ -103,7 +101,7 @@ class TalentController extends BaseAdminController {
             $cell = array();
             $cell[$i++] = null;
             $cell[$i++] = $dataRow->getId();
-            $cell[$i++] = sprintf("%s | %s", $cat->getName(), $subcat->getName());
+            $cell[$i++] = $dataRow->getSubcategoriesAsString();
             $cell[$i++] = $dataRow->getName();
             $cell[$i++] = $dataRow->getPrice();
             $cell[$i++] = $user !== null ? $user->getUsername() : '';
@@ -261,6 +259,7 @@ class TalentController extends BaseAdminController {
      */
     public function talentEditAction(Request $request, $id) {        
         $talentRepo = $this->getDoctrineRepo('AppBundle:Talent');
+        $subcatRepo = $this->getDoctrineRepo('AppBundle:Subcategory');
         $talent = $talentRepo->find($id);
         $mainImage = $talentRepo->getTalentMainImage($id);
         $images = $talentRepo->getTalentButMainImages($id);
@@ -269,12 +268,11 @@ class TalentController extends BaseAdminController {
             return new Response(Response::HTTP_NOT_FOUND);
         }        
         $owner = $talent->getUser();
-        $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown2(Category::TYPE_TALENT);
+        $subcats = $subcatRepo->getAllForDropdown2(Category::TYPE_TALENT);
         
         // map fields, TODO: consider moving to Talent's method
         //<editor-fold> map fields            
         $data = array(
-            'subcategoryId' => $talent->getSubcategory()->getId(),
             'inquiryEmail' => $talent->getInquiryEmail(),
             'name' => $talent->getName(),
             'price' => $talent->getPrice(),
@@ -303,9 +301,14 @@ class TalentController extends BaseAdminController {
             'descTarget' => $talent->getDescTarget(),
             'descCondition' => $talent->getDescCondition()
         );
-        
-        
-        
+        $i = 1;
+        foreach ($talent->getSubcategories() as $sc) {
+            $data["subcategory{$i}Id"] = $sc->getId();
+            $i++;
+            if ($i === 4)
+                break;
+        }
+                        
         if (empty($talent->getAddrStreet())) {
             $data['street'] = $owner->getAddrStreet();
             $data['number'] = $owner->getAddrNumber();
@@ -322,12 +325,27 @@ class TalentController extends BaseAdminController {
                 'constraints' => array(
                     new Callback(array($this, 'validateTime'))
                 )))
-                ->add('subcategoryId', 'choice', array(
+                ->add('subcategory1Id', 'choice', array(
                     'choices' => $subcats,
                     'choices_as_values' => false,
                     'constraints' => array(
                         new NotBlank()
                     )
+                ))
+                ->add('subcategory2Id', 'choice', array(
+                    'required' => false,
+                    'choices' => $subcats,
+                    'choices_as_values' => false
+                ))
+                ->add('subcategory3Id', 'choice', array(
+                    'required' => false,
+                    'choices' => $subcats,
+                    'choices_as_values' => false
+                ))
+                ->add('subcategory4Id', 'choice', array(
+                    'required' => false,
+                    'choices' => $subcats,
+                    'choices_as_values' => false
                 ))
                 ->add('name', 'text', array(
                     'constraints' => array(
@@ -470,15 +488,15 @@ class TalentController extends BaseAdminController {
         if ($form->isValid()   && $mainImageValidation === null && $imagesValidation === null ) {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
+            $arr = array();
+            for ($i = 1; $i <= 4; $i++)
+                if ($data["subcategory{$i}Id"] !== '')
+                    array_push ($arr, $subcatRepo->find($data["subcategory{$i}Id"]));
             
 
-            // check for modaration relevant changes
-            $changed = $talent->getName() !== $data['name'];
             
             // map fields, TODO: consider moving to Talent's method
             //<editor-fold> map fields            
-            $talent->setSubcategory($subcat);
             $talent->setName($data['name']);
             $talent->setPrice($data['price']);
             $talent->setRequestPrice($data['requestPrice'] ? 1 : 0);
@@ -536,6 +554,11 @@ class TalentController extends BaseAdminController {
 
             $owner->setPhonePrefix($data['phonePrefix']);
             $owner->setPhone($data['phone']);
+            // subcats
+            foreach ($talent->getSubcategories() as $sc)
+                $talent->removeSubcategory($sc);
+            foreach ($arr as $sc)
+                $talent->addSubcategory($sc);            
 
             if ($data['defaultAddress'] === true) {
                 $owner->setAddrStreet($talent->getAddrStreet());
@@ -571,17 +594,33 @@ class TalentController extends BaseAdminController {
      * @Route("/admin/talent/new", name="admin_talent_new")     
      */
     public function talentAddAction(Request $request) {                
-        $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown2(Category::TYPE_TALENT);
+        $subcatRepo = $this->getDoctrineRepo('AppBundle:Subcategory');
+        $subcats = $subcatRepo->getAllForDropdown2(Category::TYPE_TALENT);
         $users = $this->getDoctrineRepo('AppBundle:User')->getAllForDropdown();
         // build form
         //<editor-fold>
         $form = $this->createFormBuilder()                                
-            ->add('subcategoryId', 'choice', array(
+            ->add('subcategory1Id', 'choice', array(
                 'choices' => $subcats,
                 'choices_as_values' => false,
                 'constraints' => array(
                     new NotBlank()
                 )
+            ))
+            ->add('subcategory2Id', 'choice', array(
+                'required' => false,
+                'choices' => $subcats,
+                'choices_as_values' => false
+            ))
+            ->add('subcategory3Id', 'choice', array(
+                'required' => false,
+                'choices' => $subcats,
+                'choices_as_values' => false
+            ))
+            ->add('subcategory4Id', 'choice', array(
+                'required' => false,
+                'choices' => $subcats,
+                'choices_as_values' => false
             ))
             ->add('userId', 'choice', array(
                 'choices' => $users,
@@ -597,15 +636,18 @@ class TalentController extends BaseAdminController {
         
         if ($form->isValid()) {
             $data = $form->getData();
-            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
             $user = $this->getDoctrineRepo('AppBundle:User')->find($data['userId']);
+            // handle multiple subcats
+            $arr = array();
+            for ($i = 1; $i <= 4; $i++)
+                if ($data["subcategory{$i}Id"] !== '')
+                    array_push ($arr, $subcatRepo->find($data["subcategory{$i}Id"]));
             
             
             $em = $this->getDoctrine()->getManager();
             
             $talent = new Talent();
             $talent->setUser($user);
-            $talent->setSubcategory($subcat);
             $talent->setStatus(Talent::STATUS_INCOMPLETE);         
             $talent->setName('');
             $talent->setUuid(Utils::getUuid());
@@ -614,6 +656,9 @@ class TalentController extends BaseAdminController {
             $talent->setAddrFlatNumber($user->getAddrFlatNumber());
             $talent->setAddrPostcode($user->getAddrPostcode());
             $talent->setAddrPlace($user->getAddrPlace());
+
+            foreach ($arr as $sc)
+                $talent->addSubcategory($sc);            
             
             $em->persist($talent);
             $em->flush();

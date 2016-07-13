@@ -253,7 +253,7 @@ class DefaultController extends BaseController {
             $repo = 'AppBundle:Equipment';
             $ratRepo = 'AppBundle:EquipmentRating';
             $tmpl = 'default/equipment.html.twig';
-            $subcat = $eq->getSubcategory();
+            $subcat = $eq->getSubcategories()[0];
             $id = $eq->getId();
             $type = ReportOffer::OFFER_TYPE_EQUIPMENT;
         }
@@ -264,7 +264,7 @@ class DefaultController extends BaseController {
             $repo = 'AppBundle:Talent';
             $ratRepo = 'AppBundle:TalentRating';
             $tmpl = 'default/talent.html.twig';
-            $subcat = $tal->getSubcategory();
+            $subcat = $tal->getSubcategories()[0];
             $id = $tal->getId();
             $type = ReportOffer::OFFER_TYPE_TALENT;
         }

@@ -89,8 +89,10 @@ class EquipmentController extends BaseAdminController {
         
         $rows = array(); // rows as json result        
         foreach ($dataRows as $dataRow) { // build single row
-            $subcat = $dataRow->getSubcategory();
-            $cat = $subcat->getCategory();
+            //$subcats = $dataRow->getSubcategories();
+            
+            
+            //$cat = $subcat->getCategory();
             $user = $dataRow->getUser();
             $stat = $stats[$dataRow->getId()];
             
@@ -100,7 +102,7 @@ class EquipmentController extends BaseAdminController {
             $cell = array();
             $cell[$i++] = null;
             $cell[$i++] = $dataRow->getId();
-            $cell[$i++] = sprintf("%s | %s", $cat->getName(), $subcat->getName());
+            $cell[$i++] = $dataRow->getSubcategoriesAsString();
             $cell[$i++] = $dataRow->getName();
             $cell[$i++] = $dataRow->getPrice();
             $cell[$i++] = $user !== null ? $user->getUsername() : '';
@@ -259,6 +261,7 @@ class EquipmentController extends BaseAdminController {
      */
     public function equipmentEditAction(Request $request, $id) {
         $eqRepo = $this->getDoctrineRepo('AppBundle:Equipment');
+        $subcatRepo = $this->getDoctrineRepo('AppBundle:Subcategory');
         $equipment = $eqRepo->find($id);
         $mainImage = $eqRepo->getEquipmentMainImage($id);
         $images = $eqRepo->getEquipmentButMainImages($id);
@@ -272,12 +275,11 @@ class EquipmentController extends BaseAdminController {
         
         //Get eq owner
         $owner = $equipment->getUser();
-        $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown2(Category::TYPE_EQUIPMENT);
+        $subcats = $subcatRepo->getAllForDropdown2(Category::TYPE_EQUIPMENT);
         
         // map fields, TODO: consider moving to Equipment's method
         //<editor-fold> map fields            
         $data = array(
-            'subcategoryId' => $equipment->getSubcategory()->getId(),
             'inquiryEmail' => $equipment->getInquiryEmail(),
             
             //edit 1
@@ -316,6 +318,14 @@ class EquipmentController extends BaseAdminController {
             'descCondition' => $equipment->getDescCondition()
             
         );
+        $i = 1;
+        foreach ($equipment->getSubcategories() as $sc) {
+            $data["subcategory{$i}Id"] = $sc->getId();
+            $i++;
+            if ($i === 4)
+                break;
+        }
+        
         //</editor-fold>
         
         // build form
@@ -332,12 +342,27 @@ class EquipmentController extends BaseAdminController {
                     return array('Default');
                 }
             ))
-                ->add('subcategoryId', 'choice', array(
+                ->add('subcategory1Id', 'choice', array(
                     'choices' => $subcats,
                     'choices_as_values' => false,
                     'constraints' => array(
                         new NotBlank()
                     )
+                ))
+                ->add('subcategory2Id', 'choice', array(
+                    'required' => false,
+                    'choices' => $subcats,
+                    'choices_as_values' => false
+                ))
+                ->add('subcategory3Id', 'choice', array(
+                    'required' => false,
+                    'choices' => $subcats,
+                    'choices_as_values' => false
+                ))
+                ->add('subcategory4Id', 'choice', array(
+                    'required' => false,
+                    'choices' => $subcats,
+                    'choices_as_values' => false
                 ))
                 
                 //edit 1                
@@ -519,14 +544,16 @@ class EquipmentController extends BaseAdminController {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find($data['ageId']);            
-            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
+            $arr = array();
+            for ($i = 1; $i <= 4; $i++)
+                if ($data["subcategory{$i}Id"] !== '')
+                    array_push ($arr, $subcatRepo->find($data["subcategory{$i}Id"]));
 
             // check for modaration relevant changes
             $changed = $equipment->getName() !== $data['name'];
 
             // map fields, TODO: consider moving to Equipment's method
             //<editor-fold> map fields           
-            $equipment->setSubcategory($subcat);
             
             //EDIT 1
             $equipment->setName($data['name']);
@@ -570,6 +597,12 @@ class EquipmentController extends BaseAdminController {
             
             $owner->setPhonePrefix($data['phonePrefix']);
             $owner->setPhone($data['phone']);
+            
+            // subcats
+            foreach ($equipment->getSubcategories() as $sc)
+                $equipment->removeSubcategory($sc);
+            foreach ($arr as $sc)
+                $equipment->addSubcategory($sc);            
             
             if ($data['defaultAddress'] === true) {
                 $owner->setAddrStreet($equipment->getAddrStreet());
@@ -631,17 +664,33 @@ class EquipmentController extends BaseAdminController {
      * @Route("/admin/equipment/new", name="admin_equipment_new")     
      */
     public function equipmentAddAction(Request $request) {                
-        $subcats = $this->getDoctrineRepo('AppBundle:Subcategory')->getAllForDropdown2(Category::TYPE_EQUIPMENT);
+        $subcatRepo = $this->getDoctrineRepo('AppBundle:Subcategory');
+        $subcats = $subcatRepo->getAllForDropdown2(Category::TYPE_EQUIPMENT);
         $users = $this->getDoctrineRepo('AppBundle:User')->getAllForDropdown();
         // build form
         //<editor-fold>
         $form = $this->createFormBuilder()                                
-            ->add('subcategoryId', 'choice', array(
+            ->add('subcategory1Id', 'choice', array(
                 'choices' => $subcats,
                 'choices_as_values' => false,
                 'constraints' => array(
                     new NotBlank()
                 )
+            ))
+            ->add('subcategory2Id', 'choice', array(
+                'required' => false,
+                'choices' => $subcats,
+                'choices_as_values' => false
+            ))
+            ->add('subcategory3Id', 'choice', array(
+                'required' => false,
+                'choices' => $subcats,
+                'choices_as_values' => false
+            ))
+            ->add('subcategory4Id', 'choice', array(
+                'required' => false,
+                'choices' => $subcats,
+                'choices_as_values' => false
             ))
             ->add('userId', 'choice', array(
                 'choices' => $users,
@@ -657,16 +706,18 @@ class EquipmentController extends BaseAdminController {
         
         if ($form->isValid()) {
             $data = $form->getData();
-            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($data['subcategoryId']);
             $user = $this->getDoctrineRepo('AppBundle:User')->find($data['userId']);
             $age = $this->getDoctrineRepo('AppBundle:EquipmentAge')->find(1);
-            
+            // handle multiple subcats
+            $arr = array();
+            for ($i = 1; $i <= 4; $i++)
+                if ($data["subcategory{$i}Id"] !== '')
+                    array_push ($arr, $subcatRepo->find($data["subcategory{$i}Id"]));
             
             $em = $this->getDoctrine()->getManager();
             
             $eq = new Equipment();
             $eq->setUser($user);
-            $eq->setSubcategory($subcat);
             $eq->setName('');
             $eq->setPrice(0);
             $eq->setValue(0);
@@ -681,6 +732,9 @@ class EquipmentController extends BaseAdminController {
             $eq->setAddrFlatNumber($user->getAddrFlatNumber());
             $eq->setAddrPostcode($user->getAddrPostcode());
             $eq->setAddrPlace($user->getAddrPlace());
+            
+            foreach ($arr as $sc)
+                $eq->addSubcategory($sc);            
             
             $em->persist($eq);
             $em->flush();

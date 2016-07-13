@@ -725,7 +725,7 @@ class ProviderController extends BaseController {
             $eq->setUuid(Utils::getUuid());            
             $eq->setName($data['name']);
             $eq->setUser($user);
-            $eq->setSubcategory($subcat);
+            $eq->addSubcategory($subcat);
             $eq->setPrice($data['price']);
             $eq->setPriceWeek($data['priceWeek']);
             $eq->setPriceMonth($data['priceMonth']);
@@ -1581,7 +1581,7 @@ class ProviderController extends BaseController {
             }
             array_push($parts, "equipment in");
             
-            $subcat = $eq->getSubcategory();
+            $subcat = $eq->getSubcategoriesAsString(); // $eq->getSubcategory();
             $cat = $subcat->getCategory();
             array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
             
@@ -1604,7 +1604,7 @@ class ProviderController extends BaseController {
             }
             array_push($parts, "equipment in");
             
-            $subcat = $eq->getSubcategory();
+            $subcat = $eq->getSubcategoriesAsString(); //$eq->getSubcategory();
             $cat = $subcat->getCategory();
             array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
             

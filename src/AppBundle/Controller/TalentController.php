@@ -62,7 +62,7 @@ class TalentController extends BaseController {
             $eq->setUuid(Utils::getUuid());  
             $eq->setName($data['name']);
             $eq->setUser($user);
-            $eq->setSubcategory($subcat);
+            $eq->addSubcategory($subcat);
             $eq->setPrice($data['price']);
             $eq->setRequestPrice($data['requestPrice'] ? 1 : 0);
             $eq->setStatus(Talent::STATUS_INCOMPLETE);
@@ -1208,7 +1208,7 @@ class TalentController extends BaseController {
         }
         array_push($parts, "talent in");
 
-        $subcat = $eq->getSubcategory();
+        $subcat = $eq->getSubcategoriesAsString();// $eq->getSubcategory();
         $cat = $subcat->getCategory();
         array_push($parts, "{$cat->getName()} / {$subcat->getName()}"); 
 

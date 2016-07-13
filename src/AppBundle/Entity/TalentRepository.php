@@ -17,7 +17,7 @@ use AppBundle\ViewModel\Admin\LogEvent;
 class TalentRepository extends EntityRepository
 {
     public function getAllBySubcategory($subcategoryId) {
-        $sql = "select e from AppBundle:Talent e where e.subcategory = :subcategoryId and e.status = :approved";
+        $sql = "select e from AppBundle:Talent e where e.subcategories = :subcategoryId and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
         $query->setParameter('approved', Talent::STATUS_APPROVED);
@@ -25,7 +25,7 @@ class TalentRepository extends EntityRepository
     }   
     
     public function getAllForOtherCategories($subcategoryId) {
-        $sql = "select e from AppBundle:Talent e where e.subcategory != :subcategoryId and e.status = :approved";
+        $sql = "select e from AppBundle:Talent e where e.subcategories != :subcategoryId and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
         $query->setParameter('approved', Talent::STATUS_APPROVED);
@@ -36,7 +36,7 @@ class TalentRepository extends EntityRepository
         #TODO: Correct query, remove hardcoded number of items
         // TODO: refactor: write query with proper "order by" and take first four items
         //TODO: add user status = ok 
-        $sql = "select e from AppBundle:Talent e where e.subcategory = :subcategoryId and e.id != :id and e.status = :approved";
+        $sql = "select e from AppBundle:Talent e where e.subcategories = :subcategoryId and e.id != :id and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
         $query->setParameter('id', $eqId);
@@ -86,7 +86,7 @@ class TalentRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('e, u, s, c')
             ->from('AppBundle:Talent', 'e')
-            ->leftJoin('e.subcategory', 's')
+            ->leftJoin('e.subcategories', 's')
             ->leftJoin('s.category', 'c')
             ->leftJoin('e.user', 'u');
         $this->gridOverviewParams($qb, $sStatus);
@@ -307,7 +307,7 @@ EOT;
                 ->createQueryBuilder()
                 ->select('e', 'i'/*, 'd'*/) // this line forces fetch join
                 ->from('AppBundle:Talent', 'e')
-                ->join('e.subcategory', 's')
+                ->join('e.subcategories', 's')
                 ->join('e.user', 'u')
                 ->leftJoin('e.images', 'i')/*
                 ->leftJoin('e.discounts', 'd')*/
@@ -717,9 +717,10 @@ EOT;
     public function getShowcaseStartCount() {
         return $this->getEntityManager()->createQueryBuilder()
             ->select('count(t.id)')
+            ->distinct()
             ->from('AppBundle:Talent', 't')
-            ->join('t.subcategory', 's')
-            ->join('s.category', 'c')
+            ->join('t.subcategories', 's')
+            ->join('s.categor', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('t.showcaseStart = 1')
             ->andWhere('t.status = :status')
@@ -730,8 +731,9 @@ EOT;
     public function getShowcaseStart() {
         $tals = $this->getEntityManager()->createQueryBuilder()
             ->select('t')
+            ->distinct()
             ->from('AppBundle:Talent', 't')
-            ->join('t.subcategory', 's')
+            ->join('t.subcategories', 's')
             ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('t.showcaseStart = 1')
@@ -750,8 +752,9 @@ EOT;
     public function getShowcaseTalentCount() {
         return $this->getEntityManager()->createQueryBuilder()
             ->select('count(t.id)')
+            ->distinct()
             ->from('AppBundle:Talent', 't')
-            ->join('t.subcategory', 's')
+            ->join('t.subcategories', 's')
             ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('t.showcaseTalent = 1')
@@ -763,8 +766,9 @@ EOT;
     public function getShowcaseTalent() {
         $tals = $this->getEntityManager()->createQueryBuilder()
             ->select('t', 'i')
+            ->distinct()
             ->from('AppBundle:Talent', 't')
-            ->join('t.subcategory', 's')
+            ->join('t.subcategories', 's')
             ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->leftJoin('t.images', 'i')
