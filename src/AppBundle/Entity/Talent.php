@@ -182,6 +182,10 @@ class Talent {
      * @ORM\Column(type="boolean")
      */
     protected $featured = false;
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $inquiryEmail;
     
     
     public function setUuid($uuid)
@@ -1188,5 +1192,29 @@ class Talent {
     public function getFeatured()
     {
         return $this->featured;
+    }
+
+    /**
+     * Set inquiryEmail
+     *
+     * @param string $inquiryEmail
+     *
+     * @return Talent
+     */
+    public function setInquiryEmail($inquiryEmail)
+    {
+        $this->inquiryEmail = $inquiryEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get inquiryEmail
+     *
+     * @return string
+     */
+    public function getInquiryEmail()
+    {
+        return $this->inquiryEmail;
     }
 }

@@ -1,3 +1,64 @@
+#footer nav {
+    padding: 10px 0;
+}
+
+.main-header .main-search .rhomeheader {
+font-size: 40px;
+}
+
+.rneublock {
+margin-top:15px;
+}
+
+.rstartbuttons {
+font-size: 24px;
+font-family: 'Open Sans',sans-serif;
+font-weight: 400;
+}
+
+@media (max-width: 736px) {	
+
+.rstartbuttons {
+font-size: 14px;
+margin: 15px 0 0 0!important;
+}
+
+.rstartbutton:hover {
+transition: none!important;
+}
+
+.main-header .main-search .rhomeheader {
+font-size: 22px;
+}
+
+.main-header .main-search {
+top: 42% !important;
+}
+
+.main-header .main-search .margin-bottom-40 {
+margin-bottom: 0 !important;
+}
+
+}
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (orientation: portrait) {
+.rhomeheader {
+display:none
+}
+.rstartbuttons {
+display:none;
+}
+.main-header .main-search .rhomeheader {
+font-size: 27px;
+}
+	  
+  }
+
+    
+
 /* PLAY BUTTON */
 
 .rplay {

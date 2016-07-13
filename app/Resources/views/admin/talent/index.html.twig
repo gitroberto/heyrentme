@@ -49,7 +49,7 @@
     }
     function gridComplete() {
         $('a.delete').on('click', deleteClick);
-        $('input.showcase').on('change', showcaseChange)
+        $('input.showcase').on('change', showcaseChange);
         $('input.featured').on('change', featuredChange);
     }
     function showcaseChange(e) {
@@ -151,6 +151,15 @@
                 defaultSearch: 'e',
                 clearSearch: false
             });
+
+            // tooltips
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(12)').attr('title', 'Questions');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(13)').attr('title', 'Bookings');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(14)').attr('title', 'Cancellations');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(15)').attr('title', 'Revenue');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(16)').attr('title', 'Discount');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(17)').attr('title', 'Showcase');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(18)').attr('title', 'Featured');
         }
 
         toastr.options["timeOut"] = 3000;

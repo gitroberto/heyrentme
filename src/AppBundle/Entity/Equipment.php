@@ -216,6 +216,10 @@ class Equipment
      * @ORM\Column(type="boolean")
      */
     protected $testDrive = false;
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $inquiryEmail;
     
     
     public function setUuid($uuid)
@@ -1473,5 +1477,29 @@ class Equipment
     public function getTestDrive()
     {
         return $this->testDrive;
+    }
+
+    /**
+     * Set inquiryEmail
+     *
+     * @param string $inquiryEmail
+     *
+     * @return Equipment
+     */
+    public function setInquiryEmail($inquiryEmail)
+    {
+        $this->inquiryEmail = $inquiryEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get inquiryEmail
+     *
+     * @return string
+     */
+    public function getInquiryEmail()
+    {
+        return $this->inquiryEmail;
     }
 }

@@ -278,6 +278,7 @@ class EquipmentController extends BaseAdminController {
         //<editor-fold> map fields            
         $data = array(
             'subcategoryId' => $equipment->getSubcategory()->getId(),
+            'inquiryEmail' => $equipment->getInquiryEmail(),
             
             //edit 1
             'name' => $equipment->getName(),
@@ -291,7 +292,7 @@ class EquipmentController extends BaseAdminController {
             'invoice' => $equipment->getInvoice(),
             'industrial' => $equipment->getIndustrial(),
             'service' => $equipment->getService(),
-            'ageId' => $equipment->getAge()->getId(),
+            'ageId' => $equipment->getAge() !== null ? $equipment->getAge()->getId() : null,
             
             //edit 2
             'description' => $equipment->getDescription(),
@@ -321,9 +322,15 @@ class EquipmentController extends BaseAdminController {
         //<editor-fold>
         $ageArr = $this->getDoctrineRepo('AppBundle:EquipmentAge')->getAllForDropdown();        
         $form = $this->createFormBuilder($data, array(
-            'constraints' => array(
+                'constraints' => array(
                     new Callback(array($this, 'validateTime'))                
-                )
+                ),
+                'validation_groups' => function (\Symfony\Component\Form\FormInterface $form) {
+                    $data = $form->getData();
+                    if (!$data['service'])
+                        return array('Default', 'no-service');
+                    return array('Default');
+                }
             ))
                 ->add('subcategoryId', 'choice', array(
                     'choices' => $subcats,
@@ -360,14 +367,16 @@ class EquipmentController extends BaseAdminController {
                     )
                 ))
                 ->add('deposit', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
+                        new NotBlank(array('groups' => 'no-service')),
                         new Range(array('min' => 0, 'max' => 1000))
                     )
                 ))
                 ->add('value', 'integer', array(
+                    'required' => false,
                     'constraints' => array(
-                        new NotBlank(),
+                        new NotBlank(array('groups' => 'no-service')),
                         new Range(array('min' => 50, 'max' => 50000))
                     )
                 ))
@@ -468,7 +477,6 @@ class EquipmentController extends BaseAdminController {
                         new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Bitte gib hier eine gültige Vorwahl ein'))
                     )
                 ))
-
                 //edit 3
                 ->add('timeMorning', 'checkbox', array('required' => false))
                 ->add('timeAfternoon', 'checkbox', array('required' => false))
@@ -489,7 +497,13 @@ class EquipmentController extends BaseAdminController {
                     'attr' => array('maxlength' => 1000),
                     'constraints' => array(new Length(array('max' => 1000)))
                 ))              
-                
+                // other stuff
+                ->add('inquiryEmail', 'email', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\Email(array('checkHost' => true))
+                    )
+                ))
                 ->getForm();
         //</editor-fold>
         
@@ -551,6 +565,8 @@ class EquipmentController extends BaseAdminController {
             $equipment->setDescType($data['descType']);
             $equipment->setDescSpecial($data['descSpecial']);
             $equipment->setDescCondition($data['descCondition']);
+            
+            $equipment->setInquiryEmail($data['inquiryEmail']);
             
             $owner->setPhonePrefix($data['phonePrefix']);
             $owner->setPhone($data['phone']);

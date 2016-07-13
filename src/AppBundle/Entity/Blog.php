@@ -77,7 +77,7 @@ class Blog
     /**
      * @ORM\Column(type="boolean")
      */
-    protected $showcase;
+    protected $showcase = 0;
     
     public function getExtendedTitle() {
         return sprintf('%s [%s]', $this->title, $this->published ? "PUBLISHED" : "UNPUBLISHED");

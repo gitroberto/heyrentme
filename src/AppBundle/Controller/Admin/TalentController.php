@@ -275,6 +275,7 @@ class TalentController extends BaseAdminController {
         //<editor-fold> map fields            
         $data = array(
             'subcategoryId' => $talent->getSubcategory()->getId(),
+            'inquiryEmail' => $talent->getInquiryEmail(),
             'name' => $talent->getName(),
             'price' => $talent->getPrice(),
             'requestPrice' => $talent->getRequestPrice() > 0,
@@ -449,6 +450,12 @@ class TalentController extends BaseAdminController {
                     'attr' => array('maxlength' => 1000),
                     'constraints' => array(new Length(array('max' => 1000)))
                 ))              
+                ->add('inquiryEmail', 'email', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\Email(array('checkHost' => true))
+                    )
+                ))
                 ->getForm();
         //</editor-fold>
         
@@ -525,9 +532,11 @@ class TalentController extends BaseAdminController {
             $talent->setDescScope($data['descScope']);
             $talent->setDescCondition($data['descCondition']);
             
+            $talent->setInquiryEmail($data['inquiryEmail']);
+
             $owner->setPhonePrefix($data['phonePrefix']);
             $owner->setPhone($data['phone']);
-            
+
             if ($data['defaultAddress'] === true) {
                 $owner->setAddrStreet($talent->getAddrStreet());
                 $owner->setAddrNumber($talent->getAddrNumber());

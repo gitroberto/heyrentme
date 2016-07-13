@@ -5,10 +5,10 @@
           <img src="/img/allgemein-final/talente_buchen.jpg" alt="Talente und Dienstleistungen buchen" class="img-responsive max-1600 max-320"/>
           <img src="/img/allgemein-final/talente_buchen_small.jpg" alt="Talente und Dienstleistungen" class="img-responsive min-320"/>
           <div class="main-search">
-            <h1 class="margin-bottom-40 text-white text-background mobile-hidden">Finde tolle Talente <span
+            <h1 class="margin-bottom-40 text-white text-background mobile-hidden">Entdecke neue Talente <span
                     class="text-yellow text-bold">in deiner Nähe!</span></h1>
                     <div class="mobile-headers">
-                      <h1 class="text-white text-background desktop-hide-inline">Finde tolle Talente</h1>
+                      <h1 class="text-white text-background desktop-hide-inline">Entdecke neue Talente</h1>
                     </div>
                     <div class="mobile-headers">
                       <h1 class="margin-bottom-40 text-white text-background desktop-hide-inline"><span
@@ -49,10 +49,10 @@
           </div>
 
         {% if talentSc|length >= constant('AppBundle\\Entity\\Common::SHOWCASE_MIN') and talentSc|length <= constant('AppBundle\\Entity\\Common::SHOWCASE_MAX') %}
-            <div class="container new-header">
+            <div class="container new-header rhomehead ">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h2>Neu bei <b>hey! VIENNA</b></h2>
+                        <h2>Neue Talente bei <b>hey! VIENNA</b></h2>
                     </div>
                 </div>
             </div>
@@ -101,6 +101,7 @@
                             {% if eq.offerStatus %}
                                 <p class="product-list-info">{{ eq.offerStatus }}</p>
                             {% endif %}
+                            {% if eq.featured %}<div class="featured-icon rcat"><span>FEATURED</span></div>{% endif %}
                             <p class="product-list-info">{{ eq.description }}</p>
                             <span class="list-desc-border"></span>
                         </div>
@@ -114,10 +115,10 @@
         {% endif %}
           
         <!-- Categories -->
-        <div class="container new-header mobile-hidden">
+        <div class="container new-header mobile-hidden rhomehead">
           <div class="row">
             <div class="col-xs-12">
-              <h2>Beliebte Dienstleistungen bei <b>hey! VIENNA</b></h2>
+              <h2>Talent-Kategorien</h2>
             </div>
           </div>
         </div>
@@ -139,7 +140,7 @@
           <div class="container">
               <div class="row">
                   <div class="col-sm-6 pull-right">
-                      <h4 class="heading text-bold text-yellow">Talente buchen</h4>
+                      <h4 class="heading text-bold text-yellow">Talente entdecken</h4>
                       <br/>
                       <h4 class="heading">wie geht das?</h4>
 
