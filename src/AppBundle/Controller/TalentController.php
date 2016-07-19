@@ -281,7 +281,7 @@ class TalentController extends BaseController {
         $tal->setUuid(Utils::getUuid());  
         $tal->setName('');
         $tal->setUser($user);
-        $tal->setSubcategory($subcat);
+        $tal->addSubcategory($subcat);
         $tal->setStatus(Talent::STATUS_INCOMPLETE);
 
         $em->persist($tal);
@@ -442,7 +442,7 @@ class TalentController extends BaseController {
             $eq->setUuid(Utils::getUuid());  
             $eq->setName($data['name']);
             $eq->setUser($user);
-            $eq->setSubcategory($subcat);
+            $eq->addSubcategory($subcat);
             $eq->setPrice($data['price']);
             $eq->setRequestPrice($data['requestPrice'] ? 1 : 0);
             $eq->setStatus(Talent::STATUS_INCOMPLETE);
