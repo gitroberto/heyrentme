@@ -113,7 +113,7 @@
                         colModel:[
                                 { name:'', width:130, fixed:true, editable:false, sortable:false, formatter:rowActions, search: false },
                                 { name:'Id', index:'e.id', editable:false, sortable:false, hidden: true, search: false },
-                                { name:'Category', index:'concat(c.name, s.name)', width: 250, editable:false, sortable:true, search: false },
+                                { name:'Subcategory', index:'concat(c.name, s.name)', width: 250, editable:false, sortable:true, search: false },
                                 { name:'Name', index:'e.name', width: 250, editable:false, sortable:true, search: false },
                                 { name:'Price', index:'e.price', width: 80, align: "right", editable:false, sortable:true, search: false },
                                 { name:'User', index:'u.username',  width: 250, editable:false, sortable:true, search: false},
@@ -149,6 +149,15 @@
                     defaultSearch: 'e',
                     clearSearch: false
                 });
+                
+            // tooltips
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(14)').attr('title', 'Questions');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(15)').attr('title', 'Bookings');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(16)').attr('title', 'Cancellations');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(17)').attr('title', 'Revenue');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(18)').attr('title', 'Discount');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(19)').attr('title', 'Showcase');
+            $('.ui-jqgrid-htable thead tr:first-child th:nth-child(20)').attr('title', 'Featured');
         }
         
         toastr.options["timeOut"] = 3000;

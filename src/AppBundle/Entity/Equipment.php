@@ -98,10 +98,11 @@ class Equipment
     protected $modifiedAt;
             
     /**
-     * @ORM\ManyToOne(targetEntity="Subcategory", inversedBy="equipments")
-     * @ORM\JoinColumn(name="subcategory_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Subcategory", inversedBy="equipments")
+     * @ORM\JoinTable(name="equipment_subcategory")     
      */
-    protected $subcategory;
+    protected $subcategories;
+    
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="equipments")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -216,6 +217,10 @@ class Equipment
      * @ORM\Column(type="boolean")
      */
     protected $testDrive = false;
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $inquiryEmail;
     
     
     public function setUuid($uuid)
@@ -635,31 +640,6 @@ class Equipment
     }
 
     /**
-     * Set subcategory
-     *
-     * @param Subcategory $subcategory
-     *
-     * @return Equipment
-     */
-    public function setSubcategory(Subcategory $subcategory = null)
-    {
-        $this->subcategory = $subcategory;
-
-        return $this;
-    }
-
-    /**
-     * Get subcategory
-     *
-     * @return Subcategory
-     */
-    public function getSubcategory()
-    {
-        return $this->subcategory;
-    }
-
-
-    /**
      * Set user
      *
      * @param User $user
@@ -965,6 +945,10 @@ class Equipment
             array_push($arr, 'WE');
         }
         return implode(" / ", $arr);
+    }
+    
+    public function getSubcategoriesAsString() {
+        return implode(", ", array_map(function($i) { return $i->getName(); }, $this->subcategories->toArray()));
     }
     
     /**
@@ -1473,5 +1457,63 @@ class Equipment
     public function getTestDrive()
     {
         return $this->testDrive;
+    }
+
+    /**
+     * Set inquiryEmail
+     *
+     * @param string $inquiryEmail
+     *
+     * @return Equipment
+     */
+    public function setInquiryEmail($inquiryEmail)
+    {
+        $this->inquiryEmail = $inquiryEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get inquiryEmail
+     *
+     * @return string
+     */
+    public function getInquiryEmail()
+    {
+        return $this->inquiryEmail;
+    }
+
+    /**
+     * Add subcategory
+     *
+     * @param \AppBundle\Entity\Subcategory $subcategory
+     *
+     * @return Equipment
+     */
+    public function addSubcategory(\AppBundle\Entity\Subcategory $subcategory)
+    {
+        $this->subcategories[] = $subcategory;
+
+        return $this;
+    }
+
+    /**
+     * Remove subcategory
+     *
+     * @param \AppBundle\Entity\Subcategory $subcategory
+     */
+    public function removeSubcategory(\AppBundle\Entity\Subcategory $subcategory)
+    {
+        $this->subcategories->removeElement($subcategory);
+    }
+
+    /**
+     * Get subcategories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubcategories()
+    {
+        return $this->subcategories;
     }
 }

@@ -37,11 +37,11 @@ class Subcategory
     protected $category;    
 
     /**
-     * @ORM\OneToMany(targetEntity="Talent", mappedBy="subcategory")
+     * @ORM\OneToMany(targetEntity="Talent", mappedBy="subcategories")
      */
     protected $talents;
     /**
-     * @ORM\OneToMany(targetEntity="Equipment", mappedBy="subcategory")
+     * @ORM\ManyToMany(targetEntity="Equipment", mappedBy="subcategories")
      */
     protected $equipments;
    

@@ -119,6 +119,10 @@ class TalentBookingController extends BaseController {
             $this->get('mailer')->send($message);
             //</editor-fold>
             
+            // notify
+            if ($eq->getInquiryEmail() !== null)
+                $this->get('app.general_mailer')->AdmItemInquiryCc($inq);
+            
             return new JsonResponse(array('status' => 'ok'));
         }
         
@@ -867,6 +871,10 @@ class TalentBookingController extends BaseController {
             $this->get('mailer')->send($message);
             //</editor-fold>
     
+            // notify
+            if ($eq->getInquiryEmail() !== null)
+                $this->get('app.general_mailer')->AdmItemQuestionCc($q);
+
             return new JsonResponse(array('status' => 'ok'));
         }
         

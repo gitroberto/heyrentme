@@ -110,6 +110,25 @@ class TalentController extends BaseController {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();
+/*
+ * merge leftover: remove if unnecessary
+ * 
+            // get subcategory
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+            $user = $this->getUser();
+            // map fields, TODO: consider moving to Talent's method
+            //<editor-fold> map fields
+            $eq = new Talent();
+            $eq->setUuid(Utils::getUuid());  
+            $eq->setName($data['name']);
+            $eq->setUser($user);
+            $eq->addSubcategory($subcat);
+            $eq->setPrice($data['price']);
+            $eq->setRequestPrice($data['requestPrice'] ? 1 : 0);
+            $eq->setStatus(Talent::STATUS_INCOMPLETE);
+            //</editor-fold>
+            // save to db
+*/
             $em = $this->getDoctrine()->getManager();
                         
             if ($tariff === null) {
@@ -1486,7 +1505,7 @@ class TalentController extends BaseController {
         }
         array_push($parts, "talent in");
 
-        $subcat = $eq->getSubcategory();
+        $subcat = $eq->getSubcategoriesAsString();// $eq->getSubcategory();
         $cat = $subcat->getCategory();
         array_push($parts, "{$cat->getName()} / {$subcat->getName()}"); 
 

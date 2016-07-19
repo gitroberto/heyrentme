@@ -82,6 +82,7 @@ class SubcategoryRepository extends \Doctrine\ORM\EntityRepository
         $rows = $qb->getQuery()->getResult();
         
         $arr = array();
+        $arr[''] = "-- please select";
         foreach($rows as $sc) {
             $c = $sc->getCategory();
             $arr[$sc->getId()] = "{$c->getName()} | {$sc->getName()}";

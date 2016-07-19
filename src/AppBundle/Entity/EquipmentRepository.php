@@ -20,7 +20,7 @@ use ErrorException;
 class EquipmentRepository extends EntityRepository {
     
     public function getAllBySubcategory($subcategoryId) {
-        $sql = "select e from AppBundle:Equipment e where e.subcategory = :subcategoryId and e.status = :approved";
+        $sql = "select e from AppBundle:Equipment inner join e.subcategories s where s.id = :subcategoryId and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
         $query->setParameter('approved', Equipment::STATUS_APPROVED);
@@ -28,7 +28,7 @@ class EquipmentRepository extends EntityRepository {
     }   
     
     public function getAllForOtherCategories($subcategoryId) {
-        $sql = "select e from AppBundle:Equipment e where e.subcategory != :subcategoryId and e.status = :approved";
+        $sql = "select e from AppBundle:Equipment e where e.subcategories != :subcategoryId and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
         $query->setParameter('approved', Equipment::STATUS_APPROVED);
@@ -39,7 +39,7 @@ class EquipmentRepository extends EntityRepository {
         #TODO: Correct query, remove hardcoded number of items
         // TODO: refactor: write query with proper "order by" and take first four items
         //TODO: add user status = ok 
-        $sql = "select e from AppBundle:Equipment e where e.subcategory = :subcategoryId and e.id != :id and e.status = :approved";
+        $sql = "select e from AppBundle:Equipment e where e.subcategories = :subcategoryId and e.id != :id and e.status = :approved";
         $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('subcategoryId', $subcategoryId);
         $query->setParameter('id', $eqId);
@@ -89,7 +89,7 @@ class EquipmentRepository extends EntityRepository {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('e, u, s, c')
             ->from('AppBundle:Equipment', 'e')
-            ->leftJoin('e.subcategory', 's')
+            ->leftJoin('e.subcategories', 's')
             ->leftJoin('s.category', 'c')
             ->leftJoin('e.user', 'u');
         $this->gridOverviewParams($qb, $sStatus);
@@ -310,7 +310,7 @@ EOT;
                 ->createQueryBuilder()
                 ->select('e', 'i', 'd') // this line forces fetch join
                 ->from('AppBundle:Equipment', 'e')
-                ->join('e.subcategory', 's')
+                ->join('e.subcategories', 's')
                 ->join('e.user', 'u')
                 ->leftJoin('e.images', 'i')
                 ->leftJoin('e.discounts', 'd')
@@ -724,8 +724,9 @@ EOT;
     public function getShowcaseStartCount() {
         return $this->getEntityManager()->createQueryBuilder()
             ->select('count(e.id)')
+            ->distinct()
             ->from('AppBundle:Equipment', 'e')
-            ->join('e.subcategory', 's')
+            ->join('e.subcategories', 's')
             ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('e.showcaseStart = 1')
@@ -739,8 +740,9 @@ EOT;
             ->getEntityManager()
             ->createQueryBuilder()
             ->select('e')
+            ->distinct()
             ->from('AppBundle:Equipment', 'e')
-            ->join('e.subcategory', 's')
+            ->join('e.subcategories', 's')
             ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('e.showcaseStart = 1')
@@ -759,8 +761,9 @@ EOT;
     public function getShowcaseEquipmentCount() {
         return $this->getEntityManager()->createQueryBuilder()
             ->select('count(e.id)')
+            ->distinct()
             ->from('AppBundle:Equipment', 'e')
-            ->join('e.subcategory', 's')
+            ->join('e.subcategories', 's')
             ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('e.showcaseEquipment = 1')
@@ -774,9 +777,10 @@ EOT;
             ->getEntityManager()
             ->createQueryBuilder()
             ->select('e', 'i')
+            ->distinct()
             ->from('AppBundle:Equipment', 'e')
             ->leftJoin('e.images', 'i')
-            ->join('e.subcategory', 's')
+            ->join('e.subcategories', 's')
             ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('e.showcaseEquipment = 1')
