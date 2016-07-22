@@ -431,7 +431,24 @@
                 <div class="user-data-tabs">
                   <div class="user-tab euro">
                     <p>
-                        {% if item.requestPrice %}Kosten auf Anfr.{% else %}ab {{ item.activePrice|number_format(2, ',') }} € pro Stunde{% endif %}
+                        {% set tariff = item.firstTariff %}
+                        {% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
+                            {% if tariff.requestPrice %}Kosten auf Anfr.{% else %}ab {{ tariff.price|number_format(2, ',') }} &euro; pro Stunde{% endif %}
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+                            Gruppenstd. ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
+                            Workshop ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::PERFORMANCE') %}
+                            Performance ab {{ tariff.price|number_format(2, ',') }} &euro;
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_5ERBLOCK') %}
+                            5er Block ab {{ tariff.price|number_format(2, ',') }} &euro;
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_10ERBLOCK') %}
+                            10er Block ab {{ tariff.price|number_format(2, ',') }} &euro;
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_20ERBLOCK') %}
+                            20er Block ab {{ tariff.price|number_format(2, ',') }} &euro;
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}
+                            Tagessatz ab {{ tariff.price|number_format(2, ',') }} &euro;
+                        {% endif %}
                     </p>
                   </div>
                     {#
