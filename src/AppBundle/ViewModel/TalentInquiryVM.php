@@ -43,7 +43,7 @@ class TalentInquiryVM {
             $this->calculate23($tariff);
         else if ($this->type === TariffType::TAGESSATZ)
             $this->calculate7($tariff);
-        else if ($this->type === TariffType::_5ERBLOCK || $this->type === TariffType::_10ERBLOCK)
+        else if ($this->type === TariffType::_5ERBLOCK || $this->type === TariffType::_10ERBLOCK || $this->type === TariffType::_20ERBLOCK)
             $this->price = $tariff->getPrice();
 
         }

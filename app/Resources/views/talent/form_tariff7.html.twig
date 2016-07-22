@@ -36,6 +36,44 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-xs-12">
+            <div class="chbox-holder" style="display: inline-block;">
+                {{ form_widget(form.ownPlace) }}
+                <label for="form_ownPlace"><span></span>Eigene Treffpunkt Addresse (Falls der Treffpunkt nicht mit deiner Standard-Adresse übereinstimmt)</label>
+            </div>
+        </div>
+    </div>
+    <div class="form-container" id="address" {% if not form.vars.value.ownPlace %}style="display: none;"{% endif %}>
+        <div class="row ort">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-xs-6">
+                        {{ form_widget(form.addrStreet, { 'attr': { 'placeholder': 'Strasse*' } }) }}
+                        <div class="err-msg">{{ form_errors(form.addrStreet, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                    </div>
+                    <div class="col-xs-3">
+                        {{ form_widget(form.addrNumber, { 'attr': { 'placeholder': 'Hausnr.*', 'class': 'security' } }) }}
+                        <div class="err-msg">{{ form_errors(form.addrNumber, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                    </div>
+                    <div class="col-xs-3">
+                        {{ form_widget(form.addrFlatNumber, { 'attr': { 'placeholder': 'Türnr.', 'class': 'security' } }) }}
+                        <div class="err-msg">{{ form_errors(form.addrFlatNumber, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3">
+                        {{ form_widget(form.addrPostcode, { 'attr': { 'placeholder': 'PLZ*' } }) }}
+                        <div class="err-msg">{{ form_errors(form.addrPostcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                    </div>
+                    <div class="col-xs-5">
+                        {{ form_widget(form.addrPlace, { 'attr': { 'placeholder': 'Ort*' } }) }}
+                        <div class="err-msg">{{ form_errors(form.addrPlace, { 'attr': { 'class': 'err-msg' } }) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <button id="tariff-save">Diese Tarifoption speichern</button>
             {% if tariffId %}
@@ -63,8 +101,18 @@
             $dcntNum.selectpicker('refresh');
         }        
     }
+    function ownPlaceChanged() {
+        var $chb = $("#form_ownPlace");
+        var $addr = $('#address');
+        if ($chb.prop('checked'))
+            $addr.show();
+        else
+            $addr.hide();
+    }
     $(function () {
         $("#form_discount").on('click change', discountChanged);
         window.setTimeout(discountChanged, 123); // todo: improve (call after $('.num-picker').selectpicker())
+        $("#form_ownPlace").on('click change', ownPlaceChanged);
+        window.setTimeout(ownPlaceChanged, 123); // todo: improve (call after $('.num-picker').selectpicker())
     });
 </script>

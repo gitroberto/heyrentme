@@ -261,6 +261,15 @@ class Talent {
                 throw new RuntimeException("Talent status corrupt!");
         }
     }
+    
+    public function getFirstTariff() {
+        $arr = $this->tariffs->toArray();
+        usort($arr, function($a, $b) {
+            $d = $a->getPosition() - $b->getPosition();
+            return $d === 0 ? 0 : ($d > 0 ? 1 : -1);
+        });
+        return $arr[0];
+    }    
 
     public function checkStatusOnSave(){
         if ($this->status == Talent::STATUS_APPROVED || $this->status == Talent::STATUS_REJECTED) {            

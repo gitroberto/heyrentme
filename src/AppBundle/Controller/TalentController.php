@@ -15,6 +15,7 @@ use AppBundle\Form\Type\Tariff\TariffType4;
 use AppBundle\Form\Type\Tariff\TariffType5;
 use AppBundle\Form\Type\Tariff\TariffType6;
 use AppBundle\Form\Type\Tariff\TariffType7;
+use AppBundle\Form\Type\Tariff\TariffType8;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
@@ -25,7 +26,6 @@ use Symfony\Component\Serializer\Exception\Exception;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -155,6 +155,16 @@ class TalentController extends BaseController {
         $data = array();
         $data['type'] = strval($type);
         
+        // address for all
+        if ($tariff !== null) {
+            $data['ownPlace'] = $tariff->getOwnPlace();
+            $data['addrStreet'] = $tariff->getAddrStreet();
+            $data['addrNumber'] = $tariff->getAddrNumber();
+            $data['addrFlatNumber'] = $tariff->getAddrFlatNumber();
+            $data['addrPostcode'] = $tariff->getAddrPostcode();
+            $data['addrPlace'] = $tariff->getAddrPlace();
+        }
+
         if ($type === TariffType::$EINZELSTUNDEN->getId()) {
             if ($tariff !== null) {
                 $data['price'] = $tariff->getPrice();
@@ -172,7 +182,6 @@ class TalentController extends BaseController {
                 $data['discount'] = $tariff->getDiscount();
                 $data['discountMinNum'] = $tariff->getDiscountMinNum();
                 $data['discountPrice'] = $tariff->getDiscountPrice();
-                $data['ownPlace'] = $tariff->getOwnPlace();
             }
             $form = $this->createForm(new TariffType2(), $data, array('action' => $url));            
         }
@@ -183,7 +192,6 @@ class TalentController extends BaseController {
                 $data['discount'] = $tariff->getDiscount();
                 $data['discountMinNum'] = $tariff->getDiscountMinNum();
                 $data['discountPrice'] = $tariff->getDiscountPrice();
-                $data['ownPlace'] = $tariff->getOwnPlace();
             }
             $form = $this->createForm(new TariffType3(), $data, array('action' => $url));            
         }
@@ -218,6 +226,13 @@ class TalentController extends BaseController {
             }
             $form = $this->createForm(new TariffType7(), $data, array('action' => $url));            
         }
+        else if ($type === TariffType::$_20ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType8(), $data, array('action' => $url));            
+        }
         
         return $form;        
     }
@@ -248,6 +263,11 @@ class TalentController extends BaseController {
         $tariff->setOwnPlace(array_key_exists('ownPlace', $data) ? ($data['ownPlace'] ? 1 : 0) : null);
         $tariff->setDuration(array_key_exists('duration', $data) ? $data['duration'] : null);
         $tariff->setRequestPrice(array_key_exists('requestPrice', $data) ? ($data['requestPrice'] ? 1 : 0) : null);
+        $tariff->setAddrStreet(array_key_exists('addrStreet', $data) ? $data['addrStreet'] : null);
+        $tariff->setAddrNumber(array_key_exists('addrNumber', $data) ? $data['addrNumber'] : null);
+        $tariff->setAddrFlatNumber(array_key_exists('addrFlatNumber', $data) ? $data['addrFlatNumber'] : null);
+        $tariff->setAddrPostcode(array_key_exists('addrPostcode', $data) ? $data['addrPostcode'] : null);
+        $tariff->setAddrPlace(array_key_exists('addrPlace', $data) ? $data['addrPlace'] : null);
     }
     
     /**

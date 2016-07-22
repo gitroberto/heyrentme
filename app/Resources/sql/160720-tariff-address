@@ -1,0 +1,7 @@
+
+ALTER TABLE `talent_tariff`
+	ADD COLUMN `addr_street` VARCHAR(128) NULL AFTER `modified_at`,
+	ADD COLUMN `addr_number` VARCHAR(16) NULL AFTER `addr_street`,
+	ADD COLUMN `addr_flat_number` VARCHAR(16) NULL AFTER `addr_number`,
+	ADD COLUMN `addr_postcode` VARCHAR(4) NULL AFTER `addr_flat_number`,
+	ADD COLUMN `addr_place` VARCHAR(128) NULL AFTER `addr_postcode`;

@@ -83,16 +83,8 @@
                                         </p>
                                     </div>
                                     <div class="col-xs-5">
-                                        {% if eq.requestPrice %}
-                                            <p class="price">auf Anfr.</p>
-                                        {% else %}
-                                            <p class="price">
-                                                {{ eq.activePrice|number_format(2, ',') }} &#8364;
-                                            </p>
-                                            <p class="tag">
-                                                pro Stunde
-                                            </p>
-                                        {% endif %}
+                                        <p class="price">{{ eq.firstTariff.pricesLine|raw }}</p>
+                                        <p class="tag">{{ eq.firstTariff.pricesDesc }}</p>
                                     </div>
                                     {% if eq.video %}<div class="rplay"></div>{% endif %}
                                     <img class="product-user product-user2" alt="{{ eq.user.fullName }}" src="{{ eq.user.getProfilePicture(false, image_url_prefix) }}">

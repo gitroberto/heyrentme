@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class TariffType1 extends AbstractType {
     
@@ -45,6 +47,39 @@ class TariffType1 extends AbstractType {
                         new NotBlank(array('groups' => 'num-discount')),
                         new Range(array('min' => 10, 'max' => 100))
                     )
+                ))->add('ownPlace', 'checkbox', array(
+                    'required' => false
+                ))
+                ->add('addrStreet', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(array('groups' => 'own-place')),
+                        new Length(array('max' => 128))
+                    )
+                ))
+                ->add('addrNumber', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(array('groups' => 'own-place')),
+                        new Length(array('max' => 16))
+                    )
+                ))
+                ->add('addrFlatNumber', 'text', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Length(array('max' => 16))
+                    )
+                ))
+                ->add('addrPostcode', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(array('groups' => 'own-place')),
+                        new Length(array('max' => 4)),
+                        new Regex(array('pattern' => '/^\d{4}$/', 'message' => 'Bitte gib hier eine gültige PLZ ein'))
+                    )
+                ))
+                ->add('addrPlace', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(array('groups' => 'own-place')),
+                        new Length(array('max' => 128))
+                    )
                 ));
     }
     
@@ -55,6 +90,8 @@ class TariffType1 extends AbstractType {
                 $grps = array('Default');
                 if ($data['discount'])
                     array_push ($grps, 'num-discount');
+                if ($data['ownPlace'])
+                    array_push($grps, 'own-place');
                 return $grps;
             }
         ));

@@ -6,10 +6,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class TariffType4 extends AbstractType {
     
@@ -31,9 +31,55 @@ class TariffType4 extends AbstractType {
                 ))
                 ->add('requestPrice', 'checkbox', array(
                     'required' => false
+                ))
+                ->add('ownPlace', 'checkbox', array(
+                    'required' => false
+                ))
+                ->add('addrStreet', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(array('groups' => 'own-place')),
+                        new Length(array('max' => 128))
+                    )
+                ))
+                ->add('addrNumber', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(array('groups' => 'own-place')),
+                        new Length(array('max' => 16))
+                    )
+                ))
+                ->add('addrFlatNumber', 'text', array(
+                    'required' => false,
+                    'constraints' => array(
+                        new Length(array('max' => 16))
+                    )
+                ))
+                ->add('addrPostcode', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(array('groups' => 'own-place')),
+                        new Length(array('max' => 4)),
+                        new Regex(array('pattern' => '/^\d{4}$/', 'message' => 'Bitte gib hier eine gültige PLZ ein'))
+                    )
+                ))
+                ->add('addrPlace', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(array('groups' => 'own-place')),
+                        new Length(array('max' => 128))
+                    )
                 ));
     }
 
+    public function configureOptions(OptionsResolver $resolver) {
+        $resolver->setDefaults(array(
+            'validation_groups' => function(FormInterface $form) {
+                $data = $form->getData();
+                $grps = array('Default');
+                if ($data['ownPlace'])
+                    array_push($grps, 'own-place');
+                return $grps;
+            }
+        ));
+    }
+    
     public function getName() {
         return "form";
     }    

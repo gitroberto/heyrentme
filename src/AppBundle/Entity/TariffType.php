@@ -11,6 +11,7 @@ class TariffType {
     const _5ERBLOCK = 5;
     const _10ERBLOCK = 6;
     const TAGESSATZ = 7;
+    const _20ERBLOCK = 8;
 
     public static $EINZELSTUNDEN;
     public static $GRUPPENSTUNDEN;
@@ -19,6 +20,7 @@ class TariffType {
     public static $_5ERBLOCK;
     public static $_10ERBLOCK;
     public static $TAGESSATZ;
+    public static $_20ERBLOCK;
     
     private $id;
     private $name;
@@ -47,6 +49,7 @@ class TariffType {
         TariffType::$_5ERBLOCK = new TariffType(TariffType::_5ERBLOCK, '5erblock');
         TariffType::$_10ERBLOCK = new TariffType(TariffType::_10ERBLOCK, '10erblock');
         TariffType::$TAGESSATZ = new TariffType(TariffType::TAGESSATZ, 'Tagessatz');
+        TariffType::$_20ERBLOCK = new TariffType(TariffType::_20ERBLOCK, '20erblock');
     }
     public static function getByType($type) {
         switch ($type) {
@@ -57,6 +60,7 @@ class TariffType {
             case 5: return TariffType::$_5ERBLOCK;
             case 6: return TariffType::$_10ERBLOCK;
             case 7: return TariffType::$TAGESSATZ;
+            case 8: return TariffType::$_20ERBLOCK;
         }
     }
     
@@ -68,7 +72,8 @@ class TariffType {
             TariffType::$PERFORMANCE->getId() => TariffType::$PERFORMANCE->getName(),
             TariffType::$_5ERBLOCK->getId() => TariffType::$_5ERBLOCK->getName(),
             TariffType::$_10ERBLOCK->getId() => TariffType::$_10ERBLOCK->getName(),
-            TariffType::$TAGESSATZ->getId() => TariffType::$TAGESSATZ->getName(),
+            TariffType::$_20ERBLOCK->getId() => TariffType::$_20ERBLOCK->getName(),
+            TariffType::$TAGESSATZ->getId() => TariffType::$TAGESSATZ->getName()
         );
         
     }
