@@ -3,7 +3,17 @@
 }
 
 .main-header .main-search .rhomeheader {
-font-size: 40px;
+font-size: 50px;
+}
+
+.rmainsearch {
+top: 55%;
+}
+
+.rhomeheader_sub {
+font-size: 24px;
+font-weight: 300;
+display: inline-block;
 }
 
 .rneublock {
@@ -28,7 +38,12 @@ transition: none!important;
 }
 
 .main-header .main-search .rhomeheader {
-font-size: 22px;
+font-size: 30px;
+}
+
+.rhomeheader_sub {
+font-size: 14px;
+margin-top:3px;
 }
 
 .main-header .main-search {
