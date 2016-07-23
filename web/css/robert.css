@@ -4,6 +4,7 @@
 
 .main-header .main-search .rhomeheader {
 font-size: 50px;
+margin-bottom:5px
 }
 
 .main-header .rmainsearch {
@@ -11,9 +12,10 @@ top: 55%;
 }
 
 .rhomeheader_sub {
-font-size: 24px;
+font-size: 22px;
 font-weight: 300;
 display: inline-block;
+margin-bottom: 20px;
 }
 
 .rneublock {
@@ -44,6 +46,8 @@ font-size: 30px;
 .rhomeheader_sub {
 font-size: 14px;
 margin-top:3px;
+line-height: 20px;
+max-width: 75%;
 }
 
 .main-header .main-search {
