@@ -56,7 +56,9 @@
 			 -->
 
             <div class="container new-header rneublock main-offers">
-                {% if blogSc|length == 3 %}
+                
+			 <!--
+				{% if blogSc|length == 3 %}
                     <div class="row">
                         {% for post in blogSc %}
                             <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
@@ -85,6 +87,7 @@
                     </div>
                 {% endif %}
                 
+				 -->
 				
 				              {% if talentSc|length == 3 %}
                     <div class="row">
