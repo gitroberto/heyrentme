@@ -1208,9 +1208,7 @@ class TalentController extends BaseController {
         }
         array_push($parts, "talent in");
 
-        $subcat = $eq->getSubcategoriesAsString();// $eq->getSubcategory();
-        $cat = $subcat->getCategory();
-        array_push($parts, "{$cat->getName()} / {$subcat->getName()}"); 
+        array_push($parts, $eq->getSubcategoriesAsString()); 
 
         $subject = join(" ", $parts);
         
