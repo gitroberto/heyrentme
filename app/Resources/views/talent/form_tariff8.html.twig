@@ -78,10 +78,14 @@
     function ownPlaceChanged() {
         var $chb = $("#form_ownPlace");
         var $addr = $('#address');
-        if ($chb.prop('checked'))
+        if ($chb.prop('checked')) {
             $addr.show();
-        else
+            $addr.find('input').prop('required', true);
+        }
+        else {
             $addr.hide();
+            $addr.find('input').prop('required', false);
+        }
     }
     $(function () {
         $("#form_ownPlace").on('click change', ownPlaceChanged);
