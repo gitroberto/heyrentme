@@ -720,7 +720,7 @@ EOT;
             ->distinct()
             ->from('AppBundle:Talent', 't')
             ->join('t.subcategories', 's')
-            ->join('s.categor', 'c')
+            ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('t.showcaseStart = 1')
             ->andWhere('t.status = :status')
