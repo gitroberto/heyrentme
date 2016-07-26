@@ -1583,11 +1583,8 @@ class ProviderController extends BaseController {
             }
             array_push($parts, "equipment in");
             
-            $subcat = $eq->getSubcategoriesAsString(); // $eq->getSubcategory();
-            $cat = $subcat->getCategory();
-            array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
-            
-            
+            array_push($parts, $eq->getSubcategoriesAsString());
+                        
             $emailHtml = $this->renderView('Emails/Equipment/new_modified_item.html.twig', array(                                    
                 'equipment' => $eq,
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),            
@@ -1606,9 +1603,7 @@ class ProviderController extends BaseController {
             }
             array_push($parts, "equipment in");
             
-            $subcat = $eq->getSubcategoriesAsString(); //$eq->getSubcategory();
-            $cat = $subcat->getCategory();
-            array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
+            array_push($parts, $eq->getSubcategoriesAsString());
             
             $emailHtml = $this->renderView('Emails/talent/new_modified_item.html.twig', array(                                    
                 'talent' => $eq,

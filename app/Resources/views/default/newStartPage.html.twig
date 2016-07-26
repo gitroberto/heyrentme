@@ -4,18 +4,29 @@
     <div class="main-header">
           <img src="/img/allgemein-final/heyvienna.jpg" alt="Equipment mieten" class="img-responsive max-1600 max-320"/>
           <img src="/img/allgemein-final/heyvienna_small.jpg" alt="Equipment mieten" class="img-responsive min-320"/>
-          <div class="main-search">
-            <h1 class="margin-bottom-40 rhomeheader text-white text-background">Entdecke <span
-                    class="text-yellow text-bold">hey! VIENNA</span></h1>
-            <div class="search-form mobile-kategorie-form">
-         <div class="row">  
-    <div class="col-md-6">
-  <a id="fragestellenbut" class="green-big-button yellow question rstartbuttons" href="{{ path('bookme') }}">Talente entdecken</a>
-  </div>
-    <div class="col-md-6">
-  <a id="fragestellenbut" class="green-big-button yellow question rstartbuttons" href="{{ path('rentme') }}">Equipment entdecken</a>
-  </div>
-  </div>
+          <div class="rmainsearch main-search">
+		  <div><h1 class="rhomeheader text-white text-background"><span class="text-yellow text-bold">hey!</span> VIENNA</h1></div>
+            <h2 class="rhomeheader_sub text-white text-background">Geführte Touren, Workshops und Freizeit-Ausrüstung in Wien</h2>
+                    <!-- <div class="mobile-headers">
+                     <h1 class="text-white text-background desktop-hide-inline">Die Plattform für</h1> 
+                    </div>
+                    <div class="mobile-headers">
+                      <h1 class="margin-bottom-40 text-white text-background desktop-hide-inline"><span
+                                      class="text-yellow text-bold">Equipment, Talente und Dienstleistungen</span></h1>
+                    </div>  -->
+<div class="search-form mobile-kategorie-form mobile-hidden">
+                <form method="post" accept-charset="utf-8" action="">
+                    <div style="display:none;">
+                        <input type="hidden" name="_method" value="POST"></div>
+                    
+                    <select name="gender2" class="selectpickerspc">
+                        <option value="S">HAUPTKATEGORIEN</option>
+                        <option value="T">HAUPTKATEGORIEN</option>
+                    </select>
+                    <input type="submit" class="desktop-hide" value="los geht's!"></form>
+                <ul class="col-xs-6 pull-right text-right kaup-select">
+                    {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
+                </ul>
             </div>
           </div>
         </div>
@@ -45,7 +56,9 @@
 			 -->
 
             <div class="container new-header rneublock main-offers">
-                {% if blogSc|length == 3 %}
+                
+			 <!--
+				{% if blogSc|length == 3 %}
                     <div class="row">
                         {% for post in blogSc %}
                             <a class="text-black" href="{{ path('blog_detail', { 'slug' : post.slug }) }}">
@@ -74,6 +87,59 @@
                     </div>
                 {% endif %}
                 
+				 -->
+				
+				              {% if talentSc|length == 3 %}
+                    <div class="row">
+                    {% for eq in talentSc %}
+                        <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
+                            <div class="col-md-4">
+                                {% set images = eq.talentImages %}
+                                {% if images|length > 0 %}
+                                    <div class="rcatimage">
+                                    <img src="{{ images[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ eq.name }}"/>
+                                    </div>
+                                {% else %}
+                                    <div class="rcatimage">
+                                    <img src="/img/equipment-default.jpg" alt="placeholder"/>
+                                    </div>
+                                {% endif %}
+                                <div class="product-info position-relative">
+                                    <div class="row">                                  
+                                        <div class="col-xs-7">
+                                            <p class="product-name">
+                                                {{ eq.name }}
+                                            </p>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            {% if eq.requestPrice %}
+                                                <p class="price">auf Anfr.</p>
+                                            {% else %}
+                                                <p class="price">
+                                                    {{ eq.activePrice|number_format(2, ',') }} &#8364;
+                                                </p>
+                                                <p class="tag">
+                                                    pro Stunde
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                        {% if eq.video %}<div class="rplay"></div>{% endif %}
+                                        <img class="product-user product-user2" alt="{{ eq.user.fullName }}" src="{{ eq.user.getProfilePicture(false, image_url_prefix) }}">
+                                    </div>
+                                </div>
+                                {% if eq.offerStatus %}
+                                    <p class="product-list-info">{{ eq.offerStatus }}</p>
+                                {% endif %}
+                                {% if eq.featured %}<div class="featured-icon rcat"><span>FEATURED</span></div>{% endif %}
+                                <p class="product-list-info">{{ eq.description }}</p>
+                                <span class="list-desc-border"></span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    </div>
+                {% endif %} 
+				
+				
                 {% if equipmentSc|length == 3 %}
                     <div class="row">
                     {% for eq in equipmentSc %}
@@ -101,18 +167,10 @@
                                             </p>
                                         </div>
                                         <div class="col-xs-5">
-                                            <p class="price">
-                                                {% if eq.testDrive %}
-                                                    Probefahrt
-                                                {% else %}
-                                                    {{ eq.pricesLine }}&nbsp;&#8364;
-                                                {% endif %}
-                                            </p>
-                                            <p class="tag">
-                                                {% if not eq.testDrive %}
-                                                    Pr. ab: {{ eq.pricesDesc }}
-                                                {% endif %}
-                                            </p>
+
+                                            <p class="price">{{ eq.firstTariff.pricesLine|raw }}</p>
+                                            <p class="tag">{{ eq.firstTariff.pricesDesc }}</p>
+
                                         </div>
                                     </div>
                                 </div>
@@ -128,47 +186,9 @@
                     </div>
                 {% endif %}
                 
-                {% if talentSc|length == 3 %}
-                    <div class="row">
-                    {% for eq in talentSc %}
-                        <a class="text-black" href="{{ path('catchall', { 'content': eq.urlPath }) }}">
-                            <div class="col-md-4">
-                                {% set images = eq.talentImages %}
-                                {% if images|length > 0 %}
-                                    <div class="rcatimage">
-                                    <img src="{{ images[0].image.thumbnailUrlPath(image_url_prefix) }}" alt="{{ eq.name }}"/>
-                                    </div>
-                                {% else %}
-                                    <div class="rcatimage">
-                                    <img src="/img/equipment-default.jpg" alt="placeholder"/>
-                                    </div>
-                                {% endif %}
-                                <div class="product-info position-relative">
-                                    <div class="row">                                  
-                                        <div class="col-xs-7">
-                                            <p class="product-name">
-                                                {{ eq.name }}
-                                            </p>
-                                        </div>
-                                        <div class="col-xs-5">
-                                            <p class="price">{{ eq.firstTariff.pricesLine|raw }}</p>
-                                            <p class="tag">{{ eq.firstTariff.pricesDesc }}</p>
-                                        </div>
-                                        {% if eq.video %}<div class="rplay"></div>{% endif %}
-                                        <img class="product-user product-user2" alt="{{ eq.user.fullName }}" src="{{ eq.user.getProfilePicture(false, image_url_prefix) }}">
-                                    </div>
-                                </div>
-                                {% if eq.offerStatus %}
-                                    <p class="product-list-info">{{ eq.offerStatus }}</p>
-                                {% endif %}
-                                {% if eq.featured %}<div class="featured-icon rcat"><span>FEATURED</span></div>{% endif %}
-                                <p class="product-list-info">{{ eq.description }}</p>
-                                <span class="list-desc-border"></span>
-                            </div>
-                        </a>
-                    {% endfor %}
-                    </div>
-                {% endif %}                
+    
+				
+				             
             </div>
         {% endif %}
           
@@ -176,7 +196,7 @@
         <div class="container new-header mobile-hidden rhomehead">
           <div class="row">
             <div class="col-xs-12">
-              <h2>Talente bei <b>hey! VIENNA</b></h2>
+              <h2>Touren und Workshops</h2>
             </div>
           </div>
         </div>
@@ -198,7 +218,7 @@
         <div class="container new-header mobile-hidden rhomehead">
           <div class="row">
             <div class="col-xs-12">
-              <h2>Equipment bei <b>hey! VIENNA</b></h2>
+              <h2>Freizeitausrüstung</h2>
             </div>
           </div>
         </div>
