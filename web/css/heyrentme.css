@@ -706,3 +706,15 @@ div#panel-quote-group {
 button#tariff-save, button#tariff-delete {
     font-family: 'open sans', sans-serif;    
 }
+
+.adjust-to-rabatt {
+    padding-left: 64px;
+}
+
+.adjust-to-rabatt-small {
+    padding-left: 44px;
+}
+
+.adjust-to-rabatt-small2{
+    padding-left:12px;
+}

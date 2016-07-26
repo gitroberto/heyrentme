@@ -57,40 +57,6 @@ class TariffType2 extends AbstractType {
                         new NotBlank(array('groups' => 'num-discount')),
                         new Range(array('min' => 10, 'max' => 100))
                     )
-                ))
-                ->add('ownPlace', 'checkbox', array(
-                    'required' => false
-                ))
-                ->add('addrStreet', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(array('groups' => 'own-place')),
-                        new Length(array('max' => 128))
-                    )
-                ))
-                ->add('addrNumber', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(array('groups' => 'own-place')),
-                        new Length(array('max' => 16))
-                    )
-                ))
-                ->add('addrFlatNumber', 'text', array(
-                    'required' => false,
-                    'constraints' => array(
-                        new Length(array('max' => 16))
-                    )
-                ))
-                ->add('addrPostcode', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(array('groups' => 'own-place')),
-                        new Length(array('max' => 4)),
-                        new Regex(array('pattern' => '/^\d{4}$/', 'message' => 'Bitte gib hier eine gültige PLZ ein'))
-                    )
-                ))
-                ->add('addrPlace', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(array('groups' => 'own-place')),
-                        new Length(array('max' => 128))
-                    )
                 ));
     }
     
@@ -107,8 +73,6 @@ class TariffType2 extends AbstractType {
                 $grps = array('Default');
                 if ($data['discount'])
                     array_push ($grps, 'num-discount');
-                if ($data['ownPlace'])
-                    array_push($grps, 'own-place');
                 return $grps;
             }
         ));
@@ -120,10 +84,10 @@ class TariffType2 extends AbstractType {
     
     public static function init() {
         TariffType2::$minChoices = array();
-        for ($i = 2; $i < 10; $i++)
+        for ($i = 1; $i < 10; $i++)
             TariffType2::$minChoices[$i] = "{$i} PER.";
         TariffType2::$numChoices = array();
-        for ($i = 3; $i < 10; $i++)
+        for ($i = 2; $i < 10; $i++)
             TariffType2::$numChoices[$i] = "{$i} PER.";
     }
 }

@@ -29,7 +29,7 @@
                 (Genaue Adresse wird nach Buchung bekanntgegeben)
             </p>
 {#---------------------------------------------------------------------------#}
-        {% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::WORKSHOP'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN')] %}
+        {% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN')] %}
             <p>
                 <span class="text-bold" >Termin:</span>  
                 <span id="from-date">{{ inquiry.from|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</span>

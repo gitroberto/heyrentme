@@ -156,6 +156,7 @@ class TalentController extends BaseController {
         $data['type'] = strval($type);
         
         // address for all
+        /*
         if ($tariff !== null) {
             $data['ownPlace'] = $tariff->getOwnPlace();
             $data['addrStreet'] = $tariff->getAddrStreet();
@@ -163,7 +164,7 @@ class TalentController extends BaseController {
             $data['addrFlatNumber'] = $tariff->getAddrFlatNumber();
             $data['addrPostcode'] = $tariff->getAddrPostcode();
             $data['addrPlace'] = $tariff->getAddrPlace();
-        }
+        }*/
 
         if ($type === TariffType::$EINZELSTUNDEN->getId()) {
             if ($tariff !== null) {
@@ -185,7 +186,7 @@ class TalentController extends BaseController {
             }
             $form = $this->createForm(new TariffType2(), $data, array('action' => $url));            
         }
-        else if ($type === TariffType::$WORKSHOP->getId()) {
+        else if ($type === TariffType::$TOUR->getId()) {
             if ($tariff !== null) {
                 $data['price'] = $tariff->getPrice();
                 $data['minNum'] = $tariff->getMinNum();
@@ -194,14 +195,6 @@ class TalentController extends BaseController {
                 $data['discountPrice'] = $tariff->getDiscountPrice();
             }
             $form = $this->createForm(new TariffType3(), $data, array('action' => $url));            
-        }
-        else if ($type === TariffType::$PERFORMANCE->getId()) {
-            if ($tariff !== null) {
-                $data['price'] = $tariff->getPrice();
-                $data['duration'] = $tariff->getDuration();
-                $data['requestPrice'] = $tariff->getRequestPrice();
-            }
-            $form = $this->createForm(new TariffType4(), $data, array('action' => $url));            
         }
         else if ($type === TariffType::$_5ERBLOCK->getId()) {
             if ($tariff !== null) {
@@ -260,14 +253,14 @@ class TalentController extends BaseController {
         $tariff->setDiscount(array_key_exists('discount', $data) ? ($data['discount'] ? 1 : 0) : null);
         $tariff->setDiscountMinNum(array_key_exists('discountMinNum', $data) ? $data['discountMinNum'] : null);
         $tariff->setDiscountPrice(array_key_exists('discountPrice', $data) ? $data['discountPrice'] : null);
-        $tariff->setOwnPlace(array_key_exists('ownPlace', $data) ? ($data['ownPlace'] ? 1 : 0) : null);
+        //$tariff->setOwnPlace(array_key_exists('ownPlace', $data) ? ($data['ownPlace'] ? 1 : 0) : null);
         $tariff->setDuration(array_key_exists('duration', $data) ? $data['duration'] : null);
         $tariff->setRequestPrice(array_key_exists('requestPrice', $data) ? ($data['requestPrice'] ? 1 : 0) : null);
-        $tariff->setAddrStreet(array_key_exists('addrStreet', $data) ? $data['addrStreet'] : null);
-        $tariff->setAddrNumber(array_key_exists('addrNumber', $data) ? $data['addrNumber'] : null);
-        $tariff->setAddrFlatNumber(array_key_exists('addrFlatNumber', $data) ? $data['addrFlatNumber'] : null);
-        $tariff->setAddrPostcode(array_key_exists('addrPostcode', $data) ? $data['addrPostcode'] : null);
-        $tariff->setAddrPlace(array_key_exists('addrPlace', $data) ? $data['addrPlace'] : null);
+        //$tariff->setAddrStreet(array_key_exists('addrStreet', $data) ? $data['addrStreet'] : null);
+        //$tariff->setAddrNumber(array_key_exists('addrNumber', $data) ? $data['addrNumber'] : null);
+        //$tariff->setAddrFlatNumber(array_key_exists('addrFlatNumber', $data) ? $data['addrFlatNumber'] : null);
+        //$tariff->setAddrPostcode(array_key_exists('addrPostcode', $data) ? $data['addrPostcode'] : null);
+        //$tariff->setAddrPlace(array_key_exists('addrPlace', $data) ? $data['addrPlace'] : null);
     }
     
     /**

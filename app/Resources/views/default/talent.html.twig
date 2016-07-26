@@ -253,16 +253,7 @@
                                                 <select id="tests2" name="gender" class="selectpicker bs-select-hidden hour-to">
                                                     {% for i in range(1, 23) %}<option value="{{ "Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; %02d:00"|format(i)|raw }}"{% if i == 11 %} selected="selected"{% endif %}>{{ "%02d:00 Uhr"|format(i) }}</option>{% endfor %}</select>
                                             </div>
-                                            {% if tariff.ownPlace %}
-                                                <div class="user-data">
-                                                    <p>Treffpunkt*</p>
-                                                    <div class="user-data-tabs">
-                                                        <div class="user-tab steps">
-                                                            <p>{{ tariff.addressAsString }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
+                                            
                                             <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
                                             <p class="price">
                                                 <b class="price-calc">
@@ -272,7 +263,7 @@
                                             <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                                         </div>
                                     </div>
-                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
                                     <div class="panel-body">
                                         <div class="date-picker">
                                             <!-- Date -->
@@ -297,16 +288,7 @@
                                                 </p>
                                                 
                                             </div>
-                                            {% if tariff.ownPlace %}
-                                                <div class="user-data">
-                                                    <p>Treffpunkt*</p>
-                                                    <div class="user-data-tabs">
-                                                        <div class="user-tab steps">
-                                                            <p>{{ tariff.addressAsString }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
+                                            
                                             <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
                                             <p class="price">{#<span>ab</span>#}
                                                 <b class="price-calc">
@@ -316,43 +298,10 @@
                                             <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                                         </div>
                                     </div>
-                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::PERFORMANCE') %}
-                                    <div class="panel-body">                
-                                        <div class="date-picker">
-                                            {% if tariff.ownPlace %}
-                                                <div class="user-data">
-                                                    <p>Treffpunkt*</p>
-                                                    <div class="user-data-tabs">
-                                                        <div class="user-tab steps">
-                                                            <p>{{ tariff.addressAsString }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                            <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
-                                            <p class="price">
-                                                <b class="price-calc">{% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}</b>
-                                            </p>
-                                            <p>
-                                                Hinweis: Termine werden direkt mit dem Anbieter vereinbart.<br/>
-                                                Dauer einer Einheit: {{ tariff.duration|number_format(0) }} min.
-                                            </p>
-                                            <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
-                                        </div>
-                                    </div>
                                 {% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::_5ERBLOCK'), constant('AppBundle\\Entity\\TariffType::_10ERBLOCK'), constant('AppBundle\\Entity\\TariffType::_20ERBLOCK')] %}
                                     <div class="panel-body">                
                                         <div class="date-picker">
-                                            {% if tariff.ownPlace %}
-                                                <div class="user-data">
-                                                    <p>Treffpunkt*</p>
-                                                    <div class="user-data-tabs">
-                                                        <div class="user-tab steps">
-                                                            <p>{{ tariff.addressAsString }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
+                                            
                                             <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
                                             <p class="price">{#<span>ab</span>#}
                                                 <b class="price-calc">{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span></b>                         
@@ -397,16 +346,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {% if tariff.ownPlace %}
-                                                <div class="user-data">
-                                                    <p>Treffpunkt*</p>
-                                                    <div class="user-data-tabs">
-                                                        <div class="user-tab steps">
-                                                            <p>{{ tariff.addressAsString }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
+                                            
                                             <p>Preis<span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span></p>
                                             <p class="price">{#<span>ab</span>#}
                                                 <b class="price-calc">
@@ -436,10 +376,8 @@
                             {% if tariff.requestPrice %}Kosten auf Anfr.{% else %}ab {{ tariff.price|number_format(2, ',') }} &euro; pro Stunde{% endif %}
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
                             Gruppenstd. ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
-                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
-                            Workshop ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
-                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::PERFORMANCE') %}
-                            Performance ab {{ tariff.price|number_format(2, ',') }} &euro;
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') %}
+                            Tour ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_5ERBLOCK') %}
                             5er Block ab {{ tariff.price|number_format(2, ',') }} &euro;
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_10ERBLOCK') %}
@@ -813,9 +751,8 @@
             {% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
                 $(".panel-collapse[data-type='1'] .hour-from, .panel-collapse[data-type='1'] .hour-to").on('change', updatePrice1);
                 updatePrice1();
-            {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::PERFORMANCE') %}
             {% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::_5ERBLOCK'), constant('AppBundle\\Entity\\TariffType::_10ERBLOCK'), constant('AppBundle\\Entity\\TariffType::_20ERBLOCK')] %}
-            {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+            {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
                 $(".panel-collapse[data-type='{{ tariff.type }}'] select.num-picker").on('change', updatePrice{{ tariff.type }});
                 updatePrice{{ tariff.type }}();
             {% endif %}
@@ -879,7 +816,7 @@
                     $p.html(' <span>ab</span> ' + total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
                 }
             }
-        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
             function updatePrice{{ tariff.type }}() {
                 var $th = $(".panel-collapse[data-type='{{ tariff.type }}'] select.num-picker");
                 var args = {

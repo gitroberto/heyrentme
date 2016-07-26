@@ -7,7 +7,7 @@
         </div>
         <div class="col-sm-6">
             <label for="form_price">Preis 20 Einheiten ab:</label>
-            {{ form_widget(form.price) }}
+            {{ form_widget(form.price, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0' }}) }}EUR
             {% if form.price.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.price) }}</div>{% endif %}
         </div>
     </div> 
@@ -21,74 +21,19 @@
     <div class="row">
         <div class="col-xs-12">
             <label for="form_duration">Dauer einer Einheit:</label>
-            {{ form_widget(form.duration) }}
+            {{ form_widget(form.duration, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0' }}) }}
             <label>MIN.</label>
             {% if form.duration.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.duration) }}</div>{% endif %}
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="chbox-holder" style="display: inline-block;">
-                {{ form_widget(form.ownPlace) }}
-                <label for="form_ownPlace"><span></span>Eigene Treffpunkt Addresse (Falls der Treffpunkt nicht mit deiner Standard-Adresse übereinstimmt)</label>
-            </div>
-        </div>
-    </div>
-    <div class="form-container" id="address" {% if not form.vars.value.ownPlace %}style="display: none;"{% endif %}>
-        <div class="row ort">
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-xs-6">
-                        {{ form_widget(form.addrStreet, { 'attr': { 'placeholder': 'Strasse*' } }) }}
-                        <div class="err-msg">{{ form_errors(form.addrStreet, { 'attr': { 'class': 'err-msg' } }) }}</div>
-                    </div>
-                    <div class="col-xs-3">
-                        {{ form_widget(form.addrNumber, { 'attr': { 'placeholder': 'Hausnr.*', 'class': 'security' } }) }}
-                        <div class="err-msg">{{ form_errors(form.addrNumber, { 'attr': { 'class': 'err-msg' } }) }}</div>
-                    </div>
-                    <div class="col-xs-3">
-                        {{ form_widget(form.addrFlatNumber, { 'attr': { 'placeholder': 'Türnr.', 'class': 'security' } }) }}
-                        <div class="err-msg">{{ form_errors(form.addrFlatNumber, { 'attr': { 'class': 'err-msg' } }) }}</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-3">
-                        {{ form_widget(form.addrPostcode, { 'attr': { 'placeholder': 'PLZ*' } }) }}
-                        <div class="err-msg">{{ form_errors(form.addrPostcode, { 'attr': { 'class': 'err-msg' } }) }}</div>
-                    </div>
-                    <div class="col-xs-5">
-                        {{ form_widget(form.addrPlace, { 'attr': { 'placeholder': 'Ort*' } }) }}
-                        <div class="err-msg">{{ form_errors(form.addrPlace, { 'attr': { 'class': 'err-msg' } }) }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
+    
     <div class="row">
         <div class="col-sm-12">
             <button id="tariff-save">Diese Tarifoption speichern</button>
             {% if tariffId %}
-                <button id="tariff-delete" data-id="{{ tariffId }}">Diese Tarifoption zurücksetzen und entrefnen</button>
+                <button id="tariff-delete" data-id="{{ tariffId }}">Diese Tarifoption zurücksetzen und entfernen</button>
             {% endif %}
         </div>
     </div>
 {{ form_end(form) }}
-
-<script>
-    function ownPlaceChanged() {
-        var $chb = $("#form_ownPlace");
-        var $addr = $('#address');
-        if ($chb.prop('checked')) {
-            $addr.show();
-            $addr.find('input').prop('required', true);
-        }
-        else {
-            $addr.hide();
-            $addr.find('input').prop('required', false);
-        }
-    }
-    $(function () {
-        $("#form_ownPlace").on('click change', ownPlaceChanged);
-        window.setTimeout(ownPlaceChanged, 123); // todo: improve (call after $('.num-picker').selectpicker())
-    });
-</script>
