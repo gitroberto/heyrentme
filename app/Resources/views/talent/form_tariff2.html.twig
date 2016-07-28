@@ -17,21 +17,7 @@
                 Bitte gib hier Tarif (bist du Umsatzsteuerpflichtig inkl. Ust.) für diese Einheit an. Sollte es bei einer Buchung zu gefingfügigen Mehrkosten kommen, kannst du das dem Kunden separat mitteilen.
             </p>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <label for="form_minNum">Mindestanzahl Personen*:</label>
-            {{ form_widget(form.minNum) }}
-            {% if form.minNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.minNum) }}</div>{% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <p class="memo">
-                *Bitte wähle hier wieviele Personen für eine Gruppen-Buchung mindestens erforderlich sind.
-            </p>
-        </div>
-    </div>
+    </div>    
     <div class="row">
         <div class="col-sm-6">
             <div class="chbox-holder" style="display: inline-block;">

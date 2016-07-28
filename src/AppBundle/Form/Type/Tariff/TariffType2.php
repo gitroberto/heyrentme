@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class TariffType2 extends AbstractType {
     
     public static $numChoices;
-    public static $minChoices;
+    
     
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
@@ -29,12 +29,7 @@ class TariffType2 extends AbstractType {
                         new Range(array('min' => 10, 'max' => 100))
                     )
                 ))
-                ->add('minNum', 'choice', array(
-                    'choices' => TariffType2::$minChoices,
-                    'attr' => array(
-                        'class' => 'num-picker'
-                    )
-                ))
+                
                 ->add('discount', 'checkbox', array(
                     'required' => false
                 ))
@@ -62,8 +57,7 @@ class TariffType2 extends AbstractType {
     
     public function validate($value, ExecutionContextInterface $context) {
         $data = $context->getRoot()->getData();
-        if (intval($data['minNum']) >= intval($data['discountMinNum']))
-            $context->addViolation('Dieser Wert muss größer als Mindestanzahl Personen sein');
+        
     }
     
     public function configureOptions(OptionsResolver $resolver) {
@@ -83,9 +77,6 @@ class TariffType2 extends AbstractType {
     }
     
     public static function init() {
-        TariffType2::$minChoices = array();
-        for ($i = 1; $i < 10; $i++)
-            TariffType2::$minChoices[$i] = "{$i} PER.";
         TariffType2::$numChoices = array();
         for ($i = 2; $i < 10; $i++)
             TariffType2::$numChoices[$i] = "{$i} PER.";

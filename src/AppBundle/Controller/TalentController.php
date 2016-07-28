@@ -301,7 +301,8 @@ class TalentController extends BaseController {
         $em->flush();
         
         $id = $tal->getId();
-        $this->addNewId($request, $id);
+        //comented by seba - I think that it was unintentionally copied from admin flow, it's causing erros on dashboard (removeNewId is not present in user flow)
+        //$this->addNewId($request, $id);
         
         return $this->redirectToRoute('talent-edit-1', array('id' => $id));
     }

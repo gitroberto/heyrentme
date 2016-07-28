@@ -15,8 +15,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class TariffType3 extends AbstractType {
     
-    public static $numChoices;
-    public static $minChoices;
+    public static $numChoices;    
     
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
@@ -29,12 +28,6 @@ class TariffType3 extends AbstractType {
                         new Range(array('min' => 10, 'max' => 100))
                     )
                 ))
-                ->add('minNum', 'choice', array(
-                    'choices' => TariffType3::$minChoices,
-                    'attr' => array(
-                        'class' => 'num-picker'
-                    )
-                ))
                 ->add('discount', 'checkbox', array(
                     'required' => false
                 ))
@@ -44,11 +37,7 @@ class TariffType3 extends AbstractType {
                         'class' => 'num-picker'
                     ),
                     'constraints' => array(
-                        new NotBlank(array('groups' => 'num-discount')),
-                        new Callback(array(
-                            'callback' => array($this, 'validate'),
-                            'groups' => 'num-discount'
-                        ))
+                        new NotBlank(array('groups' => 'num-discount'))
                     )
                 ))
                 ->add('discountPrice', 'integer', array(
@@ -58,12 +47,6 @@ class TariffType3 extends AbstractType {
                         new Range(array('min' => 10, 'max' => 100))
                     )
                 ));
-    }
-    
-    public function validate($value, ExecutionContextInterface $context) {
-        $data = $context->getRoot()->getData();
-        if (intval($data['minNum']) >= intval($data['discountMinNum']))
-            $context->addViolation('Dieser Wert muss größer als Mindestanzahl Personen sein');
     }
     
     public function configureOptions(OptionsResolver $resolver) {
@@ -83,9 +66,7 @@ class TariffType3 extends AbstractType {
     }
     
     public static function init() {
-        TariffType3::$minChoices = array();
-        for ($i = 1; $i < 10; $i++)
-            TariffType3::$minChoices[$i] = "{$i} PER.";
+        
         TariffType3::$numChoices = array();
         for ($i = 2; $i < 10; $i++)
             TariffType3::$numChoices[$i] = "{$i} PER.";

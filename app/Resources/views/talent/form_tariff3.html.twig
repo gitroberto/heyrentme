@@ -19,20 +19,6 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12">
-            <label for="form_minNum">Mindestanzahl Personen*:</label>
-            {{ form_widget(form.minNum) }}
-            {% if form.minNum.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.minNum) }}</div>{% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <p class="memo">
-                *Bitte wähle hier wieviele Personen für eine Gruppen-Buchung mindestens erforderlich sind.
-            </p>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-sm-6">
             <div class="chbox-holder" style="display: inline-block;">
                 {{ form_widget(form.discount) }}
