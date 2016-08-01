@@ -6,6 +6,16 @@ use AppBundle\Entity\Common;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentImage;
+use AppBundle\Entity\TalentTariff;
+use AppBundle\Entity\TariffType;
+use AppBundle\Form\Type\Tariff\TariffType1;
+use AppBundle\Form\Type\Tariff\TariffType2;
+use AppBundle\Form\Type\Tariff\TariffType3;
+use AppBundle\Form\Type\Tariff\TariffType4;
+use AppBundle\Form\Type\Tariff\TariffType5;
+use AppBundle\Form\Type\Tariff\TariffType6;
+use AppBundle\Form\Type\Tariff\TariffType7;
+use AppBundle\Form\Type\Tariff\TariffType8;
 use AppBundle\Entity\Video;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -275,8 +285,6 @@ class TalentController extends BaseAdminController {
         $data = array(
             'inquiryEmail' => $talent->getInquiryEmail(),
             'name' => $talent->getName(),
-            'price' => $talent->getPrice(),
-            'requestPrice' => $talent->getRequestPrice() > 0,
             //edit 2
             'description' => $talent->getDescription(),
             'videoUrl' => $talent->getVideo() !== null ? $talent->getVideo()->getOriginalUrl() : null,
@@ -300,6 +308,7 @@ class TalentController extends BaseAdminController {
             'descScope' => $talent->getDescScope(),
             'descTarget' => $talent->getDescTarget(),
             'descCondition' => $talent->getDescCondition()
+            
         );
         $i = 1;
         foreach ($talent->getSubcategories() as $sc) {
@@ -352,12 +361,6 @@ class TalentController extends BaseAdminController {
                         new NotBlank(),
                         new Length(array('max' => 32))
                     )
-                ))
-                ->add('price', 'integer', array(
-                    'required' => false
-                ))
-                ->add('requestPrice', 'checkbox', array(
-                    'required' => false
                 ))
                 
                 //edit 2
@@ -480,12 +483,15 @@ class TalentController extends BaseAdminController {
         $form->handleRequest($request);
         $mainImageValidation = null;
         $imagesValidation = null;        
+        $tariffsValidation = null;        
+        $tariffs = $this->getDoctrineRepo('AppBundle:TalentTariff')->getTariffs($id);
         if ($request->getMethod() === 'POST') {
             $mainImageValidation = $this->mainImageValidation($mainImage);
             $imagesValidation = $this->imagesValidation($images);
+            $tariffsValidation = $this->tariffsValidation($tariffs);;        
         }
         
-        if ($form->isValid()   && $mainImageValidation === null && $imagesValidation === null ) {
+        if ($form->isValid()   && $mainImageValidation === null && $imagesValidation === null && $tariffsValidation === null ) {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $arr = array();
@@ -498,8 +504,6 @@ class TalentController extends BaseAdminController {
             // map fields, TODO: consider moving to Talent's method
             //<editor-fold> map fields            
             $talent->setName($data['name']);
-            $talent->setPrice($data['price']);
-            $talent->setRequestPrice($data['requestPrice'] ? 1 : 0);
             
             
             //edit2
@@ -577,6 +581,7 @@ class TalentController extends BaseAdminController {
         }
         
         $mb = intval($this->getParameter('image_upload_max_size'));
+        
         return $this->render('admin/talent/edit.html.twig', array(
             'talent' => $talent,
             'form' => $form->createView(),            
@@ -585,8 +590,11 @@ class TalentController extends BaseAdminController {
             'images' => $images,
             'mainImageValidation' => $mainImageValidation,
             'imagesValidation' => $imagesValidation,
+            'tariffsValidation' => $tariffsValidation,
             'megabytes' => $mb,
-            'max_num_images' => $this->getParameter('equipment_max_num_images')
+            'max_num_images' => $this->getParameter('equipment_max_num_images'),
+            'type' => TariffType::$EINZELSTUNDEN->getId(),
+            'tariffs' => $tariffs
         ));
     }     
     
@@ -680,6 +688,10 @@ class TalentController extends BaseAdminController {
     public function imagesValidation($images) {
         $max = $this->getParameter('equipment_max_num_images');
         return count($images) <= $max ? null : sprintf('Bitte lade max. %s Bilder hoch', $max);
+    }
+    
+    public function tariffsValidation($tariffs) {
+        return count($tariffs) > 0 ? null : "Bitte definieren Sie mindestens eine Tarifoption";
     }
     
     public function validateTime($data, ExecutionContextInterface $context) {
@@ -1146,4 +1158,162 @@ class TalentController extends BaseAdminController {
         
         return new JsonResponse(array('message' => 'ok'));
     }    
+    
+    
+    /**
+     * @Route("/admin-talent-detail-form/{id}/{type}", name="admin-talent-detail-form")
+     */
+    public function formTariffAction(Request $request, $id, $type) {
+        $repo = $this->getDoctrineRepo('AppBundle:TalentTariff');
+        $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        $tariff = $repo->getTariff($id, $type);
+        $url = $this->generateUrl('admin-talent-detail-form', array('id' => $id, 'type' => $type));
+        $form = $this->getTariffForm(intval($type), $tariff, $url);
+        
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+/*
+ * merge leftover: remove if unnecessary
+ * 
+            // get subcategory
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+            $user = $this->getUser();
+            // map fields, TODO: consider moving to Talent's method
+            //<editor-fold> map fields
+            $eq = new Talent();
+            $eq->setUuid(Utils::getUuid());  
+            $eq->setName($data['name']);
+            $eq->setUser($user);
+            $eq->addSubcategory($subcat);
+            $eq->setPrice($data['price']);
+            $eq->setRequestPrice($data['requestPrice'] ? 1 : 0);
+            $eq->setStatus(Talent::STATUS_INCOMPLETE);
+            //</editor-fold>
+            // save to db
+*/
+            $em = $this->getDoctrine()->getManager();
+                        
+            if ($tariff === null) {
+                $tariff = new TalentTariff();
+                $tariff->setTalent($tal);
+                $tariff->setType($type);
+                $this->collectTariffFormData($tariff, $data, $type);
+                $repo->insert($tariff, $tal->getId());
+            }
+            else {
+                $this->collectTariffFormData($tariff, $data);
+                $em->flush();
+            }
+        }
+        
+        $tmpl = sprintf('admin/talent/form_tariff%d.html.twig', $type);
+        return $this->render($tmpl, array(
+            'form' => $form->createView(),
+            'tariffId' => $tariff !== null ? $tariff->getId() : null
+        ));
+    }
+    
+    private function getTariffForm($type, $tariff, $url) {
+        $data = array();
+        $data['type'] = strval($type);
+        
+        if ($type === TariffType::$EINZELSTUNDEN->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['requestPrice'] = $tariff->getRequestPrice() > 0;
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();                
+            }
+            $form = $this->createForm(new TariffType1(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$GRUPPENSTUNDEN->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['minNum'] = $tariff->getMinNum();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType2(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$TOUR->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['minNum'] = $tariff->getMinNum();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType3(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$_5ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType5(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$_10ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType6(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$TAGESSATZ->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType7(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$_20ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType8(), $data, array('action' => $url));            
+        }
+        
+        return $form;        
+    }
+    
+    private function collectTariffFormData($tariff, $data) {
+        $tariff->setPrice(array_key_exists('price', $data) ? $data['price'] : null);
+        $tariff->setMinNum(array_key_exists('minNum', $data) ? $data['minNum'] : null);
+        $tariff->setDiscount(array_key_exists('discount', $data) ? ($data['discount'] ? 1 : 0) : null);
+        $tariff->setDiscountMinNum(array_key_exists('discountMinNum', $data) ? $data['discountMinNum'] : null);
+        $tariff->setDiscountPrice(array_key_exists('discountPrice', $data) ? $data['discountPrice'] : null);
+        //$tariff->setOwnPlace(array_key_exists('ownPlace', $data) ? ($data['ownPlace'] ? 1 : 0) : null);
+        $tariff->setDuration(array_key_exists('duration', $data) ? $data['duration'] : null);
+        $tariff->setRequestPrice(array_key_exists('requestPrice', $data) ? ($data['requestPrice'] ? 1 : 0) : null);
+        //$tariff->setAddrStreet(array_key_exists('addrStreet', $data) ? $data['addrStreet'] : null);
+        //$tariff->setAddrNumber(array_key_exists('addrNumber', $data) ? $data['addrNumber'] : null);
+        //$tariff->setAddrFlatNumber(array_key_exists('addrFlatNumber', $data) ? $data['addrFlatNumber'] : null);
+        //$tariff->setAddrPostcode(array_key_exists('addrPostcode', $data) ? $data['addrPostcode'] : null);
+        //$tariff->setAddrPlace(array_key_exists('addrPlace', $data) ? $data['addrPlace'] : null);
+    }
+    
+    /**
+     * @Route("/admin-talent-tariffs/{id}", name="admin-talent-tariffs")
+     */
+    public function tariffsAction(Request $request, $id) {
+        $tariffs = $this->getDoctrineRepo('AppBundle:TalentTariff')->getTariffs($id);
+        
+        $arr = array();
+        $i = 0;
+        foreach ($tariffs as $t)
+            $arr[] = array(
+                'id' => $t->getId(),
+                'name' => $t->getTypeName()
+            );
+        $result = array('list' => $arr);
+      
+        return new JsonResponse($result);
+    }
+    
 }
