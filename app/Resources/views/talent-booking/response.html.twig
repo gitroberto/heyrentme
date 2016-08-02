@@ -68,7 +68,7 @@
                         {% if inquiry.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
                             <p class="no-margin-bottom"><strong>Beginn:</strong> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
                             <p class="no-margin-bottom"><strong>Ende:</strong> {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy, HH:mm') }}</p>
-                        {% elseif inquiry.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN')] %}
+                        {% elseif inquiry.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN'), constant('AppBundle\\Entity\\TariffType::WORKSHOP')] %}
                             <p class="no-margin-bottom"><strong>Termin:</strong> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy') }}</p>
                         {% elseif inquiry.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}
                             <p class="no-margin-bottom"><strong>Beginn:</strong> {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'cccc dd MMMM yyyy') }}</p>

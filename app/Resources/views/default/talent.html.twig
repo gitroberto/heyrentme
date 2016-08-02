@@ -263,7 +263,7 @@
                                             <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
                                         </div>
                                     </div>
-                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+                                {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
                                     <div class="panel-body">
                                         <div class="date-picker">
                                             <!-- Date -->
@@ -283,7 +283,7 @@
                                                     <br/>
                                                     <br/>
                                                     <select id="min-num" class="num-picker">
-                                                        {% for i in range(tariff.minNum, 9) %}<option value="{{ i }}">{{ i }} PER.</option>{% endfor %}
+                                                        {% for i in range(1, 9) %}<option value="{{ i }}">{{ i }} PER.</option>{% endfor %}
                                                     </select>
                                                 </p>
                                                 
@@ -378,6 +378,8 @@
                             Gruppenstd. ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') %}
                             Tour ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
+                            Workshop ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_5ERBLOCK') %}
                             5er Block ab {{ tariff.price|number_format(2, ',') }} &euro;
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_10ERBLOCK') %}
@@ -752,7 +754,7 @@
                 $(".panel-collapse[data-type='1'] .hour-from, .panel-collapse[data-type='1'] .hour-to").on('change', updatePrice1);
                 updatePrice1();
             {% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::_5ERBLOCK'), constant('AppBundle\\Entity\\TariffType::_10ERBLOCK'), constant('AppBundle\\Entity\\TariffType::_20ERBLOCK')] %}
-            {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+            {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
                 $(".panel-collapse[data-type='{{ tariff.type }}'] select.num-picker").on('change', updatePrice{{ tariff.type }});
                 updatePrice{{ tariff.type }}();
             {% endif %}
@@ -816,7 +818,7 @@
                     $p.html(' <span>ab</span> ' + total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
                 }
             }
-        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
             function updatePrice{{ tariff.type }}() {
                 var $th = $(".panel-collapse[data-type='{{ tariff.type }}'] select.num-picker");
                 var args = {

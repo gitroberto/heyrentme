@@ -16,6 +16,7 @@ use AppBundle\Form\Type\Tariff\TariffType5;
 use AppBundle\Form\Type\Tariff\TariffType6;
 use AppBundle\Form\Type\Tariff\TariffType7;
 use AppBundle\Form\Type\Tariff\TariffType8;
+use AppBundle\Form\Type\Tariff\TariffType9;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
@@ -225,6 +226,16 @@ class TalentController extends BaseController {
                 $data['duration'] = $tariff->getDuration();
             }
             $form = $this->createForm(new TariffType8(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$WORKSHOP->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['minNum'] = $tariff->getMinNum();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType9(), $data, array('action' => $url));            
         }
         
         return $form;        

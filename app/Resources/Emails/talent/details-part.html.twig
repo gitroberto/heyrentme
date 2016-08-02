@@ -15,7 +15,7 @@
         {{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'HH:mm') }}
     </p>
 {#---------------------------------------------------------------------------#}
-{% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN')] %}
+{% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN'), constant('AppBundle\\Entity\\TariffType::WORKSHOP')] %}
     <p style="font-family: helvetica, arial;font-size: 15px;line-height: 24px;font-size: 20px;margin-bottom: 5px;margin-top:5px;">
         <span style="font-weight: bold;">Termin:</span> 
         {{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}

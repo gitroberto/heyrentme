@@ -6,14 +6,16 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class TariffType7 extends AbstractType {
-
-    public static $numChoices;
+class TariffType9 extends AbstractType {
+    
+    public static $numChoices;    
     
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
@@ -22,14 +24,15 @@ class TariffType7 extends AbstractType {
                 ))
                 ->add('price', 'integer', array(
                     'constraints' => array(
-                        new NotBlank()
+                        new NotBlank(),
+                        new Range(array('min' => 10, 'max' => 100))
                     )
                 ))
                 ->add('discount', 'checkbox', array(
                     'required' => false
                 ))
                 ->add('discountMinNum', 'choice', array(                    
-                    'choices' => TariffType7::$numChoices,
+                    'choices' => TariffType9::$numChoices,
                     'attr' => array(
                         'class' => 'num-picker'
                     ),
@@ -45,7 +48,7 @@ class TariffType7 extends AbstractType {
                     )
                 ));
     }
-
+    
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'validation_groups' => function(FormInterface $form) {
@@ -57,16 +60,17 @@ class TariffType7 extends AbstractType {
             }
         ));
     }
-
+    
     public function getName() {
         return "form";
-    }    
+    }
     
     public static function init() {
-        TariffType7::$numChoices = array();
+        
+        TariffType9::$numChoices = array();
         for ($i = 2; $i < 10; $i++)
-            TariffType7::$numChoices[$i] = "{$i} T";
+            TariffType9::$numChoices[$i] = "{$i} PER.";
     }
 }
 
-TariffType7::init();
+TariffType9::init();

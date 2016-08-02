@@ -39,7 +39,7 @@ class TalentInquiryVM {
         
         if ($this->type === TariffType::EINZELSTUNDEN)
             $this->calculate1($tariff);
-        else if ($this->type === TariffType::GRUPPENSTUNDEN || $this->type === TariffType::TOUR)
+        else if ($this->type === TariffType::GRUPPENSTUNDEN || $this->type === TariffType::TOUR  || $this->type === TariffType::WORKSHOP)
             $this->calculate23($tariff);
         else if ($this->type === TariffType::TAGESSATZ)
             $this->calculate7($tariff);

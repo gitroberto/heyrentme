@@ -92,6 +92,7 @@ class TalentTariff {
             case TariffType::_10ERBLOCK:
             case TariffType::_20ERBLOCK:
             case TariffType::TAGESSATZ:
+            case TariffType::WORKSHOP:
                 return number_format($this->price, 2, ",", " ") . " &euro;";                
         }
     }
@@ -111,6 +112,8 @@ class TalentTariff {
                 return "20er Block";
             case TariffType::TAGESSATZ:
                 return "pro Tag";
+            case TariffType::WORKSHOP:
+                return "Workshop / pro Per.";
         }
     }
     

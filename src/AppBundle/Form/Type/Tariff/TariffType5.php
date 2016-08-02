@@ -20,8 +20,7 @@ class TariffType5 extends AbstractType {
                 ))
                 ->add('price', 'integer', array(
                     'constraints' => array(
-                        new NotBlank(),
-                        new Range(array('min' => 10, 'max' => 100))
+                        new NotBlank()
                     )
                 ))
                 ->add('duration', 'integer', array(

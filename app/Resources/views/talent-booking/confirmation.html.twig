@@ -35,7 +35,7 @@
                     {% if inquiry.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}    
                         <p>BEGINN:</p>
                         <p>ENDE:</p>
-                    {% elseif inquiry.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN')] %}
+                    {% elseif inquiry.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN'), constant('AppBundle\\Entity\\TariffType::WORKSHOP')] %}
                         <p>TERMIN:</p>
                     {% elseif inquiry.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}    
                         <p>BEGINN:</p>
@@ -50,7 +50,7 @@
                     {% if inquiry.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}    
                         <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
                         <p>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    {% elseif inquiry.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN')] %}
+                    {% elseif inquiry.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN'), constant('AppBundle\\Entity\\TariffType::WORKSHOP') ] %}
                         <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</p>
                     {% elseif inquiry.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}    
                         <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</p>

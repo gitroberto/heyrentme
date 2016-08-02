@@ -113,6 +113,7 @@
         var fieldsChanged = false;
         
         $(function() {
+            $("#form_type").val({{type}});
             initBasicForm();
             initTariffForm();
             $('#tariff-container').sortable({

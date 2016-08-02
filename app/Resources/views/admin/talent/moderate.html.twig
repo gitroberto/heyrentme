@@ -53,7 +53,7 @@
                                 <br>
                                 Ab {{ tariff.discountMinNum }} Std. nur <span style="font-weight: bold;">{{ tariff.discountPrice|number_format(2, ',') }} EUR/Std.</span>
                             {% endif %}
-                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
                             {% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}<br>
                             {% if tariff.discount %}                                
                                 Ab {{ tariff.discountMinNum }} Per. nur <span style="font-weight: bold;">{{ tariff.discountPrice|number_format(2, ',') }} EUR/Per.</span>
