@@ -68,12 +68,12 @@ class TariffType {
         return array(
             TariffType::$EINZELSTUNDEN->getId() => TariffType::$EINZELSTUNDEN->getName(),
             TariffType::$GRUPPENSTUNDEN->getId() => TariffType::$GRUPPENSTUNDEN->getName(),
+            TariffType::$WORKSHOP->getId() => TariffType::$WORKSHOP->getName(),
             TariffType::$TOUR->getId() => TariffType::$TOUR->getName(),
+            TariffType::$TAGESSATZ->getId() => TariffType::$TAGESSATZ->getName(),
             TariffType::$_5ERBLOCK->getId() => TariffType::$_5ERBLOCK->getName(),
             TariffType::$_10ERBLOCK->getId() => TariffType::$_10ERBLOCK->getName(),
-            TariffType::$_20ERBLOCK->getId() => TariffType::$_20ERBLOCK->getName(),
-            TariffType::$TAGESSATZ->getId() => TariffType::$TAGESSATZ->getName(),
-            TariffType::$WORKSHOP->getId() => TariffType::$WORKSHOP->getName()
+            TariffType::$_20ERBLOCK->getId() => TariffType::$_20ERBLOCK->getName()
         );
         
     }
