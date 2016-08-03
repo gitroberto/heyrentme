@@ -2,20 +2,25 @@
 
 {% block body %}
     <div class="main-header">
-          <img src="/img/allgemein-final/heyvienna.jpg" alt="Equipment mieten" class="img-responsive max-1600 max-320"/>
-          <img src="/img/allgemein-final/heyvienna_small.jpg" alt="Equipment mieten" class="img-responsive min-320"/>
-          <div class="main-search">
-            <h1 class="margin-bottom-40 rhomeheader text-white text-background">Entdecke <span
-                    class="text-yellow text-bold">hey! VIENNA</span></h1>
-            <div class="search-form mobile-kategorie-form">
-         <div class="row">  
-    <div class="col-md-6">
-  <a id="fragestellenbut" class="green-big-button yellow question rstartbuttons" href="{{ path('bookme') }}">Talente entdecken</a>
-  </div>
-    <div class="col-md-6">
-  <a id="fragestellenbut" class="green-big-button yellow question rstartbuttons" href="{{ path('rentme') }}">Equipment entdecken</a>
-  </div>
-  </div>
+
+          <img src="/img/allgemein-final/heyvienna.jpg" alt="hey! VIENNA" class="img-responsive max-1600 max-320"/>
+          <img src="/img/allgemein-final/heyvienna_small.jpg" alt="hey! VIENNA" class="img-responsive min-320"/>
+          <div class="rmainsearch main-search">
+		  <div><h1 class="rhomeheader text-white text-background"><span class="text-yellow text-bold">hey!</span> VIENNA</h1></div>
+            <h2 class="rhomeheader_sub text-white text-background">Geführte Touren, Workshops und Freizeit-Ausrüstung für deinen Aufenthalt in Wien</h2>
+<div class="search-form mobile-kategorie-form mobile-hidden">
+                <form method="post" accept-charset="utf-8" action="">
+                    <div style="display:none;">
+                        <input type="hidden" name="_method" value="POST"></div>                    
+                    <select name="gender2" class="selectpickerspc">
+                        <option value="S">HAUPTKATEGORIEN</option>
+                        <option value="T">HAUPTKATEGORIEN</option>
+                    </select>
+                    <input type="submit" class="desktop-hide" value="los geht's!"></form>
+                <ul class="col-xs-6 pull-right text-right kaup-select">
+                    {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT') })) }}
+                </ul>
+
             </div>
           </div>
         </div>
