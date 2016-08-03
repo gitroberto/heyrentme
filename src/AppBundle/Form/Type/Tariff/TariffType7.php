@@ -22,7 +22,8 @@ class TariffType7 extends AbstractType {
                 ))
                 ->add('price', 'integer', array(
                     'constraints' => array(
-                        new NotBlank()
+                        new NotBlank(),
+                        new Range(array('min' => 10))
                     )
                 ))
                 ->add('discount', 'checkbox', array(
@@ -41,7 +42,7 @@ class TariffType7 extends AbstractType {
                     'required' => false,
                     'constraints' => array(
                         new NotBlank(array('groups' => 'num-discount')),
-                        new Range(array('min' => 10, 'max' => 100))
+                        new Range(array('min' => 10))
                     )
                 ));
     }

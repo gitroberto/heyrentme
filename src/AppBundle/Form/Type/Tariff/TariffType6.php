@@ -20,7 +20,8 @@ class TariffType6 extends AbstractType {
                 ))
                 ->add('price', 'integer', array(
                     'constraints' => array(
-                        new NotBlank()
+                        new NotBlank(),
+                        new Range(array('min' => 10))
                     )
                 ))
                 ->add('duration', 'integer', array(
