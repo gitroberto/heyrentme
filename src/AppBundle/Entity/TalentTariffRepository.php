@@ -109,6 +109,24 @@ class TalentTariffRepository extends \Doctrine\ORM\EntityRepository {
         $em->flush();
         $out .= "Saved to database\n";
         
+                                                   
+        $inquiries = $em->getRepository('AppBundle:TalentInquiry')->findAll();
+        foreach ($inquiries as $inq) {
+            $out .= "Checking talent_inquiry id={$inq->getId()}\t";
+            $type = $inq->getType();
+            if ($type) {
+                $out .= "ALREADY UPDATED";
+            } else {
+                $inq->setType(TariffType::$EINZELSTUNDEN->getId());
+                $inq->setRequestPrice(0);
+                $inq->setNum(null);
+                $em->persist($inq);
+                $out .= "Updating talent_inquiry type={$inq->getType()}, RequestedPrice={$inq->getRequestPrice()}, Num={$inq->getNum()}\t";
+            }
+            $out .= "\n";
+        }
+        $em->flush();
+        
         return $out;
     }
 }

@@ -8,7 +8,6 @@ CREATE TABLE `talent_tariff` (
 	`discount` SMALLINT(6) NULL DEFAULT NULL,
 	`discount_min_num` INT(11) NULL DEFAULT NULL,
 	`discount_price` DECIMAL(10,2) NULL DEFAULT NULL,
-	`own_place` SMALLINT(6) NULL DEFAULT NULL,
 	`duration` INT(11) NULL DEFAULT NULL,
 	`request_price` SMALLINT(6) NULL DEFAULT NULL,
 	`position` INT(11) NULL DEFAULT NULL,
