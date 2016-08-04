@@ -122,6 +122,7 @@ class EquipmentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseEquipment();
             $cell[$i++] = $dataRow->getFeatured();
+            $cell[$i++] = $dataRow->anyCategoryActive();
             
             $row['cell'] = $cell;
             array_push($rows, $row);

@@ -321,6 +321,15 @@ class Talent {
         return implode(", ", array_map(function($i) { return $i->getName(); }, $this->subcategories->toArray()));
     }
     
+    public function anyCategoryActive() {
+        foreach($this->subcategories as $sc){
+            $cat = $sc->getCategory();
+            if ($cat && $cat->getActive() == 1){
+                return true;
+            }
+        }
+        return false;
+    }
     
     /**
      * Constructor

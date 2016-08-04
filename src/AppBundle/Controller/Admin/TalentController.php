@@ -132,6 +132,7 @@ class TalentController extends BaseAdminController {
             $cell[$i++] = $dataRow->getShowcaseStart();
             $cell[$i++] = $dataRow->getShowcaseTalent();
             $cell[$i++] = $dataRow->getFeatured();
+            $cell[$i++] = $dataRow->anyCategoryActive();
             
             $row['cell'] = $cell;
             array_push($rows, $row);

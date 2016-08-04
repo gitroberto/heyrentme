@@ -38,8 +38,13 @@
     function showcaseActions(cellvalue, options, cellobject) {
         if (cellobject[6] !== 'approved')
             return '';
-
-        var s = '<input type="checkbox" class="showcase" data-type="start" data-id="' + cellobject[1] + '" title="start page"' + (cellobject[19] ? ' checked="checked" ' : '') + '/>';
+        
+        var display = '';
+        if (cellobject[22] !== true){
+            display = 'disabled="disable"';
+        }
+        
+        var s = '<input type="checkbox" ' + display +' class="showcase" data-type="start" data-id="' + cellobject[1] + '" title="start page"' + (cellobject[19] ? ' checked="checked" ' : '') + '/>';
         s += '&nbsp;&nbsp;';
         s += '<input type="checkbox" class="showcase" data-type="talent" data-id="' + cellobject[1] + '" title="talent page"' + (cellobject[20] ? ' checked="checked" ' : '') + '/>';
         return s;
