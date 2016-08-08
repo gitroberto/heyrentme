@@ -96,6 +96,28 @@ class TalentTariff {
                 return number_format($this->price, 2, ",", " ") . " &euro;";                
         }
     }
+    
+    public function getPricesLineForMainPages() {
+        if ($this->discountPrice) {
+            $priceToDisplay = $this->discountPrice;
+        } else {
+            $priceToDisplay = $this->price;
+        }
+        
+        switch ($this->type) {
+            case TariffType::EINZELSTUNDEN:
+                return $this->requestPrice ? "auf Anfr." : 'ab ' . (number_format($priceToDisplay, 2, ",", " ") . " &euro;");
+            case TariffType::GRUPPENSTUNDEN:
+            case TariffType::TOUR:
+            case TariffType::_5ERBLOCK:
+            case TariffType::_10ERBLOCK:
+            case TariffType::_20ERBLOCK:
+            case TariffType::TAGESSATZ:
+            case TariffType::WORKSHOP:
+                return "ab " . number_format($priceToDisplay, 2, ",", " ") . " &euro;";                
+        }
+    }
+    
     public function getPricesDesc() {
         switch ($this->type) {
             case TariffType::EINZELSTUNDEN:

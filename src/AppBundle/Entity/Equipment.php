@@ -342,8 +342,19 @@ class Equipment
             $s = str_replace('.', ',', $s);
             array_push($arr, $s);
         }
-    return implode("&nbsp;/&nbsp;", $arr);
+        return implode("&nbsp;/&nbsp;", $arr);
     }
+    public function getPricesLineForMainPages() {
+        if ($this->priceMonth) {
+            $priceToDisplay = $this->priceMonth/30;
+        } else if ($this->priceWeek){
+            $priceToDisplay = $this->priceWeek/7;
+        } else {
+            $priceToDisplay = $this->price;
+        }
+        return "ab " . number_format(round($priceToDisplay, 0), 2, ",", " ");
+    }
+    
     public function calculatePrice($days) {
         $pm = $this->priceMonth;
         if ($days >= 30 && $pm !== null && $pm > 0)
