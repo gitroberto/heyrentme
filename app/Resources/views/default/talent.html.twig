@@ -211,7 +211,6 @@
         <div class="col-md-4 right-side">
             <div class="offer-dates">
                 <h3>Datum wählen und buchen</h3>
-                <h4>{{ item.name }}</h4>
                 
                 {% for tariff in tariffs %}
                     <div class="panel-group" id="panel-quote-group">
@@ -372,22 +371,23 @@
                   <div class="user-tab euro">
                     <p>
                         {% set tariff = item.firstTariff %}
+                            
                         {% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
-                            {% if tariff.requestPrice %}Kosten auf Anfr.{% else %}ab {{ tariff.price|number_format(2, ',') }} &euro; pro Stunde{% endif %}
+                            {% if tariff.requestPrice %}Kosten auf Anfr.{% else %} {{ tariff.PricesLine|raw }} pro Stunde{% endif %}
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') %}
-                            Gruppenstd. ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
+                            Gruppenstd. {{ tariff.PricesLine|raw }} pro Per.
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') %}
-                            Tour ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
+                            Tour {{ tariff.PricesLine|raw }} pro Per.
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
-                            Workshop ab {{ tariff.price|number_format(2, ',') }} &euro; pro Per.
+                            Workshop {{ tariff.PricesLine|raw }} pro Per.
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_5ERBLOCK') %}
-                            5er Block ab {{ tariff.price|number_format(2, ',') }} &euro;
+                            5er Block {{ tariff.PricesLine|raw }}
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_10ERBLOCK') %}
-                            10er Block ab {{ tariff.price|number_format(2, ',') }} &euro;
+                            10er Block {{ tariff.PricesLine|raw }}
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::_20ERBLOCK') %}
-                            20er Block ab {{ tariff.price|number_format(2, ',') }} &euro;
+                            20er Block {{ tariff.PricesLine|raw }}
                         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}
-                            Tagessatz ab {{ tariff.price|number_format(2, ',') }} &euro;
+                            Tagessatz {{ tariff.PricesLine|raw }}
                         {% endif %}
                     </p>
                   </div>
