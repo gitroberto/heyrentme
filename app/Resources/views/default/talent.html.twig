@@ -210,7 +210,7 @@
         </div>
         <div class="col-md-4 right-side">
             <div class="offer-dates">
-                <h3>Anfrage für:</h3>
+                <h3>Datum wählen und buchen</h3>
                 <h4>{{ item.name }}</h4>
                 
                 {% for tariff in tariffs %}
@@ -219,7 +219,7 @@
                             <div class="panel-heading" id="robert-heading">
                                 <p class="panel-title">
                                    {{ tariff.tariffType.name }}
-                                   {{ tariff.PricesLine }}
+                                   {{ tariff.PricesLine|raw }}
                                     <span class="pull-right">
                                         <a>
                                             <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
