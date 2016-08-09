@@ -219,7 +219,7 @@
                             <div class="panel-heading" id="robert-heading">
                                 <p class="panel-title">
                                    {{ tariff.tariffType.name }}
-                                   {% if tariff.requestPrice %}: auf Anfr.{% else %} ab: {{ tariff.price|number_format(2, ',') }} &euro;{% endif %} 
+                                   {{ tariff.PricesLine }}
                                     <span class="pull-right">
                                         <a>
                                             <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
@@ -362,7 +362,7 @@
                     </div>
                 {% endfor %}
                 
-                <a id="fragestellenbut" class="green-big-button yellow question" href="#">Eine Frage stellen</a>
+                <a id="fragestellenbut" class="white-big-button yellow question" href="#">Eine Frage stellen</a>
             </div>
             <div class="user-data">
                 <h3>Details:</h3>
@@ -815,7 +815,7 @@
                 console.log('p1: ' + total);
                 if (total !== null && !isNaN(total)) {
                     var $p = $panel.find('.price-calc');
-                    $p.html(' <span>ab</span> ' + total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
+                    $p.html( total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
                 }
             }
         {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') or tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}

@@ -303,15 +303,14 @@ class Equipment
     }
     
     public function getPricesLine() {
-        $arr = array();
-        array_push($arr, sprintf("%d", $this->getPrice()));
-        $p = $this->getPriceWeek();
-        if ($p !== null && $p > 0)
-            array_push($arr, sprintf("%d", $p));
-        $p = $this->getPriceMonth();
-        if ($p !== null && $p > 0)
-            array_push($arr, sprintf("%d", $p));
-        return implode("/", $arr);
+        if ($this->priceMonth) {
+            $priceToDisplay = $this->priceMonth/30;
+        } else if ($this->priceWeek){
+            $priceToDisplay = $this->priceWeek/7;
+        } else {
+            $priceToDisplay = $this->price;
+        }
+        return "ab " . number_format(round($priceToDisplay, 0), 2, ",", " ");
     }
     public function getPricesDesc() {       
         $arr = array();
@@ -343,16 +342,6 @@ class Equipment
             array_push($arr, $s);
         }
         return implode("&nbsp;/&nbsp;", $arr);
-    }
-    public function getPricesLineForMainPages() {
-        if ($this->priceMonth) {
-            $priceToDisplay = $this->priceMonth/30;
-        } else if ($this->priceWeek){
-            $priceToDisplay = $this->priceWeek/7;
-        } else {
-            $priceToDisplay = $this->price;
-        }
-        return "ab " . number_format(round($priceToDisplay, 0), 2, ",", " ");
     }
     
     public function calculatePrice($days) {

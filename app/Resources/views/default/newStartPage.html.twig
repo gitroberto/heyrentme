@@ -74,7 +74,7 @@
                                             </p>
                                         </div>
                                         <div class="col-xs-5">
-                                            <p class="price">{{ eq.firstTariff.PricesLineForMainPages|raw }}</p>
+                                            <p class="price">{{ eq.firstTariff.PricesLine|raw }}</p>
                                             <p class="tag">{{ eq.firstTariff.pricesDesc }}</p>
                                         </div>
                                         {% if eq.video %}<div class="rplay"></div>{% endif %}
@@ -124,7 +124,7 @@
                                                 {% if eq.testDrive %}
                                                     Probefahrt
                                                 {% else %}
-                                                    {{ eq.PricesLineForMainPages }}&nbsp;&#8364;
+                                                    {{ eq.PricesLine }}&nbsp;&#8364;
                                                 {% endif %}
                                             </p>
                                             

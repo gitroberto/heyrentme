@@ -718,3 +718,50 @@ button#tariff-save, button#tariff-delete {
 .adjust-to-rabatt-small2{
     padding-left:12px;
 }
+
+.right-side .offer-dates .date-picker .white-big-button {
+  margin: 23px 0;
+  width: 91%;
+  margin-right: auto;
+  margin-left: auto;
+  font-size: 24px;
+  border: none;
+  padding: 6px 0;
+}
+
+.white-big-button {
+  background-color: #ffffff;
+  font-size: 24px;
+  text-align: center;
+  color: #000000;
+  font-family: 'Roboto Slab', sans-serif;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  font-weight: bolder;
+  display: inline-block;
+}
+
+.white-big-button:hover {
+  background-color: #34b437;
+  transition: all 300ms ease-in;
+  text-decoration: none;
+  color: white;
+}
+
+.left-side .user-notes.shop-notes .white-big-button {
+  margin: 0;
+}
+
+.right-side .offer-dates .date-picker .white-big-button {
+    width: 100%;
+}
+
+.einzelstunden .panel-heading {
+    background-color: #34b437;
+    
+}
+
+.einzelstunden .panel-heading  p {
+    color: #fff;
+}

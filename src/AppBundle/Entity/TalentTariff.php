@@ -82,22 +82,8 @@ class TalentTariff {
             $fn = '/' . $this->addrFlatNumber;
         return sprintf("%s %s%s, %s %s", $this->addrStreet, $this->addrNumber, $fn, $this->addrPostcode, $this->addrPlace);
     }
-    public function getPricesLine() {
-        switch ($this->type) {
-            case TariffType::EINZELSTUNDEN:
-                return $this->requestPrice ? "auf Anfr." : (number_format($this->price, 2, ",", " ") . " &euro;");
-            case TariffType::GRUPPENSTUNDEN:
-            case TariffType::TOUR:
-            case TariffType::_5ERBLOCK:
-            case TariffType::_10ERBLOCK:
-            case TariffType::_20ERBLOCK:
-            case TariffType::TAGESSATZ:
-            case TariffType::WORKSHOP:
-                return number_format($this->price, 2, ",", " ") . " &euro;";                
-        }
-    }
     
-    public function getPricesLineForMainPages() {
+    public function getPricesLine() {
         if ($this->discountPrice) {
             $priceToDisplay = $this->discountPrice;
         } else {
@@ -123,9 +109,9 @@ class TalentTariff {
             case TariffType::EINZELSTUNDEN:
                 return "pro Stunde";
             case TariffType::GRUPPENSTUNDEN:
-                return "Gruppenstd. / pro Per.";
+                return "Gruppenstunde";
             case TariffType::TOUR:
-                return "Tour / pro Per.";
+                return "Tour";
             case TariffType::_5ERBLOCK:
                 return "5er Block";
             case TariffType::_10ERBLOCK:
@@ -135,7 +121,7 @@ class TalentTariff {
             case TariffType::TAGESSATZ:
                 return "pro Tag";
             case TariffType::WORKSHOP:
-                return "Workshop / pro Per.";
+                return "Workshop";
         }
     }
     
