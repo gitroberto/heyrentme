@@ -92,7 +92,7 @@ class TalentTariff {
         
         switch ($this->type) {
             case TariffType::EINZELSTUNDEN:
-                return $this->requestPrice ? "auf Anfr." : 'ab ' . (number_format($priceToDisplay, 2, ",", " ") . " &euro;");
+                return $this->requestPrice ? "auf Anfr." : '<span class="prefix-text">ab</span> ' . (number_format($priceToDisplay, 2, ",", " ") . " &euro;");
             case TariffType::GRUPPENSTUNDEN:
             case TariffType::TOUR:
             case TariffType::_5ERBLOCK:
@@ -100,7 +100,7 @@ class TalentTariff {
             case TariffType::_20ERBLOCK:
             case TariffType::TAGESSATZ:
             case TariffType::WORKSHOP:
-                return "ab " . number_format($priceToDisplay, 2, ",", " ") . " &euro;";                
+                return "<span class='prefix-text'>ab</span> " . number_format($priceToDisplay, 2, ",", " ") . " &euro;";                
         }
     }
     

@@ -198,7 +198,7 @@
                             {% if item.testDrive %}
                                 Probefahrt
                             {% else %}
-                                {{ item.PricesLine }} € pro Tag
+                                {{ item.PricesLine|raw }} € pro Tag
                             {% endif %}
                             <span class="pull-right">
                                 <a>
@@ -306,7 +306,7 @@
                         {% if item.testDrive %}
                             Probefahrt
                         {% else %}
-                            {{ item.PricesLine }} &euro; pro Tag 
+                            {{ item.PricesLine|raw }} &euro; pro Tag 
                         {% endif %}
                     </p>
                   </div>

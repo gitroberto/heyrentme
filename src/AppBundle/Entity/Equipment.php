@@ -310,7 +310,7 @@ class Equipment
         } else {
             $priceToDisplay = $this->price;
         }
-        return "ab " . number_format(round($priceToDisplay, 0), 2, ",", " ");
+        return "<span class='prefix-text'>ab</span> " . number_format(round($priceToDisplay, 0), 2, ",", " ");
     }
     public function getPricesDesc() {       
         $arr = array();

@@ -66,6 +66,12 @@
                                     <img src="/img/equipment-default.jpg" alt="placeholder"/>
                                     </div>
                                 {% endif %}
+                                <div class="price-box product-info">
+                                    <p class="price">{{ eq.firstTariff.PricesLine|raw }}</p>
+                                    {% if not eq.firstTariff.requestPrice %}
+                                        <p class="tag">{{ eq.firstTariff.pricesDesc }}</p>
+                                    {% endif %}
+                                </div>
                                 <div class="product-info position-relative">
                                     <div class="row">                                  
                                         <div class="col-xs-7">
@@ -73,9 +79,8 @@
                                                 {{ eq.name }}
                                             </p>
                                         </div>
-                                        <div class="col-xs-5">
-                                            <p class="price">{{ eq.firstTariff.PricesLine|raw }}</p>
-                                            <p class="tag">{{ eq.firstTariff.pricesDesc }}</p>
+                                        <div class="col-xs-5 align-right">
+                                            <div class="button-details button-black backgound-yellow">Ansehen</div>
                                         </div>
                                         {% if eq.video %}<div class="rplay"></div>{% endif %}
                                         <img class="product-user product-user2" alt="{{ eq.user.fullName }}" src="{{ eq.user.getProfilePicture(false, image_url_prefix) }}">
@@ -111,6 +116,20 @@
                                 {% if eq.priceBuy is defined and eq.priceBuy %}
                                     <img src="/img/cart.png" alt="cart" class="cart"/>
                                 {% endif %}
+                                <div class="price-box product-info">
+                                    <p class="price">
+                                        {% if eq.testDrive %}
+                                            Probefahrt
+                                        {% else %}
+                                            {{ eq.PricesLine|raw }}&nbsp;&#8364;
+                                        {% endif %}
+                                    </p>
+                                    <p class="tag">
+                                        {% if not eq.testDrive %}
+                                            pro Tag
+                                        {% endif %}
+                                    </p>
+                                </div>
                                 <div class="product-info position-relative">
                                     <div class="row">                                  
                                         <div class="col-xs-7">
@@ -119,19 +138,8 @@
                                                 {{ eq.name }}
                                             </p>
                                         </div>
-                                        <div class="col-xs-5">
-                                            <p class="price">
-                                                {% if eq.testDrive %}
-                                                    Probefahrt
-                                                {% else %}
-                                                    {{ eq.PricesLine }}&nbsp;&#8364;
-                                                {% endif %}
-                                            </p>
-                                            <p class="tag">
-                                                {% if not eq.testDrive %}
-                                                    pro Tag
-                                                {% endif %}
-                                            </p>
+                                        <div class="col-xs-5 align-right">
+                                            <div class="button-details button-black backgound-yellow">Ansehen</div>
                                         </div>
                                     </div>
                                 </div>

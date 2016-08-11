@@ -75,6 +75,12 @@
                                 <img src="/img/equipment-default.jpg" alt="placeholder"/>
                                 </div>
                             {% endif %}
+                            <div class="price-box product-info">
+                                <p class="price">{{ eq.firstTariff.pricesLine|raw }}</p>
+                                {% if not eq.firstTariff.requestPrice %}
+                                    <p class="tag">{{ eq.firstTariff.pricesDesc }}</p>
+                                {% endif %}
+                            </div>
                             <div class="product-info position-relative">
                                 <div class="row">                                  
                                     <div class="col-xs-7">
@@ -82,9 +88,8 @@
                                             {{ eq.name }}
                                         </p>
                                     </div>
-                                    <div class="col-xs-5">
-                                        <p class="price">{{ eq.firstTariff.pricesLine|raw }}</p>
-                                        <p class="tag">{{ eq.firstTariff.pricesDesc }}</p>
+                                    <div class="col-xs-5 align-right">
+                                        <div class="button-details button-black backgound-yellow">Ansehen</div>
                                     </div>
                                     {% if eq.video %}<div class="rplay"></div>{% endif %}
                                     <img class="product-user product-user2" alt="{{ eq.user.fullName }}" src="{{ eq.user.getProfilePicture(false, image_url_prefix) }}">
