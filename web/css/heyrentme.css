@@ -806,3 +806,15 @@ button#tariff-save, button#tariff-delete {
 .align-right {
     text-align: right;
 }
+
+#tariff-save,#tariff-delete {
+    background-color: #f0c814;
+    color: #fff;
+    font-weight: bold;
+}
+
+body .users .user-forms input[type="submit"].disabled-button, body .users .user-forms .user-submit.disabled-button
+.disabled-button {
+    background-color: 	#AAAAAA;
+    color: gray;
+}

@@ -70,7 +70,7 @@
                     </div>                     
                 </div>                              
             </div>
-            <input type="submit" id="basic-submit" class="yellow-button" value="Tarif speichern &gt;&gt;">
+            <input type="submit" id="basic-submit" class="yellow-button {% if tariffs|length == 0  %}disabled-button{% endif %}" {% if tariffs|length == 0  %}disabled="disabled"{% endif %}  value="Weiter &gt;&gt;">
         </div>
         <div class="col-xs-3">
             <div class="tariff-box support" style="overflow: auto;">
@@ -134,6 +134,14 @@
                         var box = $('#tariff-container');
                         box.empty();
                         var l = data.list.length;
+                        console.debug(l);
+                        if (l == 0) {
+                            $("#basic-submit").attr("disabled","disable");
+                            $("#basic-submit").addClass("disabled-button");
+                        } else {
+                            $("#basic-submit").removeAttr("disabled");
+                            $("#basic-submit").removeClass("disabled-button");
+                        }
                         for (var i = 0; i < l; i++) {
                             var t = data.list[i];
                             var li = $('<li>').addClass('tariff').data('id', t.id).text(t.name);
@@ -156,7 +164,7 @@
             $("#tariff-delete").click(tariffDelete);
         }
         function initBasicForm() {
-            $("#basic-submit").click(basicSubmit);            
+            $("#basic-submit").click(basicSubmit);    
         }
         function tariffChanged() {
             var type = $("#form_type").selectpicker('val');
