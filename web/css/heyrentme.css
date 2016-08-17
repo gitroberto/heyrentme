@@ -757,9 +757,9 @@ button#tariff-save, button#tariff-delete {
     width: 100%;
 }
 
+
 .einzelstunden .panel-heading {
-    background-color: #34b437;
-    
+    background-color: #34b437!important;    
 }
 
 .einzelstunden .panel-heading  p {
