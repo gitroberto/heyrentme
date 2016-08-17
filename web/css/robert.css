@@ -1,3 +1,22 @@
+.einzelstunden .panel-title {
+font-size: 18px;
+}
+
+.einzelstunden .panel-heading:hover {
+background-color:#0d9110!important;
+}
+
+.white-big-button {
+    font-size: 18px!important;
+    font-family: 'Open Sans',sans-serif!important;
+    font-weight: 700!important;
+	padding-top: 10px!important;
+    padding-bottom: 10px!important;
+}
+
+.white-big-button:hover {
+background-color:#f0c814!important;
+}
 
 #footer nav {
     padding: 10px 0;
