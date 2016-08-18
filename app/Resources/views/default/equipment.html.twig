@@ -132,6 +132,8 @@
                 </div>
             </div>
             <div style="height: 240px;" id="googleMap"></div>
+            
+            {% if opinions|length > 0 %}
             <div class="panel-group desktop-hide" id="panel-quote-group2">
                 <div class="panel panel-default">
                     <div class="panel-heading" id="panel-heading1">
@@ -166,6 +168,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}                    
             <!-- notes area -->
             <div class="row user-notes mobile-hidden">
                 {% for opinion in opinions %}
@@ -738,7 +741,8 @@
     var zoom=16;
     var geocoder;
     var address = 'österreich, {{ item.addrPostcode }} {{ item.addrPlace }}, {{ item.addrStreet }} {{ item.addrNumber }}';
-    console.log(address);
+    //console.log(address);
+    var draggable = $(window).width() > 480;
 
     function init() {
         geocoder = new google.maps.Geocoder();
@@ -746,7 +750,8 @@
         var mapOptions = {
             zoom: 10,
             center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            draggable: draggable
         };
         map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
 
