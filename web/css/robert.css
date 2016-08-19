@@ -938,7 +938,7 @@ color:#000;
 box-shadow: none;
 }
 
-.right-side .offer-dates, .right-side .user-data {
+.right-side .user-data {
 background: transparent;
 }
 
@@ -1078,7 +1078,7 @@ font-size: 15px;
 }
 
 .product-detail .left-side h1 {
-font-size: 18px;
+font-size: 25px;
 }
 
 .featured-offers p.price {

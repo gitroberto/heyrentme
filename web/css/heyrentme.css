@@ -818,3 +818,10 @@ body .users .user-forms input[type="submit"].disabled-button, body .users .user-
     background-color: 	#AAAAAA;
     color: gray;
 }
+
+@media (max-width: 980px) {
+    .right-side .offer-dates{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}

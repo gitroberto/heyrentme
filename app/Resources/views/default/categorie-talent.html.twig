@@ -53,7 +53,7 @@
     <div class="clearfix"></div>
   </div>
   <div class="container">
-  {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_TALENT'), 'mobile': true })) }}
+  
   <section class="main-categories main-offers">
     <div class="container  background-white background-light-grey">
         <nav class="crumbs">
@@ -101,6 +101,7 @@
         </div>
     </div>
   </section>
+  {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_TALENT'), 'mobile': true })) }}
   </div>
 </div>
 {% endblock %}
