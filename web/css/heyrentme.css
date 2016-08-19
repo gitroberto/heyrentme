@@ -825,3 +825,12 @@ body .users .user-forms input[type="submit"].disabled-button, body .users .user-
         padding-right: 10px;
     }
 }
+
+.mobile-description{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.item-name {
+    word-wrap: break-word;
+}

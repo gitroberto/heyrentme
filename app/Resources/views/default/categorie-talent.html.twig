@@ -11,9 +11,15 @@
 {% endblock %}
 
 {% block body %}
+  
   <div class="main-header ">
          <img src="{% if category.bigImageUrl %}{{ category.bigImageUrl }}{% else %}/img/cat-final/e_sport.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive max-1600 max-320"/>
          <img src="{% if category.imageUrl %}{{ category.imageUrl }}{% else %}/img/cat-final/e_sport_small.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive min-320"/>
+         {% if category.descriptionMobile != null %}
+            <div class="desktop-hide container mobile-description">
+                {{category.descriptionMobile}}
+            </div>
+        {% endif %}
         <div class="main-search kategorie-search">
             <h2 class="heading mobile-hidden">{{ category.name }} bei <span class="text-yellow text-bold"> hey! VIENNA</span></h2>
             <div class="mobile-headers">
@@ -28,6 +34,7 @@
                 <form method="post" accept-charset="utf-8" action="/kategorie/index/Rennr%C3%A4der"><div style="display:none;"><input type="hidden" name="_method" value="POST"></div><input type="text" name="test2" placeholder="(z.B. 1050 Wien)" class="city-input" id="test2"><input type="submit" value="los geht´s!"></form>                <span class="clearfix"></span>
             </div>
             -->
+            
             <div class="search-form mobile-kategorie-form mobile-hidden">
                 <form method="post" accept-charset="utf-8" action="">
                     <div style="display:none;">
@@ -55,6 +62,7 @@
   <div class="container">
   
   <section class="main-categories main-offers">
+      
     <div class="container  background-white background-light-grey">
         <nav class="crumbs">
             <ul class="col-xs-6">
@@ -79,7 +87,7 @@
                         <span class="gallery-block-icon"></span>
                     </a></li>
             </ul>
-        </nav>        
+        </nav>
         <div class="col-sm-8 col-xs-12 pull-left sortieren">
           <p>
             Sortieren nach:
@@ -101,7 +109,7 @@
         </div>
     </div>
   </section>
-  {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_TALENT'), 'mobile': true })) }}
+{{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_TALENT'), 'mobile': true })) }}
   </div>
 </div>
 {% endblock %}

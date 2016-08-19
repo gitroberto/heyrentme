@@ -45,6 +45,15 @@
     </div>
     <div class="row">
         <div class="form-group">
+          <label for="form_descriptionMobile" class="control-label col-xs-2">Description for mobile</label>
+          <div class="col-xs-10">
+            <div class="err-msg">{{ form_errors(form.descriptionMobile) }}</div>
+            {{ form_widget(form.descriptionMobile, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'description for mobile' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
           <label for="form_slug" class="control-label col-xs-2">Slug</label>
           <div class="col-xs-10">
               <div class="err-msg">{{ form_errors(form.slug) }}</div>

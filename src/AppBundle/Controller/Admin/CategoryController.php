@@ -38,6 +38,12 @@ class CategoryController extends BaseAdminController {
                         new Length(array('max' => 256))
                     )
                 ))
+                ->add('descriptionMobile', 'text', array(
+                    'required' => false,
+                    'constraints' => array(                        
+                        new Length(array('max' => 256))
+                    )
+                ))
                 ->add('slug', 'text', array(
                     'constraints' => array(
                         // TODO: check for uniqueness of slug (category + subcategory; copy from blog)
@@ -170,6 +176,12 @@ class CategoryController extends BaseAdminController {
                 ->add('name', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
+                        new Length(array('max' => 256))
+                    )
+                ))
+                ->add('descriptionMobile', 'text', array(
+                    'required' => false,
+                    'constraints' => array(                        
                         new Length(array('max' => 256))
                     )
                 ))
@@ -355,13 +367,15 @@ class CategoryController extends BaseAdminController {
             $row = array();
             $row['id'] = $dataRow->getId();
             $cell = array();            
-            $cell[0] = null;
-            $cell[1] = $dataRow->getId();
-            $cell[2] = $dataRow->getName();
-            $cell[3] = $dataRow->getSlug();
-            $cell[4] = $dataRow->getTypeStr();
-            $cell[5] = $dataRow->getPosition();
-            $cell[6] = $dataRow->getActive();
+            $i = 0;
+            $cell[$i++] = null;
+            $cell[$i++] = $dataRow->getId();
+            $cell[$i++] = $dataRow->getName();
+            $cell[$i++] = $dataRow->getDescriptionMobile();
+            $cell[$i++] = $dataRow->getSlug();
+            $cell[$i++] = $dataRow->getTypeStr();
+            $cell[$i++] = $dataRow->getPosition();
+            $cell[$i++] = $dataRow->getActive();
             $row['cell'] = $cell;
             array_push($rows, $row);
         }

@@ -53,10 +53,12 @@ if( $('#jqgrid').length > 0 ) {
                         { name:' ', width:180, fixed:true, editable:false, sortable:false, formatter:rowActions },
                         { name:'Id', index:'c.id', width: 0, editable:false, sortable:false, hidden: true },
                         { name:'Name', index:'c.name', width: 200, editable:false, sortable:true },
+                        { name:'DescriptionMobile', index:'c.descriptionMobile', width: 200, editable:false, sortable:true },
                         { name:'Slug', index:'c.slug', width: 150, editable:false, sortable:true },
                         { name:'Type', index:'c.type', align:"left", width: 100, editable:false, sortable:true},
                         { name:'Position', index:'c.position', align:"right", width: 80, editable:false, sortable:true},
                         { name: 'Active', index: 'c.active', align: "center", width: 80, editable: false, sortable: true, formatter: activeFormatter }
+                        
                 ],
                 height: 550,
                 rowNum: 20,
