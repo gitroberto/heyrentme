@@ -38,7 +38,7 @@ class CategoryController extends BaseAdminController {
                         new Length(array('max' => 256))
                     )
                 ))
-                ->add('descriptionMobile', 'text', array(
+                ->add('descriptionMobile', 'textarea', array(
                     'required' => false,
                     'constraints' => array(                        
                         new Length(array('max' => 256))
@@ -179,7 +179,7 @@ class CategoryController extends BaseAdminController {
                         new Length(array('max' => 256))
                     )
                 ))
-                ->add('descriptionMobile', 'text', array(
+                ->add('descriptionMobile', 'textarea', array(
                     'required' => false,
                     'constraints' => array(                        
                         new Length(array('max' => 256))
