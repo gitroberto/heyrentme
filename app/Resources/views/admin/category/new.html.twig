@@ -2,7 +2,25 @@
 
 {% block head %}
     {{ parent() }}
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="/js/videoembed/plugin.min.js"></script>
   <script>
+        tinymce.init({ 
+          selector: 'textarea.rich-text-edit',
+          width: 850,
+          menubar: false/*,
+          content_css: '/css/main.css'*/,
+          plugins: [
+                  "table contextmenu paste videoembed",
+                  'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                    'searchreplace wordcount visualblocks visualchars code fullscreen',
+                    'insertdatetime media nonbreaking save directionality',
+                    'emoticons template textcolor colorpicker textpattern imagetools'
+            ],
+            toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | videoembed",
+            toolbar2: 'print preview media | forecolor backcolor emoticons | code',
+            image_advtab: true
+        });
         $(function() {
             $("#form_name").keyup(updateSlug).blur(updateSlug);
         });
@@ -46,7 +64,7 @@
           <label for="form_descriptionMobile" class="control-label col-xs-2">Description for mobile</label>
           <div class="col-xs-10">
             <div class="err-msg">{{ form_errors(form.descriptionMobile) }}</div>
-            {{ form_widget(form.descriptionMobile, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'description for mobile' }}) }}
+            {{ form_widget(form.descriptionMobile, { 'attr': { 'class': 'rich-text-edit', 'placeholder': 'description for mobile' }}) }}
           </div>
         </div>
     </div>
