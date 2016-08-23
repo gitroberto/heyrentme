@@ -1,0 +1,104 @@
+<div class="panel-group" id="panel-quote-group_{{suffix}}">
+    <div class="panel panel-default einzelstunden">
+        <div class="panel-heading robert-heading-button" id="robert-heading_{{suffix}}">
+            <p class="panel-title">
+                {% if item.testDrive %}
+                    Probefahrt
+                {% else %}
+                    {{ item.PricesLine|raw }} € pro Tag
+                {% endif %}
+                <span class="pull-right">
+                    <a>
+                        <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
+                    </a>
+                </span>
+            </p>
+        </div>
+
+        <div id="collapseQuote_{{suffix}}" class="panel-collapse robertcollapse collapse">
+            <div class="panel-body">
+
+                <div class="date-picker">
+                    <!-- Date -->
+                    <div class="date-container  position-relative date-container_{{suffix}}">
+                      <p class="mobile-hidden">Beginn / Ende</p>
+                      <div class="input-group date" id="datetimepicker1_{{suffix}}">
+                          <input type="text" class="form-control" id="date-range_{{suffix}}" />
+                      </div>
+                      <div class="input-group date display-none" id="datetimepicker2_{{suffix}}">
+                          <input type="text" class="form-control" id="date-range1_{{suffix}}" />
+                      </div>
+                    </div>
+                    <!-- Time -->
+                    <div class="time-container">
+                        <p class="mobile-hidden">Uhrzeit</p>
+                        <select id="tests_{{suffix}}" name="gender" class="selectpicker bs-select-hidden">
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 01:00">01:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 02:00">02:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 03:00">03:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 04:00">04:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 05:00">05:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 06:00">06:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 07:00">07:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 08:00">08:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 09:00">09:00 Uhr</option>
+                            <option selected="selected" value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 10:00">10:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 11:00">11:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 12:00">12:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 13:00">13:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 14:00">14:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 15:00">15:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 16:00">16:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 17:00">17:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 18:00">18:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 19:00">19:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 20:00">20:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 21:00">21:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 22:00">22:00 Uhr</option>
+                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
+                        </select>
+                        <select id="tests2_{{suffix}}" name="gender" class="selectpicker bs-select-hidden">
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 01:00">01:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 02:00">02:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 03:00">03:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 04:00">04:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 05:00">05:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 06:00">06:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 07:00">07:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 08:00">08:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 09:00">09:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 10:00">10:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 11:00">11:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 12:00">12:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 13:00">13:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 14:00">14:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 15:00">15:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 16:00">16:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 17:00">17:00 Uhr</option>
+                            <option selected="selected" value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 18:00">18:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 19:00">19:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 20:00">20:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 21:00">21:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 22:00">22:00 Uhr</option>
+                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
+                        </select>
+                    </div>
+                    {% if not item.testDrive %}
+                        <p>
+                            Preis
+                            <span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span>
+                        </p>
+                    {% endif %}
+                    {% if item.testDrive %}
+                        <h4>Probefahrt</h4>
+                    {% else %}
+                        <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
+                    {% endif %}
+                    <a id="inquiry_{{suffix}}" class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<a id="fragestellenbut_{{suffix}}" class="white-big-button yellow question" href="#">Eine Frage stellen</a>

@@ -87,7 +87,6 @@
                         <img src="/img/equipment-default.jpg" alt="{{ item.name }}"/>
                     {% endif %}
               </div>
-
               <div class="media-list" id="media-list">
                     {% for eimg in item.equipmentImages %}
                         <span class="media-img"><img src="{{ eimg.image.thumbnailUrlPath(image_url_prefix) }}" data-url="{{ eimg.image.urlPath(image_url_prefix) }}" alt="{{ item.name }}{% if loop.index != 1 %} {{ loop.index}}{% endif %}"/></span>
@@ -96,6 +95,11 @@
                         <span><a class="videos-ico" id="3"></a><img src="/img/placeholder/video2.jpg" id="3" alt=""/>   </span>
                     #}
               </div>
+            </div>
+            <div class="desktop-hide right-side">
+                <div class="offer-dates">
+                    {% include 'default/equipment-buttons.html.twig' with {"suffix":"1"} %}
+                </div>
             </div>
             <div>
                 <div class="row">
@@ -193,111 +197,7 @@
         <div class="col-md-4 right-side">
             <div class="offer-dates">
                 <h3>Datum wählen und buchen</h3>
-                
-                <div class="panel-group" id="panel-quote-group">
-                <div class="panel panel-default einzelstunden">
-                    <div class="panel-heading" id="robert-heading">
-                        <p class="panel-title">
-                            {% if item.testDrive %}
-                                Probefahrt
-                            {% else %}
-                                {{ item.PricesLine|raw }} € pro Tag
-                            {% endif %}
-                            <span class="pull-right">
-                                <a>
-                                    <span class="toggle-icon glyphicon glyphicon-triangle-bottom"></span>
-                                </a>
-                            </span>
-                        </p>
-                    </div>
-
-                    <div id="collapseQuote" class="panel-collapse robertcollapse collapse">
-                        <div class="panel-body">
-
-                <div class="date-picker">
-                    <!-- Date -->
-                    <div class="date-container  position-relative">
-                      <p class="mobile-hidden">Beginn / Ende</p>
-                      <div class="input-group date" id="datetimepicker1">
-                          <input type="text" class="form-control" id="date-range" />
-                      </div>
-                      <div class="input-group date display-none" id="datetimepicker2">
-                          <input type="text" class="form-control" id="date-range1" />
-                      </div>
-                    </div>
-                    <!-- Time -->
-                    <div class="time-container">
-                        <p class="mobile-hidden">Uhrzeit</p>
-                        <select id="tests" name="gender" class="selectpicker bs-select-hidden">
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 01:00">01:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 02:00">02:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 03:00">03:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 04:00">04:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 05:00">05:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 06:00">06:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 07:00">07:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 08:00">08:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 09:00">09:00 Uhr</option>
-                            <option selected="selected" value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 10:00">10:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 11:00">11:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 12:00">12:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 13:00">13:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 14:00">14:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 15:00">15:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 16:00">16:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 17:00">17:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 18:00">18:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 19:00">19:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 20:00">20:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 21:00">21:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 22:00">22:00 Uhr</option>
-                            <option value="Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
-                        </select>
-                        <select id="tests2" name="gender" class="selectpicker bs-select-hidden">
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 01:00">01:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 02:00">02:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 03:00">03:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 04:00">04:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 05:00">05:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 06:00">06:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 07:00">07:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 08:00">08:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 09:00">09:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 10:00">10:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 11:00">11:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 12:00">12:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 13:00">13:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 14:00">14:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 15:00">15:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 16:00">16:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 17:00">17:00 Uhr</option>
-                            <option selected="selected" value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 18:00">18:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 19:00">19:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 20:00">20:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 21:00">21:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 22:00">22:00 Uhr</option>
-                            <option value="Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; 23:00">23:00 Uhr</option>
-                        </select>
-                    </div>
-                    {% if not item.testDrive %}
-                        <p>
-                            Preis
-                            <span class="info-icon" data-toggle="tooltip" title="Der kalkulierte Gesamtpreis ergibt sich aus Tarif*Zeitspanne. Je nach Anfrage, kann es durch den Anbieter zu geringfügigen Mehrkosten kommen."></span>
-                        </p>
-                    {% endif %}
-                    {% if item.testDrive %}
-                        <h4>Probefahrt</h4>
-                    {% else %}
-                        <p class="price"><span>ab</span><b class="price-calc">{{ item.activePrice|number_format(2, ',') }}</b> <span class="euro-sign">&#8364;</span></p>
-                    {% endif %}
-                    <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
-                </div>
-
-                    </div>
-                </div>
-            </div>
-                </div>
-                <a id="fragestellenbut" class="white-big-button yellow question" href="#">Eine Frage stellen</a>
+                {% include 'default/equipment-buttons.html.twig' with {"suffix":"2"} %}
             </div>
             <div class="user-data">
                 <h3>Details:</h3>
@@ -490,6 +390,16 @@
         return pd === null ? null : days * pd;
 
     }
+    
+    var initDatePicker = function(controlId, options, suffix) {
+        $(controlId+suffix).dateRangePicker(options).bind('datepicker-open',function()  {
+            $(this).children('input').css('background-color','#f0c814').css('color','white').addClass('calendar-icon-hover');
+        }).bind('datepicker-closed',function()
+        {
+            $(this).children('input').css('background-color','white').css('color','black').removeClass('calendar-icon-hover');
+        });
+    }
+    
     $(document).ready(function(){
         var media = $('#media-list .media-img img');
         var mediaContainer = $('#media-content');
@@ -505,16 +415,21 @@
         });
 
 
-        var t1 = $('#date-range').val(moment().add(1, "days").format('[AB] DD.MM.YYYY'));
+        var t1 = $('#date-range_1').val(moment().add(1, "days").format('[AB] DD.MM.YYYY'));        
         var t2 = (moment().add(2, "days").format('[BIS] DD.MM.YYYY'));
+        var dateRange = t1.val() + ' ' + t2;
+        dateRange.replace('AB', '');
+        dateRange.replace('BIS', '')
+        $('#date-range_1').val(dateRange);
+        $('#date-range_2').val(dateRange);
 
-        $('#date-range').val(t1.val() + ' ' + t2);
+        //$('#date-range_1').val().replace('AB', '');
+        //$('#date-range_2').val().replace('AB', '');
+        //$('#date-range1_1').val().replace('BIS', '');
+        //$('#date-range1_2').val().replace('BIS', '');
 
-        $('#date-range').val().replace('AB', '');
-        $('#date-range1').val().replace('BIS', '');
-
-        addData('#from-data',$('#date-range').val());
-        addData('#to-data',$('#date-range1').val());
+        addData('#from-data',$('#date-range_1').val());
+        addData('#to-data',$('#date-range1_1').val());
 
         // Date range picker
         var configObject = {
@@ -529,24 +444,30 @@
             singleMonth: true,
             showShortcuts: false,
             showTopbar: false,
+            
 
             getValue: function()
             {
-                if ($('#date-range').val() && $('#date-range1').val() )
+                var idSuffixTmp = $(this).attr("id").split("_");
+                var idSuffix = idSuffixTmp[idSuffixTmp.length-1];
+                if ($('#date-range_'+idSuffix).val() && $('#date-range1_'+idSuffix).val() )
                     //return $('#date-range').val() + ' Bis ' + $('#date-range1').val();
                 //else
                     return '';
             },
             setValue: function(s,s1,s2)
             {
-                $('#date-range').val('AB '+ s1);
-                $('#date-range1').val('BIS '+s2);
+                var idSuffixTmp = $(this).attr("id").split("_");
+                var idSuffix = idSuffixTmp[idSuffixTmp.length-1];
+                
+                $('#date-range_'+idSuffix).val('AB '+ s1);
+                $('#date-range1_'+idSuffix).val('BIS '+s2);
 
-                addData('#from-data',$('#date-range').val());
-                addData('#to-data',$('#date-range1').val());
+                addData('#from-data',$('#date-range_'+idSuffix).val());
+                addData('#to-data',$('#date-range1_'+idSuffix).val());
 
-                var startData = $('#date-range').val().replace('AB', '');
-                var endData   = $('#date-range1').val().replace('BIS', '');
+                var startData = $('#date-range_'+idSuffix).val().replace('AB', '');
+                var endData   = $('#date-range1_'+idSuffix).val().replace('BIS', '');
 
                 // split the date into days, months, years array
                 var x = startData.split('.');
@@ -562,22 +483,16 @@
                 p = calculatePrice(Math.round(d) + 1);
                 if (p !== null)
                     $('.price-calc').html(p.toFixed(2).replace('.', ','));
-                $('#date-range').val('AB '+ s1 + ' BIS '+s2);
+                $('#date-range_'+idSuffix).val('AB '+ s1 + ' BIS '+s2);
             }
-        };
-        $('#datetimepicker1').dateRangePicker(configObject).bind('datepicker-open',function()  {
-            $(this).children('input').css('background-color','#f0c814').css('color','white').addClass('calendar-icon-hover');
-        }).bind('datepicker-closed',function()
-        {
-            $(this).children('input').css('background-color','white').css('color','black').removeClass('calendar-icon-hover');
-        });
-
-        $('#datetimepicker2').dateRangePicker(configObject).bind('datepicker-open',function()  {
-            $(this).children('input').css('background-color','#f0c814').css('color','white').addClass('calendar-icon-hover');
-        }).bind('datepicker-closed',function()
-        {
-            $(this).children('input').css('background-color','white').css('color','black').removeClass('calendar-icon-hover');
-        });
+        };  
+        configObject["container"] = ".date-container_1";
+        initDatePicker('#datetimepicker1', configObject, '_1');
+        initDatePicker('#datetimepicker2', configObject, '_1');
+        
+        configObject["container"] = ".date-container_2";
+        initDatePicker('#datetimepicker1', configObject, '_2');
+        initDatePicker('#datetimepicker2', configObject, '_2');
 
         $('#tests').change(function(){
             var time1 = $(this).val();
@@ -589,6 +504,19 @@
             $('#to-time').html(time1.replace('Uhrzeit bis ',''));
             $(this).parent().find('.bootstrap-select').eq(1).find('.dropdown-toggle').text($(this).val()).prepend('<span class="caret"></span>');
         });
+        
+        $('#tests_2').change(function(){
+            var time1 = $(this).val();
+            $('#from-time').html(time1.replace('Uhrzeit ab ',''));
+            $(this).parent().find('.bootstrap-select').eq(2).find('.dropdown-toggle').text($(this).val()).prepend('<span class="caret"></span>');
+        });
+        $('#tests2_2').change(function(){
+            var time1 = $(this).val();
+            $('#to-time').html(time1.replace('Uhrzeit bis ',''));
+            $(this).parent().find('.bootstrap-select').eq(3).find('.dropdown-toggle').text($(this).val()).prepend('<span class="caret"></span>');
+        });
+        
+        
 
         {% if not (isPreview) %}
             $('#myVideoPlay').on('click',function(){
@@ -638,8 +566,9 @@
             $("a.question").click(question);
         {% endif %}
 
-        $('#robert-heading').on('click', function () {
-            $('.robertcollapse').collapse('toggle');
+        $('.robert-heading-button').on('click', function () {
+            //$('.robertcollapse').collapse('toggle');
+            $(this).next().collapse('toggle');
             if($('#fragestellenbut').is(':hidden'))
                 $('#fragestellenbut').show();
             else
@@ -660,6 +589,8 @@
     $(window).load(function(){
         $('#tests').parent().find('.bootstrap-select').eq(0).find('.dropdown-toggle').html('Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp;   10:00').prepend('<span class="caret"></span>');
         $('#tests2').parent().find('.bootstrap-select').eq(1).find('.dropdown-toggle').html('Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp;  18:00').prepend('<span class="caret"></span>');
+        $('#tests_2').parent().find('.bootstrap-select').eq(2).find('.dropdown-toggle').html('Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp;   10:00').prepend('<span class="caret"></span>');
+        $('#tests2_2').parent().find('.bootstrap-select').eq(3).find('.dropdown-toggle').html('Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp;  18:00').prepend('<span class="caret"></span>');
     });
 
     function question(e) {
@@ -692,14 +623,17 @@
 
     function inquiry(e) {
         e.preventDefault();
-
+        
+        var idSuffixTmp = $(this).attr("id").split("_");
+        var idSuffix = idSuffixTmp[idSuffixTmp.length-1];
+        
         // parse datetimes
-        var range = $('#date-range').val();
+        var range = $('#date-range_'+idSuffix).val();
         var arr = range.split('BIS');
         var f = $.trim(arr[0].replace('AB', '')).split('.');                        // from date
         var t = $.trim(arr[1].replace('BIS', '')).split('.');                       // to date
-        var fh = $.trim($("#tests").val().replace('Uhrzeit ab', '')).split(':');    // from hour
-        var th = $.trim($("#tests2").val().replace('Uhrzeit bis', '')).split(':');  // to hour
+        var fh = $.trim($("#tests_"+idSuffix).val().replace('Uhrzeit ab', '')).split(':');    // from hour
+        var th = $.trim($("#tests2_"+idSuffix).val().replace('Uhrzeit bis', '')).split(':');  // to hour
 
         var from = new Date(f[2], f[1] - 1, f[0], fh[0], fh[1]);
         var to = new Date(t[2], t[1] - 1, t[0], th[0], th[1]);
