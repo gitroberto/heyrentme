@@ -833,6 +833,11 @@ body .users .user-forms input[type="submit"].disabled-button, body .users .user-
         width: 100%;
     }
     
+    .container.background-white.background-light-grey{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    
 }
 
 .mobile-description{
