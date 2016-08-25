@@ -576,12 +576,12 @@ class TalentController extends BaseController {
         $form = $this->createFormBuilder($data)
             ->add('description', 'textarea', array(
                 'attr' => array(
-                    'maxlength' => 2500,
-                    'placeholder' => 'Maximal 2500 Zeichen verfügbar'
+                    'maxlength' => 10000,
+                    'placeholder' => 'Maximal 10000 Zeichen verfügbar'
                 ),
                 'constraints' => array(
                     new NotBlank(),
-                    new Length(array('max' => 2500))
+                    new Length(array('max' => 10000))
                 )
             ))
             ->add('videoUrl', 'text', array(

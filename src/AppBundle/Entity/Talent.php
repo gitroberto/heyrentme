@@ -31,7 +31,7 @@ class Talent {
      */
     protected $name;    
     /**
-     * @ORM\Column(type="string", length=2500)
+     * @ORM\Column(type="string", length=10000)
      */
     protected $description;
     /**
