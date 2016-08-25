@@ -58,7 +58,7 @@ class Category
     protected $bigImage;
     
     /**
-     * @ORM\Column(type="string", length=256)
+     * @ORM\Column(type="string", length=10000)
      */
     protected $descriptionMobile;
 
