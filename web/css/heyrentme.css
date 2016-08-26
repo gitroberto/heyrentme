@@ -840,11 +840,31 @@ body .users .user-forms input[type="submit"].disabled-button, body .users .user-
     
 }
 
-.mobile-description{
+.mobile-description {
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 0;
+}
+.mobile-description * {
+    font-family: 'open sans', sans-serif;
+}
+.mobile-description a {
+    text-decoration: underline;
+}
+@media (max-width: 375px) {
+    .main-categories {
+        margin-top: 14px;
+    }
 }
 
+header {
+    margin-bottom: -5px;
+}
+
+@media (max-width: 736px) {
+    .main-header .main-search {
+        top: 108px !important;
+    }
+}
 .item-name {
     word-wrap: break-word;
 }
