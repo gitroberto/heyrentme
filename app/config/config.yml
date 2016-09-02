@@ -144,3 +144,6 @@ hwi_oauth:
         #    paths:
         #        email: email
 #</added by Seba>
+
+sema_minifier:
+        enable_listener: true
