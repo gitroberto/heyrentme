@@ -75,5 +75,5 @@ DirectoryIndex app.php
         ExpiresByType image/png "access plus 1 month"
         ExpiresByType image/jpg "access plus 1 month"
         ExpiresByType image/jpeg "access plus 1 month"
-        ExpiresByType text/css "access plus 1 day"
+        ExpiresByType text/css "access plus 1 month"
 </IfModule>
