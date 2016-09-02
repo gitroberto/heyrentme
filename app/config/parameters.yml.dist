@@ -29,6 +29,7 @@ parameters:
     mailer_app_url_prefix: http://test.hey-buyme.com
     # email to be notified about talent/equipment modification
     admin_email: artur@dantesoft.com
+    notification_email: artur@dantesoft.com
     # jpeg compression ratio (0 - 100)
     jpeg_compression_value: 75
     # NOTE: image_upload_max_size in megabytes
