@@ -213,7 +213,16 @@ class ProviderController extends BaseController {
 
         $path1 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . $uuid . '.' . $ext;
         //$path2 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . 'original' . $sep . $uuid . '.' . $ext;
-
+        
+        if ($ext === 'jpg' || $ext == 'jpeg') {
+            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $path1, 9);
+        }
+        
+        //rename($path, $path2);
+        //
         // create thumbnail
         //<editor-fold>
         $fullpath = $path1;
@@ -238,15 +247,6 @@ class ProviderController extends BaseController {
         imagedestroy($dst);        
         imagedestroy($src);
         //</editor-fold>
-        
-        if ($ext === 'jpg' || $ext == 'jpeg') {
-            imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));
-        }
-        else if ($ext === 'png') {
-            imagepng($dst, $path1, 9);
-        }
-        
-        //rename($path, $path2);
 
         // store entry in database
         $em = $this->getDoctrine()->getManager();

@@ -329,7 +329,7 @@ class User extends BaseUser
         return $imageUrl;
     }
     public function getProfileThumbnailPicture($imageUrlPrefix) {
-        $imageUrl = "/img/placeholder/user.png"; // default
+        $imageUrl = "/img/placeholder/user-thumb.png"; // default
         if ($this->image != null) {            
             $imageUrl = $this->image->getThumbnailUrlPath($imageUrlPrefix);            
         } 

@@ -230,6 +230,31 @@ class UserController extends BaseAdminController {
                     $destFilename = sprintf("%s.%s", $uuid, $ext);
 
                     $file->move($destDir, $destFilename);
+                    
+                    // create thumbnail
+                    //<editor-fold>
+                    $fullpath = $destDir . DIRECTORY_SEPARATOR . $destFilename;
+                    $fullpath2 = $this->getParameter('image_storage_dir') . DIRECTORY_SEPARATOR . "user" . DIRECTORY_SEPARATOR . "thumbnail" . DIRECTORY_SEPARATOR . $uuid . "." . $ext;
+
+                    $size = getimagesize($fullpath);
+                    $w = $size[0];
+                    $h = $size[1];                
+                    $nw = 80;
+                    $nh = 80;
+
+                    $src = imagecreatefromstring(file_get_contents($fullpath));
+                    $dst = imagecreatetruecolor($nw, $nh);
+                    imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+                    if ($ext === 'jpg' || $ext === 'jpeg') {
+                        imagejpeg($dst, $fullpath2, 85);
+                    }
+                    else if ($ext === 'png') {
+                        imagepng($dst, $fullpath2, 9);
+                    }        
+
+                    imagedestroy($dst);        
+                    imagedestroy($src);
+                    //</editor-fold>
 
                     // create object
                     $img = new Image();
@@ -413,6 +438,31 @@ class UserController extends BaseAdminController {
                     $destFilename = sprintf("%s.%s", $uuid, $ext);
 
                     $file->move($destDir, $destFilename);
+
+                    // create thumbnail
+                    //<editor-fold>
+                    $fullpath = $destDir . DIRECTORY_SEPARATOR . $destFilename;
+                    $fullpath2 = $this->getParameter('image_storage_dir') . DIRECTORY_SEPARATOR . "user" . DIRECTORY_SEPARATOR . "thumbnail" . DIRECTORY_SEPARATOR . $uuid . "." . $ext;
+
+                    $size = getimagesize($fullpath);
+                    $w = $size[0];
+                    $h = $size[1];                
+                    $nw = 80;
+                    $nh = 80;
+
+                    $src = imagecreatefromstring(file_get_contents($fullpath));
+                    $dst = imagecreatetruecolor($nw, $nh);
+                    imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+                    if ($ext === 'jpg' || $ext === 'jpeg') {
+                        imagejpeg($dst, $fullpath2, 85);
+                    }
+                    else if ($ext === 'png') {
+                        imagepng($dst, $fullpath2, 9);
+                    }        
+
+                    imagedestroy($dst);        
+                    imagedestroy($src);
+                    //</editor-fold>
 
                     // create object
                     $img = new Image();
