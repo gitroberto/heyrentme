@@ -32,16 +32,30 @@
                     </div>
                 </div>
                 <div class="col-sm-4 col-xs-6 summary-info">
-                    <p>BEGINN:</p>
-                    <p>ENDE:</p>
+                    {% if inquiry.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}    
+                        <p>BEGINN:</p>
+                        <p>ENDE:</p>
+                    {% elseif inquiry.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN'), constant('AppBundle\\Entity\\TariffType::WORKSHOP')] %}
+                        <p>TERMIN:</p>
+                    {% elseif inquiry.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}    
+                        <p>BEGINN:</p>
+                        <p>ENDE:</p>
+                    {% endif %}
                     <p>KOSTEN:</p>
                     {#<p>ORT:</p><br />#}
                     <p>Servicegebühr:</p>
                     <p class="text-bold">Summe:</p>
                 </div>
                 <div class="col-sm-4 col-xs-6 summary-info">
-                    <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
-                    <p>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
+                    {% if inquiry.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}    
+                        <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
+                        <p>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy HH:mm') }}</p>
+                    {% elseif inquiry.type in [constant('AppBundle\\Entity\\TariffType::TOUR'), constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN'), constant('AppBundle\\Entity\\TariffType::WORKSHOP') ] %}
+                        <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</p>
+                    {% elseif inquiry.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}    
+                        <p>{{ inquiry.fromAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</p>
+                        <p>{{ inquiry.toAt|localizeddate('none', 'none', 'de_AT', null, 'dd.MM.yyyy') }}</p>
+                    {% endif %}
                     <p>{{ inquiry.price|number_format(2) }} &euro;</p>
                     {#<p class="dont-transform">
                       {{ talent.addressAsString }}

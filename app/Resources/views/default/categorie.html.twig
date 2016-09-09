@@ -11,10 +11,18 @@
 {% endblock %}
 
 {% block body %}
+    
   <div class="main-header ">
          <img src="{% if category.bigImageUrl %}{{ category.bigImageUrl }}{% else %}/img/cat-final/e_sport.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive max-1600 max-320"/>
          <img src="{% if category.imageUrl %}{{ category.imageUrl }}{% else %}/img/cat-final/e_sport_small.jpg{% endif %}" alt="{{ category.name }}" class="img-responsive min-320"/>
+         {% if category.descriptionMobile != null %}
+            <div class="desktop-hide container mobile-description">
+                {{category.descriptionMobile|raw}}
+            </div>
+        {% endif %}
         <div class="main-search kategorie-search">
+            
+        
             <h2 class="heading mobile-hidden">{{ category.name }} bei <span class="text-yellow text-bold"> hey! VIENNA</span></h2>
             <div class="mobile-headers">
               <h1 class="text-white text-background desktop-hide-inline">{{ category.name }} bei</h1>
@@ -53,7 +61,7 @@
     <div class="clearfix"></div>
   </div>
   <div class="container">
-  {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT'), 'mobile': true })) }}
+  
   <section class="main-categories main-offers">
     <div class="container  background-white background-light-grey">
         <nav class="crumbs">
@@ -107,6 +115,8 @@
         </div>
     </div>
   </section>
+    
+    {{ render(controller('AppBundle:Common:categoryList', { 'type': constant('AppBundle\\Entity\\Category::TYPE_EQUIPMENT'), 'mobile': true })) }}
   </div>
 </div>
 {% endblock %}

@@ -147,13 +147,13 @@ class UserController extends BaseAdminController {
                 )
             ))
             ->add('aboutMyself', 'text', array(
+                'required' => false,
                 'constraints' => array(
-                    new NotBlank(),
                     new Length(array('max' => 255))
                 )
             ))
             ->add('phone', 'text', array(
-                'required' => true,
+                'required' => false,
                 'attr' => array(
                     'maxlength' => 10, 
                     'pattern' => '^[0-9]{1,10}$'),
@@ -162,7 +162,7 @@ class UserController extends BaseAdminController {
                 )
             ))
             ->add('phonePrefix', 'text', array(
-                'required' => true, 
+                'required' => false, 
                 'attr' => array('maxlength' => 3, 'pattern' => '^[0-9]{1,3}$'),
                 'constraints' => array(
                     new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Bitte gib hier eine gültige Vorwahl ein'))
@@ -186,8 +186,14 @@ class UserController extends BaseAdminController {
             ->getForm();
         //</editor-fold>
         
+            $imageValidation = null; 
+            $file = $request->files->get('upload');
+            if ($request->getMethod() === 'POST' && $file === null) {
+                $imageValidation = "Bitte laden Sie Ihr Bild";
+            }
+        
             $form->handleRequest($request);
-            if ($form->isValid()) {
+            if ($form->isValid() && $imageValidation === null) {
                 $data = $form->getData();
                 
                 $userMgr = $this->get('fos_user.user_manager');
@@ -248,7 +254,8 @@ class UserController extends BaseAdminController {
             }
         
         return $this->render('admin/user/new.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'imageValidation' => $imageValidation
         ));
     }
     /**
@@ -315,13 +322,13 @@ class UserController extends BaseAdminController {
                 )
             ))
             ->add('aboutMyself', 'text', array(
+                'required' => false,
                 'constraints' => array(
-                    new NotBlank(),
                     new Length(array('max' => 255))
                 )
             ))
             ->add('phone', 'text', array(
-                'required' => true,
+                'required' => false,
                 'attr' => array(
                     'maxlength' => 10, 
                     'pattern' => '^[0-9]{1,10}$'),
@@ -330,7 +337,7 @@ class UserController extends BaseAdminController {
                 )
             ))
             ->add('phonePrefix', 'text', array(
-                'required' => true, 
+                'required' => false, 
                 'attr' => array('maxlength' => 3, 'pattern' => '^[0-9]{1,3}$'),
                 'constraints' => array(
                     new Regex(array('pattern' => '/^\d{1,3}$/', 'message' => 'Bitte gib hier eine gültige Vorwahl ein'))
@@ -351,8 +358,15 @@ class UserController extends BaseAdminController {
             ->getForm();
         //</editor-fold>
         
+            $imageValidation = null; 
+            $file = $request->files->get('upload');
+            $oldimg = $user->getImage();
+            if ($request->getMethod() === 'POST' && $oldimg === null && $file === null) {
+                $imageValidation = "Bitte laden Sie Ihr Bild";
+            }
+        
             $form->handleRequest($request);
-            if ($form->isValid()) {
+            if ($form->isValid() && $imageValidation === null) {
                 $data = $form->getData();
                 
                 $userMgr = $this->get('fos_user.user_manager');
@@ -379,7 +393,7 @@ class UserController extends BaseAdminController {
                 if ($file != null && $file->isValid()) {
 
                     //remove old Image (both file from filesystem and entity from db)
-                    $oldimg = $user->getImage();
+                    
                     if ($oldimg !== null) {
                         $this->getDoctrineRepo('AppBundle:Image')->removeImage($oldimg, $this->getParameter('image_storage_dir'));
                         $user->setImage(null);
@@ -418,7 +432,8 @@ class UserController extends BaseAdminController {
         
         return $this->render('admin/user/edit.html.twig', array(
             'form' => $form->createView(),
-            'user' => $user
+            'user' => $user,
+            'imageValidation' => $imageValidation
         ));
     }
     

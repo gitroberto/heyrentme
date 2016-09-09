@@ -8,7 +8,7 @@
               </div>
               <div class="col-xs-6 text-right padding-right-none">
                   {% if not app.user %}
-                    <a data-toggle="modal" data-target="#reg-modal" class="button-black" href="#">Kostenlos mitmachen</a>
+                    <a data-toggle="modal" data-target="#reg-modal" class="button-black" href="#">Registrieren</a>
                     <a data-toggle="modal" data-target="#login" class="button-black" href="#">Login</a>
                   {% else %}
                       <a href="{{ path('dashboard') }}" class="button-black profilebutton">
@@ -16,7 +16,8 @@
                           {{ app.user.name }}
                       </a>
                   {% endif %}
-                  <a href="{{ path('hilfe_faq_euipment_mieten') }}" class="button-black">Hilfe & Faq</a>
+                  <a href="{{ path("kundeninfos_kontakt") }}" class="button-black">Kontakt</a>
+                  <div class="button-black phone-button">01 2530 1700 41</div>
                 </div>
           </div>
       </div>

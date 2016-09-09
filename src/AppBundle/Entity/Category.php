@@ -57,6 +57,10 @@ class Category
      */
     protected $bigImage;
     
+    /**
+     * @ORM\Column(type="string", length=10000)
+     */
+    protected $descriptionMobile;
 
     /**
      * Set id
@@ -296,5 +300,29 @@ class Category
     public function getActive()
     {
         return $this->active;
+    }
+    
+    /**
+     * Set name
+     *
+     * @param string $descriptionMobile
+     *
+     * @return Category
+     */
+    public function setdescriptionMobile($descriptionMobile)
+    {
+        $this->descriptionMobile = $descriptionMobile;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionMobile
+     *
+     * @return string
+     */
+    public function getDescriptionMobile()
+    {
+        return $this->descriptionMobile;
     }
 }

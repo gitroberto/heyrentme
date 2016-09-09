@@ -185,3 +185,6 @@ div.event-grid td {
     font-size: 24px;
     cursor: pointer;
 }
+.rdisable {
+	opacity: 0.5;
+}

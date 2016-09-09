@@ -31,7 +31,7 @@ class Talent {
      */
     protected $name;    
     /**
-     * @ORM\Column(type="string", length=2500)
+     * @ORM\Column(type="string", length=10000)
      */
     protected $description;
     /**
@@ -147,6 +147,10 @@ class Talent {
      * @ORM\OneToMany(targetEntity="TalentRating", mappedBy="talent")
      */
     protected $ratings;
+    /**
+     * @ORM\OneToMany(targetEntity="TalentTariff", mappedBy="talent")
+     */
+    protected $tariffs;
     
     /**
      * @ORM\OneToOne(targetEntity="Video")
@@ -257,6 +261,15 @@ class Talent {
                 throw new RuntimeException("Talent status corrupt!");
         }
     }
+    
+    public function getFirstTariff() {
+        $arr = $this->tariffs->toArray();
+        usort($arr, function($a, $b) {
+            $d = $a->getPosition() - $b->getPosition();
+            return $d === 0 ? 0 : ($d > 0 ? 1 : -1);
+        });
+        return $arr[0];
+    }    
 
     public function checkStatusOnSave(){
         if ($this->status == Talent::STATUS_APPROVED || $this->status == Talent::STATUS_REJECTED) {            
@@ -308,6 +321,15 @@ class Talent {
         return implode(", ", array_map(function($i) { return $i->getName(); }, $this->subcategories->toArray()));
     }
     
+    public function anyCategoryActive() {
+        foreach($this->subcategories as $sc){
+            $cat = $sc->getCategory();
+            if ($cat && $cat->getActive() == 1){
+                return true;
+            }
+        }
+        return false;
+    }
     
     /**
      * Constructor
@@ -1176,6 +1198,17 @@ class Talent {
     }
 
     /**
+     * Add tariff
+     *
+     * @param \AppBundle\Entity\TalentTariff $tariff
+     *
+     * @return Talent
+     */
+    public function addTariff(\AppBundle\Entity\TalentTariff $tariff)
+    {
+        $this->tariffs[] = $tariff;
+    }
+    /*
      * Set inquiryEmail
      *
      * @param string $inquiryEmail
@@ -1185,11 +1218,29 @@ class Talent {
     public function setInquiryEmail($inquiryEmail)
     {
         $this->inquiryEmail = $inquiryEmail;
-
         return $this;
     }
 
     /**
+     * Remove tariff
+     *
+     * @param \AppBundle\Entity\TalentTariff $tariff
+     */
+    public function removeTariff(\AppBundle\Entity\TalentTariff $tariff)
+    {
+        $this->tariffs->removeElement($tariff);
+    }
+
+    /**
+     * Get tariffs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTariffs()
+    {
+        return $this->tariffs;
+    }
+    /*
      * Get inquiryEmail
      *
      * @return string

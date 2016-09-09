@@ -1,0 +1,74 @@
+{{ form_start(form) }}
+    <input type="hidden" name="success" value="{{ form.vars.submitted and form.vars.valid ? "1" : "0" }}"/>
+    <div class="row">
+        <div class="col-sm-6">
+            <label for="form_type">Einheit wählen:</label>
+           {{ form_widget(form.type) }}
+        </div>
+        <div class="col-sm-6">
+            <label for="form_price">Preis Performance ab:</label>
+            {{ form_widget(form.price, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0' }}) }}EUR
+            {% if form.price.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.price) }}</div>{% endif %}
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="memo">
+                Bitte gib hier Tarif (bist du Umsatzsteuerpflichtig inkl. Ust.) für diese Einheit an. Sollte es bei einer Buchung zu gefingfügigen Mehrkosten kommen, kannst du das dem Kunden separat mitteilen.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <label for="form_duration">Dauer einer Performance:</label>
+            {{ form_widget(form.duration) }} 
+            <label>MIN.</label>
+            {% if form.duration.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.duration) }}</div>{% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="chbox-holder" style="display: inline-block;">
+                {{ form_widget(form.requestPrice, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0' }}) }}EUR
+                <label for="form_requestPrice"><span></span>Preis nur auf Anfrage*</label>
+                {% if form.requestPrice.vars.errors|length > 0 %}<div class="err-msg">{{ form_errors(form.requestPrice) }}</div>{% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="memo">
+                *Bitte beachte, dass es fur Kunden genrell vorteilhafter ist, wenn ein Tarif angegeben wird.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="tariff-save">Diese Tarifoption speichern</button>
+            {% if tariffId %}
+                <button id="tariff-delete" data-id="{{ tariffId }}">Diese Tarifoption zurücksetzen und entfernen</button>
+            {% endif %}
+        </div>
+    </div>
+{{ form_end(form) }}
+
+<script>
+    function requestPriceChanged() {
+        var $price = $("#form_price");
+        var price = parseInt($price.val());
+        var $req = $("#form_requestPrice");
+        var req = $req.prop('checked');
+        if (req) {
+            $price.attr('readOnly', 'true');
+            $price.css({ 'background-color': '#aaa', 'opacity': '0.5' });
+        }
+        else {
+            $price.removeAttr('readOnly');
+            $price.css({ 'background-color': '#fff', 'opacity': '1.0' });
+        }
+    }
+    $(function () {
+        $("#form_requestPrice").on('click change', requestPriceChanged);          
+        requestPriceChanged();        
+    });
+</script>

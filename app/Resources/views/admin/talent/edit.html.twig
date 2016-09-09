@@ -67,6 +67,47 @@
     </form>
 </div>
 
+            
+            
+            
+<div class="row">
+    <div class="col-xs-5">            
+        <div id="tariff-form" style="padding-left: 15px;">
+            {{ render(controller('AppBundle:Admin/Talent:formTariff', { 'id': id, 'type': type })) }}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 err-msg">
+        {% if tariffsValidation %}
+            <ul><li>{{ tariffsValidation }}</li></ul>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-4">
+        <div class="tariff-box support" style="overflow: auto;">
+            <p class="head">Tarif Reihenfolge*</p>
+
+            <ul id="tariff-container" style="">
+                {% for tariff in tariffs %}
+                    <li class="tariff" data-id="{{ tariff.id }}">{{ tariff.typeName }}</li>
+                {% endfor %}
+            </ul>
+
+            <p>Reihenfolgen ändern durch Drag &amp; Drop</p>
+            <p>
+                *Wichtig: Die 1. Tarifoption erscheint auch auf deiner Angebots-Vorschau auf der Übersichtsseite!
+            </p>
+        </div>
+    </div>
+</div>
+            
+            
+            
+
 {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 <div class="container form">
     <div class="row">
@@ -110,26 +151,7 @@
         <div class="err-msg">{{ form_errors(form.name) }}</div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-2">
-            <label >preis pro stunde (ab)</label>
-        </div>
-        <div class="col-xs-6">
-            {{ form_widget(form.price, { 'attr': { 'class': 'small-input text-box short', 'placeholder': '0', 'min': '10', 'max': '500' }}) }}EUR
-        </div>
-        <div class="err-msg">{{ form_errors(form.price) }}</div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-2">
-            <label ></label>
-        </div>
-        <div class="col-xs-8">
-            {{ form_widget(form.requestPrice, { 'attr': { 'disabled': 'disabled' } }) }}
-            <label for="form_requestPrice"><span></span>preis nur auf anfrage (auf deine portraitseite nicht sichtbar)</label>
-        </div>
-        <div class="err-msg">{{ form_errors(form.price) }}</div>
-    </div>
+    
 
     <div class="row">
         <div class="col-xs-2">
@@ -368,14 +390,24 @@
 {% endblock %}
 
 {% block script %}
-  <script src="/js/vendors/upload/jquery.knob.js"></script>
-  <script src="/js/vendors/upload/jquery.ui.widget.js"></script>
+  
+  <script src="/js/vendors/upload/jquery.knob.js"></script>  
+  <script src="/js/vendors/upload/jquery.ui.widget.js"></script>  
   <script src="/js/vendors/upload/jquery.iframe-transport.js"></script>
   <script src="/js/vendors/upload/jquery.fileupload.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.color.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>  
+  
+  
+  
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script>
+        (window.jQuery.ui === undefined) && document.write('<script src="/js/jquery-ui.min.js">\x3C/script>');
+    </script>
+  
+    <script src="/js/ajaxSubmit.js"></script>
+    
     <script>
         var jcropApi = null;
 
@@ -682,5 +714,90 @@
             });
         });
     </script>
+    
+    <script>
+        $(function() {
+            $("#form_type").val({{type}})
+            initTariffForm();            
+            $('#tariff-container').sortable({
+                'containment': '.tariff-box',
+                'stop': sortSave
+            });
+        }); // end of ready
+        
+        function reloadTariffs() {
+            var url = '{{ path('admin-talent-tariffs', { 'id': id }) }}';
+            $.get(url)
+                    .done(function(data) {
+                        var box = $('#tariff-container');
+                        box.empty();
+                        var l = data.list.length;
+                        for (var i = 0; i < l; i++) {
+                            var t = data.list[i];
+                            var li = $('<li>').addClass('tariff').data('id', t.id).text(t.name);
+                            box.append(li);
+                        }
+                    });
+        }
+        function initTariffForm() {
+            var $tariffPicker = $("#form_type");
+            //$tariffPicker.selectpicker({
+            //    width: 200,
+            //    style: 'btn-info'
+            //});
+            $tariffPicker.on('change', tariffChanged);
+            //$(".num-picker").selectpicker({
+            //    width: 'fit',
+            //    style: 'btn-info'
+            //});
+            $("#tariff-save").click(tariffSave);
+            $("#tariff-delete").click(tariffDelete);
+        }
+        
+        function tariffChanged() {
+            var type = $("#form_type").val();
+            var url = '{{ path('admin-talent-detail-form', { 'id': id, 'type': '-TYPE-' }) }}';
+            url = url.replace('-TYPE-', type);            
+            $("#tariff-form").load(url, function() { 
+                initTariffForm();
+            });            
+        }
+        function tariffSave(e) {
+            e.preventDefault();
+            
+            var $form = $('#tariff-form form');
+            if ($form[0].checkValidity())
+                $form.ajaxSubmit({
+                    target: $('#tariff-form'),
+                    success: function() { 
+                        initTariffForm();
+                        reloadTariffs();
+                    }
+                });
+            else
+                $('<input type="submit">').hide().appendTo($form).click().remove();
+        }
+        function tariffDelete(e) {
+            e.preventDefault();
+            
+            var id = $(this).data('id');
+            var url = '{{ path('talent-tariff-delete', { 'id': '-ID-' }) }}'.replace('-ID-', id);
+            $.get(url)
+                    .done(function() {
+                        reloadTariffs();
+                        tariffChanged();
+                    });
+        }
+        function sortSave() {
+            var lis = $('#tariff-container li');
+            var arr = [];
+            for (var i = 0; i < lis.length; i++)
+                arr.push($(lis[i]).data('id'));
+            var ids = arr.join(',');
+            var url = '{{ path('talent-tariff-order', { 'id': id, 'ids': '-IDS-' }) }}'.replace('-IDS-', ids);
+            $.get(url);            
+        }
+    </script>
+    
 {% endblock %}
 

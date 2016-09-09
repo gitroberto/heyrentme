@@ -30,6 +30,7 @@ class BaseController extends Controller
                 $categories[$cat->getSlug()] = array(
                     'id' => $cat->getId(),
                     'name' => $cat->getName(),
+                    'descriptionMobile' => $cat->getDescriptionMobile(),
                     'type' => $cat->getType(),
                     'slug' => $cat->getSlug(),
                     'imageUrl' => $cat->getImage() !== null ? $cat->getImage()->getUrlPath($this->getParameter('image_url_prefix')) : null,

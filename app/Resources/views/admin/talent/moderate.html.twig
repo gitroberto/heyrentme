@@ -33,14 +33,53 @@
               </div>
             </div>
         </div>
+        
         <div class="row">
             <div class="form-group">
-              <label for="form_name" class="control-label col-xs-2">Preis pro Tag:</label>
-              <div class="col-xs-10 control-readonly">
-                {{ talent.Price }},- € 
-              </div>
+              <label for="form_name" class="control-label col-xs-2">Tariffs:</label>
             </div>
-        </div>
+        </div> 
+              
+              
+              
+        {% for tariff in talent.tariffs %}
+            <div class="row">
+                <div class="form-group">
+                  <label for="form_name" class="control-label col-xs-2">{{ tariff.TypeName() }}</label>
+                  <div class="col-xs-10 control-readonly">
+                        {% if tariff.type == constant('AppBundle\\Entity\\TariffType::EINZELSTUNDEN') %}
+                            {% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}
+                            {% if tariff.discount %}
+                                <br>
+                                Ab {{ tariff.discountMinNum }} Std. nur <span style="font-weight: bold;">{{ tariff.discountPrice|number_format(2, ',') }} EUR/Std.</span>
+                            {% endif %}
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TOUR') or tariff.type == constant('AppBundle\\Entity\\TariffType::GRUPPENSTUNDEN') or tariff.type == constant('AppBundle\\Entity\\TariffType::WORKSHOP') %}
+                            {% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}<br>
+                            {% if tariff.discount %}                                
+                                Ab {{ tariff.discountMinNum }} Per. nur <span style="font-weight: bold;">{{ tariff.discountPrice|number_format(2, ',') }} EUR/Per.</span>
+                            {% endif %}
+                        {% elseif tariff.type in [constant('AppBundle\\Entity\\TariffType::_5ERBLOCK'), constant('AppBundle\\Entity\\TariffType::_10ERBLOCK'), constant('AppBundle\\Entity\\TariffType::_20ERBLOCK')] %}
+                            {{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span><br>
+                            {% if tariff.duration %}
+                                Dauer einer Einheit: {{ tariff.duration|number_format(0) }} min.
+                            {% endif %}
+                        {% elseif tariff.type == constant('AppBundle\\Entity\\TariffType::TAGESSATZ') %}
+                            {% if tariff.requestPrice %}auf Anfr.{% else %}{{ tariff.price|number_format(2, ',') }} <span class="euro-sign">&#8364;</span>{% endif %}                            
+                            {% if tariff.discount %}
+                                <br/>
+                                Ab {{ tariff.discountMinNum }} Tage nur <span style="font-weight: bold;">{{ tariff.discountPrice|number_format(2, ',') }} EUR/T</span>
+                            {% endif %}
+                        {% endif %}
+                      
+                  </div>
+                </div>
+            </div> 
+            
+            
+                  
+            
+        {% endfor %}
+              
     </div>
           
     <div class="page" >

@@ -19,6 +19,12 @@
                 <div class="discount"><span>-{{ "%d"|format(tal.activeDiscount.percent) }}%</span></div>
             {% endif %}
             #}
+            <div class="price-box product-info">
+                <p class="price">{{ tal.firstTariff.pricesLine|raw }}</p>
+                {% if not tal.firstTariff.requestPrice %}
+                    <p class="tag">{{ tal.firstTariff.pricesDesc }}</p>
+                {% endif %}
+            </div>
             <div class="product-info position-relative">
                 <div class="row">
                     <div class="col-xs-7">
@@ -27,17 +33,8 @@
                             {{ tal.name }}
                         </p>
                     </div>
-                    <div class="col-xs-5">
-                        {% if tal.requestPrice %}
-                            <p class="price">auf Anfr.</p>
-                        {% else %}
-                            <p class="price">
-                                {{ tal.activePrice|number_format(2, ',') }} &#8364;
-                            </p>
-                            <p class="tag">
-                                pro Stunde
-                            </p>
-                        {% endif %}
+                    <div class="col-xs-5 align-right">
+                        <div class="button-details button-black backgound-yellow">Ansehen</div>
                     </div>
                     {% if tal.video %}<div class="rplay"></div>{% endif %}
                     <img class="product-user product-user2" alt="{{ tal.user.fullName }}" src="{{ tal.user.getProfilePicture(false, image_url_prefix) }}">

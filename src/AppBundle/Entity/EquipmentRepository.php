@@ -722,7 +722,7 @@ EOT;
 
     /* ------------------------------------------------------------------------- showcase */
     public function getShowcaseStartCount() {
-        return $this->getEntityManager()->createQueryBuilder()
+        /*return $this->getEntityManager()->createQueryBuilder()
             ->select('count(e.id)')
             ->distinct()
             ->from('AppBundle:Equipment', 'e')
@@ -733,7 +733,22 @@ EOT;
             ->andWhere('e.status = :status')
             ->setParameter('status', Equipment::STATUS_APPROVED)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult();*/
+        $eqs = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('e.id')
+            ->distinct()
+            ->from('AppBundle:Equipment', 'e')
+            ->join('e.subcategories', 's')
+            ->join('s.category', 'c')
+            ->andWhere('c.active = 1')
+            ->andWhere('e.showcaseStart = 1')
+            ->andWhere('e.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->getQuery()
+            ->getResult();
+        return count($eqs);
     }
     public function getShowcaseStart() {
         $eqs = $this
@@ -759,7 +774,7 @@ EOT;
         return $eqs;
     }
     public function getShowcaseEquipmentCount() {
-        return $this->getEntityManager()->createQueryBuilder()
+        /*return $this->getEntityManager()->createQueryBuilder()
             ->select('count(e.id)')
             ->distinct()
             ->from('AppBundle:Equipment', 'e')
@@ -770,7 +785,22 @@ EOT;
             ->andWhere('e.status = :status')
             ->setParameter('status', Equipment::STATUS_APPROVED)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult();*/
+        $eqs = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('e.id')
+            ->distinct()
+            ->from('AppBundle:Equipment', 'e')
+            ->join('e.subcategories', 's')
+            ->join('s.category', 'c')
+            ->andWhere('c.active = 1')
+            ->andWhere('e.showcaseEquipment = 1')
+            ->andWhere('e.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->getQuery()
+            ->getResult();
+        return count($eqs);
     }
     public function getShowcaseEquipment() {
         $eqs = $this

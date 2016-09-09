@@ -715,18 +715,34 @@ EOT;
     }
     /* ------------------------------------------------------------------------- showcase */
     public function getShowcaseStartCount() {
+        //TODO check why old query retuned wrong count when talent belongs to two categories. 
+        //Seems that distinct statement is not included in query
+        /*
         return $this->getEntityManager()->createQueryBuilder()
             ->select('count(t.id)')
             ->distinct()
             ->from('AppBundle:Talent', 't')
             ->join('t.subcategories', 's')
-            ->join('s.categor', 'c')
+            ->join('s.category', 'c')
             ->andWhere('c.active = 1')
             ->andWhere('t.showcaseStart = 1')
             ->andWhere('t.status = :status')
             ->setParameter('status', Equipment::STATUS_APPROVED)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult();*/
+        $tals = $this->getEntityManager()->createQueryBuilder()
+            ->select('t.id')
+            ->distinct()
+            ->from('AppBundle:Talent', 't')
+            ->join('t.subcategories', 's')
+            ->join('s.category', 'c')
+            ->andWhere('c.active = 1')
+            ->andWhere('t.showcaseStart = 1')
+            ->andWhere('t.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->getQuery()
+            ->getResult();
+        return count($tals);
     }
     public function getShowcaseStart() {
         $tals = $this->getEntityManager()->createQueryBuilder()
@@ -750,6 +766,7 @@ EOT;
         return $tals;
     }    
     public function getShowcaseTalentCount() {
+        /*
         return $this->getEntityManager()->createQueryBuilder()
             ->select('count(t.id)')
             ->distinct()
@@ -761,7 +778,20 @@ EOT;
             ->andWhere('t.status = :status')
             ->setParameter('status', Equipment::STATUS_APPROVED)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult();*/
+        $tals = $this->getEntityManager()->createQueryBuilder()
+            ->select('t.id')
+            ->distinct()
+            ->from('AppBundle:Talent', 't')
+            ->join('t.subcategories', 's')
+            ->join('s.category', 'c')
+            ->andWhere('c.active = 1')
+            ->andWhere('t.showcaseTalent = 1')
+            ->andWhere('t.status = :status')
+            ->setParameter('status', Equipment::STATUS_APPROVED)
+            ->getQuery()
+            ->getResult();
+        return count($tals);
     }
     public function getShowcaseTalent() {
         $tals = $this->getEntityManager()->createQueryBuilder()
@@ -784,5 +814,7 @@ EOT;
         
         return $tals;
     }
+
+    /* -------------------------------------------------------------- Tariffs */    
 }
 

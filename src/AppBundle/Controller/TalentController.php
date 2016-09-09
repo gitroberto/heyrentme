@@ -5,7 +5,18 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentImage;
+use AppBundle\Entity\TalentTariff;
+use AppBundle\Entity\TariffType;
 use AppBundle\Entity\Video;
+use AppBundle\Form\Type\Tariff\TariffType1;
+use AppBundle\Form\Type\Tariff\TariffType2;
+use AppBundle\Form\Type\Tariff\TariffType3;
+use AppBundle\Form\Type\Tariff\TariffType4;
+use AppBundle\Form\Type\Tariff\TariffType5;
+use AppBundle\Form\Type\Tariff\TariffType6;
+use AppBundle\Form\Type\Tariff\TariffType7;
+use AppBundle\Form\Type\Tariff\TariffType8;
+use AppBundle\Form\Type\Tariff\TariffType9;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_Message;
@@ -16,43 +27,93 @@ use Symfony\Component\Serializer\Exception\Exception;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class TalentController extends BaseController {
-
+    
+    
     /**
-     * @Route("/provider/talent-add-1/{subcategoryId}", name="talent-add-1")
+     * @Route("/provider/talent-basic-form/{id}", name="talent-basic-form")
      */
-    public function talentAdd1Action(Request $request, $subcategoryId) {
+    public function formBasicAction(Request $request, $id) {
+        $success = false;
+        $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        $data = array(
+            'name' => $tal->getName(),
+            'id' => $tal->getId()
+        );
         
-        // build form
-        //<editor-fold>
-        $form = $this->createFormBuilder(null, array(
-                'error_bubbling' => false,
-                'constraints' => array(
-                    /*new Callback(array($this, 'validateStep1'))*/
-                )))
+        $action = $this->generateUrl('talent-basic-form', array('id' => $id));
+        $form = $this->createFormBuilder($data, array(
+                    'constraints' => array(
+                        new Callback(array($this, 'formBasicValidation'))
+                    )
+                ))
+                ->setAction($action)
                 ->add('name', 'text', array(
+                    'required' => false,
                     'constraints' => array(
                         new NotBlank(),
                         new Length(array('max' => 32))
                     )
                 ))
-                ->add('price', 'integer', array(
-                    'required' => false
-                ))
-                ->add('requestPrice', 'checkbox', array(
-                    'required' => false
-                ))
+                ->add('id', 'hidden')
                 ->getForm();
-        //</editor-fold>
         
         $form->handleRequest($request);
-        
+        $statusChanged = false; // change relevant for email notification
         if ($form->isValid()) {
             $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            
+            // check for modaration relevant changes
+            $changed = $tal->getName() !== $data['name'];
+            
+            $tal->setName($data['name']);
+            $em->flush();
+            $success = true;            
+
+            // handle status change and notification
+            if ($changed) {
+                $statusChanged = $this->getDoctrineRepo('AppBundle:Talent')->talentModified($id);
+            }
+            if ($statusChanged) {
+                $this->sendNewModifiedTalentInfoMessage($request, $tal); 
+                // todo: refactor: notification sent by repository/service, etc.; consider mapping fields within the method
+            }            
+        }
+        
+        return $this->render('talent/form_basic.html.twig', array(
+            'form' => $form->createView(),
+            'success' => $success,
+            'statusChanged' => $statusChanged,
+            'id' => $id
+        ));
+    }
+    
+    public function formBasicValidation($data, ExecutionContextInterface $context) {
+        $count = $this->getDoctrineRepo('AppBundle:TalentTariff')->getTariffCount($data['id']);
+        if ($count === 0) 
+            $context->addViolation('Bitte definieren Sie mindestens eine Tarifoption');
+    }
+    
+    /**
+     * @Route("/provider/talent-detail-form/{id}/{type}", name="talent-detail-form")
+     */
+    public function formTariffAction(Request $request, $id, $type) {
+        $repo = $this->getDoctrineRepo('AppBundle:TalentTariff');
+        $tal = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        $tariff = $repo->getTariff($id, $type);
+        $url = $this->generateUrl('talent-detail-form', array('id' => $id, 'type' => $type));
+        $form = $this->getTariffForm(intval($type), $tariff, $url);
+        
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+/*
+ * merge leftover: remove if unnecessary
+ * 
             // get subcategory
             $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
             $user = $this->getUser();
@@ -68,62 +129,222 @@ class TalentController extends BaseController {
             $eq->setStatus(Talent::STATUS_INCOMPLETE);
             //</editor-fold>
             // save to db
+*/
             $em = $this->getDoctrine()->getManager();
-            if ($eq->checkStatusOnSave()){
-                $this->sendNewModifiedTalentInfoMessage($request, $eq);
+                        
+            if ($tariff === null) {
+                $tariff = new TalentTariff();
+                $tariff->setTalent($tal);
+                $tariff->setType($type);
+                $this->collectTariffFormData($tariff, $data, $type);
+                $repo->insert($tariff, $tal->getId());
             }
-            $em->persist($eq);
-            $em->flush();
-            
-            $session = $request->getSession();
-            $session->set('TalentEditId', $eq->getId());
-            return $this->redirectToRoute('talent-edit-2', array('id' => $eq->getId()));
+            else {
+                $this->collectTariffFormData($tariff, $data);
+                $em->flush();
+            }        
         }
         
-        return $this->render('talent/talent_edit_step1.html.twig', array(
+        $tmpl = sprintf('talent/form_tariff%d.html.twig', $type);
+        return $this->render($tmpl, array(
             'form' => $form->createView(),
-            'complete' => false,
-            'id' => $subcategoryId,
-            'statusChanged' => false
+            'tariffId' => $tariff !== null ? $tariff->getId() : null
         ));
     }
     
-    public function validateStep1($data, ExecutionContextInterface $context) {
-        $p = $data['price'];
-        $rp = $data['requestPrice'];
+    private function getTariffForm($type, $tariff, $url) {
+        $data = array();
+        $data['type'] = strval($type);
         
-        if ($p === null xor $rp) {
-            $context->buildViolation('Sie müssen entweder Preis beim Check Preis auf Anfrage füllen.')->atPath('price')->addViolation();
+        // address for all
+        /*
+        if ($tariff !== null) {
+            $data['ownPlace'] = $tariff->getOwnPlace();
+            $data['addrStreet'] = $tariff->getAddrStreet();
+            $data['addrNumber'] = $tariff->getAddrNumber();
+            $data['addrFlatNumber'] = $tariff->getAddrFlatNumber();
+            $data['addrPostcode'] = $tariff->getAddrPostcode();
+            $data['addrPlace'] = $tariff->getAddrPlace();
+        }*/
+
+        if ($type === TariffType::$EINZELSTUNDEN->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['requestPrice'] = $tariff->getRequestPrice() > 0;
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();                
+            }
+            $form = $this->createForm(new TariffType1(), $data, array('action' => $url));            
         }
-        if ($p !== null and ($p < 10 or $p > 500)) {
-            $context->buildViolation('Preis muss eine Zahl zwischen 10 und 500 sein.')->atPath('price')->addViolation();
+        else if ($type === TariffType::$GRUPPENSTUNDEN->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['minNum'] = $tariff->getMinNum();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType2(), $data, array('action' => $url));            
         }
+        else if ($type === TariffType::$TOUR->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['minNum'] = $tariff->getMinNum();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType3(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$_5ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType5(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$_10ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType6(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$TAGESSATZ->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType7(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$_20ERBLOCK->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['duration'] = $tariff->getDuration();
+            }
+            $form = $this->createForm(new TariffType8(), $data, array('action' => $url));            
+        }
+        else if ($type === TariffType::$WORKSHOP->getId()) {
+            if ($tariff !== null) {
+                $data['price'] = $tariff->getPrice();
+                $data['minNum'] = $tariff->getMinNum();
+                $data['discount'] = $tariff->getDiscount();
+                $data['discountMinNum'] = $tariff->getDiscountMinNum();
+                $data['discountPrice'] = $tariff->getDiscountPrice();
+            }
+            $form = $this->createForm(new TariffType9(), $data, array('action' => $url));            
+        }
+        
+        return $form;        
+    }
+    /**
+     * @Route("/provider/talent-tariff-order/{id}/{ids}", name="talent-tariff-order")
+     */
+    public function tariffDeleteAction(Request $request, $id, $ids) {
+        $arr = array_map('intval', explode(',', $ids));
+        $this->getDoctrineRepo('AppBundle:TalentTariff')->saveOrder($id, $arr);
+        return new JsonResponse("ok");
+    }
+    /**
+     * @Route("/provider/talent-tariff-delete/{id}", name="talent-tariff-delete")
+     */
+    public function tariffOrderAction(Request $request, $id) {
+        $em = $this->getDoctrine()->getManager();
+        $tt = $this->getDoctrineRepo('AppBundle:TalentTariff')->find($id);
+        $em->remove($tt);
+        $em->flush();
+        return new JsonResponse("ok");
+    }
+    private function collectTariffFormData($tariff, $data) {
+        $tariff->setPrice(array_key_exists('price', $data) ? $data['price'] : null);
+        $tariff->setMinNum(array_key_exists('minNum', $data) ? $data['minNum'] : null);
+        $tariff->setDiscount(array_key_exists('discount', $data) ? ($data['discount'] ? 1 : 0) : null);
+        $tariff->setDiscountMinNum(array_key_exists('discountMinNum', $data) ? $data['discountMinNum'] : null);
+        $tariff->setDiscountPrice(array_key_exists('discountPrice', $data) ? $data['discountPrice'] : null);
+        //$tariff->setOwnPlace(array_key_exists('ownPlace', $data) ? ($data['ownPlace'] ? 1 : 0) : null);
+        $tariff->setDuration(array_key_exists('duration', $data) ? $data['duration'] : null);
+        $tariff->setRequestPrice(array_key_exists('requestPrice', $data) ? ($data['requestPrice'] ? 1 : 0) : null);
+        //$tariff->setAddrStreet(array_key_exists('addrStreet', $data) ? $data['addrStreet'] : null);
+        //$tariff->setAddrNumber(array_key_exists('addrNumber', $data) ? $data['addrNumber'] : null);
+        //$tariff->setAddrFlatNumber(array_key_exists('addrFlatNumber', $data) ? $data['addrFlatNumber'] : null);
+        //$tariff->setAddrPostcode(array_key_exists('addrPostcode', $data) ? $data['addrPostcode'] : null);
+        //$tariff->setAddrPlace(array_key_exists('addrPlace', $data) ? $data['addrPlace'] : null);
     }
     
     /**
-     * @Route("/provider/talent-delete/{id}", name="talent-delete")
+     * @Route("/provider/talent-tariffs/{id}", name="talent-tariffs")
      */
-    public function talentDeleteAction(Request $request, $id) {
-        $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
-
-        // security check
-        if ($this->getUser()->getId() !== $talent->getUser()->getId()) {
-            return new Response($status = Response::HTTP_FORBIDDEN);
-        }
+    public function tariffsAction(Request $request, $id) {
+        $tariffs = $this->getDoctrineRepo('AppBundle:TalentTariff')->getTariffs($id);
         
-        if (!$talent) {
-            return new Response(Response::HTTP_NOT_FOUND);
-        }
-        
-        $this->getDoctrineRepo('AppBundle:Talent')->delete($talent->getId(), $this->getParameter('image_storage_dir'));
-                
-        return $this->redirectToRoute("dashboard");
+        $arr = array();
+        $i = 0;
+        foreach ($tariffs as $t)
+            $arr[] = array(
+                'id' => $t->getId(),
+                'name' => $t->getTypeName()
+            );
+        $result = array('list' => $arr);
+      
+        return new JsonResponse($result);
     }
+    
+    
+    /**
+     * @Route("/provider/talent-add-1/{subcategoryId}", name="talent-add-1")
+     */
+    public function addAction(Request $request, $subcategoryId) {
+        $em = $this->getDoctrine()->getManager();
+        $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+        $user = $this->getUser();
+
+        $tal = new Talent();
+        $tal->setUuid(Utils::getUuid());  
+        $tal->setName('');
+        $tal->setUser($user);
+        $tal->addSubcategory($subcat);
+        $tal->setStatus(Talent::STATUS_INCOMPLETE);
+
+        $em->persist($tal);
+        $em->flush();
+        
+        $id = $tal->getId();
+        //comented by seba - I think that it was unintentionally copied from admin flow, it's causing erros on dashboard (removeNewId is not present in user flow)
+        //$this->addNewId($request, $id);
+        
+        return $this->redirectToRoute('talent-edit-1', array('id' => $id));
+    }
+    
     
     /**
      * @Route("/provider/talent-edit-1/{id}", name="talent-edit-1")
      */
     public function talentEdit1Action(Request $request, $id) {
+        $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
+        if (!$talent) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }        
+        // security check
+        if ($this->getUser()->getId() !== $talent->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }
+        
+        $tariffs = $this->getDoctrineRepo('AppBundle:TalentTariff')->getTariffs($id);
+        return $this->render('talent/talent_edit_step1.html.twig', array(
+            'complete' => false,
+            'id' => $id,
+            'statusChanged' => false,
+            'type' => TariffType::$EINZELSTUNDEN->getId(),
+            'tariffs' => $tariffs
+        ));
+    }        
+    /**
+     * @Route("/provider/talent-edit-1-old/{id}", name="talent-edit-1-old")
+     */
+    public function talentEdit1OldAction(Request $request, $id) {
         $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
         if (!$talent) {
             return new Response(Response::HTTP_NOT_FOUND);
@@ -204,7 +425,108 @@ class TalentController extends BaseController {
             'statusChanged' => $statusChanged
         ));
     }        
+    
+    
+    /**
+     * @Route("/provider/talent-add-1-old/{subcategoryId}", name="talent-add-1-old")
+     */
+    public function talentAdd1Action(Request $request, $subcategoryId) {
+        
+        // build form
+        //<editor-fold>
+        $form = $this->createFormBuilder(null, array(
+                'error_bubbling' => false,
+                'constraints' => array(
+                    /*new Callback(array($this, 'validateStep1'))*/
+                )))
+                ->add('name', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('max' => 32))
+                    )
+                ))
+                ->add('price', 'integer', array(
+                    'required' => false
+                ))
+                ->add('requestPrice', 'checkbox', array(
+                    'required' => false
+                ))
+                ->getForm();
+        //</editor-fold>
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
+            // get subcategory
+            $subcat = $this->getDoctrineRepo('AppBundle:Subcategory')->find($subcategoryId);
+            $user = $this->getUser();
+            // map fields, TODO: consider moving to Talent's method
+            //<editor-fold> map fields
+            $eq = new Talent();
+            $eq->setUuid(Utils::getUuid());  
+            $eq->setName($data['name']);
+            $eq->setUser($user);
+            $eq->addSubcategory($subcat);
+            $eq->setPrice($data['price']);
+            $eq->setRequestPrice($data['requestPrice'] ? 1 : 0);
+            $eq->setStatus(Talent::STATUS_INCOMPLETE);
+            //</editor-fold>
+            // save to db
+            $em = $this->getDoctrine()->getManager();
+            if ($eq->checkStatusOnSave()){
+                $this->sendNewModifiedTalentInfoMessage($request, $eq);
+            }
+            $em->persist($eq);
+            $em->flush();
+            
+            $session = $request->getSession();
+            $session->set('TalentEditId', $eq->getId());
+            return $this->redirectToRoute('talent-edit-2', array('id' => $eq->getId()));
+        }
+        
+        return $this->render('talent/talent_edit_step1.html.twig', array(
+            'form' => $form->createView(),
+            'complete' => false,
+            'id' => $subcategoryId,
+            'statusChanged' => false
+        ));
+    }
+    
+    
+    
+    public function validateStep1($data, ExecutionContextInterface $context) {
+        $p = $data['price'];
+        $rp = $data['requestPrice'];
+        
+        if ($p === null xor $rp) {
+            $context->buildViolation('Sie müssen entweder Preis beim Check Preis auf Anfrage füllen.')->atPath('price')->addViolation();
+        }
+        if ($p !== null and ($p < 10 or $p > 500)) {
+            $context->buildViolation('Preis muss eine Zahl zwischen 10 und 500 sein.')->atPath('price')->addViolation();
+        }
+    }
+    
+    /**
+     * @Route("/provider/talent-delete/{id}", name="talent-delete")
+     */
+    public function talentDeleteAction(Request $request, $id) {
+        $talent = $this->getDoctrineRepo('AppBundle:Talent')->find($id);
 
+        // security check
+        if ($this->getUser()->getId() !== $talent->getUser()->getId()) {
+            return new Response($status = Response::HTTP_FORBIDDEN);
+        }
+        
+        if (!$talent) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+        
+        $this->getDoctrineRepo('AppBundle:Talent')->delete($talent->getId(), $this->getParameter('image_storage_dir'));
+                
+        return $this->redirectToRoute("dashboard");
+    }
+    
     private $currentVideo;
     
     /**
@@ -254,12 +576,12 @@ class TalentController extends BaseController {
         $form = $this->createFormBuilder($data)
             ->add('description', 'textarea', array(
                 'attr' => array(
-                    'maxlength' => 2500,
-                    'placeholder' => 'Maximal 2500 Zeichen verfügbar'
+                    'maxlength' => 10000,
+                    'placeholder' => 'Maximal 10000 Zeichen verfügbar'
                 ),
                 'constraints' => array(
                     new NotBlank(),
-                    new Length(array('max' => 2500))
+                    new Length(array('max' => 10000))
                 )
             ))
             ->add('videoUrl', 'text', array(
@@ -1208,9 +1530,7 @@ class TalentController extends BaseController {
         }
         array_push($parts, "talent in");
 
-        $subcat = $eq->getSubcategoriesAsString();// $eq->getSubcategory();
-        $cat = $subcat->getCategory();
-        array_push($parts, "{$cat->getName()} / {$subcat->getName()}"); 
+        array_push($parts, $eq->getSubcategoriesAsString()); 
 
         $subject = join(" ", $parts);
         
@@ -1229,4 +1549,21 @@ class TalentController extends BaseController {
         $this->get('mailer')->send($message);
         
     }
+
+    const NEW_TALENT_IDS = 'AppBundle\Controller\TalentController\NewTalentIds';
+    
+    private function addNewId(Request $request, $id) {
+        $session = $request->getSession();
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());
+        array_push($ids, $id);
+        $session->set(TalentController::NEW_TALENT_IDS, $ids);
+    }
+    private function removeNewId(Request $request, $id) {
+        $session = $request->getSession();
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());
+        $key = array_search($id, $ids);
+        if ($key !== FALSE)
+            unset($ids[$key]);
+        $session->set(TalentController::NEW_TALENT_IDS, $ids);
+    }    
 }

@@ -32,7 +32,7 @@ class Equipment
      */
     protected $name;
     /**
-     * @ORM\Column(type="string", length=2500)
+     * @ORM\Column(type="string", length=10000)
      */
     protected $description;
     /**
@@ -303,15 +303,14 @@ class Equipment
     }
     
     public function getPricesLine() {
-        $arr = array();
-        array_push($arr, sprintf("%d", $this->getPrice()));
-        $p = $this->getPriceWeek();
-        if ($p !== null && $p > 0)
-            array_push($arr, sprintf("%d", $p));
-        $p = $this->getPriceMonth();
-        if ($p !== null && $p > 0)
-            array_push($arr, sprintf("%d", $p));
-        return implode("/", $arr);
+        if ($this->priceMonth) {
+            $priceToDisplay = $this->priceMonth/30;
+        } else if ($this->priceWeek){
+            $priceToDisplay = $this->priceWeek/7;
+        } else {
+            $priceToDisplay = $this->price;
+        }
+        return "<span class='prefix-text'>ab</span> " . number_format(round($priceToDisplay, 0), 2, ",", " ");
     }
     public function getPricesDesc() {       
         $arr = array();
@@ -342,8 +341,9 @@ class Equipment
             $s = str_replace('.', ',', $s);
             array_push($arr, $s);
         }
-    return implode("&nbsp;/&nbsp;", $arr);
+        return implode("&nbsp;/&nbsp;", $arr);
     }
+    
     public function calculatePrice($days) {
         $pm = $this->priceMonth;
         if ($days >= 30 && $pm !== null && $pm > 0)
@@ -951,6 +951,15 @@ class Equipment
         return implode(", ", array_map(function($i) { return $i->getName(); }, $this->subcategories->toArray()));
     }
     
+    public function anyCategoryActive() {
+        foreach($this->subcategories as $sc){
+            $cat = $sc->getCategory();
+            if ($cat && $cat->getActive() == 1){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Set age
      *

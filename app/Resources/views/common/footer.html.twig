@@ -1,8 +1,9 @@
   <div class="sb-slidebar sb-left sb-style-overlay">
       <a href="{{ path('start-page') }}">Home</a>
-      <a href="{{ path('bookme') }}">Talente buchen</a>
-      <a href="{{ path('rentme') }}">Equipment mieten</a>
-      <a href="{{ path('blog') }}">Blog</a>
+      <!--<a href="{{ path('bookme') }}">Talente buchen</a>
+      <a href="{{ path('rentme') }}">Equipment mieten</a>-->
+      <a href="{{ path("kundeninfos_kontakt") }}">Kontakt</a>
+	  <a href="{{ path('blog') }}">Magazin</a>
 	  <a href="#" data-toggle="modal" data-target="#reg-modal">Kostenlos mitmachen</a>
       <a href="#" data-toggle="modal" data-target="#login">Login</a>
 	  <p class="rhinweis-mob">Hinweis: Um selbst etwas anzubieten, logge dich bitte auf einem Desktop ein.</p>
@@ -174,6 +175,8 @@
     </div>      
 {% endif %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/vendors/jquery-1.11.2.min.js"><\/script>')</script>
 <script>
     var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -213,9 +216,21 @@
     });
 </script>
 
-  <script src="/js/owl.carousel.min.js"></script>
-  <script src="/js/vendors/bootstrap.min.js"></script>
-  <script src="/js/vendors/bootstrap-select.min.js"></script>
-  <script src="/js/vendors/slidebars.min.js"></script>
-  <script src="/js/build.js"></script>
-  <script src="http://malsup.github.com/jquery.form.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/vendors/bootstrap.min.js"></script>
+<script src="/js/vendors/bootstrap-select.min.js"></script>
+<script src="/js/vendors/slidebars.min.js"></script>
+<script src="/js/build.js"></script>
+<script src="/js/jquery.form.min.js"></script> {# http://malsup.github.io/min/jquery.form.min.js #}
+<script type="text/javascript" src="//valao.de/cookieplugin/script.js"></script>
+<script>
+    (window.jQuery.fn.ajaxForm === undefined) && document.write('<script src="/js/jquery.form.min.js">\x3C/script>');
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+<script>
+ WebFont.load({
+    google: {
+      families: ['Roboto Slab:300,400', 'Open Sans:400,500,600,300']
+    }
+  });
+</script>

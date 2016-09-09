@@ -31,6 +31,8 @@ class ProviderController extends BaseController {
         $equipments = $this->getDoctrineRepo('AppBundle:Equipment')->getAllByUserId($user->getId());        
         $talents = $this->getDoctrineRepo('AppBundle:Talent')->getAllByUserId($user->getId());        
         
+        $this->clearNewIds($request);
+        
         return $this->render('provider/dashboard.html.twig', array( 
             'equipments'=> $equipments, 
             'talents' => $talents,
@@ -821,12 +823,12 @@ class ProviderController extends BaseController {
         $form = $this->createFormBuilder($data)
             ->add('description', 'textarea', array(
                 'attr' => array(
-                    'maxlength' => 2500,
-                    'placeholder' => 'Maximal 2500 Zeichen verfügbar'
+                    'maxlength' => 10000,
+                    'placeholder' => 'Maximal 10000 Zeichen verfügbar'
                 ),
                 'constraints' => array(
                     new NotBlank(),
-                    new Length(array('max' => 2500))
+                    new Length(array('max' => 10000))
                 )
             ))
             ->add('make_sure', 'checkbox', array(
@@ -1581,11 +1583,8 @@ class ProviderController extends BaseController {
             }
             array_push($parts, "equipment in");
             
-            $subcat = $eq->getSubcategoriesAsString(); // $eq->getSubcategory();
-            $cat = $subcat->getCategory();
-            array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
-            
-            
+            array_push($parts, $eq->getSubcategoriesAsString());
+                        
             $emailHtml = $this->renderView('Emails/Equipment/new_modified_item.html.twig', array(                                    
                 'equipment' => $eq,
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),            
@@ -1604,9 +1603,7 @@ class ProviderController extends BaseController {
             }
             array_push($parts, "equipment in");
             
-            $subcat = $eq->getSubcategoriesAsString(); //$eq->getSubcategory();
-            $cat = $subcat->getCategory();
-            array_push($parts, "{$cat->getName()} / {$subcat->getName()}");
+            array_push($parts, $eq->getSubcategoriesAsString());
             
             $emailHtml = $this->renderView('Emails/talent/new_modified_item.html.twig', array(                                    
                 'talent' => $eq,
@@ -1741,5 +1738,25 @@ class ProviderController extends BaseController {
     }   
     */
     
+    private function clearNewIds($request) {
+        // remove "hanging" equipments (new but not saved)
+        $session = $request->getSession();
+
+        $ids = $session->get(TalentController::NEW_TALENT_IDS, array());        
+        if (count($ids) === 0)
+            return;
+        
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrineRepo('AppBundle:Talent');
+        
+        foreach($ids as $id) {
+            $eq = $repo->find($id);
+            if ($eq !== null)
+                $em->remove($eq);
+        }
+        $em->flush();
+        
+        $session->set(TalentController::NEW_TALENT_IDS, array()); // clear session var
+    }
     
 }
