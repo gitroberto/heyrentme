@@ -868,3 +868,13 @@ header {
 .item-name {
     word-wrap: break-word;
 }
+
+.phone-button {
+    background-image: url(/img/phone.png);
+    background-repeat: no-repeat;
+    background-position: 16px 12px;
+    padding-left: 44px;
+}
+.phone-button:hover {
+    background-color: black;
+}
