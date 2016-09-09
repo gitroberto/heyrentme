@@ -37,7 +37,7 @@
                         <div class="button-details button-black backgound-yellow">Ansehen</div>
                     </div>
                     {% if tal.video %}<div class="rplay"></div>{% endif %}
-                    <img class="product-user product-user2" alt="{{ tal.user.fullName }}" src="{{ tal.user.getProfilePicture(false, image_url_prefix) }}">
+                    <img class="product-user product-user2" alt="{{ tal.user.fullName }}" src="{{ tal.user.getProfileThumbnailPicture(image_url_prefix) }}">
                 </div>
             </div>
             {% if tal.offerStatus %}

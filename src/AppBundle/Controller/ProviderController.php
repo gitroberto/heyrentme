@@ -213,6 +213,31 @@ class ProviderController extends BaseController {
 
         $path1 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . $uuid . '.' . $ext;
         //$path2 = $this->getParameter('image_storage_dir') . $sep . 'user' . $sep . 'original' . $sep . $uuid . '.' . $ext;
+
+        // create thumbnail
+        //<editor-fold>
+        $fullpath = $path1;
+        $fullpath2 = $this->getParameter('image_storage_dir') . DIRECTORY_SEPARATOR . "user" . DIRECTORY_SEPARATOR . "thumbnail" . DIRECTORY_SEPARATOR . $uuid . "." . $ext;
+
+        $size = getimagesize($fullpath);
+        $w = $size[0];
+        $h = $size[1];                
+        $nw = 80;
+        $nh = 80;
+
+        $src = imagecreatefromstring(file_get_contents($fullpath));
+        $dst = imagecreatetruecolor($nw, $nh);
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+        if ($ext === 'jpg' || $ext === 'jpeg') {
+            imagejpeg($dst, $fullpath2, 85);
+        }
+        else if ($ext === 'png') {
+            imagepng($dst, $fullpath2, 9);
+        }        
+
+        imagedestroy($dst);        
+        imagedestroy($src);
+        //</editor-fold>
         
         if ($ext === 'jpg' || $ext == 'jpeg') {
             imagejpeg($dst, $path1, intval($this->getParameter('jpeg_compression_value')));

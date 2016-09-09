@@ -277,4 +277,14 @@ EOT;
             $manager->getRepository('AppBundle:Image')->deleteById($image->getId());
         }    
     }    
+    
+    public function getAllThumbnailless() {
+        $sql = <<<EOT
+            select u, i
+            from AppBundle:User u
+                join u.image i
+            where i.thumbnailPath is null
+EOT;
+        return $this->getEntityManager()->createQuery($sql)->getResult();
+    }
 }

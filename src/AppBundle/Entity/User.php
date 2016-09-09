@@ -328,6 +328,17 @@ class User extends BaseUser
 
         return $imageUrl;
     }
+    public function getProfileThumbnailPicture($imageUrlPrefix) {
+        $imageUrl = "/img/placeholder/user.png"; // default
+        if ($this->image != null) {            
+            $imageUrl = $this->image->getThumbnailUrlPath($imageUrlPrefix);            
+        } 
+        else if ($this->facebookID != null){
+            $imageUrl = $this->getFacebookPicture(false);
+        }         
+
+        return $imageUrl;
+    }
     
      /**
      * @ORM\Column(type="datetime")
