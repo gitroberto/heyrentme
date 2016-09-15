@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\DiscountCode;
+use AppBundle\Entity\PromoCode;
 use AppBundle\Entity\TalentBooking;
 use AppBundle\Entity\TalentBookingCancel;
 use AppBundle\Entity\TalentInquiry;
@@ -318,12 +319,26 @@ class TalentBookingController extends BaseController {
                     }
                 }
             }
+            $promoCode = null;
+            if (!empty($data['discountCode'])) {
+                $pcode = $this->getDoctrineRepo('AppBundle:PromoCode')->findValid($data['discountCode']);
+                if ($pcode !== null) {
+                    $promoCode = $pcode; // only here the discount is valid
+                }
+            }
             
             // calculate discount, total price
             if ($discountCode !== null) {                
                 $discountCode->setStatus(DiscountCode::STATUS_USED);
                 $bk->setDiscountCode($discountCode);
                 $p = $bk->getPrice() - 5;
+                $bk->setTotalPrice($p);
+            }
+            else if ($promoCode !== null) {
+                $promoCode->setStatus(PromoCode::STATUS_USED);
+                $promoCode->setUser($this->getUser());
+                $bk->setPromoCode($promoCode);
+                $p = $bk->getPrice() - $promoCode->getValue();
                 $bk->setTotalPrice($p);
             }
             else {
@@ -397,15 +412,25 @@ class TalentBookingController extends BaseController {
         }
         
         $dcode = $this->getDoctrineRepo('AppBundle:DiscountCode')->findOneByCode($data['discountCode']);
-        if ($dcode === null || $dcode->getStatus() != DiscountCode::STATUS_ASSIGNED) {
-            $context->buildViolation('This is not a valid discount code')->atPath('discountCode')->addViolation();
+        
+        if ($dcode !== null) {        
+            if ($dcode === null || $dcode->getStatus() != DiscountCode::STATUS_ASSIGNED) {
+                $context->buildViolation('This is not a valid discount code')->atPath('discountCode')->addViolation();
+                return;
+            }
+
+            $inq = $this->getDoctrineRepo('AppBundle:TalentInquiry')->findOneByUuid($data['uuid']);
+            $user = $inq->getUser();
+            if ($user === null || $user->getId() !== $dcode->getUser()->getId()) {
+                $context->buildViolation('This is not a valid discount code')->atPath('discountCode')->addViolation();
+            }
             return;
         }
-        
-        $inq = $this->getDoctrineRepo('AppBundle:TalentInquiry')->findOneByUuid($data['uuid']);
-        $user = $inq->getUser();
-        if ($user === null || $user->getId() !== $dcode->getUser()->getId()) {
-            $context->buildViolation('This is not a valid discount code')->atPath('discountCode')->addViolation();
+        else {
+            $pcode = $this->getDoctrineRepo('AppBundle:PromoCode')->findValid($data['discountCode']);
+            if ($pcode === null) {
+                $context->buildViolation('This is not a valid discount code')->atPath('discountCode')->addViolation();
+            }
         }
     }
     /**
@@ -423,18 +448,30 @@ class TalentBookingController extends BaseController {
             $dcode->setStatus(DiscountCode::STATUS_EXPIRED);
             $em->flush();
         }
-        if ($dcode === null || $dcode->getStatus() !== DiscountCode::STATUS_ASSIGNED) {
+        $pcode = $this->getDoctrineRepo('AppBundle:PromoCode')->findValid($code);        
+        
+        $ok = ($dcode !== null && $dcode->getStatus() === DiscountCode::STATUS_ASSIGNED) || ($pcode !== null && $pcode->getStatus() === PromoCode::STATUS_NEW);
+        
+        if (!$ok)
             return new Response('', Response::HTTP_FORBIDDEN);
-        }
         
         $inq = $this->getDoctrineRepo('AppBundle:TalentInquiry')->findOneByUuid($uuid);
         $user = $inq->getUser();
+        $loggedUser = $this->getUser();        
         
         // security
-        if ($user === null || $user->getId() !== $dcode->getUser()->getId()) {
+        if ($user === null || $user->getId() !== $loggedUser->getId())
             return new Response('', Response::HTTP_FORBIDDEN);
+        
+        if ($dcode !== null) {
+            if ($user === null || $user->getId() !== $dcode->getUser()->getId())
+                return new Response('', Response::HTTP_FORBIDDEN);
+
         }
-        return new JsonResponse(array('result' => 'ok', 'value' => $dcode->getValue()));
+
+        $value = $dcode !== null ? $dcode->getValue() : $pcode->getValue();
+        
+        return new JsonResponse(array('result' => 'ok', 'value' => $value));
     }
  
     /** 
