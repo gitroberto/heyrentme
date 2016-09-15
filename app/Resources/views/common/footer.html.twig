@@ -221,14 +221,188 @@
 <script src="/js/build.js"></script>
 <script src="/js/jquery.form.min.js"></script> {# http://malsup.github.io/min/jquery.form.min.js #}
 <script type="text/javascript" src="//valao.de/cookieplugin/script.js"></script>
-<script>
-    (window.jQuery.fn.ajaxForm === undefined) && document.write('<script src="/js/jquery.form.min.js">\x3C/script>');
-</script>
 <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
 <script>
+    (window.jQuery.fn.ajaxForm === undefined) && document.write('<script src="/js/jquery.form.min.js">\x3C/script>');
  WebFont.load({
     google: {
       families: ['Roboto Slab:300,400', 'Open Sans:400,500,600,300']
     }
   });
+    var ajaxFormReportOfferSubmit = function () {
+            var $form = $(this);
+
+            var options = {
+                url: $form.attr("action"),
+                type: $form.attr("method"),
+                data: $form.serialize()
+            };
+
+            $.ajax(options).done(function (data) {    
+                var $target = $("#formReportOffer");
+                var $newHtml = $(data);        
+                
+                $target.replaceWith($newHtml);
+                if (data.indexOf("Report_Offer_Saved") != -1){                    
+                    $("#ReportOfferConfirmationDiv").show();                   
+                }
+            });
+
+            return false;
+            
+        };
+    
+    $(function() {
+        
+        $("#category-dropdown, #subcategory-dropdown").selectpicker({
+            style: 'btn-info',
+            size: 9
+        });
+        
+        $("#category-dropdown").change(function() {
+            var id = $("#category-dropdown").val();
+            if (id == null || id == "")
+                return;
+            var url = '{{ path('subcat', { 'id': 'CAT_ID' }) }}'.replace('CAT_ID', id.toString());           
+            var subsel = $("#subcategory-dropdown");
+            $.getJSON(url)
+                .done(function(json) {
+                    subsel.empty();
+                    subsel.attr('disabled', 'disabled').selectpicker('refresh');
+                    $.each(json, function(index, item) {
+                        var opt = $("<option>").attr('value', item.id).text(item.name);                   
+                        subsel.append(opt);
+                    });
+                    subsel.removeAttr('disabled').selectpicker('refresh');
+                })
+                .fail(function(jqxhr, textStatus, error) {
+                    var err = textStatus + ", " + error;
+                    console.log("Request Failed: " + err);
+                    alert("Subcategories cannot be loaded, please try again.");
+                    subsel.attr('disabled', 'disabled').selectpicker('refresh');
+                })
+                .always(function() {
+                    refreshButtons();
+                });
+        });
+        
+        $("#subcategory-dropdown").change(refreshButtons);
+        $("#choose-offer-detail").on("shown.bs.modal", refreshButtons);
+        
+        $("#weiter-button").click(weiterClick);
+        $("#anleitung-button").click(anleitungClick);
+
+        $(".social.fb").on('click touchstart', function(e) {
+                e.preventDefault();
+                FB.ui({
+                    method: 'share',
+                    href: '{{ mailer_app_url_prefix }}/'
+                }, function(response){});
+            });
+        $(".social.flash").on('click touchstart', function(e) {
+                e.preventDefault();
+                FB.ui({
+                    method: 'send',
+                    link: '{{ mailer_app_url_prefix }}/'
+                }, function(response){});
+            });
+        $(".social.tweet").on('click touchstart', function(e) {
+            e.preventDefault();
+            var title = 'hey! VIENNA';
+            var url = '{{ mailer_app_url_prefix|escape('url') }}/';
+            window.open('http://twitter.com/home?status=' + title + '+' + url,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+        });
+        $(".social.email").on('click touchstart', function(e) {
+            e.preventDefault();
+            var subject = encodeURIComponent('hey! VIENNA');
+            var body = encodeURIComponent('{{ mailer_app_url_prefix }}/');
+            var url = 'mailto:?subject=' + subject + '&body=' + body;
+            window.location = url;
+        });
+        
+    });
+    
+    function refreshButtons() {
+        var $butt = $("#weiter-button, #anleitung-button");
+        var $subSel = $("#subcategory-dropdown");
+        if ($subSel.val() != '') {
+            $butt.removeAttr('disabled');
+            $butt.removeClass('disabled2');
+        }
+        else {
+            $butt.attr('disabled', 'disabled');
+            $butt.addClass('disabled2');
+        }
+    }
+    var lastType = null;
+    function anbieten(type, categoryId) {
+        window.lastType = type;
+        // load categories
+        var url = '{{ path('cat', { 'type': 'XXX' }) }}'.replace('XXX', type.toString());           
+        var $sel = $("#category-dropdown");
+        var $subsel = $("#subcategory-dropdown");
+        $.getJSON(url)
+            .done(function(json) {
+                $sel.empty();
+                $sel.attr('disabled', 'disabled').selectpicker('refresh');
+                $subsel.empty();
+                $subsel.attr('disabled', 'disabled').selectpicker('refresh');
+        
+                $.each(json, function(index, item) {
+                    var opt = $("<option>").attr('value', item.id).text(item.name);                   
+                    $sel.append(opt);
+                });
+                $sel.removeAttr('disabled').selectpicker('refresh');
+
+                // preselect current category
+                if (typeof categoryId === 'number') {
+                    $sel.val(categoryId.toString()).selectpicker('refresh');
+                    $sel.change();
+                    $('#weiter-button').attr('diabled', 'disabled').addClass('disabled2');                    
+                }
+                $("#choose-offer-detail").modal();
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
+                alert("Categories cannot be loaded, please try again.");
+                $sel.attr('disabled', 'disabled').selectpicker('refresh');
+            })
+            .always(function() {
+                refreshButtons();
+            });
+        
+        
+        
+    }
+    function weiterClick() {
+        var id = $("#subcategory-dropdown").val();
+        if (id !== "") {
+            var url;
+            if (window.lastType == 1)
+                url = '{{ path('equipment-add-1', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            else
+                url = '{{ path('talent-add-1', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            window.location = url;
+        }
+    }
+    function anleitungClick() {
+        var id = $("#subcategory-dropdown").val();
+        if (id != "") {
+            var url = '{{ path('rental-guidelines', { 'subcategoryId': 'SUBCAT_ID' }) }}'.replace('SUBCAT_ID', id);
+            $.getJSON(url)
+                .done(function(json) {
+                    $("#choose-offer-detail").modal('hide');
+                    $("#choose-offer").modal('hide');
+                    $("#danke").modal();
+                });
+        }
+    }
+    window.cookieconsent_options = {
+        message: 'Diese Website nutzt Cookies, um bestmögliche Funktionalität bieten zu können.',
+        dismiss: 'Ok, verstanden',
+        learnMore: 'Mehr Infos',
+        link: '{{ path('kundeninfos_datenschutz') }}',
+        theme: 'light-floating'
+    };
 </script>
