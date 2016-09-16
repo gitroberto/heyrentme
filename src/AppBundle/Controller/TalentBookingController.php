@@ -38,7 +38,7 @@ class TalentBookingController extends BaseController {
         $model = new TalentInquiryVM();
         $model->parse($request);     
         
-        $log = $this->get('monolog.logger.artur');
+        //$log = $this->get('monolog.logger.artur');
         $ks = $request->request->keys();
         foreach ($ks as $k) {            
             $v = var_export($request->get($k), true);
@@ -210,7 +210,7 @@ class TalentBookingController extends BaseController {
             
             // send email
             //<editor-fold>
-            $log = $this->get('monolog.logger.artur');
+            //$log = $this->get('monolog.logger.artur');
             
             $provider = $eq->getUser();
             if ($inq->getUser() !== null) {
