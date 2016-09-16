@@ -706,7 +706,7 @@
         else
             total = args.price * num;
 
-        console.log('p237: ' + total);
+        //console.log('p237: ' + total);
         if (total !== null && !isNaN(total)) {
             var $p = $th.parents('.panel-body').find('.price-calc');
             $p.html(total.toFixed(2).replace('.', ',') + ' <span class="euro-sign">&euro;</span>');
