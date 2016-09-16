@@ -39,11 +39,9 @@ class TalentBookingController extends BaseController {
         $model = new TalentInquiryVM();
         $model->parse($request);     
         
-        $log = $this->get('monolog.logger.artur');
         $ks = $request->request->keys();
         foreach ($ks as $k) {            
             $v = var_export($request->get($k), true);
-            $log->info("{$k}: {$v}");
         }
         
         $model->calculate($tariff);
@@ -211,7 +209,6 @@ class TalentBookingController extends BaseController {
             
             // send email
             //<editor-fold>
-            $log = $this->get('monolog.logger.artur');
             
             $provider = $eq->getUser();
             if ($inq->getUser() !== null) {
@@ -220,13 +217,11 @@ class TalentBookingController extends BaseController {
             else {
                 $email = $inq->getEmail();
             }
-            $log->info($email);
             $url = null;
             if ($inq->getAccepted() === 1) {
                 $url = $request->getSchemeAndHttpHost() .
                     $this->generateUrl('talent-confirmation', array('uuid' => $inq->getUuid()));
             }
-            $log->info($url);
             $from = array($this->getParameter('mailer_fromemail') => $this->getParameter('mailer_fromname'));
             $emailHtml = $this->renderView('Emails/talent/mail_to_user_confirm_offer_accepted.html.twig', array(
                 'mailer_app_url_prefix' => $this->getParameter('mailer_app_url_prefix'),
@@ -235,16 +230,13 @@ class TalentBookingController extends BaseController {
                 'talent' => $eq,
                 'url' => $url
             ));
-            $log->info($emailHtml);
             $message = Swift_Message::newInstance()
                 ->setSubject('Deine Anfrage bei hey! VIENNA')
                 ->setFrom($from)
                 ->setTo($email)
                 ->setBody($emailHtml, 'text/html');
-            $log->info('aa');
             $res = $this->get('mailer')->send($message);
             
-            $log->info(var_export($res, true));
             //</editor-fold>
                         
             $saved = true;
