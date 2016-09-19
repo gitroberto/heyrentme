@@ -44,7 +44,6 @@
                         </select>
                     <select name="gender2" class="selectpickerspc">
                                 <option value="S">HAUPTKATEGORIEN</option>
-                                <option value="T">HAUPTKATEGORIEN</option>
                             </select>
                             <input type="submit" class="desktop-hide" value="los geht´s!">
                 </form>
@@ -98,7 +97,7 @@
         </select>
             <p>Filtern nach:</p>
             <select id="filter" multiple style="display: none;">
-                {% for subcat in subcategories %}
+9                {% for subcat in subcategories %}
                     <option value="{{ subcat[0].id }}" data-subtext="">{{ subcat[0].name }} ({{ subcat[1] }})</option>
                 {% endfor %}
             </select>          
