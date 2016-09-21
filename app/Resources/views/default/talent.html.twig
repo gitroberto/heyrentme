@@ -513,8 +513,14 @@
         });
         
         $(".num-picker").selectpicker({
-            style: 'btn-info'
-        });        
+            style: 'btn-info',
+            width: '91%'
+        });
+        $(".hour-to, .hour-from").selectpicker({
+            style: 'btn-info',
+            width: '91%'
+        });
+        
         
         {% if not (isPreview) %}
             $(".social.fb").off('click touchstart').on('click touchstart', function(e) {

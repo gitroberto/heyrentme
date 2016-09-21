@@ -879,12 +879,13 @@ header {
     background-color: black;
 }
 
-.bootstrap-select.btn-group.num-picker .dropdown-toggle .caret {
-}
 .right-side .offer-dates .bootstrap-select.num-picker .caret {
     background-image: url('/img/gruppen.png');
-    background-repeat: none;
+    background-repeat: no-repeat;
     top: 14px;    
     width: 21px;
     height: 20px;
+}
+.right-side .offer-dates .bootstrap-select.btn-group .dropdown-toggle .caret {
+    top: 12px;    
 }
