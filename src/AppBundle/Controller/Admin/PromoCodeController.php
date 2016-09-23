@@ -31,19 +31,27 @@ class PromoCodeController extends BaseAdminController {
                         new NotBlank()
                     )
                 ))
+                ->add('type', 'choice', array(
+                    'choices' => array(
+                        'Amount (EUR)' => PromoCode::TYPE_AMOUNT,
+                        'Percent (%)' => PromoCode::TYPE_PERCENT
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true,
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+                ))
                 ->add('value', 'integer', array(
                     'constraints' => array(
                         new NotBlank()
                     )
-                ))
-                
+                ))                
                 ->add('number', 'integer', array(
                     'constraints' => array(
-                        new NotBlank()
-                        
+                        new NotBlank()                        
                     )
-                ))
-                
+                ))                
                 ->add('expirationDate', 'date', array(
                     'required' => false,
                     'input'  => 'string',
@@ -59,6 +67,7 @@ class PromoCodeController extends BaseAdminController {
             $code = $form['code']->getData();
             $number = $form['number']->getData();
             $value = $form['value']->getData();
+            $type = $form['type']->getData();
             $expirationDateStr = $form['expirationDate']->getData();
             
             if (empty($expirationDateStr)){
@@ -74,7 +83,8 @@ class PromoCodeController extends BaseAdminController {
             for($i = 0; $i < $number; $i++){
                 $pc = new PromoCode();
                 $pc->setStatus(PromoCode::STATUS_NEW);
-                $pc->setCode($code);    
+                $pc->setCode($code);  
+                $pc->setType($type);
                 $pc->setValue($value);
                 $pc->setExpiresAt($expirationDate);
                 $em->persist($pc);
@@ -156,6 +166,7 @@ class PromoCodeController extends BaseAdminController {
                 $cell[$i++] =  "";
             }
             $cell[$i++] = $dataRow->getValue();
+            $cell[$i++] = $dataRow->getType();
 /*            $sub = $dataRow->getSubscriber();
             if ($sub !== null) {
                 $cell[$i++] = $sub->getId();

@@ -15,6 +15,9 @@ class PromoCode {
     const STATUS_EXPIRED = 3;
     const STATUS_CANCELLED = 4;
     
+    const TYPE_AMOUNT = 1;
+    const TYPE_PERCENT = 2;
+    
 
     /**
      * @ORM\Column(type="integer")
@@ -29,7 +32,11 @@ class PromoCode {
     /**
      * @ORM\Column(type="integer")
      */
-    protected $value = 1;
+    protected $type = 1;    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $value;
     /**
      * @ORM\Column(type="string")
      */
@@ -297,5 +304,29 @@ class PromoCode {
     public function getTalentBooking()
     {
         return $this->talentBooking;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return PromoCode
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

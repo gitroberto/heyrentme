@@ -127,7 +127,13 @@
                         .replace(':CODE', dcode);
                 $.get(url, function(data, status) {
                     if (status === 'success' && data.result === 'ok') {
-                        var newPrice = price - data.value;                    
+                        var value = data.value;
+                        var type = data.type;                                                
+                        var newPrice;
+                        if (type === 1)
+                            newPrice = price - data.value;
+                        else
+                            newPrice = price * (1.0 - data.value / 100.0);
                         var $price = $("#price");
                         $price.text(newPrice);
                         $price.parent().css({ 'background-color': '#f0c814' });                    

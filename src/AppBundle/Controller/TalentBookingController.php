@@ -332,6 +332,10 @@ class TalentBookingController extends BaseController {
                 $bk->setPromoCode($promoCode);
                 $p = $bk->getPrice() - $promoCode->getValue();
                 $bk->setTotalPrice($p);
+                if ($promoCode->getType() === PromoCode::TYPE_AMOUNT)
+                    $p = $bk->getPrice() - $promoCode->getValue();
+                else 
+                    $p = $bk->getPrice() * (1.0 - $promoCode->getValue() / 100.0);
             }
             else {
                 $bk->setTotalPrice($bk->getPrice());
@@ -462,8 +466,9 @@ class TalentBookingController extends BaseController {
         }
 
         $value = $dcode !== null ? $dcode->getValue() : $pcode->getValue();
+        $type = $dcode !== null ? 1 : $pcode->getType();
         
-        return new JsonResponse(array('result' => 'ok', 'value' => $value));
+        return new JsonResponse(array('result' => 'ok', 'value' => $value, 'type' => $type));
     }
  
     /** 
