@@ -97,7 +97,7 @@
         </select>
             <p>Filtern nach:</p>
             <select id="filter" multiple style="display: none;">
-9                {% for subcat in subcategories %}
+                {% for subcat in subcategories %}
                     <option value="{{ subcat[0].id }}" data-subtext="">{{ subcat[0].name }} ({{ subcat[1] }})</option>
                 {% endfor %}
             </select>          
