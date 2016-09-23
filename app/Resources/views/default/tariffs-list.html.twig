@@ -33,9 +33,9 @@
                                     <br/>
                                     <br/>
                                 </p>
-                                <select id="tests" name="gender" class="selectpicker bs-select-hidden hour-from">
+                                <select id="tests" name="gender" class="bs-select-hidden hour-from">
                                     {% for i in range(1, 23) %}<option value="{{ "Uhrzeit ab &nbsp; &nbsp; &nbsp; &nbsp; %02d:00"|format(i)|raw }}"{% if i == 10 %} selected="selected"{% endif %}>{{ "%02d:00 Uhr"|format(i) }}</option>{% endfor %}</select>
-                                <select id="tests2" name="gender" class="selectpicker bs-select-hidden hour-to">
+                                <select id="tests2" name="gender" class="bs-select-hidden hour-to">
                                     {% for i in range(1, 23) %}<option value="{{ "Uhrzeit bis &nbsp; &nbsp; &nbsp; &nbsp; %02d:00"|format(i)|raw }}"{% if i == 11 %} selected="selected"{% endif %}>{{ "%02d:00 Uhr"|format(i) }}</option>{% endfor %}</select>
                             </div>
 

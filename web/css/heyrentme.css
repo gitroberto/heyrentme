@@ -878,3 +878,14 @@ header {
 .phone-button:hover {
     background-color: black;
 }
+
+.right-side .offer-dates .bootstrap-select.num-picker .caret {
+    background-image: url('/img/gruppen.png');
+    background-repeat: no-repeat;
+    top: 14px;    
+    width: 21px;
+    height: 20px;
+}
+.right-side .offer-dates .bootstrap-select.btn-group .dropdown-toggle .caret {
+    top: 12px;    
+}
