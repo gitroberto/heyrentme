@@ -1,0 +1,124 @@
+{% extends 'admin/admin.base.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+    
+    
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="{{ path('admin_promo_code_list') }}" class="active-crumb">Promo code</a></li>
+{% endblock %}
+
+
+{% block body %}
+<h1>Generate discount code</h1>
+    
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+<div class="container form">
+    <div class="err-msg">{{ form_errors(form) }}</div>
+
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Code</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.code) }}</div>
+            {{ form_widget(form.code, { 'attr': { 'class': 'text-box single-line' }}) }}            
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Type</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.type) }}</div>
+            {{ form_widget(form.type, { 'attr': { 'class': 'text-box single-line' }}) }}            
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Value</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.value) }}</div>
+            {{ form_widget(form.value, { 'attr': { 'class': 'text-box single-line', 'list': 'value-list' }}) }}            
+            <datalist id="value-list">
+                <option value="5">5 &euro;</option>
+                <option value="10">10 &euro;</option>
+                <option value="15">15 &euro;</option>
+                <option value="20">20 &euro;</option>
+            </datalist> 
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Number</label>
+          <div class="col-xs-10">
+              <div class="err-msg">{{ form_errors(form.number) }}</div>
+            {{ form_widget(form.number, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'Number of codes' }}) }}
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Expiration date</label>
+          <div class="col-xs-10 date-container">
+              
+              <div class="" id="datetimepicker">
+                  <div class="err-msg">{{ form_errors(form.expirationDate) }}</div>
+                    {{ form_widget(form.expirationDate, { 'attr': { 'id': 'expirationDate' , 'style': 'background-color:#f0c814;' ,  'class': 'text-box single-line date-selector calendar-icon-hover', }}) }}
+              </div>
+          </div>
+        </div>
+    </div>
+    
+              
+              
+    <div class="row">          
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="button-black backgound-yellow text-black" value="Generate">
+                <a class="button-black backgound-yellow text-black" href="{{ path('admin_promo_code_list') }}">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+{% endblock %}
+
+{% block footer %}
+    {{ include('admin/common/admin.footer.html.twig') }}
+    <script src="/js/vendors/moment.min.js"></script>
+    <script src="/js/vendors/bootstrap-datetimepicker.min.js"></script>
+    <script>        
+        
+        $(document).ready(function(){
+            var configObject = {
+                separator : '',
+                language:'de',
+                format:'DD.MM.YYYY',
+                autoClose: true,
+                startDate: new Date(),
+                selectForward: true,
+                duration: 0,
+                container:'.date-container',
+                singleMonth: true,
+                showShortcuts: false,
+                showTopbar: false,
+                singleDate: true,
+                extraClass: 'correctPosition',                
+                setValue: function(date) {
+                    $('#form_expirationDate').val(date);
+                    
+                    $(form[expirationDate]).val(date);
+                }
+            };
+            
+            $('#form_expirationDate').dateRangePicker(configObject);
+            
+        });
+    </script>
+    
+{% endblock %}

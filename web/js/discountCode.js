@@ -2,15 +2,17 @@ $(function(){
        
     $("#DivGenerate").click(CheckNumberAndGenerateCode);
     
-    $("#selectAll").click(function(){ SelectDeselectAll(true); });
-    $("#deselectAll").click(function(){ SelectDeselectAll(false); });
+    $("#selectAll").click(function(e){ e.preventDefault(); SelectDeselectAll(true); });
+    $("#deselectAll").click(function(e){ e.preventDefault(); SelectDeselectAll(false); });
     $("#revertSelection").click(RevertSelection);
     
     $("#DivCancel").click(CancelCodes);
     
 });
 
-function CancelCodes(){
+function CancelCodes(e){
+    e.preventDefault();
+    
     var url = $(this).attr("data-target");
     
     var ids = "";
@@ -50,7 +52,8 @@ function SelectDeselectAll(selection){
     });
 }
 
-function RevertSelection(){
+function RevertSelection(e){
+    e.preventDefault();
     $(".CheckboxItems").each(function(){
         this.checked = !this.checked;        
     });

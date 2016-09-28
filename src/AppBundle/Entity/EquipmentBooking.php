@@ -100,6 +100,11 @@ class EquipmentBooking {
      */    
     private $discountCode;
     /**
+     * @ORM\OneToOne(targetEntity="PromoCode")
+     * @ORM\JoinColumn(name="promo_code_id", referencedColumnName="id")
+     */    
+    private $promoCode;
+    /**
      * @ORM\OneToMany(targetEntity="EquipmentBookingCancel", mappedBy="booking")
      */    
     private $cancels;
@@ -654,5 +659,29 @@ class EquipmentBooking {
     public function getUserRating()
     {
         return $this->userRating;
+    }
+
+    /**
+     * Set promoCode
+     *
+     * @param \AppBundle\Entity\PromoCode $promoCode
+     *
+     * @return EquipmentBooking
+     */
+    public function setPromoCode(\AppBundle\Entity\PromoCode $promoCode = null)
+    {
+        $this->promoCode = $promoCode;
+
+        return $this;
+    }
+
+    /**
+     * Get promoCode
+     *
+     * @return \AppBundle\Entity\PromoCode
+     */
+    public function getPromoCode()
+    {
+        return $this->promoCode;
     }
 }
