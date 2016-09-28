@@ -889,3 +889,7 @@ header {
 .right-side .offer-dates .bootstrap-select.btn-group .dropdown-toggle .caret {
     top: 12px;    
 }
+
+#form_discountCode.rabat-input.error {
+    border: 1px solid red;
+}

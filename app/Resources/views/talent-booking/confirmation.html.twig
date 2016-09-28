@@ -66,7 +66,7 @@
                 <div class="col-sm-4">
                     {{ form_widget(form.uuid) }}
                     {#<input id="discount-code" name="discount-code" type="text" placeholder="rabattcode eingeben" class="rabat-input" />#}
-                    {{ form_widget(form.discountCode, { 'placeholder': 'rabattcode eingeben', 'class': 'rabat-input' }) }}
+                    {{ form_widget(form.discountCode, { 'attr': { 'placeholder': 'rabattcode eingeben', 'class': 'rabat-input' }}) }}
                     <div class="err-msg">{{ form_errors(form.discountCode) }}</div>
                     <div class="err-msg">{{ form_errors(form) }}</div>
                 </div>
@@ -114,6 +114,13 @@
 {% block script %}
     <script>
         {% if not saved %}
+            $(function() {
+                $("#form_discountCode").on('change keypress', function() {
+                    var dcode = $.trim($("#form_discountCode").val());
+                    if (dcode !== '')
+                        $("#form_discountCode").removeClass('error').parent().attr('title', '');
+                });
+            });
             function submit() {
                 $("#booking-confirm").submit();
             }
@@ -121,22 +128,31 @@
             function checkCode() {
                 var price = {{ inquiry.price|number_format(2) }};
                 var dcode = $.trim($("#form_discountCode").val());
+                if (dcode === '') {
+                    $("#form_discountCode").addClass('error');
+                    return;
+                }
+
                 var url = '{{ path('talent-check-code', { 'code': ':CODE', 'uuid': inquiry.uuid }) }}'
                         .replace(':CODE', dcode);
-                $.get(url, function(data, status) {
-                    if (status === 'success' && data.result === 'ok') {
-                        var value = data.value;
-                        var type = data.type;                                                
-                        var newPrice;
-                        if (type === 1)
-                            newPrice = price - data.value;
-                        else
-                            newPrice = price * (1.0 - data.value / 100.0);
-                        var $price = $("#price");
-                        $price.text(newPrice);
-                        $price.parent().css({ 'background-color': '#f0c814' });                    
-                    }
-                });
+                $.get(url)
+                    .done(function(data, status) {
+                            if (data.result === 'ok') {
+                            var value = data.value;
+                            var type = data.type;                                                
+                            var newPrice;
+                            if (type === 1)
+                                newPrice = price - data.value;
+                            else
+                                newPrice = price * (1.0 - data.value / 100.0);
+                            var $price = $("#price");
+                            $price.text(newPrice);
+                            $price.parent().css({ 'background-color': '#f0c814' });                    
+                        }
+                    })
+                    .fail(function() {
+                        $("#form_discountCode").addClass('error').parent().attr('title', 'Kein gültiger Rabattcode');
+                    });
             }
         {% else %}
             $(function(){
