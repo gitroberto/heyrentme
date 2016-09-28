@@ -213,7 +213,7 @@
             <div class="row user-notes mobile-hidden">                
                 <!-- row end -->
                 <div class="col-xs-12">
-                    <a class="green-big-button inquiry" href="#">Jetzt anfragen!</a>
+                    <a class="green-big-button inquiry-proxy" href="#">Jetzt anfragen!</a>
                 </div>
             </div>
         <!-- LEFT side ends -->
@@ -553,7 +553,8 @@
             
         
             {% if (loggedIn) %}
-                $("a.inquiry").click(inquiry);
+                $("a.inquiry").click(inquiry_click);
+                $("a.inquiry-proxy").click(inquiryProxy_click);
             {% else %}
                 $("a.inquiry").click(function(){
                     if ($("a[data-target='#login']").size() > 0) {
@@ -706,12 +707,12 @@
                     price: {{ tariff.price|number_format(2, '.') }},
                     discountPrice: {{ tariff.discountPrice|number_format(2, '.') }}
                 };
-                updatePrice237($th, args);
+                updatePrice2379($th, args);
             }
         {% endif %}
 
     {% endfor %}
-    function updatePrice237($th, args) {
+    function updatePrice2379($th, args) {
         var num = $th.val();
 
         if (typeof num === 'undefined' || num === null)
@@ -776,10 +777,17 @@
         return { 'h1': h1, 'h2': h2, 'date1': date1, 'date2': date2, 'diff': diff };
     }
 
-    function inquiry(e) {
+    function inquiry_click(e) {
         e.preventDefault();
-        var $th = $(this);
         var $panel = $(this).parents('.panel-body');
+        inquiry($panel);
+    }
+    function inquiryProxy_click(e) {
+        e.preventDefault();
+        var $panel = $('.right-side:not(.desktop-hide) .panel-body').eq(0);
+        inquiry($panel);
+    }
+    function inquiry($panel) {
         var args = inquiryArgs($panel);        
         var url = '{{ path('talent-inquiry', { 'id': '-ID-' }) }}'.replace('-ID-', args.tariffId);
         delete args.tariffId;
@@ -802,7 +810,7 @@
             args['dateFrom'] = span.date1.toISOString();
             args['dateTo'] = span.date2.toISOString();
         }
-        else if (type === 2 || type === 3 || type === 7) {
+        else if (type === 2 || type === 3 || type === 7 || type === 9) {
             var span = calculateTimespan($panel);
             args['dateFrom'] = span.date1.toISOString();
             args['num'] = $panel.find('select.num-picker').val();
