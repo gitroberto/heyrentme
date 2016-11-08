@@ -304,10 +304,10 @@ class Talent {
     public function getTimeAsString() {
         $arr = array();
         if ($this->getTimeMorning()) {
-            array_push($arr, 'Nachm.');
+            array_push($arr, 'Vorm.');
         }
         if ($this->getTimeAfternoon()) {
-            array_push($arr, 'Vorm.');
+            array_push($arr, 'Nachm.');
         }
         if ($this->getTimeEvening()) {
             array_push($arr, 'Abends');
