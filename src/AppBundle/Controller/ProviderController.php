@@ -835,7 +835,8 @@ class ProviderController extends BaseController {
             'postcode' => $eq->getAddrPostcode(),
             'place' => $eq->getAddrPlace()
         );
-        if (empty($eq->getAddrStreet())) {
+        $addr = $eq->getAddrStreet();
+        if (empty($addr)) {
             $data['street'] = $user->getAddrStreet();
             $data['number'] = $user->getAddrNumber();
             $data['flatNumber'] = $user->getAddrFlatNumber();

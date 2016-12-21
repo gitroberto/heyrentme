@@ -320,7 +320,8 @@ class TalentController extends BaseAdminController {
                 break;
         }
                         
-        if (empty($talent->getAddrStreet())) {
+        $addr = $talent->getAddrStreet();
+        if (empty($addr)) {
             $data['street'] = $owner->getAddrStreet();
             $data['number'] = $owner->getAddrNumber();
             $data['flatNumber'] = $owner->getAddrFlatNumber();

@@ -74,7 +74,12 @@ class TalentTariff {
         return TariffType::getByType($this->getType());
     }
     public function getTypeName() {
-        return TariffType::getByType($this->getType())->getName();
+        $type = TariffType::getByType($this->getType());
+        if ($type == null){
+            return null;
+        } else {
+            return $type->getName();
+        }
     }
     public function getAddressAsString() {
         $fn = '';

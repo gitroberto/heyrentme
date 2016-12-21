@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\Loader\XliffFileLoader;
+
 
 class DefaultController extends BaseController {
     
@@ -408,9 +411,16 @@ class DefaultController extends BaseController {
      * @Route("/test")
      */
     public function testAction(Request $request) {
-        $request->attributes->set('_locale', 'de');
+        
+        $translator = $this->get('translator');
+        
+        $request->setLocale('de');
+        
+        $locale = $request->getLocale();
         $dt = new DateTime();
-        return $this->render('default/test.html.twig', array('dt' => $dt));
+        $someText = $translator->trans('Symfony is great',  array( '%name%' => 'seba'), 'messages', $locale);
+        
+        return $this->render('default/test.html.twig', array('dt' => $dt, 'someText' => $someText, 'locale' => $locale, 'name' => 'lukasz'));
         
     }
 }

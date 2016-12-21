@@ -563,7 +563,8 @@ class TalentController extends BaseController {
             'make_sure' => $eq->getLicence() > 0,
             'accept' => $eq->getAccept() > 0
         );        
-        if (empty($eq->getAddrStreet())) {
+        $addr = $eq->getAddrStreet();
+        if (empty($addr)) {
             $data['street'] = $user->getAddrStreet();
             $data['number'] = $user->getAddrNumber();
             $data['flatNumber'] = $user->getAddrFlatNumber();
