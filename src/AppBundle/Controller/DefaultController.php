@@ -414,13 +414,50 @@ class DefaultController extends BaseController {
         
         $translator = $this->get('translator');
         
-        $request->setLocale('de');
+        $request->setLocale('en');
         
         $locale = $request->getLocale();
         $dt = new DateTime();
-        $someText = $translator->trans('Symfony is great',  array( '%name%' => 'seba'), 'messages', $locale);
         
-        return $this->render('default/test.html.twig', array('dt' => $dt, 'someText' => $someText, 'locale' => $locale, 'name' => 'lukasz'));
+        
+        #
+        $someText = $translator->trans('test.label',  array( '%name%' => 'seba' ), 'test', $locale);
+        
+        $talent = $this->getDoctrineRepo('AppBundle:Talent')->getOne(147);
+        $options = array();
+        $options[0] = 
+        
+        $data = array(
+            'id' => $talent->getId(),
+            'status' => $talent->getStatus(),
+            'reason' => $talent->getReason()
+        );
+        
+        $form = $this->createFormBuilder($data)
+                ->add('id', 'hidden')
+                ->add('status', 'choice', array(
+                    'choices' => array(
+                        'select status' => null,
+                        'Approve' => Talent::STATUS_APPROVED,
+                        'Reject' => Talent::STATUS_REJECTED
+                    ),
+                    'choices_as_values' => true,
+                    'required' => true
+                ))
+                ->add('sendNot', 'checkbox', array('required' => false))
+                ->add('reason', 'textarea', array(
+                    'required' => false
+                ))
+                ->getForm();
+        
+        
+        return $this->render('default/test.html.twig', 
+                array('dt' => $dt, 
+                      'someText' => $someText, 
+                      'locale' => $locale, 
+                      'name' => 'lukasz',
+                      'form' => $form->createView()
+                ));
         
     }
 }

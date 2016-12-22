@@ -3,9 +3,19 @@
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="symfony_is_great">
-                <source>Symfony is great</source>
+                <source>test.label</source>
                 <target>DE test Symfony</target>
             </trans-unit>
+            <trans-unit id="1">
+                <source>emails.registration_confirm.thanks</source>
+                <target>DE %br% DE</target>
+            </trans-unit>
+            
+            <trans-unit id="3">
+                <source>form.sendNot.message</source>
+                <target>de de de</target>
+            </trans-unit>
+            
         </body>
     </file>
 </xliff>

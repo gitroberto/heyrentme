@@ -14,10 +14,41 @@ Tralala:
 {{ locale }}
 
 
+<br />
+<br />
 
+
+<h1>{{ 'emails.registration_confirm.thanks'|trans({ '%br%' : '<br>' }, 'test', locale ) | raw }}  </h1>
 
 
 <br />
 <br />
 
-{{ 'Symfony is great'|trans({ '%name%': name}, 'messages', 'en') }} 
+{{ 'test.label'|trans({ '%name%': name}, 'test', locale) }} 
+
+
+<br />
+<br />
+
+<br />
+<br />
+
+<br />
+<br />
+
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+
+    <div class="row">
+        <div class="form-group">
+          <label for="form_name" class="control-label col-xs-2">Reason</label>
+          <div class="col-xs-10  control-readonly">
+              {{ form_widget(form.sendNot) }}
+                <label for="form_sendNot">{{ 'form.sendNot.message'|trans({ }, 'test', 'en') }}</label>
+              <div class="err-msg">{{ form_errors(form.reason) }}</div>
+            {{ form_widget(form.reason, { 'attr': { 'class': 'text-box single-line', 'placeholder': 'reason' }}) }}
+          </div>
+        </div>
+    </div>
+            
+{{ form_end(form) }}
